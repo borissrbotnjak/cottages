@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -33,6 +34,18 @@ public class Cottage implements Serializable {
     private String state;
 
     @Column
+    private String image;
+
+    @Column
+    private Long numberOfRooms;
+
+    @Column
+    private Long numberOfBeds;
+
+    @Column
+    private String rules;
+
+    @Column
     private String description;
 
     @Column
@@ -41,4 +54,6 @@ public class Cottage implements Serializable {
     @ElementCollection
     private Set<Integer> ratings;
 
+    @ManyToOne(targetEntity = CottageOwner.class)
+    private CottageOwner cottageOwner;
 }

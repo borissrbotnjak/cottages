@@ -3,6 +3,7 @@ package com.isa.cottages.Model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Entity
@@ -23,19 +24,19 @@ public class User implements Serializable {
     private Long id;
 
     @Column
-    //@NotEmpty(message = "This field can not be empty")
+    @NotEmpty(message = "This field can not be empty")
     private String firstName;
 
     @Column
-    //@NotEmpty(message = "This field can not be empty")
+    @NotEmpty(message = "This field can not be empty")
     private String lastName;
 
     @Column
-    //@NotEmpty(message = "This field can not be empty")
+    @NotEmpty(message = "This field can not be empty")
     private String email;
 
     @Column(nullable = false)
-    //@NotEmpty(message = "This field can not be empty")
+    @NotEmpty(message = "This field can not be empty")
     //@JsonIgnore
     private String password;
 
@@ -53,4 +54,7 @@ public class User implements Serializable {
 
     @Column
     private Boolean enabled = false;
+
+    @Column
+    UserRole userRole;
 }

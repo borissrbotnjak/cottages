@@ -21,4 +21,7 @@ public class Boat implements Serializable {
 
     @Column
     private String name;
+
+    @ManyToOne(targetEntity = BoatOwner.class)
+    private BoatOwner boatOwner;
 }
