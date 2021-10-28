@@ -57,8 +57,14 @@ public class UserAuthenticationService implements AuthenticationProvider {
             retVal = new UsernamePasswordAuthenticationToken(
                     email, "", grantedAuths
             );
+        } else if (userRepository.findByEmail(email).getUserRole() == CLIENT) {
+            grantedAuths.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
+
+            retVal = new UsernamePasswordAuthenticationToken(
+                    email, "", grantedAuths
+            );
         }
-    }
+        }
     else
 
     {
