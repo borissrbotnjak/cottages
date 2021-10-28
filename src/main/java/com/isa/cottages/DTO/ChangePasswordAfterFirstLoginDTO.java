@@ -1,6 +1,6 @@
 package com.isa.cottages.DTO;
 
-import com.isa.cottages.fieldMatch.FieldMatch;
+import com.isa.cottages.FieldMatch.FieldMatch;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

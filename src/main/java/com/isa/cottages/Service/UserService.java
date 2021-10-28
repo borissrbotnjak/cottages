@@ -7,4 +7,6 @@ public interface UserService {
 
     User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
 
+
+    User findByEmail(String email);
 }

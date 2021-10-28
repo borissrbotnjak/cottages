@@ -1,4 +1,4 @@
-package com.isa.cottages.fieldMatch;
+package com.isa.cottages.FieldMatch;
 
 import org.apache.commons.beanutils.BeanUtils;
 

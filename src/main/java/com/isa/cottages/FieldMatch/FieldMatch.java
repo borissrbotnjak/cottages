@@ -1,4 +1,4 @@
-package com.isa.cottages.fieldMatch;
+package com.isa.cottages.FieldMatch;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
