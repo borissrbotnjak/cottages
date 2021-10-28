@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CottageRepository extends JpaRepository<Cottage, Long> {
-
-    Cottage findByName(String name);
 }
