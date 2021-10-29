@@ -20,4 +20,9 @@ public class CottageOwner extends User {
     @OneToMany(mappedBy = "cottageOwner", cascade = CascadeType.ALL)
     private Set<Cottage> cottages = new HashSet<>();
 
+    @Column
+    private RegistrationType registrationType;
+
+    @Column
+    private String explanationOfRegistration;
 }
