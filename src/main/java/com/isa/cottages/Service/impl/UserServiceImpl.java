@@ -1,6 +1,7 @@
 package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
+import com.isa.cottages.DTO.ChangePasswordDTO;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.UserRepository;
 import com.isa.cottages.Service.UserService;
@@ -16,6 +17,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c) {
+        user.setPassword(c.getNewPassword());
+        this.userRepository.save(user);
+        return user;
+    }
+
+    public User changePassword(User user, ChangePasswordDTO c) {
         user.setPassword(c.getNewPassword());
         this.userRepository.save(user);
         return user;

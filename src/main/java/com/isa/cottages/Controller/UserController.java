@@ -66,6 +66,13 @@ public class UserController {
         return new ModelAndView("boat-owner-home");
     }
 
+    @GetMapping("client/home")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView clientHome(Model model, Authentication auth){
+        Client client = (Client) userService.findByEmail(auth.getName());
+        return new ModelAndView("client-home");
+    }
+
 
     @GetMapping("/registerSystemAdmin")
     @PreAuthorize("hasRole('SYS_ADMIN')")

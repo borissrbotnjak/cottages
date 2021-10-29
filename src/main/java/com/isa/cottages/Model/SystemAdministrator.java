@@ -18,4 +18,8 @@ import java.util.Set;
 public class SystemAdministrator extends User{
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<LoyaltyProgram> loyaltyPrograms = new HashSet<>();
+
+    @Column
+    private Boolean isFirstLogin = false;
+
 }
