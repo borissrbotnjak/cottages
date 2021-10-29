@@ -3,6 +3,7 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Model.SystemAdministrator;
 import com.isa.cottages.Model.User;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
@@ -67,5 +68,23 @@ public class UserController {
         model.addAttribute("boatOwner", boatOwner);
         return new ModelAndView("boat-owner-home");
     }
+    
+    
+    @GetMapping("/registerSystemAdmin")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView regSysAdminForm(Model model){
+        SystemAdministrator systemAdministrator = new SystemAdministrator();
+        model.addAttribute(systemAdministrator);
+        return new ModelAndView("registerSystemAdmin");
+    }
 
+    @PostMapping("/registerSystemAdmin/submit")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView registerSystemAdmin(@ModelAttribute SystemAdministrator user){
+        if(this.userService.findByEmail(user.getEmail()) != null){
+            throw new ResourceConflictException(user.getId(), "Email already exists.");
+        }
+        this.userService.saveSystemAdmin(user);
+        return new ModelAndView("redirect:/user/sys-admin/home");
+    }
 }

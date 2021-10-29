@@ -1,10 +1,7 @@
 package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Model.User;
-import com.isa.cottages.Model.UserRequest;
-import com.isa.cottages.Model.UserRole;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.UserRepository;
 import com.isa.cottages.Service.UserService;
 import lombok.AllArgsConstructor;
@@ -56,4 +53,15 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(co);
         return co;
     }
+
+    @Override
+    public SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator){
+        systemAdministrator.setEnabled(true);
+        systemAdministrator.setPassword(systemAdministrator.getPassword());
+        systemAdministrator.setUserRole(UserRole.SYS_ADMIN);
+
+        this.userRepository.save(systemAdministrator);
+        return systemAdministrator;
+    }
+
 }
