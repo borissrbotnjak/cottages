@@ -56,6 +56,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public BoatOwner saveBoatOwner(UserRequest userRequest){
+
+        BoatOwner bo = new BoatOwner();
+        bo.setEnabled(false);
+        bo.setEmail(bo.getEmail());
+        bo.setPassword(bo.getPassword());
+        bo.setFirstName(bo.getFirstName());
+        bo.setLastName(bo.getLastName());
+        bo.setResidence(bo.getResidence());
+        bo.setCity(bo.getCity());
+        bo.setState(bo.getState());
+        bo.setPhoneNumber(bo.getPhoneNumber());
+        bo.setRegistrationType(bo.getRegistrationType());
+        bo.setExplanationOfRegistration(bo.getExplanationOfRegistration());
+
+        bo.setUserRole(UserRole.BOAT_OWNER);
+
+        this.userRepository.save(bo);
+        return bo;
+    }
+
+    @Override
     public SystemAdministrator saveSystemAdmin(SystemAdministrator systemAdministrator){
         systemAdministrator.setEnabled(true);
         systemAdministrator.setPassword(systemAdministrator.getPassword());

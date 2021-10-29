@@ -14,6 +14,7 @@ public interface UserService {
     User findByEmail(String email);
 
     User saveCottageOwner(UserRequest userRequest);
+    User saveBoatOwner(UserRequest userRequest);
 
     User saveSystemAdmin(SystemAdministrator systemAdministrator);
 

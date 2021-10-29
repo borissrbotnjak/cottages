@@ -1,10 +1,7 @@
 package com.isa.cottages.Controller;
 
 import com.isa.cottages.Exception.ResourceConflictException;
-import com.isa.cottages.Model.BoatOwner;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Model.SystemAdministrator;
-import com.isa.cottages.Model.User;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
@@ -25,7 +22,7 @@ public class UserController {
     private BoatOwnerServiceImpl boatOwnerService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService, BoatOwnerServiceImpl boatOwnerService){
+    public UserController(UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService, BoatOwnerServiceImpl boatOwnerService) {
         this.userService = userService;
         this.cottageOwnerService = cottageOwnerService;
         this.boatOwnerService = boatOwnerService;
@@ -33,9 +30,9 @@ public class UserController {
 
     @GetMapping("/index")
     @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT')")
-    public ModelAndView indexPage(Authentication auth) throws Exception{
+    public ModelAndView indexPage(Authentication auth) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
-        if(u.getEnabled()==false){
+        if (u.getEnabled() == false) {
             throw new Exception("Your account is not activated, please check your email.");
         }
         return new ModelAndView("indexPage");
@@ -49,7 +46,7 @@ public class UserController {
 
     @GetMapping("sys-admin/home")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView sysAdminHome(Model model){
+    public ModelAndView sysAdminHome(Model model) {
         return new ModelAndView("sys-admin-home");
     }
 
@@ -63,25 +60,25 @@ public class UserController {
 
     @GetMapping("boat-owner/home")
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView boatOwnerHome(Model model, Authentication auth){
+    public ModelAndView boatOwnerHome(Model model, Authentication auth) {
         BoatOwner boatOwner = (BoatOwner) userService.findByEmail(auth.getName());
         model.addAttribute("boatOwner", boatOwner);
         return new ModelAndView("boat-owner-home");
     }
-    
-    
+
+
     @GetMapping("/registerSystemAdmin")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView regSysAdminForm(Model model){
+    public ModelAndView regSysAdminForm(Model model) {
         SystemAdministrator systemAdministrator = new SystemAdministrator();
         model.addAttribute(systemAdministrator);
         return new ModelAndView("registerSystemAdmin");
     }
 
-    @PostMapping("/registerSystemAdmin/submit")
+    @PostMapping(value = "/registerSystemAdmin/submit")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView registerSystemAdmin(@ModelAttribute SystemAdministrator user){
-        if(this.userService.findByEmail(user.getEmail()) != null){
+    public ModelAndView registerSystemAdmin(@ModelAttribute SystemAdministrator user) {
+        if (this.userService.findByEmail(user.getEmail()) != null) {
             throw new ResourceConflictException(user.getId(), "Email already exists.");
         }
         this.userService.saveSystemAdmin(user);

@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,4 +19,10 @@ public class BoatOwner extends User {
 
     @OneToMany(mappedBy = "boatOwner", cascade = CascadeType.ALL)
     private Set<Boat> boats = new HashSet<>();
+
+    @Column
+    private RegistrationType registrationType;
+
+    @Column
+    private String explanationOfRegistration;
 }
