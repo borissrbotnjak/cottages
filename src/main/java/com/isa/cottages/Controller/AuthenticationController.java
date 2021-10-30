@@ -143,4 +143,9 @@ public class AuthenticationController {
             return new ModelAndView("redirect:/auth/home");
         }
     }
+
+    @GetMapping("confirm")
+    public String confirm(@RequestParam("token") String token){
+        return userService.confirmToken(token);
+    }
 }

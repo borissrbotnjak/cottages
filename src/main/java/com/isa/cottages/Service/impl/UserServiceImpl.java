@@ -201,4 +201,25 @@ public class UserServiceImpl implements UserService {
                 "\n" +
                 "</div></div>";
     }
+
+    @Override
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = tokenService
+                .getToken(token)
+                .orElseThrow(() -> new IllegalStateException("token not found"));
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+
+        tokenService.setConfirmedAt(token);
+        userRepository.enableUser(
+                confirmationToken.getUser().getEmail());
+        return "Registration confirmed";
+    }
 }

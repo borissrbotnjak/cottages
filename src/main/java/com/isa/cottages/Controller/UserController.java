@@ -35,6 +35,7 @@ public class UserController {
         if (u.getEnabled() == false) {
             throw new Exception("Your account is not activated, please check your email.");
         }
+        // TODO: add separate page redirection for each user role
         return new ModelAndView("indexPage");
     }
 
@@ -58,7 +59,7 @@ public class UserController {
         return new ModelAndView("cottage-owner-home");
     }
 
-    @GetMapping("boat-owner/home")
+    @GetMapping("/boat-owner/home")
     @PreAuthorize("hasRole('BOAT_OWNER')")
     public ModelAndView boatOwnerHome(Model model, Authentication auth) {
         BoatOwner boatOwner = (BoatOwner) userService.findByEmail(auth.getName());
@@ -66,10 +67,11 @@ public class UserController {
         return new ModelAndView("boat-owner-home");
     }
 
-    @GetMapping("client/home")
+    @GetMapping("/client/home")
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView clientHome(Model model, Authentication auth){
         Client client = (Client) userService.findByEmail(auth.getName());
+        model.addAttribute("user", client);
         return new ModelAndView("client-home");
     }
 

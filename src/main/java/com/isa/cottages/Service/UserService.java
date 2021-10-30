@@ -23,6 +23,7 @@ public interface UserService {
     User saveSystemAdmin(SystemAdministrator systemAdministrator);
 
     String buildEmail(String name, String link);
+    String confirmToken(String token);
 }
 
 
