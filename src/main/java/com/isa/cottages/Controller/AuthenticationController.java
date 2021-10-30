@@ -47,6 +47,28 @@ public class AuthenticationController {
         return new ModelAndView("redirect:/auth/home");
     }
 
+    @GetMapping("/signup")
+    public ModelAndView registrationForm(Model model){
+        UserRequest userRequest = new UserRequest();
+        model.addAttribute(userRequest);
+        return new ModelAndView("registrationClient");
+    }
+
+    @PostMapping("/signup/submit")
+    public ModelAndView addClient(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
+
+        User existUser = this.userService.findByEmail(userRequest.getEmail());
+        if (existUser != null) {
+            throw new ResourceConflictException(userRequest.getId(), "Email already exists");
+        }
+        if (result.hasErrors()){
+            return new ModelAndView("redirect:/auth/signup");
+        }
+        this.userService.saveClient(userRequest);
+
+        return new ModelAndView("redirect:/auth/home");
+    }
+
     @GetMapping("/signupOwner")
     public ModelAndView registrationOwnerForm(Model model){
         UserRequest userRequest = new UserRequest();

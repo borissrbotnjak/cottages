@@ -18,6 +18,7 @@ public interface UserService {
 
     User saveCottageOwner(UserRequest userRequest);
     User saveBoatOwner(UserRequest userRequest);
+    User saveClient(UserRequest userRequest);
 
     User saveSystemAdmin(SystemAdministrator systemAdministrator);
 

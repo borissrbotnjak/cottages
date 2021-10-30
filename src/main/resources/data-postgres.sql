@@ -1,4 +1,4 @@
-/*USERS*/
+/*USERS*//*
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Goca', 'Petrusic', 'goca@gmail.com', 'goca', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'system_administrator', true, 0);
 
@@ -10,3 +10,7 @@ VALUES ('Brod', 'Petrusic', 'brod@gmail.com', 'brod', 'Novi Sad', 'Novi Sad', 'S
 
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'klijent', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'client', true, 3);
+
+INSERT INTO USERS(user_type, user_type, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD)
+VALUES ('system_administrator', 'system_administrator',  'Sinisa', 'Mali', sinisa@mail.com, 'mali');
+*/

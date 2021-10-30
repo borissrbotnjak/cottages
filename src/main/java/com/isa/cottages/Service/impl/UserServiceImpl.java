@@ -2,18 +2,27 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
 import com.isa.cottages.DTO.ChangePasswordDTO;
+import com.isa.cottages.Email.EmailSender;
+import com.isa.cottages.Email.EmailService;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.UserRepository;
+import com.isa.cottages.Service.ConfirmationTokenService;
 import com.isa.cottages.Service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private ConfirmationTokenService tokenService;
+    private EmailSender emailSender;
 
     @Override
     public User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c) {
@@ -30,14 +39,44 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) throws AccessDeniedException {
-        User u = userRepository.findById(id).orElseGet(null);
-        return u;
+        return userRepository.findById(id).orElseGet(null);
     }
 
     @Override
     public User findByEmail(String email) {
-        User u = userRepository.findByEmail(email);
-        return u;
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Client saveClient(UserRequest userRequest) {
+        // TODO: add loyalty program
+
+        Client cl = new Client();
+        cl.setEmail(userRequest.getEmail());
+        cl.setPassword(userRequest.getPassword());
+        cl.setFirstName(userRequest.getFirstName());
+        cl.setLastName(userRequest.getLastName());
+        cl.setCity(userRequest.getCity());
+        cl.setResidence(userRequest.getResidence());
+        cl.setState(userRequest.getState());
+        cl.setPhoneNumber(userRequest.getPhoneNumber());
+        cl.setEnabled(false);
+
+        cl.setUserRole(UserRole.CLIENT);
+        cl = this.userRepository.save(cl);
+
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(60),
+                cl
+        );
+        tokenService.saveConfirmationToken(confirmationToken);
+
+        String link = "http://localhost:8081/auth/confirm?token=" + token;
+        emailSender.send(userRequest.getEmail(),buildEmail(userRequest.getFirstName(),link));
+        return cl;
     }
 
     @Override
