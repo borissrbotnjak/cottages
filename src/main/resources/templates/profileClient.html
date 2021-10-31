@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+-->
+    <link rel="stylesheet" href="../../static/css/profileCSS.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <title>Profile</title>
+</head>
+<body>
+
+<div class="container-fluid bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Vikendice Memedovic</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto"> <!--
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Appointments
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" th:href="@{'/pharmacies/allPharmacies'}">Schedule with dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/chooseTime'}">Schedule with pharmacist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/dermatologist/upcoming'}">Upcoming - dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/pharmacist/upcoming'}">Upcoming - pharmacist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/dermatologist/history'}">History - dermatologist</a>
+                        <a class="dropdown-item" th:href="@{'/appointments/pharmacist/history'}">History - pharmacist</a>
+                    </div>
+                </li> -->
+                <!--<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ePrescription
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">View all</a>
+                        <a class="dropdown-item" href="#">View history</a>
+                    </div>
+                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div></br></br>
+
+<div class="container emp-profile">
+    <!--<form method="post">-->
+    <form th:object="${user}" method="get">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="https://kctherapy.com/wp-content/uploads/2019/09/default-user-avatar-300x293.png" alt=""/>
+                    <!--<div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file"/>
+                    </div>-->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head" th:object="${user}">
+                    <h5 th:text="${user.getFullName()}"></h5>
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <!--<li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
+                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="loyalty-tab" data-toggle="tab" href="#loyalty" role="tab" aria-controls="loyalty" aria-selected="false">Loyalty program</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <!--<input type="submit" class="profile-edit-btn" name="btnAddMore"
+                       value="Edit Profile" th:action="@{/profile/p/__${user.id}__/editProfile}"/>-->
+            </div>
+        </div>
+        </br>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <p>Other</p>
+                    <a th:href="@{/client/profile/__${user.id}__/editProfile}">Edit profile</a><br/></br>
+                    <!--<a href="">Complaints</a><br/>-->
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <!--<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        </div>
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>User Id</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p  th:text="${user.id}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:text="${user.getFullName()}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:text="${user.email}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                <label>Phone</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.phoneNumber}"></p>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.getFullName()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.email}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Phone number</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.phoneNumber}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>City</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.city}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>State</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.state}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Residence</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.residence}"></p>
+                            </div>
+                        </div>
+                    </div> <!--
+                    <div class="tab-pane fade" id="loyalty" role="tabpanel" aria-labelledby="loyalty-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Appointment points</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getAppointmentPoints()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Consultation points</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getConsultationPoints()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Regular points</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getRegularPoints()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Silver points</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getSilverPoints()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gold points</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getGoldPoints()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gold regular</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getDiscountRegular()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gold silver</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getDiscountSilver()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gold discount</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${program.getDiscountGold()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4>
+                                Na osnovu
+                                kategorije, korisnik ostvaruje dodatni popust koji se primenjuje na svaku
+                                rezervaciju leka, kao i na svaki pregled i savetovanje.
+                            </h4>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

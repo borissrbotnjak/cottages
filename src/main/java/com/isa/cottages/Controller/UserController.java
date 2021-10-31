@@ -36,6 +36,9 @@ public class UserController {
             throw new Exception("Your account is not activated, please check your email.");
         }
         // TODO: add separate page redirection for each user role
+        /*if (u instanceof Client) {
+            return new ModelAndView("client-home");
+        }*/
         return new ModelAndView("indexPage");
     }
 
