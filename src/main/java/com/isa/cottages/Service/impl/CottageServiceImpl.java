@@ -6,6 +6,8 @@ import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CottageServiceImpl implements CottageService {
 
@@ -25,6 +27,11 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
+    public List<Cottage> findAll() {
+        return this.cottageRepository.findAll();
+    }
+
+    @Override
     public Cottage saveCottage(Cottage cottage) {
         Cottage c = new Cottage();
         c.setName(cottage.getName());
@@ -37,5 +44,10 @@ public class CottageServiceImpl implements CottageService {
         c.setDescription(cottage.getDescription());
         this.cottageRepository.save(c);
         return c;
+    }
+
+    @Override
+    public List<Cottage> findByKeyword(String keyword) {
+        return this.cottageRepository.findByKeyword(keyword);
     }
 }

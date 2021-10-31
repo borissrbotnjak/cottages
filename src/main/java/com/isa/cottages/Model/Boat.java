@@ -20,7 +20,7 @@ public class Boat implements Serializable {
     private Long id;
 
     @Column
-    private String name;
+    private String boatName;
 
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;

@@ -2,8 +2,18 @@ package com.isa.cottages.Repository;
 
 import com.isa.cottages.Model.Cottage;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface CottageRepository extends JpaRepository<Cottage, Long> {
+    @Query(value="SELECT * FROM Cottage c where lower(c.name) like lower(concat('%', ?1, '%')) " +
+            "or lower(c.state) like lower(concat('%', ?1, '%')" +
+            "or lower(c.city) like lower(concat('%', ?1, '%')" +
+            "or lower(c.residence) like lower(concat('%', ?1, '%')) ",
+            nativeQuery = true)
+    List<Cottage> findByKeyword(@Param("keyword") String keyword);
 }

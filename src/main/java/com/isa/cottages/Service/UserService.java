@@ -9,21 +9,20 @@ import com.isa.cottages.Model.UserRequest;
 public interface UserService {
 
     User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c);
-
     User changePassword(User user, ChangePasswordDTO c);
 
     User findById(Long id);
-
     User findByEmail(String email);
 
     User saveCottageOwner(UserRequest userRequest);
     User saveBoatOwner(UserRequest userRequest);
     User saveClient(UserRequest userRequest);
-
     User saveSystemAdmin(SystemAdministrator systemAdministrator);
 
     String buildEmail(String name, String link);
     String confirmToken(String token);
+
+    User getUserFromPrincipal() throws Exception;
 }
 
 

@@ -8,6 +8,7 @@ import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.UserRepository;
 import com.isa.cottages.Service.ConfirmationTokenService;
 import com.isa.cottages.Service.UserService;
+import com.isa.cottages.authFasace.AuthenticationFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private ConfirmationTokenService tokenService;
     private EmailSender emailSender;
+    private AuthenticationFacade facade;
 
     @Override
     public User changePasswordAfterFirstLogin(User user, ChangePasswordAfterFirstLoginDTO c) {
@@ -221,5 +223,11 @@ public class UserServiceImpl implements UserService {
         userRepository.enableUser(
                 confirmationToken.getUser().getEmail());
         return "Registration confirmed";
+    }
+
+    @Override
+    public User getUserFromPrincipal() throws Exception {
+        String principal = this.facade.getPrincipalEmail();
+        return this.findByEmail(principal);
     }
 }
