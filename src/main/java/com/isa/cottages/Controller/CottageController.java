@@ -4,21 +4,22 @@ import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value = "/cottage")
+@AllArgsConstructor
+@RequestMapping(value = "/cottages")
 public class CottageController {
 
+    @Autowired
     private CottageServiceImpl cottageService;
+    @Autowired
     private UserServiceImpl userService;
 
     @Autowired
@@ -49,14 +50,22 @@ public class CottageController {
         if (keyword != null) {
             model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
         } else {
-            model.addAttribute("pharmacies", this.cottageService.findAll());
+            model.addAttribute("cottages", this.cottageService.findAll());
         }
 
         try {
             model.addAttribute("principal", this.userService.getUserFromPrincipal());
             return new ModelAndView("cottages");
         } catch (Exception e) {
+            //System.out.println("error all cottages");
             return new ModelAndView("cottagesGuests");
         }
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView showCottage(@PathVariable("id") Long id, Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("cottage", this.cottageService.findById(id));
+        return new ModelAndView("cottage");
     }
 }
