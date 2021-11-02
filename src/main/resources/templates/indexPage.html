@@ -26,17 +26,17 @@
 
     <div th:align="center" sec:authorize="hasRole('COTTAGE_OWNER')">
         <h4>Welcome Cottage Owner</h4>
-        <a th:href="${'cottage-owner/home'}"></a>
+        <a th:href="${'cottage-owner/home'}">Home</a>
     </div>
 
     <div th:align="center" sec:authorize="hasRole('BOAT_OWNER')">
         <h4>Welcome Boat Owner</h4>
-        <a th:href="${'boat-owner/home'}"></a>
+        <a th:href="${'boat-owner/home'}">Home</a>
     </div>
 
     <div th:align="center" sec:authorize="hasRole('CLIENT')">
         <h4>Welcome Client</h4>
-        <a th:href="${'client/home'}"></a>
+        <a th:href="${'client/home'}">Home</a>
     </div>
 </body>
 </html>

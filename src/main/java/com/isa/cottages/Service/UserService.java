@@ -24,6 +24,8 @@ public interface UserService {
 
     String buildEmail(String name, String link);
     String confirmToken(String token);
+
+    User getUserFromPrincipal() throws Exception;
 }
 
 

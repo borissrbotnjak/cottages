@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
+    <meta charset= "UTF-8" >
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -16,92 +15,86 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <title>Register Cottage Owner</title>
+    <title>Registration</title>
 </head>
 <body>
-    <div class="container">
-        <div class="center-align">
-            <h1>Register Cottage Owner</h1>
-            <form th:action="@{/auth/signupOwner/submit}" th.object="${userRequest}" method="post">
-                <br><label for="firstName">First name:</label>
-                <input id="firstName" type="text" th:field="/{firstName}"/>
 
-                <br><label for="lastName">Last name:</label>
-                <input id="lastName" type="text" th:filed="*{lastName}"/>
 
-                <br><label for="email">Email:</label>
-                <input id="email" type="text" th:filed="*{email}"/>
-                <p class="error-message"
-                    th:if="${#fields.gasGlobalErrors()}"
-                    th:each="error: ${#fields.errors('global')}"
-                   th:text="${error}"> Validation error
-                </p>
-
-                <div class="form-group"
-                     th:classapend="${#fields.hasErrors('password')}? 'has-error':''">
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-lock"></i>
-                        </span>
-                        <label>Password:</label>
-                        <input id="password" class="form-control" type="password" th:field="*{password}"/>
-                    </div>
-                    <p class="error-message"
-                       th:each="error: ${#fields.errors('password')}"
-                       th:text="${error}">Validation error>
-                    </p>
-                </div>
-
-                <div class="form-group"
-                     th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
-                    <div class="input-group">
+<div class="container mySpace">
+    <div class="center-align blue lighten-5">
+        <h1>Registration</h1>
+        <form th:action="@{/auth/signupOwner/submit}" th:object="${userRequest}" method="post">
+            <br><label for="firstName">FirstName:</label>
+            <input id="firstName" type="text" th:field="*{firstName}"/>
+            <br><label for="lastName">LastName:</label>
+            <input id="lastName" type="text" th:field="*{lastName}"/>
+            <br><label for="email">Email:</label>
+            <input id="email" type="email" th:field="*{email}"/>
+            <p class="error-message"
+               th:if="${#fields.hasGlobalErrors()}"
+               th:each="error : ${#fields.errors('global')}"
+               th:text="${error}">Validation error</p>
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="glyphicon glyphicon-lock"></i>
                                             </span>
-                        <label>Confirm Password:</label>
-                        <input id="confirmPassword"
-                               class="form-control"
-                               type="password"
-                               th:field="*{confirmPassword}">
-                    </div>
-                    <p class="error-message"
-                       th:each="error: ${#fields.errors('confirmPassword')}"
-                       th:text="${error}">Validation error</p>
+                    <label>Password:</label>
+                    <input id="password"
+                           class="form-control"
+                           type="password"
+                           th:field="*{password}"/>
                 </div>
-
-                <br><label for="residence">Residence:</label>
-                <input id="residence" type="text" th:field="*{residence}"/>
-
-                <br><label for="city">City:</label>
-                <input id="city" type="text" th:field="*{city}"/>
-
-                <br><label for="state">State:</label>
-                <input id="state" type="text" th:field="*{state}"/>
-
-                <br><label for="phoneNumber">Phone Number:</label>
-                <input id="phoneNumber" type="text" field="*{phoneNumber}"/>
-
-
-                <div class="form-group">
-                    <label for="registrationType">Registration type:</label>
-                    <select class="form-control" id="registrationType" th:field="*{registrationType}">
-                        <option value="">Select a type</option>
-                        <option th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
-                        th:value="${registrationTypeOpt}"
-                                th:text="${registrationTypeOpt.getDisplayName()}">
-                        </option>
-                    </select>
+                <p class="error-message"
+                   th:each="error: ${#fields.errors('password')}"
+                   th:text="${error}">Validation error</p>
+            </div>
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
+                <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="glyphicon glyphicon-lock"></i>
+                                            </span>
+                    <label>Confirm Password:</label>
+                    <input id="confirmPassword"
+                           class="form-control"
+                           type="password"
+                           th:field="*{confirmPassword}">
                 </div>
-                <br>
+                <p class="error-message"
+                   th:each="error: ${#fields.errors('confirmPassword')}"
+                   th:text="${error}">Validation error</p>
+            </div>
+            <br><label for="residence">Residence:</label>
+            <input id="residence" type="text" th:field="*{residence}"/>
+            <br><label for="city">City:</label>
+            <input id="city" type="text" th:field="*{city}"/>
+            <br><label for="state">State:</label>
+            <input id="state" type="text" th:field="*{state}"/>
+            <br><label for="phoneNumber">Phone Number:</label>
+            <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+<!--            <div class="form-group">-->
+<!--                <label for="registrationType">Registration type:</label>-->
+<!--                <select class="form-control" id="registrationType" th:field="*{registrationType}">-->
+<!--                    <option value="">Select a type</option>-->
+<!--                    <option th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"-->
+<!--                            th:value="${registrationTypeOpt}"-->
+<!--                            th:text="${registrationTypeOpt.getDisplayName()}">-->
+<!--                    </option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <br>-->
 
-                <br><label for="explanationOfRegistration">Explanation of registration</label>
-                <input id="explanationOfRegistration" type="text" th:field="*{explanationOfRegistration}"/>
+<!--            <br><label for="explanationOfRegistration">Explanation of registration</label>-->
+<!--            <input id="explanationOfRegistration" type="text" th:field="*{explanationOfRegistration}"/>-->
 
-                <div class="form-group">
-                    <button type="button" class="btn btn-block btn-success">Submit</button>
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success">Submit</button>
+            </div>
+        </form>
     </div>
+</div>
+
 </body>
 </html>

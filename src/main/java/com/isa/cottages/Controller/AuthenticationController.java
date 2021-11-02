@@ -77,7 +77,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signupOwner/submit")
-    public ModelAndView addUser(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
+    public ModelAndView addOwner(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
         User existUser = this.userService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Email already exists.");

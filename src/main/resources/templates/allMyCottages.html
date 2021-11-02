@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+    <h3>My cottages</h3>
+    <br>
+    <div class="right-align" sec:authorize="hasRole('COTTAGE_OWNER')">
+        <a th:href="${'/cottage/addCottage'}">Add cottage</a>
+    </div>
+    <br>
+
+    <div class="right-align">
+        <form th:acion="@{'/cottage/findCottage'}" th:object="${cottage}">
+            <label for="name">Find cottage</label>
+        <input id="name" type="text" placeholder="Enter cottage name.." th:filed="*{name}"/>
+            <button type="submit" id="button">Search</button>
+        </form>
+    </div>
+    <br>
+
+    <div>
+<!--        filter-->
+    </div>
+
+    <div class="table">
+        <table id="cottages">
+            <tr>
+                <th>Id:</th>
+                <th>Name:</th>
+                <th>Residence</th>
+            </tr>
+            <tr th:each="cottage:${cottages}">
+                <td th:text="${cottage.id}"></td>
+                <td th:text="${cottage.name}"></td>
+                <td th:text="${cottage.residence}"></td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

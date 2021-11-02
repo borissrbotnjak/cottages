@@ -6,6 +6,9 @@ import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CottageServiceImpl implements CottageService {
 
@@ -37,5 +40,21 @@ public class CottageServiceImpl implements CottageService {
         c.setDescription(cottage.getDescription());
         this.cottageRepository.save(c);
         return c;
+    }
+//
+//    @Override
+//    public List<Cottage> findAllByCottageOwner(Long id) {
+//        List<Cottage> all = this.cottageRepository.findAllByCottageOwner(id);
+//        List<Cottage> my = new ArrayList<>();
+//
+//        for(Cottage cot: all){
+//            my.add(cot);
+//        }
+//        return my;
+//    }
+
+    @Override
+    public List<Cottage> findAll() {
+        return this.cottageRepository.findAll();
     }
 }

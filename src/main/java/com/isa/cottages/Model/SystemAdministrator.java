@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("system_administrator")
+@DiscriminatorValue("System_administrator")
 @Setter
 @Getter
 @AllArgsConstructor
