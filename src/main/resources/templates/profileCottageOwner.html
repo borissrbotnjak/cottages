@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Profile</title>
+</head>
+<body>
+
+<div class="center-align">
+    <form th:object="${user}" method="get">
+    <div th:objext="${user}">
+    <p th:text="${user.name}"></p>
+    <label for="email">Email:</label>
+    <p id="email" th:text="${user.email}"></p>
+    </div>
+    </form>
+</div>
+
+<!--    <div class="container">-->
+<!--        <form th:object="${user}">-->
+<!--            <div class="row">-->
+<!--                <div class="col">-->
+<!--                    <label>Name</label>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                    <p th:text="${user.name}"></p>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="row">-->
+<!--                <div class="col">-->
+<!--                    <label>Email</label>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                    <p th:text="${user.email}"></p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+</body>
+</html>

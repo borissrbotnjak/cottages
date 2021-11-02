@@ -21,38 +21,33 @@
 <div class="container">
     <h3>My cottages</h3>
     <br>
-    <div class="right-align" sec:authorize="hasRole('COTTAGE_OWNER')">
-        <a th:href="${'/cottage/addCottage'}">Add cottage</a>
-    </div>
-    <br>
-
     <div class="right-align">
-        <form th:acion="@{'/cottage/findCottage'}" th:object="${cottage}">
-            <label for="name">Find cottage</label>
-        <input id="name" type="text" placeholder="Enter cottage name.." th:filed="*{name}"/>
-            <button type="submit" id="button">Search</button>
-        </form>
+        <a th:href="${'/cottage/addCottage'}">Add new cottage</a>
     </div>
     <br>
 
-    <div>
-<!--        filter-->
-    </div>
+    <div class="row">
+        <div class="col col-lg-5">
+            <form th:action="@{'/cottage/allMyCottages'}" method="get">
+                <input type="text" placeholder="Name.." name="keyword"/>
+                <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </form>
+        </div>
 
-    <div class="table">
-        <table id="cottages">
-            <tr>
-                <th>Id:</th>
-                <th>Name:</th>
-                <th>Residence</th>
-            </tr>
-            <tr th:each="cottage:${cottages}">
+        <div>
+            <table id="cottages" width="90%">
+                <tr>
+                    <th>Id:</th>
+                    <th>Name:</th>
+                    <th>Residence</th>
+                </tr>
+                <tr th:each="cottage:${cottages}"></tr>
                 <td th:text="${cottage.id}"></td>
-                <td th:text="${cottage.name}"></td>
+                <td th:tetx="$cottage.name"></td>
                 <td th:text="${cottage.residence}"></td>
+            </table>
+        </div>
 
-            </tr>
-        </table>
     </div>
 </div>
 </body>

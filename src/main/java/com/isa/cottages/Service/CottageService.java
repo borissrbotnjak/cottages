@@ -10,7 +10,9 @@ public interface CottageService {
 
     Cottage saveCottage(Cottage cottage);
 
-//    List<Cottage> findAllByCottageOwner(Long id);
+//    List<Cottage> findByCottageOwner(Long id);
 
     List<Cottage> findAll();
+
+    List<Cottage> findByKeyword(String keyword);
 }

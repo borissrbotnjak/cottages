@@ -23,14 +23,14 @@ public class CottageController {
     private UserServiceImpl userService;
 
     @Autowired
-    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService){
+    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService) {
         this.cottageService = cottageService;
         this.userService = userService;
     }
 
     @GetMapping(value = "/addCottage")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView addCottageForm(Model model){
+    public ModelAndView addCottageForm(Model model) {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
         List<Cottage> cottages = this.cottageService.findAll();
@@ -48,13 +48,14 @@ public class CottageController {
         return new ModelAndView("redirect:/allMyCottages/");
     }
 
-//    @GetMapping("/allMyCottages")
-//    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-//    public ModelAndView getAllMyCottages(Model model, @PathVariable Long id) throws Exception{
-//        List<Cottage> cottages = this.cottageService.findAllByCottageOwner(id);
-//        model.addAttribute("cottages", cottages);
-//        model.addAttribute("principal", this.userService.getUserFromPrincipal());
-//
-//        return new ModelAndView("/allMyCottages");
-//    }
+    @GetMapping("/allMyCottages")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView getAllMyCottages(Model model, String keyword) {
+        if (keyword != null) {
+            model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
+        } else {
+            model.addAttribute("cottages", this.cottageService.findAll());
+        }
+        return new ModelAndView("allMyCottages");
+    }
 }

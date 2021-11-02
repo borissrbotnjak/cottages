@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+
 public class CottageServiceImpl implements CottageService {
 
     private CottageRepository cottageRepository;
@@ -41,9 +42,9 @@ public class CottageServiceImpl implements CottageService {
         this.cottageRepository.save(c);
         return c;
     }
-//
+
 //    @Override
-//    public List<Cottage> findAllByCottageOwner(Long id) {
+//    public List<Cottage> findByCottageOwner(Long id) {
 //        List<Cottage> all = this.cottageRepository.findAllByCottageOwner(id);
 //        List<Cottage> my = new ArrayList<>();
 //
@@ -56,5 +57,10 @@ public class CottageServiceImpl implements CottageService {
     @Override
     public List<Cottage> findAll() {
         return this.cottageRepository.findAll();
+    }
+
+    @Override
+    public List<Cottage> findByKeyword(String keyword) {
+        return this.cottageRepository.findByKeyword(keyword);
     }
 }

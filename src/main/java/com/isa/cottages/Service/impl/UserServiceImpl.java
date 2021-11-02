@@ -227,7 +227,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserFromPrincipal() throws Exception {
         String principal = this.facade.getPrincipalEmail();
-
         return findByEmail(principal);
     }
 
