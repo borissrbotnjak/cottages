@@ -20,7 +20,7 @@
 <body>
     <div class="container center-align">
         <h1>Add cottage</h1>
-        <form th:action="@{/cottage/addCottage/submit}" th:object="${cottage}" method="post">
+        <form th:action="@{/cottages/addCottage/submit}" th:object="${cottage}" method="post">
             <br><label for="name">Name:</label>
             <input id="name" type="text" th:field="*{name}"/>
 

@@ -3,7 +3,6 @@ package com.isa.cottages.Service.impl;
 import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
 import com.isa.cottages.DTO.ChangePasswordDTO;
 import com.isa.cottages.Email.EmailSender;
-import com.isa.cottages.Email.EmailService;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.UserRepository;
 import com.isa.cottages.Service.ConfirmationTokenService;
@@ -227,8 +226,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserFromPrincipal() throws Exception {
         String principal = this.facade.getPrincipalEmail();
-        return findByEmail(principal);
+        return this.findByEmail(principal);
     }
-
-
 }

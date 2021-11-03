@@ -27,7 +27,7 @@ public class BoatServiceImpl implements BoatService {
     @Override
     public Boat saveBoat(Boat boat) {
         Boat b = new Boat();
-        b.setName(boat.getName());
+        b.setBoatName(boat.getBoatName());
         this.boatRepository.save(b);
         return b;
     }

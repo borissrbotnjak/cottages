@@ -6,7 +6,6 @@ import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +27,11 @@ public class CottageServiceImpl implements CottageService {
         }
         return this.cottageRepository.findById(id).get();
     }
+
+//    @Override
+//    public List<Cottage> findAll() {
+//        return this.cottageRepository.findAll();
+//    }
 
     @Override
     public Cottage saveCottage(Cottage cottage) {

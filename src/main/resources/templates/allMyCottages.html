@@ -22,13 +22,13 @@
     <h3>My cottages</h3>
     <br>
     <div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">
-        <a th:href="${'/cottage/addCottage'}">Add new cottage</a>
+        <a th:href="${'/cottages/addCottage'}">Add new cottage</a>
     </div>
     <br>
 
     <div class="row">
         <div class="col col-lg-5">
-            <form th:action="@{'/cottage/allMyCottages'}" method="get">
+            <form th:action="@{'/cottages/allMyCottages'}" method="get">
                 <input type="text" placeholder="Name.." name="keyword"/>
                 <button type="submit" class="btn btn-dark mt-2">Search</button>
             </form>

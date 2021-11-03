@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value = "/boat")
+@RequestMapping(value = "/boats")
 public class BoatController {
 
     private BoatServiceImpl boatService;
