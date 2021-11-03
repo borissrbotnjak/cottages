@@ -35,15 +35,15 @@
         </div>
 
         <div>
-            <table id="cottages" width="90%">
+            <table width="90%">
                 <tr>
                     <th>Name:</th>
                     <th>Residence</th>
                 </tr>
                 <tr th:each="cottage:${cottages}"></tr>
-                <td th:tetx="${cottage.name}"></td>
+                <td th:text="${cottage.name}"></td>
                 <td th:text="${cottage.residence}"></td>
-                <td><a th:hreg="${'/cottage/' + cottage.getId()}">View cottage</a></td>
+                <td><a th:href="${'/cottage/' + cottage.getId()}">View cottage</a></td>
             </table>
         </div>
     </div>
