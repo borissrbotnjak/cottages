@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -33,7 +34,7 @@ public class CottageController {
     public ModelAndView addCottageForm(Model model) {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
-        List<Cottage> cottages = this.cottageService.findAll();
+        Collection<Cottage> cottages = this.cottageService.findAll();
         model.addAttribute("cottages", cottages);
         return new ModelAndView("addCottageForm");
     }
@@ -57,5 +58,12 @@ public class CottageController {
             model.addAttribute("cottages", this.cottageService.findAll());
         }
         return new ModelAndView("allMyCottages");
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView showCottage(@PathVariable("id") Long id, Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("cottage", this.cottageService.findById(id));
+        return new ModelAndView("cottage");
     }
 }

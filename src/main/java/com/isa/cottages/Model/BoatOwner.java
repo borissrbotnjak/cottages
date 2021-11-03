@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("Ship_owner")
+@DiscriminatorValue("Boat_owner")
 @Getter
 @Setter
 @NoArgsConstructor

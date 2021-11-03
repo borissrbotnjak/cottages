@@ -2,6 +2,7 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Cottage;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface CottageService {
@@ -12,7 +13,7 @@ public interface CottageService {
 
 //    List<Cottage> findByCottageOwner(Long id);
 
-    List<Cottage> findAll();
+    Collection<Cottage> findAll();
 
     List<Cottage> findByKeyword(String keyword);
 }

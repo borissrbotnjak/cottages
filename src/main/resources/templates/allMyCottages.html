@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--Import Google Icon Font-->
@@ -21,7 +21,7 @@
 <div class="container">
     <h3>My cottages</h3>
     <br>
-    <div class="right-align">
+    <div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">
         <a th:href="${'/cottage/addCottage'}">Add new cottage</a>
     </div>
     <br>
@@ -37,17 +37,15 @@
         <div>
             <table id="cottages" width="90%">
                 <tr>
-                    <th>Id:</th>
                     <th>Name:</th>
                     <th>Residence</th>
                 </tr>
                 <tr th:each="cottage:${cottages}"></tr>
-                <td th:text="${cottage.id}"></td>
-                <td th:tetx="$cottage.name"></td>
+                <td th:tetx="${cottage.name}"></td>
                 <td th:text="${cottage.residence}"></td>
+                <td><a th:hreg="${'/cottage/' + cottage.getId()}">View cottage</a></td>
             </table>
         </div>
-
     </div>
 </div>
 </body>
