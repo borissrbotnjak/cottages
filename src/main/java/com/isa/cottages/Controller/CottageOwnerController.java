@@ -25,34 +25,26 @@ public class CottageOwnerController {
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/profile/{id}")
-    public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception{
+    public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = cottageOwnerService.findById(id);
-//        if(cottageOwner == null){
-//            throw new Exception("User does not exist.");
-//        }
         model.addAttribute("user", cottageOwner);
         return new ModelAndView("profileCottageOwner");
     }
-
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/profile/{id}/editProfile")
-    public ModelAndView updateProfile(Model model, @PathVariable("id") Long id) throws Exception{
+    public ModelAndView updateProfile(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = this.cottageOwnerService.findById(id);
-        if(cottageOwner == null) {
-            throw new Exception("User with this id does not exist.");
-        }
         model.addAttribute("user", cottageOwner);
         return new ModelAndView("editOwnerProfile");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/profile/{id}/editProfile/submit")
-    public ModelAndView updateProfile(@ModelAttribute CottageOwner cottageOwner, Model model,
-                                      @PathVariable("id") Long id) throws Exception {
-        try{
+    public ModelAndView updateProfile(@PathVariable("id") Long id, Model model, @ModelAttribute CottageOwner cottageOwner) {
+        try {
             this.cottageOwnerService.updateProfile(cottageOwner);
             model.addAttribute("user", cottageOwner);
-            return new ModelAndView("redirect:/cottageOwner/profile" + id.toString());
+            return new ModelAndView("redirect:/cottageOwner/profile/" + id.toString());
         } catch (Exception e) {
             return new ModelAndView("home");
         }

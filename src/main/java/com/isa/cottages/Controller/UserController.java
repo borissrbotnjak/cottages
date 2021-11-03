@@ -35,7 +35,6 @@ public class UserController {
         if (u.getEnabled() == false) {
             throw new Exception("Your account is not activated, please check your email.");
         }
-        // TODO: add separate page redirection for each user role
         return new ModelAndView("indexPage");
     }
 

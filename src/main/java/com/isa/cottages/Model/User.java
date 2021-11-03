@@ -57,4 +57,8 @@ public class User implements Serializable {
 
     @Column
     UserRole userRole;
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }

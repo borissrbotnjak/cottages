@@ -84,11 +84,11 @@ public class UserServiceImpl implements UserService {
     public CottageOwner saveCottageOwner(UserRequest userRequest){
 
         CottageOwner co = new CottageOwner();
-        co.setEnabled(false);
-        co.setEmail(co.getEmail());
-        co.setPassword(co.getPassword());
+        co.setEnabled(true);
         co.setFirstName(co.getFirstName());
         co.setLastName(co.getLastName());
+        co.setEmail(co.getEmail());
+        co.setPassword(co.getPassword());
         co.setResidence(co.getResidence());
         co.setCity(co.getCity());
         co.setState(co.getState());
@@ -97,8 +97,8 @@ public class UserServiceImpl implements UserService {
         co.setExplanationOfRegistration(co.getExplanationOfRegistration());
 
         co.setUserRole(UserRole.COTTAGE_OWNER);
-
         this.userRepository.save(co);
+
         return co;
     }
 

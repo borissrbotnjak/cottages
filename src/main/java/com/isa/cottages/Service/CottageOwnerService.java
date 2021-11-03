@@ -7,4 +7,6 @@ public interface CottageOwnerService {
     CottageOwner findById(Long id) throws Exception;
 
     CottageOwner updateProfile(CottageOwner cottageOwner) throws Exception;
+
+    CottageOwner updateBasicInfo(CottageOwner cottageOwner, CottageOwner forUpdate);
 }
