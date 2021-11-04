@@ -2,6 +2,7 @@ package com.isa.cottages.Model;
 
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 public class Cottage implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +53,7 @@ public class Cottage implements Serializable {
     @ElementCollection
     private Set<Integer> ratings;
 
-    @ManyToOne(targetEntity = CottageOwner.class)
+    @ManyToOne(targetEntity = CottageOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="cottage_owner_id", nullable=true, referencedColumnName = "id")
     private CottageOwner cottageOwner;
 }

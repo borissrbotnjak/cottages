@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class CottageOwner extends User {
 
-    @OneToMany(mappedBy = "cottageOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cottageOwner", targetEntity = Cottage.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Cottage> cottages = new HashSet<>();
 
     @Column

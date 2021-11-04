@@ -36,7 +36,7 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
+                <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">

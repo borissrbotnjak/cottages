@@ -1,5 +1,7 @@
 package com.isa.cottages.Controller;
 
+import com.isa.cottages.Exception.ResourceConflictException;
+import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;

@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collection;
+
 @Controller
 @RequestMapping(value = "/cottages")
 public class CottageController {
@@ -30,26 +32,34 @@ public class CottageController {
         this.cottageOwnerService = cottageOwnerService;
     }
 
-    @GetMapping(value = "/addCottage")
+    @GetMapping("/addCottage")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView addCottageForm(Model model) throws Exception {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
+
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-//        Collection<Cottage> cottages = this.cottageService.findAll();
-//        model.addAttribute("cottages", cottages);
+
+        Collection<Cottage> cottages = this.cottageService.findAll();
+        model.addAttribute("cottages", cottages);
+
         return new ModelAndView("addCottageForm");
     }
 
-    @PostMapping(value = "/addCottage/submit")
+    @PostMapping("/addCottage/submit")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView addCottage(@ModelAttribute Cottage cottage) throws Exception {
-        if (this.cottageService.findById(cottage.getId()) != null) {
-            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
-        }
+    public ModelAndView addCottage(@ModelAttribute Cottage cottage, Model model) throws Exception {
+//        if (this.cottageService.findById(cottage.getId()) != null) {
+//            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
+//        }
+//        Collection<Cottage> cottages = this.cottageService.findAll();
+//        model.addAttribute("cottages", cottages);
+
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
         this.cottageService.saveCottage(cottage);
-        return new ModelAndView("redirect:/allMyCottages/");
+        return new ModelAndView("redirect:/cottages/");
     }
 
     @GetMapping("/allMyCottages")
@@ -63,7 +73,7 @@ public class CottageController {
         if (keyword != null) {
             model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
         } else {
-            model.addAttribute("cottages", cottageOwner.getCottages());
+            model.addAttribute("cottages", cottageService.findAll());
         }
         return new ModelAndView("allMyCottages");
     }
@@ -90,5 +100,21 @@ public class CottageController {
             //System.out.println("error all cottages");
             return new ModelAndView("cottagesGuests");
         }
+    }
+
+    @GetMapping("/")
+    ModelAndView getAll(Model model, String keyword) throws Exception{
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        model.addAttribute("cottage", this.cottageService.findAll());
+        if(cottageOwner == null) {
+            throw new Exception("Cottage owner does not exist.");
+        }
+        if (keyword != null) {
+            model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
+        } else {
+            model.addAttribute("cottages", cottageService.findAll());
+        }
+        return new ModelAndView("allMyCottages");
     }
 }

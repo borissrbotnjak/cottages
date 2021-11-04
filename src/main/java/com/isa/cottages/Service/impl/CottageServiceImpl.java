@@ -69,5 +69,6 @@ public class CottageServiceImpl implements CottageService {
     public List<Cottage> findByKeyword(String keyword) {
         return this.cottageRepository.findByKeyword(keyword);
     }
+
 }
 

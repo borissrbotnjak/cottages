@@ -68,12 +68,7 @@
 </div>
 
 </br>
-
-
-<!--<div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">-->
-<!--    <a th:href="${'/cottages/addCottage'}">Add new cottage</a>-->
-<!--</div>-->
-
+<div class="container">
 <div class="row my-2">
     <div class="col col-lg-3">
         <form th:action="@{'/cottages/allCottages'}" method="get">
@@ -94,6 +89,7 @@
         </div>
     </div>
 </div>
+
 </br>
 
 <div>
@@ -117,6 +113,12 @@
     </table>
 </div>
 
+</br>
+    </br>
+    <div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">
+        <a th:href="${'/cottages/addCottage'}">Add new cottage</a>
+    </div>
+</div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
