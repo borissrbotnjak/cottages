@@ -2,6 +2,8 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Cottage;
+import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +22,24 @@ public class CottageController {
 
     private UserServiceImpl userService;
 
+    private CottageOwnerServiceImpl cottageOwnerService;
+
     @Autowired
-    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService) {
+    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService) {
         this.cottageService = cottageService;
         this.userService = userService;
+        this.cottageOwnerService = cottageOwnerService;
     }
 
     @GetMapping(value = "/addCottage")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView addCottageForm(Model model) {
+    public ModelAndView addCottageForm(Model model) throws Exception {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
-        Collection<Cottage> cottages = this.cottageService.findAll();
-        model.addAttribute("cottages", cottages);
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+//        Collection<Cottage> cottages = this.cottageService.findAll();
+//        model.addAttribute("cottages", cottages);
         return new ModelAndView("addCottageForm");
     }
 
@@ -48,11 +55,16 @@ public class CottageController {
 
     @GetMapping("/allMyCottages")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView getAllMyCottages(Model model, String keyword) {
+    public ModelAndView getAllMyCottages (Model model, String keyword) throws Exception{
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        if(cottageOwner == null) {
+            throw new Exception("Cottage owner does not exist.");
+        }
         if (keyword != null) {
             model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
         } else {
-            model.addAttribute("cottages", this.cottageService.findAll());
+            model.addAttribute("cottages", cottageOwner.getCottages());
         }
         return new ModelAndView("allMyCottages");
     }

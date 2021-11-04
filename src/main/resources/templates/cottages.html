@@ -26,21 +26,25 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href=# >Make cottage reservation</a>
-                        <a class="dropdown-item" href=#>Make boat reservation</a>
-                        <a class="dropdown-item" th:href="@{'/reservations/cottage/upcoming'}">Upcoming cottage reservations</a>
-                        <a class="dropdown-item" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
-                        <a class="dropdown-item" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
-                        <a class="dropdown-item" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" href=# >Make cottage reservation</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" href=#>Make boat reservation</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottage/upcoming'}">Upcoming cottage reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
                     </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
-                <li class="nav-item">
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
+                    <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAnonymous()">
@@ -52,6 +56,9 @@
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
                 </li>
+                <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
+                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
                 </li>
@@ -61,6 +68,11 @@
 </div>
 
 </br>
+
+
+<!--<div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">-->
+<!--    <a th:href="${'/cottages/addCottage'}">Add new cottage</a>-->
+<!--</div>-->
 
 <div class="row my-2">
     <div class="col col-lg-3">
@@ -91,7 +103,7 @@
             <th>Address:</th>
             <th></th>
             <th></th>
-            <th>Average Rating:</th>
+<!--            <th>Average Rating:</th>-->
             <th></th>
         </tr>
         <tr th:each="cottage:${cottages}">
@@ -99,7 +111,7 @@
             <td th:text="${cottage.state}"></td>
             <td th:text="${cottage.city}"></td>
             <td th:text="${cottage.residence}"></td>
-            <td th:text="${cottage.averageRating}"></td>
+<!--            <td th:text="${cottage.averageRating}"></td>-->
             <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
         </tr>
     </table>

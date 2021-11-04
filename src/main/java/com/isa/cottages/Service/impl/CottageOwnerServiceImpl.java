@@ -1,6 +1,5 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.CottageOwnerRepository;
 import com.isa.cottages.Service.CottageOwnerService;
@@ -51,5 +50,4 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
 
         return this.cottageOwnerRepository.save(forUpdate);
     }
-
 }

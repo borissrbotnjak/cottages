@@ -10,14 +10,15 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-
 public class CottageServiceImpl implements CottageService {
 
     private CottageRepository cottageRepository;
+    private UserServiceImpl userService;
 
     @Autowired
-    public CottageServiceImpl(CottageRepository cottageRepository){
+    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService){
         this.cottageRepository = cottageRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -69,3 +70,4 @@ public class CottageServiceImpl implements CottageService {
         return this.cottageRepository.findByKeyword(keyword);
     }
 }
+

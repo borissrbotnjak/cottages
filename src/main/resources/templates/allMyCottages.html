@@ -14,14 +14,43 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Title</title>
 </head>
 <body>
 
+<div class="container-fluid bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
 <div class="container">
+    </br>
     <h3>My cottages</h3>
     <br>
-    <div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">
+    <div class="row">
         <a th:href="${'/cottages/addCottage'}">Add new cottage</a>
     </div>
     <br>
@@ -34,19 +63,41 @@
             </form>
         </div>
 
-        <div>
-            <table width="90%">
+        <div class="table">
+            <table id="cottages" width="90%">
                 <tr>
                     <th>Name:</th>
-                    <th>Residence</th>
+                    <th>Residence:</th>
+                    <th>City:</th>
+                    <th>State:</th>
+                    <th>Number of rooms:</th>
+                    <th>Number of beds:</th>
+                    <th>Rules:</th>
+                    <th>Description:</th>
+                    <th></th>
                 </tr>
-                <tr th:each="cottage:${cottages}"></tr>
-                <td th:text="${cottage.name}"></td>
-                <td th:text="${cottage.residence}"></td>
-                <td><a th:href="${'/cottage/' + cottage.getId()}">View cottage</a></td>
+                <tr th:each="cottage:${cottages}">
+                    <td th:text="${cottage.name}"></td>
+                    <td th:text="${cottage.residence}"></td>
+                    <td th:text="${cottage.city}"></td>
+                    <td th:text="${cottage.state}"></td>
+                    <td th:text="${cottage.numberOfRooms}"></td>
+                    <td th:text="${cottage.numberOfBeds}"></td>
+                    <td th:text="${cottage.rules}"></td>
+                    <td th:text="${cottage.description}"></td>
+                    <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
+                </tr>
             </table>
         </div>
     </div>
 </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
 </html>
