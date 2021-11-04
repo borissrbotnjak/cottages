@@ -103,7 +103,7 @@
             <th>Address:</th>
             <th></th>
             <th></th>
-<!--            <th>Average Rating:</th>-->
+            <th>Average Rating:</th>
             <th></th>
         </tr>
         <tr th:each="cottage:${cottages}">
@@ -111,7 +111,7 @@
             <td th:text="${cottage.state}"></td>
             <td th:text="${cottage.city}"></td>
             <td th:text="${cottage.residence}"></td>
-<!--            <td th:text="${cottage.averageRating}"></td>-->
+            <td th:text="${cottage.averageRating}"></td>
             <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
         </tr>
     </table>

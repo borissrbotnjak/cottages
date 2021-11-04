@@ -3,18 +3,15 @@ package com.isa.cottages.Service.impl;
 import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
 import com.isa.cottages.DTO.ChangePasswordDTO;
 import com.isa.cottages.Email.EmailSender;
-import com.isa.cottages.Email.EmailService;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.UserRepository;
 import com.isa.cottages.Service.ConfirmationTokenService;
 import com.isa.cottages.Service.UserService;
 import com.isa.cottages.authFasace.AuthenticationFacade;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

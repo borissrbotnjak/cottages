@@ -1,7 +1,5 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Exception.ResourceConflictException;
-import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
@@ -10,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/cottageOwner")
