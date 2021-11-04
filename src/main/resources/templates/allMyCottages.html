@@ -58,14 +58,14 @@
     <div class="row">
         <div class="col col-lg-5">
             <form th:action="@{'/cottages/allMyCottages'}" method="get">
-                <input type="text" placeholder="Name.." name="keyword"/>
+                <input type="text" placeholder="Name or adress..." name="keyword"/>
                 <button type="submit" class="btn btn-dark mt-2">Search</button>
             </form>
         </div>
 
         </br>
         <div class="table">
-            <table width="90%">
+            <table id="cottages" width="90%">
                 <tr>
                     <th>Name:</th>
                     <th>Residence:</th>

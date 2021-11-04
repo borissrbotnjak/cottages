@@ -16,9 +16,10 @@ public interface CottageRepository extends JpaRepository<Cottage, Long> {
 //    List<Cottage> findAllByCottageOwner(@Param("cotOwnId") Long id);
 
     @Query(value="SELECT * FROM Cottage c where lower(c.name) like lower(concat('%', ?1, '%')) " +
-            "or lower(c.state) like lower(concat('%', ?1, '%')" +
-            "or lower(c.city) like lower(concat('%', ?1, '%')" +
-            "or lower(c.residence) like lower(concat('%', ?1, '%')) ",
-            nativeQuery = true)
+//            "or lower(c.state) like lower(concat('%', ?1, '%')" +
+//            "or lower(c.city) like lower(concat('%', ?1, '%')" +
+            //Ne radi i za city i state ????
+            "or lower(c.residence) like lower(concat('%', ?1, '%')) "
+           , nativeQuery = true)
     List<Cottage> findByKeyword(@Param("keyword") String keyword);
 }
