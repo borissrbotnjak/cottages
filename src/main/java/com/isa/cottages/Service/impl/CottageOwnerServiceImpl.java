@@ -1,10 +1,13 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.CottageOwnerRepository;
 import com.isa.cottages.Service.CottageOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class CottageOwnerServiceImpl implements CottageOwnerService {

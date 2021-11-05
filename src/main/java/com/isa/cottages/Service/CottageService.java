@@ -13,4 +13,7 @@ public interface CottageService {
     Collection<Cottage> findAll();
 
     List<Cottage> findByKeyword(String keyword);
+
+    Cottage updateCottage(Cottage cottage) throws Exception;
+    Cottage removeCottage(Cottage cottage) throws Exception;
 }

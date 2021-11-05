@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CottageServiceImpl implements CottageService {
@@ -68,6 +69,33 @@ public class CottageServiceImpl implements CottageService {
     @Override
     public List<Cottage> findByKeyword(String keyword) {
         return this.cottageRepository.findByKeyword(keyword);
+    }
+
+    @Override
+    public Cottage updateCottage(Cottage cottage) throws Exception {
+        Cottage forUpdate = findById(cottage.getId());
+
+        forUpdate.setName(forUpdate.getName());
+        forUpdate.setResidence(forUpdate.getResidence());
+        forUpdate.setCity(forUpdate.getCity());
+        forUpdate.setState(forUpdate.getState());
+        forUpdate.setNumberOfRooms(forUpdate.getNumberOfRooms());
+        forUpdate.setNumberOfBeds(forUpdate.getNumberOfBeds());
+        forUpdate.setRules(forUpdate.getRules());
+        forUpdate.setDescription(forUpdate.getDescription());
+
+        this.cottageRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public Cottage removeCottage(Cottage cottage) throws Exception {
+        Cottage forDelete = findById(cottage.getId());
+//        Set<Cottage> cottages = forUpdate.getCottageOwner().getCottages();
+        List<Cottage> cottages = (List<Cottage>) this.cottageRepository.findAll();
+        cottages.remove(forDelete);
+        this.cottageRepository.save(forDelete);
+        return forDelete;
     }
 
 }

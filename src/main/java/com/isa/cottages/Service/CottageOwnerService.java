@@ -1,5 +1,6 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 
 public interface CottageOwnerService {
