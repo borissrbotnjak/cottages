@@ -9,4 +9,6 @@ public interface CottageReservationService {
 //    List<Reservation> findReserved(Long id);
 
     List<CottageReservation> getUpcomingReservations() throws Exception;
+
+    List<CottageReservation> getPastReservations() throws Exception;
 }

@@ -36,6 +36,20 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         return upcoming;
     }
 
+    @Override
+    public List<CottageReservation> getPastReservations() throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<CottageReservation> all = this.reservationRepository.getAllReserved();
+        List<CottageReservation> pastOnes = new ArrayList<CottageReservation>();
+
+        for (CottageReservation res:all) {
+            if((res.getStartingTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+                pastOnes.add(res);
+            }
+        }
+        return pastOnes;
+    }
+
 //    @Override
 //    public List<Reservation> findReserved(Long id) {
 //        List<Reservation> all = this.reservationRepository.findReserved(id);

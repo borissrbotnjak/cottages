@@ -42,5 +42,14 @@ public class CottageReservationController {
         return new ModelAndView("upcomingCottageReservations");
     }
 
+    @GetMapping("/reservationHistory")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView showReservationHistory(Model model) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        model.addAttribute("reservations", this.reservationService.getPastReservations());
+
+        return new ModelAndView("cottageReservationHistory");
+    }
 
 }

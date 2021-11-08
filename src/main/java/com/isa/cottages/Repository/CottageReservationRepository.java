@@ -15,8 +15,8 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
 //    @Query(value = "SELECT * FROM Reservation res WHERE res.reserved = true", nativeQuery = true)
 //    List<Reservation> findReserved(@Param("id") Long id);
 
-    @Modifying
-    @Transactional
+//    @Modifying
+//    @Transactional
     @Query(value = "SELECT * FROM Reservation res WHERE res.deleted=false and res.reserved=true", nativeQuery = true)
     List<CottageReservation> getAllReserved();
 
