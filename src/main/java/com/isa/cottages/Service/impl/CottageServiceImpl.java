@@ -1,25 +1,26 @@
 package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Cottage;
+import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.CottageRepository;
 import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CottageServiceImpl implements CottageService {
 
     private CottageRepository cottageRepository;
     private UserServiceImpl userService;
+    private CottageOwnerServiceImpl cottageOwnerService;
 
     @Autowired
-    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService){
+    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService){
         this.cottageRepository = cottageRepository;
         this.userService = userService;
+        this.cottageOwnerService = cottageOwnerService;
     }
 
     @Override
@@ -30,13 +31,8 @@ public class CottageServiceImpl implements CottageService {
         return this.cottageRepository.findById(id).get();
     }
 
-//    @Override
-//    public List<Cottage> findAll() {
-//        return this.cottageRepository.findAll();
-//    }
-
     @Override
-    public Cottage saveCottage(Cottage cottage) {
+    public Cottage saveCottage(Cottage cottage) throws Exception {
         Cottage c = new Cottage();
         c.setName(cottage.getName());
         c.setResidence(cottage.getResidence());
@@ -46,20 +42,11 @@ public class CottageServiceImpl implements CottageService {
         c.setNumberOfBeds(cottage.getNumberOfBeds());
         c.setRules(cottage.getRules());
         c.setDescription(cottage.getDescription());
+        c.setCottageOwner(cottage.getCottageOwner());
         this.cottageRepository.save(c);
+
         return c;
     }
-
-//    @Override
-//    public List<Cottage> findByCottageOwner(Long id) {
-//        List<Cottage> all = this.cottageRepository.findAllByCottageOwner(id);
-//        List<Cottage> my = new ArrayList<>();
-//
-//        for(Cottage cot: all){
-//            my.add(cot);
-//        }
-//        return my;
-//    }
 
     @Override
     public Collection<Cottage> findAll() {
@@ -67,22 +54,50 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
+    public List<Cottage> findByCottageOwner(Long id) throws Exception{
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<Cottage> all = this.cottageRepository.findByCottageOwner(id);
+        List<Cottage> myCottages = new ArrayList<Cottage>();
+
+        for (Cottage co:all) {
+            if(Objects.equals(co.getCottageOwner().getId(), cottageOwner.getId())) {
+                myCottages.add(co);
+            }
+        }
+        return myCottages;
+    }
+
+    @Override
     public List<Cottage> findByKeyword(String keyword) {
         return this.cottageRepository.findByKeyword(keyword);
+    }
+
+    public List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<Cottage> all = this.cottageRepository.findByKeywordAndCottageOwner(keyword, id);
+        List<Cottage> myCottages = new ArrayList<Cottage>();
+
+        for (Cottage co:all) {
+            if(Objects.equals(co.getCottageOwner().getId(), cottageOwner.getId())) {
+                myCottages.add(co);
+            }
+        }
+        return myCottages;
     }
 
     @Override
     public Cottage updateCottage(Cottage cottage) throws Exception {
         Cottage forUpdate = findById(cottage.getId());
 
-        forUpdate.setName(forUpdate.getName());
-        forUpdate.setResidence(forUpdate.getResidence());
-        forUpdate.setCity(forUpdate.getCity());
-        forUpdate.setState(forUpdate.getState());
-        forUpdate.setNumberOfRooms(forUpdate.getNumberOfRooms());
-        forUpdate.setNumberOfBeds(forUpdate.getNumberOfBeds());
-        forUpdate.setRules(forUpdate.getRules());
-        forUpdate.setDescription(forUpdate.getDescription());
+        forUpdate.setName(cottage.getName());
+        forUpdate.setResidence(cottage.getResidence());
+        forUpdate.setCity(cottage.getCity());
+        forUpdate.setState(cottage.getState());
+        forUpdate.setNumberOfRooms(cottage.getNumberOfRooms());
+        forUpdate.setNumberOfBeds(cottage.getNumberOfBeds());
+        forUpdate.setRules(cottage.getRules());
+        forUpdate.setDescription(cottage.getDescription());
+        forUpdate.setCottageOwner(cottage.getCottageOwner());
 
         this.cottageRepository.save(forUpdate);
         return forUpdate;

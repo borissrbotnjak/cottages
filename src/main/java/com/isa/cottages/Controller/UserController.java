@@ -66,7 +66,7 @@ public class UserController {
     @PreAuthorize("hasRole('BOAT_OWNER')")
     public ModelAndView boatOwnerHome(Model model, Authentication auth) {
         BoatOwner boatOwner = (BoatOwner) userService.findByEmail(auth.getName());
-        model.addAttribute("boatOwner", boatOwner);
+        model.addAttribute("user", boatOwner);
         return new ModelAndView("boat-owner-home");
     }
 

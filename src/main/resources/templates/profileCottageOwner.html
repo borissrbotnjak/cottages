@@ -43,7 +43,7 @@
                     <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
+                    <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>

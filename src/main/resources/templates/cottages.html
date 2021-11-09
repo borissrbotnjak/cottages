@@ -41,7 +41,7 @@
                 </li>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
-                    <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
+                    <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
@@ -115,12 +115,6 @@
         </tr>
     </table>
 </div>
-
-</br>
-    </br>
-    <div class="row" sec:authorize="hasRole('COTTAGE_OWNER')">
-        <a th:href="${'/cottages/addCottage'}">Add new cottage</a>
-    </div>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

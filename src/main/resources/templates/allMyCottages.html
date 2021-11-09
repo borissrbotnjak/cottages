@@ -34,7 +34,7 @@
                     <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
+                    <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
@@ -52,13 +52,13 @@
     <h3>My cottages</h3>
     <br>
     <div class="row">
-        <a th:href="${'/cottages/addCottage'}">Add new cottage</a>
+        <a th:href="${'/cottages/addCottage/__${principal.id}__'}">Add new cottage</a>
     </div>
     <br>
 
     <div class="row">
         <div class="col col-lg-5">
-            <form th:action="@{'/cottages/allMyCottages'}" method="get">
+            <form th:action="@{'/cottages/allMyCottages/__${principal.id}__'}" method="get">
                 <input type="text" placeholder="Name or address..." name="keyword"/>
                 <button type="submit" class="btn btn-dark mt-2">Search</button>
             </form>
@@ -84,7 +84,7 @@
                     <td th:text="${cottage.state}"></td>
                     <td th:text="${cottage.averageRating}"></td>
                     <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
-                    <td><a th:href="@{'/cottages/allMyCottages/__${cottage.id}__/editCottage'}">Edit</a></td>
+                    <td><a th:href="@{'/cottages/allMyCottages/__${principal.id}__/editCottage/__${cottage.id}__'}">Edit</a></td>
                     <td><a th:href="@{'/cottages/allMyCottages/remove/__${cottage.id}__'}">Remove</a></td>
                 </tr>
             </table>

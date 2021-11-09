@@ -1,6 +1,5 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.CottageRepository;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/cottages")
@@ -35,48 +33,53 @@ public class CottageController {
         this.cottageOwnerService = cottageOwnerService;
     }
 
-    @GetMapping("/addCottage")
+    @GetMapping("/addCottage/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView addCottageForm(Model model) throws Exception {
+    public ModelAndView addCottageForm(@PathVariable Long id, Model model) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
 
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
-
-        Collection<Cottage> cottages = this.cottageService.findAll();
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
 
         return new ModelAndView("addCottageForm");
     }
 
-    @PostMapping("/addCottage/submit")
+    @PostMapping("/addCottage/{id}/submit")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView addCottage(@ModelAttribute Cottage cottage, Model model) throws Exception {
+    public ModelAndView addCottage(@PathVariable Long id, @ModelAttribute Cottage cottage, Model model) throws Exception {
 //        if (this.cottageService.findById(cottage.getId()) != null) {
 //            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
 //        }
-//        Collection<Cottage> cottages = this.cottageService.findAll();
-//        model.addAttribute("cottages", cottages);
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
+        model.addAttribute("cottages", cottages);
 
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
+
+        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
         this.cottageService.saveCottage(cottage);
-        return new ModelAndView("redirect:/cottages/allMyCottages");
+        return new ModelAndView("redirect:/cottages/allMyCottages/{id}/");
     }
 
-    @GetMapping("/allMyCottages")
+    @GetMapping("/allMyCottages/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView getAllMyCottages (Model model, String keyword) throws Exception{
+    public ModelAndView getAllMyCottages (@PathVariable Long id, Model model, String keyword) throws Exception{
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
+
+        Cottage cottage = new Cottage();
+        model.addAttribute("cottage", cottage);
+
         if(cottageOwner == null) {
             throw new Exception("Cottage owner does not exist.");
         }
         if (keyword != null) {
             model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
         } else {
-            model.addAttribute("cottages", cottageService.findAll());
+            model.addAttribute("cottages", cottageService.findByCottageOwner(id));
         }
         return new ModelAndView("allMyCottages");
     }
@@ -105,7 +108,7 @@ public class CottageController {
         }
     }
 
-    @GetMapping("/allMyCottages/{id}/editCottage")
+    @GetMapping("/allMyCottages/{id}/editCottage/{cid}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView editCottageForm(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -113,22 +116,25 @@ public class CottageController {
 
         Cottage cottage = this.cottageService.findById(id);
         model.addAttribute("cottage", cottage);
+
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
+        model.addAttribute("cottages", cottages);
         return new ModelAndView("editCottage");
     }
 
-    @PostMapping("/allMyCottages/{id}/editCottage/submit")
+    @PostMapping("/allMyCottages/{id}/editCottage/{cid}/submit")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView updateCottage(@PathVariable("id") Long id, Model model, @ModelAttribute Cottage cottage) throws Exception{
+    public ModelAndView updateCottage(@PathVariable("id") Long id, Model model) throws Exception{
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
-        try {
-            this.cottageService.updateCottage(cottage);
-            model.addAttribute("cottage", cottage);
-            return new ModelAndView("redirect:/cottages/allMyCottages/");
-        } catch (Exception e) {
-            return new ModelAndView("home");
-        }
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
+        model.addAttribute("cottages", cottages);
+
+        Cottage cottage = this.cottageService.findById(id);
+        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+        this.cottageService.updateCottage(cottage);
+        return new ModelAndView("redirect:/cottages/allMyCottages/{id}/");
     }
 
     @GetMapping("/allMyCottages/remove/{id}")
@@ -138,6 +144,6 @@ public class CottageController {
         Cottage cottage = this.cottageService.findById(id);
 
         Cottage c = this.cottageService.removeCottage(cottage);
-        return new ModelAndView("redirect:/cottages/allMyCottages");
+        return new ModelAndView("redirect:/cottages/allMyCottages/{id}");
     }
 }
