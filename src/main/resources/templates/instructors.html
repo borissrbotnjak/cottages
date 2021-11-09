@@ -6,20 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
--->
-  <link rel="stylesheet" href="../../static/css/profileCSS.css">
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-  <title>Cottage</title>
+
+  <title>Cottages</title>
 </head>
 <body>
 
 <div class="container-fluid bg-light">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Memedovic cottages</a>
+    <a class="navbar-brand" href="#">Memedovic Cottages</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
@@ -37,16 +35,17 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
+          <a class="nav-link" th:href="${'/adventures/allAdventures'}">All cottages</a>
+        </li>
         </li>
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('CLIENT')">
-          <a class="nav-link"th:href="${'/boats/allBoats'}">All boats</a>
+          <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('CLIENT')">
-          <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+          <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="${'/auth/login'}">Log in</a>
@@ -66,71 +65,66 @@
       </ul>
     </div>
   </nav>
-</div> </br></br>
-
-<div class="container emp-profile">
-  <!--<form method="post">-->
-  <form th:object="${cottage}" method="get">
+</div>
+<!--
+</br>
+<div class="container">
+  <div class="row my-2">
+    <div class="col col-lg-3">
+      <form th:action="@{'/adventures/allAdventures'}" method="get">
+        <input type="text" placeholder="Name or address.." name="keyword"/>
+        <button type="submit" class="btn btn-dark mt-2">Search</button>
+      </form>
+    </div>
     <div class="row">
-      <div class="col-md-8">
-        <div class="tab-content profile-tab" id="myTabContent">
-          <div id="profile">
-            <div class="row">
-              <div class="col-md-6">
-                <label>Name</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.name}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>State</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.state}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>City</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.city}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>Residence</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.residence}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>Average rating</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.averageRating}"></p>
-              </div>
-            </div>
-            </br></br></br>
-            <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
-          </div>
-        </div>
+      <div class="col col-lg-7">
+        <h5>Sort by Name </h5>
+        <a th:href="${'/adventures/allAdventures/sortByNameAsc'}">Ascending</a>
+        </br><a th:href="${'/adventures/allAdventures/sortByNameDesc'}">Descending</a> </br></br>
+      </div>
+      <div class="col">
+        <h5>Sort by Average Rating </h5>
+        <a th:href="${'/adventures/allAdventuressortByRatingAsc'}">Ascending</a>
+        </br><a th:href="${'/adventures/allAdventures/sortByRatingDesc'}">Descending</a> </br></br>
       </div>
     </div>
-  </form>
+  </div>
+-->
+  </br>
+
+  <div>
+    <table id="cottages" width="90%">
+      <tr>
+        <th>Instructor name:</th>
+        <th>Adventure:</th>
+        <th>Adventure description:</th>
+        <th>Address:</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr th:each="instructor:${instructors}">
+        <td th:text="${instructor.instructorInfo}"></td>
+        <td th:text="${instructor.getAdventureName()}"></td>
+        <td th:text="${instructor.adventureDescription}"></td>
+        <td><a th:href="${'/adventures/' + instructor.getId()}">View instructor and adventure</a></td>
+      </tr>
+    </table>
+  </div>
+
+  </br>
+  </br>
+  <div class="row" sec:authorize="hasRole('SYS_ADMIN')">
+    <p class="tab" style="margin-left: 40px"></p>
+    <a th:href="${'/adventures/addAdventure'}">Add new adventure</a>
+  </div>
 </div>
-
-
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 
 </body>
 </html>

@@ -3,14 +3,13 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
+import com.isa.cottages.Service.impl.UserServiceImpl;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -18,10 +17,26 @@ import org.springframework.web.servlet.ModelAndView;
 public class BoatController {
 
     private BoatServiceImpl boatService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public BoatController(BoatServiceImpl boatService){
+    public BoatController(BoatServiceImpl boatService, UserServiceImpl userService){
         this.boatService = boatService;
+        this.userService = userService;
+    }
+
+    @GetMapping("/allBoats")
+    public ModelAndView getAllBoats(Model model) throws Exception {
+        model.addAttribute("boats", this.boatService.getAll());
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        return new ModelAndView("boats");
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView showBoat(@PathVariable("id") Long id, Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("boat", this.boatService.findById(id));
+        return new ModelAndView("boat");
     }
 
     @GetMapping(value = "/addBoat")

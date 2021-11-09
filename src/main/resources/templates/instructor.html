@@ -70,17 +70,25 @@
 
 <div class="container emp-profile">
   <!--<form method="post">-->
-  <form th:object="${cottage}" method="get">
+  <form th:object="${instructor}" method="get">
     <div class="row">
       <div class="col-md-8">
         <div class="tab-content profile-tab" id="myTabContent">
           <div id="profile">
             <div class="row">
               <div class="col-md-6">
-                <label>Name</label>
+                <label>Instructor</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.name}"></p>
+                <p th:text="${instructor.instructorInfo}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Adventure</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${instructor.adventureName}"></p>
               </div>
             </div>
             <div class="row">
@@ -88,7 +96,7 @@
                 <label>State</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.state}"></p>
+                <p th:text="${instructor.adventureState}"></p>
               </div>
             </div>
             <div class="row">
@@ -96,7 +104,7 @@
                 <label>City</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.city}"></p>
+                <p th:text="${instructor.adventureCity}"></p>
               </div>
             </div>
             <div class="row">
@@ -104,19 +112,11 @@
                 <label>Residence</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.residence}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>Average rating</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.averageRating}"></p>
+                <p th:text="${instructor.adventureResidence}"></p>
               </div>
             </div>
             </br></br></br>
-            <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
+            <a th:href="@{'/adventures/__${instructor.id}__/timeSlots'}">Reservation time slots</a>
           </div>
         </div>
       </div>
