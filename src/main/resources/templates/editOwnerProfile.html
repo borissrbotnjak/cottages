@@ -56,7 +56,7 @@
     <div class="container">
         <div class="center-align blue lighten-5">
         <h1>Edit profile</h1>
-        <form th:action="@{'/cottageOwner/profile/__${user.id}__/editProfile/submit'}" th:object="${user}" method="post">
+        <form th:action="@{'/cottageOwner/profile/__${principal.id}__/editProfile/submit'}" th:object="${principal}" method="post">
             <br><label for="firstName">FirstName:</label>
             <input id="firstName" type="text" th:field="*{firstName}"/>
             <br><label for="lastName">LastName:</label>

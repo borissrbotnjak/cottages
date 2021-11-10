@@ -111,6 +111,14 @@
             </div>
             <div class="row">
               <div class="col-md-6">
+                <label>Promotional Description</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${cottage.promotionalDescription}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
                 <label>Average rating</label>
               </div>
               <div class="col-md-6">
@@ -119,6 +127,8 @@
             </div>
             </br></br></br>
             <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
+            </br></br>
+              <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
           </div>
         </div>
       </div>

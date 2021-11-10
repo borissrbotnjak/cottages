@@ -22,14 +22,13 @@
 </head>
 <body>
 
-
-
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
@@ -53,83 +52,83 @@
     </nav>
 </div>
 
-
-</br>
-<div>
-    <a th:href="@{/cottageOwner/profile/__${user.id}__/editProfile}">Edit profile</a>
+<div class="container">
+<div class="row">
+    </br>
+    <div class="col-md-4">
+        </br></br>
+        <a th:href="@{/cottageOwner/profile/__${principal.id}__/editProfile}">Edit profile</a>
+        </br>
+        <a th:href="@{/auth/change-password}">Change password</a>
+    </div>
 </div>
-<div>
-    <a th:href="@{/auth/change-password}">Change password</a>
-</div>
-<div>
-    <a th:href="${'/auth/logout'}">Log out</a>
 </div>
 
 <div class="center-align">
-    <form th:object="${user}" method="get">
+    <form th:object="${principal}" method="get">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <div class="profile-img">
                     <img src="https://kctherapy.com/wp-content/uploads/2019/09/default-user-avatar-300x293.png" alt=""/>
                 </div>
             </div>
         </div>
 
-    <div th:object="${user}">
+    <div th:object="${principal}">
 
     </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
             <label>Name:</label>
             </div>
-            <div class="col-md-6">
-                <p th:text="${user.getFullName()}"></p>
+            <div class="col-md-8">
+                <p th:text="${principal.getFullName()}"></p>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <label>Email:</label>
             </div>
-            <div class="col-md-6">
-                <p th:text="${user.email}"></p>
+            <div class="col-md-8">
+                <p th:text="${principal.email}"></p>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <label>Phone number</label>
             </div>
-            <div class="col-md-6">
-                <p th:text="${user.phoneNumber}"></p>
+            <div class="col-md-8">
+                <p th:text="${principal.phoneNumber}"></p>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <label>Residence</label>
             </div>
-            <div class="col-md-6">
-                <p th:text="${user.residence}"></p>
+            <div class="col-md-8">
+                <p th:text="${principal.residence}"></p>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <label>City</label>
             </div>
-            <div class="col-md-6">
-                <p th:text="${user.city}"></p>
+            <div class="col-md-8">
+                <p th:text="${principal.city}"></p>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <label>State</label>
             </div>
-            <div class="col-md-6">
-                <p th:text="${user.state}"></p>
+            <div class="col-md-8">
+                <p th:text="${principal.state}"></p>
             </div>
         </div>
 

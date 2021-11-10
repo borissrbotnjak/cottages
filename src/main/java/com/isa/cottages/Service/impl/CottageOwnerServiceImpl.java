@@ -31,12 +31,12 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
     public CottageOwner updateProfile(CottageOwner cottageOwner) throws Exception {
         CottageOwner forUpdate = this.findById(cottageOwner.getId());
 
-        forUpdate.setCity(cottageOwner.getCity());
-        forUpdate.setState(cottageOwner.getState());
-        forUpdate.setResidence(cottageOwner.getResidence());
         forUpdate.setFirstName(cottageOwner.getFirstName());
         forUpdate.setLastName(cottageOwner.getLastName());
         forUpdate.setPhoneNumber(cottageOwner.getPhoneNumber());
+        forUpdate.setResidence(cottageOwner.getResidence());
+        forUpdate.setCity(cottageOwner.getCity());
+        forUpdate.setState(cottageOwner.getState());
 
         this.cottageOwnerRepository.save(forUpdate);
         return forUpdate;
@@ -52,5 +52,15 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
         forUpdate.setLastName(cottageOwner.getLastName());
 
         return this.cottageOwnerRepository.save(forUpdate);
+    }
+
+    @Override
+    public CottageOwner updateCottages(CottageOwner cottageOwner) throws Exception {
+    CottageOwner forUpdate = this.findById(cottageOwner.getId());
+    if(forUpdate == null) { throw new Exception("Cottage owner does not exist."); }
+
+    forUpdate.setCottages(cottageOwner.getCottages());
+    this.cottageOwnerRepository.save(forUpdate);
+    return forUpdate;
     }
 }

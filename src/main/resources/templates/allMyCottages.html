@@ -2,13 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>My Cottages</title>
 </head>
@@ -52,7 +60,7 @@
     <h3>My cottages</h3>
     <br>
     <div class="row">
-        <a th:href="${'/cottages/addCottage/__${principal.id}__'}">Add new cottage</a>
+        <button type="button" class="btn mt-2"><a th:href="${'/cottages/addCottage/__${principal.id}__'}">Add new cottage</a></button>
     </div>
     <br>
 
@@ -61,11 +69,12 @@
             <form th:action="@{'/cottages/allMyCottages/__${principal.id}__'}" method="get">
                 <input type="text" placeholder="Name or address..." name="keyword"/>
                 <button type="submit" class="btn btn-dark mt-2">Search</button>
+                </br>
             </form>
         </div>
-
-        </br>
+        </br></br></br></br>
         <div class="table">
+            </br>
             <table id="cottages" width="90%">
                 <tr>
                     <th>Name:</th>
@@ -85,7 +94,7 @@
                     <td th:text="${cottage.averageRating}"></td>
                     <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
                     <td><a th:href="@{'/cottages/allMyCottages/__${principal.id}__/editCottage/__${cottage.id}__'}">Edit</a></td>
-                    <td><a th:href="@{'/cottages/allMyCottages/remove/__${cottage.id}__'}">Remove</a></td>
+                    <td><a th:href="@{'/cottages/allMyCottages/__${principal.id}__/remove/__${cottage.id}__'}">Remove</a></td>
                 </tr>
             </table>
         </div>

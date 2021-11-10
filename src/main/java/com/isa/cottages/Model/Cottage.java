@@ -32,6 +32,9 @@ public class Cottage implements Serializable {
     private String state;
 
     @Column
+    private String promotionalDescription;
+
+    @Column
     private String image;
 
     @Column

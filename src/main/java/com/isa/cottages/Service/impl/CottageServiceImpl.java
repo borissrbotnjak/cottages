@@ -2,6 +2,7 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Repository.CottageOwnerRepository;
 import com.isa.cottages.Repository.CottageRepository;
 import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,21 @@ public class CottageServiceImpl implements CottageService {
     private CottageRepository cottageRepository;
     private UserServiceImpl userService;
     private CottageOwnerServiceImpl cottageOwnerService;
+    private CottageOwnerRepository cottageOwnerRepository;
 
     @Autowired
-    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService){
+    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
+                              CottageOwnerServiceImpl cottageOwnerService,
+                              CottageOwnerRepository cottageOwnerRepository){
         this.cottageRepository = cottageRepository;
         this.userService = userService;
         this.cottageOwnerService = cottageOwnerService;
+        this.cottageOwnerRepository = cottageOwnerRepository;
     }
 
     @Override
     public Cottage findById(Long id) throws Exception {
-        if(!this.cottageRepository.findById(id).isPresent()) {
+        if(this.cottageRepository.findById(id).isEmpty()) {
             throw new Exception("No such value(cottage service)");
         }
         return this.cottageRepository.findById(id).get();
@@ -104,13 +109,20 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public Cottage removeCottage(Cottage cottage) throws Exception {
-        Cottage forDelete = findById(cottage.getId());
-//        Set<Cottage> cottages = forUpdate.getCottageOwner().getCottages();
-        List<Cottage> cottages = (List<Cottage>) this.cottageRepository.findAll();
-        cottages.remove(forDelete);
-        this.cottageRepository.save(forDelete);
-        return forDelete;
+    public CottageOwner removeCottage(Cottage cottage, CottageOwner cottageOwner) throws Exception {
+        CottageOwner forUpdate = (CottageOwner) userService.findById(cottageOwner.getId());
+//        if (cottageOwner == null) {
+//            throw new Exception("Cottage owner does not exist.");
+//        }
+//        Cottage cot = findById(cottage.getId());
+        Set<Cottage> cottages = forUpdate.getCottages();
+//        cottages.remove(cot);
+        cottages.remove(cottage);
+        forUpdate.setCottages(cottages);
+        this.cottageOwnerRepository.save(forUpdate);
+        this.cottageOwnerService.updateCottages(cottageOwner);
+        updateCottage(cottage);
+        return forUpdate;
     }
 
 }

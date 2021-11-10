@@ -34,14 +34,15 @@ public class CottageOwnerController {
     @GetMapping("/profile/{id}")
     public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = cottageOwnerService.findById(id);
-        model.addAttribute("user", cottageOwner);
+        model.addAttribute("principal", cottageOwner);
         return new ModelAndView("profileCottageOwner");
     }
+
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/profile/{id}/editProfile")
     public ModelAndView updateProfile(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = this.cottageOwnerService.findById(id);
-        model.addAttribute("user", cottageOwner);
+        model.addAttribute("principal", cottageOwner);
         return new ModelAndView("editOwnerProfile");
     }
 
@@ -50,7 +51,7 @@ public class CottageOwnerController {
     public ModelAndView updateProfile(@PathVariable("id") Long id, Model model, @ModelAttribute CottageOwner cottageOwner) {
         try {
             this.cottageOwnerService.updateProfile(cottageOwner);
-            model.addAttribute("user", cottageOwner);
+            model.addAttribute("principal", cottageOwner);
             return new ModelAndView("redirect:/cottageOwner/profile/" + id.toString());
         } catch (Exception e) {
             return new ModelAndView("home");

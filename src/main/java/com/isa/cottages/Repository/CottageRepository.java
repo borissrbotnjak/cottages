@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CottageRepository extends JpaRepository<Cottage, Long> {
@@ -27,4 +28,6 @@ public interface CottageRepository extends JpaRepository<Cottage, Long> {
 
     @Query(value = "SELECT * FROM Cottage co WHERE co.cottage_owner_id = ?1", nativeQuery = true)
     List<Cottage> findByCottageOwner(@Param("id") Long id);
+
+    Optional<Cottage> findById(Long id);
 }
