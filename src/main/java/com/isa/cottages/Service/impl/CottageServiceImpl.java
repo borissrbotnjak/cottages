@@ -109,21 +109,21 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public CottageOwner removeCottage(Cottage cottage, CottageOwner cottageOwner) throws Exception {
-        CottageOwner forUpdate = (CottageOwner) userService.findById(cottageOwner.getId());
-//        if (cottageOwner == null) {
-//            throw new Exception("Cottage owner does not exist.");
-//        }
-//        Cottage cot = findById(cottage.getId());
-        Set<Cottage> cottages = forUpdate.getCottages();
-//        cottages.remove(cot);
-        cottages.remove(cottage);
-        forUpdate.setCottages(cottages);
-        this.cottageOwnerRepository.save(forUpdate);
-        this.cottageOwnerService.updateCottages(cottageOwner);
-        updateCottage(cottage);
-        return forUpdate;
-    }
+    public void removeCottage(Cottage cottage, Long oid) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) userService.findById(oid);
+        if (cottageOwner == null) {
+            throw new Exception("Cottage owner does not exist.");
+        }
+        Cottage c = findById(cottage.getId());
 
+        Set<Cottage> cottages = cottageOwner.getCottages();
+        cottages.remove(c);
+        cottageOwner.setCottages(cottages);
+
+        c.setCottageOwner(null);
+//        this.cottageOwnerRepository.save(forUpdate);
+        this.cottageOwnerService.updateCottages(cottageOwner);
+        updateCottage(c);
+    }
 }
 

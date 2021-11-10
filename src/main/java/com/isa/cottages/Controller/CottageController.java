@@ -65,7 +65,6 @@ public class CottageController {
     public ModelAndView getAllMyCottages (@PathVariable Long id, Model model, String keyword) throws Exception{
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-
 //        Cottage cottage = new Cottage();
 //        model.addAttribute("cottage", cottage);
         if(cottageOwner == null) {
@@ -91,6 +90,7 @@ public class CottageController {
     public ModelAndView edit(Model model, @PathVariable Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
+
         Cottage cottage = this.cottageService.findById(id);
         model.addAttribute("cottage", cottage);
 
@@ -168,16 +168,12 @@ public class CottageController {
     public ModelAndView removeCottage(@PathVariable Long cid,
                                       @PathVariable Long id,
                                       Model model) throws Exception {
-//        cottageOwner.setCottages((Set<Cottage>) this.cottageService.findByCottageOwner(oid));
-        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
-        model.addAttribute("cottages", cottages);
-        CottageOwner cot = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cot);
-        Cottage cottage = this.cottageService.findById(cid);
-        model.addAttribute("cottage", cottage);
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
 
-        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-        this.cottageService.removeCottage(cottage, cot);
+        Cottage cottage = this.cottageService.findById(cid);
+//        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+        this.cottageService.removeCottage(cottage, id);
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
     }
 }
