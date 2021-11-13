@@ -15,10 +15,12 @@ public interface FishingInstructorAdventureRepository extends JpaRepository<Fish
 
     Optional<FishingInstructorAdventure> findById(Long id);
 
-    @Query(value="SELECT * FROM fishing_instructor_adventure c where lower(c.adventureName) like lower(concat('%', ?1, '%')) " +
-            "or lower(c.adventureState) like lower(concat('%', ?1, '%')" +
-//            "or lower(c.adventureCity) like lower(concat('%', ?1, '%')"
-            "or lower(c.residence) like lower(concat('%', ?1, '%')) "
+    @Query(value="SELECT * FROM fishing_instructor_adventure c where lower(c.adventure_name) like lower(concat('%', ?1, '%')) "
+            + "or lower(c.instructor_info) like lower(concat('%', ?1, '%'))"
+            + "or lower(c.adventure_state) like lower(concat('%', ?1, '%'))"
+            + "or lower(c.adventure_city) like lower(concat('%', ?1, '%'))"
+            + "or lower(c.adventure_residence) like lower(concat('%', ?1, '%')) "
+            + "or lower(c.adventure_description) like lower(concat('%', ?1, '%')) "
             , nativeQuery = true)
     List<FishingInstructorAdventure> findByKeyword(@Param("keyword") String keyword);
 }
