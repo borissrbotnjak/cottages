@@ -17,4 +17,8 @@ public class Client extends User {
 
     @Column
     private Integer discount;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
+    private LoyaltyProgram  loyaltyProgram;
 }

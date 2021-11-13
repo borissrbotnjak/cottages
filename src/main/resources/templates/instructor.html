@@ -34,21 +34,19 @@
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
-            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations'}>Upcoming reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory'}>Reservation history</a>
           </div>
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
-          <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
+          <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('CLIENT')">
           <a class="nav-link"th:href="${'/boats/allBoats'}">All boats</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('CLIENT')">
-          <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
+          <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="${'/auth/login'}">Log in</a>
@@ -72,17 +70,25 @@
 
 <div class="container emp-profile">
   <!--<form method="post">-->
-  <form th:object="${cottage}" method="get">
+  <form th:object="${instructor}" method="get">
     <div class="row">
       <div class="col-md-8">
         <div class="tab-content profile-tab" id="myTabContent">
           <div id="profile">
             <div class="row">
               <div class="col-md-6">
-                <label>Name</label>
+                <label>Instructor</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.name}"></p>
+                <p th:text="${instructor.instructorInfo}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Adventure</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${instructor.adventureName}"></p>
               </div>
             </div>
             <div class="row">
@@ -90,7 +96,7 @@
                 <label>State</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.state}"></p>
+                <p th:text="${instructor.adventureState}"></p>
               </div>
             </div>
             <div class="row">
@@ -98,7 +104,7 @@
                 <label>City</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.city}"></p>
+                <p th:text="${instructor.adventureCity}"></p>
               </div>
             </div>
             <div class="row">
@@ -106,15 +112,7 @@
                 <label>Residence</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.residence}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>Promotional Description</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.promotionalDescription}"></p>
+                <p th:text="${instructor.adventureResidence}"></p>
               </div>
             </div>
             <div class="row">
@@ -122,31 +120,11 @@
                 <label>Average rating</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.averageRating}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>Available from</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.availableFrom}"></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label>Available until</label>
-              </div>
-              <div class="col-md-6">
-                <p th:text="${cottage.availableUntil}"></p>
+                <p th:text="${instructor.averageRating}"></p>
               </div>
             </div>
             </br></br></br>
-            <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
-            </br></br>
-            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
-            </br></br>
-            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
+            <a th:href="@{'/adventures/__${instructor.id}__/timeSlots'}">Reservation time slots</a>
           </div>
         </div>
       </div>

@@ -56,7 +56,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Client saveClient(UserRequest userRequest) {
-        // TODO: add loyalty program
+        // TODO: test loyalty program
+        LoyaltyProgram loyaltyProgram = new LoyaltyProgram();
 
         Client cl = new Client();
         cl.setEmail(userRequest.getEmail());
@@ -68,10 +69,14 @@ public class UserServiceImpl implements UserService {
         cl.setState(userRequest.getState());
         cl.setPhoneNumber(userRequest.getPhoneNumber());
         cl.setEnabled(false);
+        cl.setLoyaltyProgram(loyaltyProgram);
 
         cl.setUserRole(UserRole.CLIENT);
         cl = this.userRepository.save(cl);
-
+/*
+        loyaltyProgram.setClient(cl);
+        loyaltyProgram = this.loyaltyProgramService.save(loyaltyProgram);
+*/
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,

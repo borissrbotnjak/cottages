@@ -15,4 +15,31 @@ public class LoyaltyProgram implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private Double consultationPoints = 0.0;
+
+    @Column
+    private Double appointmentPoints = 0.0;
+
+    @Column
+    private Double regularPoints = 0.0;
+
+    @Column
+    private Double silverPoints = 0.0;
+
+    @Column
+    private Double goldPoints = 0.0;
+
+    @Column
+    private Integer discountRegular = 0;
+
+    @Column
+    private Integer discountSilver = 0;
+
+    @Column
+    private Integer discountGold = 0;
+
+    @OneToOne(mappedBy = "loyaltyProgram")
+    private Client client;
 }

@@ -6,6 +6,9 @@ import com.isa.cottages.Service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+
 @Service
 public class BoatServiceImpl implements BoatService {
 
@@ -30,5 +33,10 @@ public class BoatServiceImpl implements BoatService {
         b.setBoatName(boat.getBoatName());
         this.boatRepository.save(b);
         return b;
+    }
+
+    @Override
+    public Collection<Boat> getAll() {
+        return this.boatRepository.findAll();
     }
 }

@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 
-    <title>Cottages</title>
+    <title>Boats</title>
 </head>
 <body>
 
@@ -32,8 +32,6 @@
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations'}>Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory'}>Reservation history</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -41,10 +39,10 @@
                 </li>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
-                    <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
+                    <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
-                    <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
+                    <a class="nav-link" href="#">All boats</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
@@ -71,50 +69,51 @@
 
 </br>
 <div class="container">
-<div class="row my-2">
-    <div class="col col-lg-3">
-        <form th:action="@{'/cottages/allCottages'}" method="get">
-            <input type="text" placeholder="Name or address.." name="keyword"/>
-            <button type="submit" class="btn btn-dark mt-2">Search</button>
-        </form>
-    </div>
-    <div class="row">
-        <div class="col col-lg-7">
-            <h5>Sort by Name </h5>
-            <a th:href="${'/cottages/allCottages/sortByNameAsc'}">Ascending</a>
-            </br><a th:href="${'/cottage/allCottages/sortByNameDesc'}">Descending</a> </br></br>
+    <div class="row my-2">
+        <div class="col col-lg-3">
+            <form th:action="@{'/boats/allBoats'}" method="get">
+                <input type="text" placeholder="Name or address.." name="keyword"/>
+                <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </form>
         </div>
-        <div class="col">
-            <h5>Sort by Average Rating </h5>
-            <a th:href="${'/cottages/allCottages/sortByRatingAsc'}">Ascending</a>
-            </br><a th:href="${'/cottage/allCottages/sortByRatingDesc'}">Descending</a> </br></br>
+        <div class="row">
+            <div class="col col-lg-7">
+                <h5>Sort by Name </h5>
+                <a th:href="${'/boats/allBoats/sortByNameAsc'}">Ascending</a>
+                </br><a th:href="${'/boats/allBoats/sortByNameDesc'}">Descending</a> </br></br>
+            </div>
+            <div class="col">
+                <h5>Sort by Average Rating </h5>
+                <a th:href="${'/boats/allBoats/sortByRatingAsc'}">Ascending</a>
+                </br><a th:href="${'/boats/allBoats/sortByRatingDesc'}">Descending</a> </br></br>
+            </div>
         </div>
     </div>
-</div>
 
-</br>
+    </br>
 
-<div>
-    <table id="cottages" width="90%">
-        <tr>
-            <th>Name:</th>
-            <th>Address:</th>
-            <th></th>
-            <th></th>
-            <th>Average Rating:</th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr th:each="cottage:${cottages}">
-            <td th:text="${cottage.name}"></td>
-            <td th:text="${cottage.state}"></td>
-            <td th:text="${cottage.city}"></td>
-            <td th:text="${cottage.residence}"></td>
-            <td th:text="${cottage.averageRating}"></td>
-            <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
-        </tr>
-    </table>
-</div>
+    <div>
+        <table id="boats" width="90%">
+            <tr>
+                <th>Boat name:</th>
+                <th>Address:</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr th:each="boat:${boats}">
+                <td th:text="${boat.boatName}"></td>
+                <td th:text="${boat.boatOwner.getState()}"></td>
+                <td th:text="${boat.boatOwner.getCity()}"></td>
+                <td><a th:href="${'/boats/' + boat.getId()}">View boat</a></td>
+            </tr>
+        </table>
+    </div>
+
+    </br>
+    </br>
+    <div class="row" sec:authorize="hasRole('BOAT_OWNER')">
+        <a th:href="${'/boat/addBoat'}">Add new boat</a>
+    </div>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
