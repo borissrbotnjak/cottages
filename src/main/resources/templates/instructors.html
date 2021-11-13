@@ -35,7 +35,7 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/adventures/allAdventures'}">All cottages</a>
+          <a class="nav-link" th:href="${'/cottages/allCottages;'}">All cottages</a>
         </li>
         </li>
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
@@ -98,15 +98,14 @@
         <th>Instructor name:</th>
         <th>Adventure:</th>
         <th>Adventure description:</th>
-        <th>Address:</th>
-        <th></th>
-        <th></th>
+        <th>Rating:</th>
         <th></th>
       </tr>
       <tr th:each="instructor:${instructors}">
         <td th:text="${instructor.instructorInfo}"></td>
         <td th:text="${instructor.getAdventureName()}"></td>
         <td th:text="${instructor.adventureDescription}"></td>
+        <td th:text="${instructor.averageRating}"></td>
         <td><a th:href="${'/adventures/' + instructor.getId()}">View instructor and adventure</a></td>
       </tr>
     </table>

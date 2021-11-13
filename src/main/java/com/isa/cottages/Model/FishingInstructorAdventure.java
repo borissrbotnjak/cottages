@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +31,12 @@ public class FishingInstructorAdventure implements Serializable {
 
     @Column
     private String adventureDescription;
+
+    @Column
+    private Double averageRating = 0.0;
+
+    @ElementCollection
+    private Set<Integer> ratings;
 
     @Column
     private String instructorInfo;

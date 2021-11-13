@@ -46,7 +46,7 @@
           <a class="nav-link"th:href="${'/boats/allBoats'}">All boats</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('CLIENT')">
-          <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+          <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="${'/auth/login'}">Log in</a>

@@ -20,10 +20,20 @@ public class FishingInstructorAdventureController {
     private UserServiceImpl userService;
 
     @GetMapping("/allAdventures")
-    public ModelAndView getAllAdventures(Model model) throws Exception {
-        model.addAttribute("instructors", this.adventureService.findAll());
-        model.addAttribute("principal", this.userService.getUserFromPrincipal());
-        return new ModelAndView("instructors");
+    public ModelAndView getAllAdventures(Model model, String keyword) throws Exception {
+        if (keyword != null) {
+            model.addAttribute("instructors", this.adventureService.findByKeyword(keyword));
+        } else {
+            model.addAttribute("instructors", this.adventureService.findAll());
+        }
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("instructors");
+        } catch (Exception e) {
+            System.out.println("\n\n\n error all adventures \n\n\n ");
+            return new ModelAndView("home");
+        }
     }
 
     @GetMapping("/{id}")

@@ -115,6 +115,14 @@
                 <p th:text="${instructor.adventureResidence}"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Average rating</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${instructor.averageRating}"></p>
+              </div>
+            </div>
             </br></br></br>
             <a th:href="@{'/adventures/__${instructor.id}__/timeSlots'}">Reservation time slots</a>
           </div>

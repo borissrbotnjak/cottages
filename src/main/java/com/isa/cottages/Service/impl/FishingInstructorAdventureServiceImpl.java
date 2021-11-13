@@ -29,10 +29,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     }
 
     @Override
-    public List<FishingInstructorAdventure> findByKeyword(String keyword) {
-        // TODO: ubaci findByKeyword u repo
-        return null;
-    }
+    public List<FishingInstructorAdventure> findByKeyword(String keyword) { return this.adventureRepository.findByKeyword(keyword); }
 
     @Override
     public FishingInstructorAdventure saveAdventure(FishingInstructorAdventure fishingInstructorAdventure) {
@@ -44,6 +41,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         fia.setAdventureResidence(fishingInstructorAdventure.getAdventureResidence());
         fia.setInstructorInfo(fishingInstructorAdventure.getInstructorInfo());
         fia.setAdventureDescription(fishingInstructorAdventure.getAdventureDescription());
+        fia.setAverageRating(fishingInstructorAdventure.getAverageRating());
 
         this.adventureRepository.save(fia);
         return fia;

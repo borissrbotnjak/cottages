@@ -52,7 +52,7 @@
                     <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
@@ -191,14 +191,14 @@
                                 <p th:text="${user.residence}"></p>
                             </div>
                         </div>
-                    </div> <!--
+                    </div>
                     <div class="tab-pane fade" id="loyalty" role="tabpanel" aria-labelledby="loyalty-tab">
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Appointment points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getAppointmentPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getAppointmentPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -206,7 +206,7 @@
                                 <label>Consultation points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getConsultationPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getConsultationPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -214,7 +214,7 @@
                                 <label>Regular points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getRegularPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getRegularPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -222,7 +222,7 @@
                                 <label>Silver points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getSilverPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getSilverPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -230,7 +230,7 @@
                                 <label>Gold points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getGoldPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getGoldPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -238,7 +238,7 @@
                                 <label>Gold regular</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getDiscountRegular()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getDiscountRegular()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -246,7 +246,7 @@
                                 <label>Gold silver</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getDiscountSilver()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getDiscountSilver()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -254,9 +254,11 @@
                                 <label>Gold discount</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${program.getDiscountGold()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getDiscountGold()}"></p>
                             </div>
                         </div>
+                        </br>
+                        </br>
                         <div class="row">
                             <h4>
                                 Na osnovu
@@ -265,7 +267,7 @@
                             </h4>
                         </div>
                     </div>
-                    -->
+
                 </div>
             </div>
         </div>
