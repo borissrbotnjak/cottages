@@ -109,6 +109,17 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
+    public Cottage defineAvailability(Cottage cottage) throws Exception {
+        Cottage forUpdate = findById(cottage.getId());
+
+        forUpdate.setAvailableFrom(cottage.getAvailableFrom());
+        forUpdate.setAvailableUntil(cottage.getAvailableUntil());
+
+        this.cottageRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
     public void removeCottage(Cottage cottage, Long oid) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) userService.findById(oid);
         if (cottageOwner == null) {

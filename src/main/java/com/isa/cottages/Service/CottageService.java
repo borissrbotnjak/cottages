@@ -19,5 +19,6 @@ public interface CottageService {
     List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception;
 
     Cottage updateCottage(Cottage cottage) throws Exception;
+    Cottage defineAvailability(Cottage cottage) throws Exception;
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 }

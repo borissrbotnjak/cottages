@@ -5,6 +5,7 @@ import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 @Controller
@@ -175,5 +179,35 @@ public class CottageController {
 //        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
         this.cottageService.removeCottage(cottage, id);
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{id}/defineAvailability")
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        Cottage cottage = this.cottageService.findById(id);
+        model.addAttribute("cottage", cottage);
+
+        return new ModelAndView("defineAvailability");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @PostMapping("/{id}/defineAvailability/submit")
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id, @ModelAttribute Cottage cottage,
+                                           @RequestParam String availableFrom,
+                                           @RequestParam String availableUntil) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
+        model.addAttribute("cottages", cottages);
+        model.addAttribute("cottage", cottage);
+
+        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+        this.cottageService.defineAvailability(cottage);
+
+        return new ModelAndView("redirect:/cottages/{id}/");
     }
 }

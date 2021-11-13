@@ -125,10 +125,28 @@
                 <p th:text="${cottage.averageRating}"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Available from</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${cottage.availableFrom}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Available until</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${cottage.availableUntil}"></p>
+              </div>
+            </div>
             </br></br></br>
             <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
             </br></br>
-              <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
+            </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
           </div>
         </div>
       </div>
