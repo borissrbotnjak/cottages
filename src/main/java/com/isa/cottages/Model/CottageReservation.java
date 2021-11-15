@@ -27,7 +27,24 @@ public class CottageReservation implements Serializable {
     private LocalDateTime startingTime;
 
     @Column
-    private double duration;
+    private Boolean action = false;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime actionAvailableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime actionAvailableUntil;
+
+    @Column
+    private Long maxPersons;
+
+    @Column
+    private Double price;
+
+    @Column
+    private Double duration;
 
     @Column
     private Boolean reserved = false;
