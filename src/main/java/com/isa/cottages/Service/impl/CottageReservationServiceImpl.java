@@ -63,6 +63,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setActionAvailableUntil(cottageReservation.getActionAvailableUntil());
         cr.setMaxPersons(cottageReservation.getMaxPersons());
         cr.setPrice(cottageReservation.getPrice());
+        cr.setAdditionalServices(cottageReservation.getAdditionalServices());
         cr.setCottageOwner(cottageReservation.getCottageOwner());
         cr.setCottage(cottageReservation.getCottage());
         cr.setAction(true);

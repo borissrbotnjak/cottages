@@ -72,12 +72,14 @@
                     <th>Available from:</th>
                     <th>Available until:</th>
                     <th>Max number of persons:</th>
+                    <th>Additional services:</th>
                     <th>Price:</th>
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="${cottageReservation.actionAvailableFrom}"></td>
                     <td th:text="${cottageReservation.actionAvailableUntil}"></td>
                     <td th:text="${cottageReservation.maxPersons}"></td>
+                    <td th:text="${cottageReservation.additionalServices}"></td>
                     <td th:text="${cottageReservation.price}"></td>
                   </tr>
             </table>

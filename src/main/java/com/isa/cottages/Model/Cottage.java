@@ -48,7 +48,7 @@ public class Cottage implements Serializable {
     private String rules;
 
     @Column
-    private String description;
+    private String additionalServices;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

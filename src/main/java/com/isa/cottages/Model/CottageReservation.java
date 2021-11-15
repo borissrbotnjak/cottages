@@ -41,6 +41,9 @@ public class CottageReservation implements Serializable {
     private Long maxPersons;
 
     @Column
+    private String additionalServices;
+
+    @Column
     private Double price;
 
     @Column

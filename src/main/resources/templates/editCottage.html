@@ -58,34 +58,34 @@
     <div class="center-align blue lighten-5">
 <!--      <form th:action="@{'/cottages/allMyCottages/__${principal.id}__/editCottage/__${cottage.id}__/submit'}" th:object="${cottage}" method="post">-->
         <form th:action="@{'/cottages/__${cottage.id}__/edit/submit'}" th:object="${cottage}" method="post">
-        <br><label for="name">Name:</label>
-        <input id="name" type="text" th:field="*{name}"/>
+            <br><label for="name">Name:</label>
+            <input id="name" type="text" th:field="*{name}"/>
 
-        <br><label for="residence">Residence:</label>
-        <input id="residence" type="text" th:field="*{residence}"/>
+            <br><label for="residence">Residence:</label>
+            <input id="residence" type="text" th:field="*{residence}"/>
 
-        <br><label for="city">City:</label>
-        <input id="city" type="text" th:field="*{city}"/>
+            <br><label for="city">City:</label>
+            <input id="city" type="text" th:field="*{city}"/>
 
-        <br><label for="state">State:</label>
-        <input id="state" type="text" th:field="*{state}"/>
+            <br><label for="state">State:</label>
+            <input id="state" type="text" th:field="*{state}"/>
 
-        <br><label for="promotionalDescription">Promotional Description:</label>
-        <input id="promotionalDescription" type="text" th:field="*{promotionalDescription}"/>
+            <br><label for="promotionalDescription">Promotional Description:</label>
+            <input id="promotionalDescription" type="text" th:field="*{promotionalDescription}"/>
 
-        <br><label for="numberOfRooms">Number of rooms:</label>
-        <input id="numberOfRooms" type="text" th:field="*{numberOfRooms}"/>
+            <br><label for="numberOfRooms">Number of rooms:</label>
+            <input id="numberOfRooms" type="text" th:field="*{numberOfRooms}"/>
 
-        <br><label for="numberOfBeds">Number of beds:</label>
-        <input id="numberOfBeds" type="text" th:field="*{numberOfBeds}"/>
+            <br><label for="numberOfBeds">Number of beds:</label>
+            <input id="numberOfBeds" type="text" th:field="*{numberOfBeds}"/>
 
-        <br><label for="rules">Rules:</label>
-        <input id="rules" type="text" th:field="*{rules}"/>
+            <br><label for="rules">Rules:</label>
+            <input id="rules" type="text" th:field="*{rules}"/>
 
-        <br><label for="description">Description:</label>
-        <input id="description" type="text" th:field="*{description}"/>
+            <br><label for="additionalServices">Additional services:</label>
+            <input id="additionalServices" type="text" th:field="*{additionalServices}"/>
 
-        <div class="form-group">
+            <div class="form-group">
           <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
         </div>
       </form>

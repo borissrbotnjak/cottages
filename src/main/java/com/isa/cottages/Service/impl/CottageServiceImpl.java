@@ -46,7 +46,8 @@ public class CottageServiceImpl implements CottageService {
         c.setNumberOfRooms(cottage.getNumberOfRooms());
         c.setNumberOfBeds(cottage.getNumberOfBeds());
         c.setRules(cottage.getRules());
-        c.setDescription(cottage.getDescription());
+        c.setPromotionalDescription(cottage.getPromotionalDescription());
+        c.setAdditionalServices(cottage.getAdditionalServices());
         c.setCottageOwner(cottage.getCottageOwner());
         this.cottageRepository.save(c);
 
@@ -101,7 +102,8 @@ public class CottageServiceImpl implements CottageService {
         forUpdate.setNumberOfRooms(cottage.getNumberOfRooms());
         forUpdate.setNumberOfBeds(cottage.getNumberOfBeds());
         forUpdate.setRules(cottage.getRules());
-        forUpdate.setDescription(cottage.getDescription());
+        forUpdate.setPromotionalDescription(cottage.getPromotionalDescription());
+        forUpdate.setAdditionalServices(cottage.getAdditionalServices());
         forUpdate.setCottageOwner(cottage.getCottageOwner());
 
         this.cottageRepository.save(forUpdate);
