@@ -25,4 +25,7 @@ public class CottageOwner extends User {
 
     @Column
     private String explanationOfRegistration;
+
+    @OneToMany(mappedBy = "cottageOwner", targetEntity = Report.class)
+    private Set<Report> reports = new HashSet<>();
 }

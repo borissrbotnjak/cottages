@@ -34,7 +34,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> upcoming = new ArrayList<CottageReservation>();
 
         for (CottageReservation res: all) {
-            if(res.getStartingTime().isAfter(LocalDateTime.now())) {
+            if((res.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
                 upcoming.add(res);
             }
         }
@@ -48,7 +48,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> pastOnes = new ArrayList<CottageReservation>();
 
         for (CottageReservation res:all) {
-            if((res.getStartingTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+            if((res.getStartingTime().isBefore(LocalDateTime.now()))) {
                 pastOnes.add(res);
             }
         }
@@ -72,23 +72,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         return cr;
     }
 
-//    @Override
-//    public List<Reservation> findReserved(Long id) {
-//        List<Reservation> all = this.reservationRepository.findReserved(id);
-//        List<Reservation> activeOnes = new ArrayList<>();
-//
-//        for(Reservation res:all) {
-//            if(res.getStartingTime().isAfter(LocalDateTime.now())) {
-//                activeOnes.add(res);
-//            }
-//        }
-//        return activeOnes;
-//    }
-
     @Override
-    public List<CottageReservation> findByCottage(Long id) throws Exception{
+    public List<CottageReservation> findActionsByCottage(Long id) throws Exception{
         Cottage cottage = (Cottage) cottageService.findById(id);
-        List<CottageReservation> all = this.reservationRepository.findByCottage(id);
+        List<CottageReservation> all = this.reservationRepository.findActionsByCottage(id);
         List<CottageReservation> cr = new ArrayList<CottageReservation>();
 
         for (CottageReservation c:all) {
@@ -97,5 +84,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
             }
         }
         return cr;
+    }
+
+    @Override
+    public List<CottageReservation> findClient(String keyword) {
+        return this.reservationRepository.findClient(keyword);
     }
 }

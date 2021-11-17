@@ -36,6 +36,12 @@ VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milo
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description, instructor_info, average_rating)
 VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9);
 
-/* COTTAGE_RESERVATIONS */
+/* COTTAGE_RESERVATIONS-ACTIONS */
 INSERT INTO cottage_reservation(COTTAGE_ID, ACTION_AVAILABLE_FROM, ACTION_AVAILABLE_UNTIL, ACTION, MAX_PERSONS, PRICE)
 VALUES(1, '14/11/2021 10:00', '18/11/2021 10:00', TRUE, 4, 1000);
+/* COTTAGE_RESERVATIONS-PAST */
+INSERT INTO cottage_reservation(COTTAGE_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME)
+VALUES(1, 5, FALSE, TRUE, '14/11/2021 12:00');
+/* COTTAGE_RESERVATIONS-UPCOMING */
+INSERT INTO cottage_reservation(COTTAGE_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME)
+VALUES(1, 5, FALSE, TRUE, '15/11/2022 12:00');

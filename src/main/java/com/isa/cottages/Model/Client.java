@@ -3,6 +3,8 @@ package com.isa.cottages.Model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,4 +23,7 @@ public class Client extends User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
     private LoyaltyProgram  loyaltyProgram;
+
+    @OneToMany(mappedBy = "client", targetEntity = CottageReservation.class)
+    private Set<CottageReservation> cottageReservations = new HashSet<>();
 }

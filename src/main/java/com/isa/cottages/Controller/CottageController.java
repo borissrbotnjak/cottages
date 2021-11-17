@@ -146,23 +146,6 @@ public class CottageController {
         return new ModelAndView("editCottage");
     }
 
-//    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-//    @PostMapping("/allMyCottages/{id}/editCottage/{cid}/submit")
-//    public ModelAndView updateCottage(Model model, @PathVariable("id") Long id,
-//                                      @PathVariable("cid") Long cid,
-//                                      @ModelAttribute Cottage cottage) throws Exception{
-//        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-//        model.addAttribute("principal", cottageOwner);
-//        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
-//        model.addAttribute("cottages", cottages);
-//
-//        this.cottageService.findById(cid);
-//        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-//        this.cottageService.updateCottage(cottage);
-//        model.addAttribute("cottage", cottage);
-//        return new ModelAndView("redirect:/cottages/allMyCottages/{id}");
-//    }
-
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping(value = "/allMyCottages/{id}/remove/{cid}")
     public ModelAndView removeCottage(@PathVariable Long cid,
@@ -206,4 +189,6 @@ public class CottageController {
 
         return new ModelAndView("redirect:/cottages/{id}/");
     }
+
+
 }
