@@ -52,27 +52,26 @@ public class CottageReservationController {
         return new ModelAndView("allActionsByCottage");
     }
 
-    @GetMapping("/upcomingReservations")
+    @GetMapping("/upcomingReservations/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView showUpcomingReservations(Model model) throws Exception {
+    public ModelAndView showUpcomingReservations(Model model, @PathVariable Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
-        model.addAttribute("cottageReservations", this.reservationService.getUpcomingReservations());
+        model.addAttribute("cottageReservations", this.reservationService.getUpcomingReservations(id));
 
         return new ModelAndView("upcomingCottageReservations");
     }
 
-    @GetMapping("/reservationHistory")
+    @GetMapping("/reservationHistory/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
+    public ModelAndView showReservationHistory(Model model, String keyword, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-
         if (keyword != null) {
             model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("cottageReservations", this.reservationService.getPastReservations());
+            model.addAttribute("cottageReservations", this.reservationService.getPastReservations(id));
         }
         return new ModelAndView("cottageReservationHistory");
     }
@@ -134,5 +133,19 @@ public class CottageReservationController {
         report.setCottageOwner(cottageOwner);
         this.reportService.save(report);
         return new ModelAndView("redirect:/cottageReservations/reservationHistory/");
+    }
+
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/viewCalendar/{id}")
+    public ModelAndView viewCalendar (Model model, @PathVariable Long id, String keyword) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        if (keyword != null) {
+            model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("cottageReservations", this.reservationService.getAllReservations(id));
+        }
+        return new ModelAndView("cottageCalendar");
     }
 }

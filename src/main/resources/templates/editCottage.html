@@ -33,8 +33,9 @@
             Reservations
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations'}> Upcoming reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory'}>Reservation history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}> Upcoming reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
+              <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
           </div>
         </li>
         <li class="nav-item">
