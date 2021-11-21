@@ -4,6 +4,7 @@ import com.isa.cottages.Model.Client;
 import com.isa.cottages.Repository.ClientRepository;
 import com.isa.cottages.Service.ClientService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,10 +13,15 @@ public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
 
+    @Autowired
+    public ClientServiceImpl(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
     @Override
     public Client findById(Long id) throws Exception {
         if (this.clientRepository.findById(id).isEmpty()) {
-            throw new Exception("No such value(Patient service)");
+            throw new Exception("No such value(Client service)");
         }
         return this.clientRepository.findById(id).get();
     }

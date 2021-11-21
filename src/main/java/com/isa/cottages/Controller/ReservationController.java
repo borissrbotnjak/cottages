@@ -33,8 +33,8 @@ public class ReservationController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/allActionsByCottage/{id}")
-    public ModelAndView getActionsByCottage(@PathVariable Long id, Model model) throws Exception {
+    @GetMapping("/allDiscountsByCottage/{id}")
+    public ModelAndView getDiscountsByCottage(@PathVariable Long id, Model model) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
@@ -46,7 +46,7 @@ public class ReservationController {
         }
         model.addAttribute("cottageReservations", reservationService.findDiscountsByCottage(id));
 
-        return new ModelAndView("allActionsByCottage");
+        return new ModelAndView("allDiscountsByCottage");
     }
 
     @GetMapping("/upcomingReservations/cottages")
@@ -60,7 +60,19 @@ public class ReservationController {
         return new ModelAndView("upcomingCottageReservations");
     }
 
+    @GetMapping("/upcomingReservations/{id}")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView showUpcomingReservations(Model model, @PathVariable Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        model.addAttribute("cottageReservations", this.reservationService.getUpcomingReservations(id));
+
+        return new ModelAndView("upcomingCottageReservations");
+    }
+
     @GetMapping("/reservationHistory/cottages")
+    @GetMapping("/reservationHistory/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -74,9 +86,26 @@ public class ReservationController {
         return new ModelAndView("cottageReservationHistory");
     }
 
+    @GetMapping("/reservationHistory/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/{id}/defineAction")
-    public ModelAndView defineAction(@PathVariable Long id, Model model) throws Exception {
+    public ModelAndView showReservationHistory(Model model, String keyword, @PathVariable("id") Long id, String email) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        Client client = this.clientService.findByEmail(email);
+        model.addAttribute("client", client);
+
+        if (keyword != null) {
+            model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("cottageReservations", this.reservationService.getPastReservations(id));
+        }
+        return new ModelAndView("cottageReservationHistory");
+    }
+
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{id}/defineDiscount")
+    public ModelAndView defineDiscount(@PathVariable Long id, Model model) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
@@ -88,12 +117,12 @@ public class ReservationController {
         Collection<CottageReservation> cottageReservations = this.reservationService.findDiscountsByCottage(id);
         model.addAttribute("cottageReservations", cottageReservations);
 
-        return new ModelAndView("defineAction");
+        return new ModelAndView("defineDiscount");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @PostMapping("/{id}/defineAction/submit")
-    public ModelAndView defineAction(@PathVariable Long id, @ModelAttribute CottageReservation cottageReservation, Model model) throws Exception {
+    @PostMapping("/{id}/defineDiscount/submit")
+    public ModelAndView defineDiscount(@PathVariable Long id, @ModelAttribute CottageReservation cottageReservation, Model model) throws Exception {
 //        if (this.cottageService.findById(cottage.getId()) != null) {
 //            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
 //        }
@@ -131,6 +160,29 @@ public class ReservationController {
         report.setCottageOwner(cottageOwner);
         this.reportService.save(report);
         return new ModelAndView("redirect:/cottageReservations/reservationHistory/");
+    }
+
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/viewCalendar/{id}")
+    public ModelAndView viewCalendar (Model model, @PathVariable Long id, String keyword) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        if (keyword != null) {
+            model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("cottageReservations", this.reservationService.getAllReservations(id));
+        }
+        return new ModelAndView("cottageCalendar");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/makeCottageReservationWithClient")
+    public ModelAndView makeReservationWithClient(Model model) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        return new ModelAndView("makeCottageReservationWithClient");
     }
 
     @GetMapping("/reservationHistory/boats")

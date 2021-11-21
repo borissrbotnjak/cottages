@@ -32,15 +32,15 @@ public class CottageReservation implements Serializable {
     private LocalDateTime endTime;
 
     @Column
-    private Boolean discount = false;
+    private Boolean action = false;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime actionAvailableFrom;
+    private LocalDateTime discountAvailableFrom;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime actionAvailableUntil;
+    private LocalDateTime discountAvailableUntil;
 
     @Column
     private Long maxPersons;

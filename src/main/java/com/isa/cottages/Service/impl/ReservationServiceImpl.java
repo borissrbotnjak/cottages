@@ -33,9 +33,31 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<CottageReservation> getAllReservations(Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<CottageReservation> all = this.reservationRepository.getAllReserved(id);
+
+        return all;
+    }
+
+    @Override
     public List<CottageReservation> getUpcomingReservations() throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllReserved();
+        List<CottageReservation> upcoming = new ArrayList<CottageReservation>();
+
+        for (CottageReservation res: all) {
+            if((res.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public List<CottageReservation> getUpcomingReservations(Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<CottageReservation> all = this.reservationRepository.getAllReserved(id);
         List<CottageReservation> upcoming = new ArrayList<CottageReservation>();
 
         for (CottageReservation res: all) {
@@ -54,6 +76,21 @@ public class ReservationServiceImpl implements ReservationService {
 
         for (CottageReservation res:all) {
             if((res.getCottage() != null) && (res.getStartingTime().isBefore(LocalDateTime.now()))) {
+                pastOnes.add(res);
+            }
+        }
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> getPastReservations(Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+//        List<Cottage> cottage = this.cottageService.findByCottageOwner(id);
+        List<CottageReservation> all = this.reservationRepository.getAllReserved(id);
+        List<CottageReservation> pastOnes = new ArrayList<CottageReservation>();
+
+        for (CottageReservation res:all) {
+            if((res.getStartingTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
                 pastOnes.add(res);
             }
         }
@@ -80,8 +117,8 @@ public class ReservationServiceImpl implements ReservationService {
     public CottageReservation saveDiscount(CottageReservation cottageReservation) throws Exception {
         CottageReservation cr = new CottageReservation();
 
-        cr.setActionAvailableFrom(cottageReservation.getActionAvailableFrom());
-        cr.setActionAvailableUntil(cottageReservation.getActionAvailableUntil());
+        cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
+        cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
         cr.setMaxPersons(cottageReservation.getMaxPersons());
         cr.setPrice(cottageReservation.getPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
@@ -108,7 +145,10 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<CottageReservation> findClient(String keyword) {
-        return this.reservationRepository.findClient(keyword);
+    public List<CottageReservation> findClient(String keyword) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<CottageReservation> all = this.reservationRepository.findClient(keyword);
+
+        return all;
     }
 }

@@ -189,6 +189,4 @@ public class CottageController {
 
         return new ModelAndView("redirect:/cottages/{id}/");
     }
-
-
 }
