@@ -3,6 +3,7 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
+import com.isa.cottages.Service.impl.ClientServiceImpl;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,17 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
     private UserServiceImpl userService;
-    private CottageOwnerServiceImpl cottageOwnerService;
     private BoatOwnerServiceImpl boatOwnerService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService, BoatOwnerServiceImpl boatOwnerService) {
+    public UserController(UserServiceImpl userService, BoatOwnerServiceImpl boatOwnerService) {
         this.userService = userService;
-        this.cottageOwnerService = cottageOwnerService;
         this.boatOwnerService = boatOwnerService;
     }
 
     @GetMapping("/index")
     @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT')")
-    public ModelAndView indexPage(Authentication auth) throws Exception {
+    public ModelAndView indexPage(Authentication auth, Model model) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
         if (u.getEnabled() == false) {
             throw new Exception("Your account is not activated, please check your email.");

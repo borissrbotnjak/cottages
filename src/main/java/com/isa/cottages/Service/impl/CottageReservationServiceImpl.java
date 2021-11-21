@@ -65,26 +65,26 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
-    public CottageReservation saveAction(CottageReservation cottageReservation) throws Exception {
+    public CottageReservation saveDiscount(CottageReservation cottageReservation) throws Exception {
         CottageReservation cr = new CottageReservation();
 
-        cr.setActionAvailableFrom(cottageReservation.getActionAvailableFrom());
-        cr.setActionAvailableUntil(cottageReservation.getActionAvailableUntil());
+        cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
+        cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
         cr.setMaxPersons(cottageReservation.getMaxPersons());
         cr.setPrice(cottageReservation.getPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
         cr.setCottageOwner(cottageReservation.getCottageOwner());
         cr.setCottage(cottageReservation.getCottage());
-        cr.setAction(true);
+        cr.setDiscount(true);
         this.reservationRepository.save(cr);
 
         return cr;
     }
 
     @Override
-    public List<CottageReservation> findActionsByCottage(Long id) throws Exception{
+    public List<CottageReservation> findDiscountsByCottage(Long id) throws Exception{
         Cottage cottage = (Cottage) cottageService.findById(id);
-        List<CottageReservation> all = this.reservationRepository.findActionsByCottage(id);
+        List<CottageReservation> all = this.reservationRepository.findDiscountsByCottage(id);
         List<CottageReservation> cr = new ArrayList<CottageReservation>();
 
         for (CottageReservation c:all) {
@@ -96,7 +96,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
-    public List<CottageReservation> findClient(String keyword) {
-        return this.reservationRepository.findClient(keyword);
+    public List<CottageReservation> findClient(String keyword) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<CottageReservation> all = this.reservationRepository.findClient(keyword);
+
+        return all;
     }
 }

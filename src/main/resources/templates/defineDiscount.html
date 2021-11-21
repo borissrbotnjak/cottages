@@ -17,7 +17,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Define action</title>
+    <title>Define discount</title>
 </head>
 <body>
 
@@ -36,6 +36,7 @@
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -58,14 +59,14 @@
 <div class="container">
     </br>
     <div class="center-align lighten-5">
-        <h1>Define action</h1>
-        <form th:action="@{'/cottageReservations/__${cottage.id}__/defineAction/submit'}" th:object="${cottageReservation}" method="post">
+        <h1>Define discount</h1>
+        <form th:action="@{'/cottageReservations/__${cottage.id}__/defineDiscount/submit'}" th:object="${cottageReservation}" method="post">
 
-            <br><label for="actionFrom">Action available from:</label>
-            <input id="actionFrom" type="datetime-local" th:field="*{actionAvailableFrom}"/>
+            <br><label for="discountFrom">Discount available from:</label>
+            <input id="discountFrom" type="datetime-local" th:field="*{discountAvailableFrom}"/>
 
-            <br><label for="actionUntil">Action available until:</label>
-            <input id="actionUntil" type="datetime-local" th:field="*{actionAvailableUntil}"/>
+            <br><label for="discountUntil">Discount available until:</label>
+            <input id="discountUntil" type="datetime-local" th:field="*{discountAvailableUntil}"/>
 
             <br><label for="maxPersons">Max number of persons:</label>
             <input id="maxPersons" type="number" th:field="*{maxPersons}"/>

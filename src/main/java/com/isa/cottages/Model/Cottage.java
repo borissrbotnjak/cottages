@@ -57,7 +57,7 @@ public class Cottage implements Serializable {
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime availableUntil;
-
+    
     @Column
     private Double averageRating = 0.0;
 
