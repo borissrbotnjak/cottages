@@ -16,11 +16,11 @@ VALUES ('Vikendica2', 'Petrusic2', 'v2@gmail.com', 'v2', 'Novi Sad', 'Novi Sad',
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod', 'Petrusic', 'brod@gmail.com', 'brod', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id)
-VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'klijent', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
+VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
 
 /* BOATS */
 INSERT INTO BOAT(boat_name, boat_owner_id)
-VALUES('Dalila', 3);
+VALUES('Dalila', 4);
 
 /* COTTAGES */
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID)
@@ -36,12 +36,20 @@ VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milo
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description, instructor_info, average_rating)
 VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9);
 
-/* COTTAGE_RESERVATIONS-ACTIONS */
+/* COTTAGE_RESERVATIONS-DISCOUNTS */
 INSERT INTO cottage_reservation(COTTAGE_ID, ACTION_AVAILABLE_FROM, ACTION_AVAILABLE_UNTIL, ACTION, MAX_PERSONS, PRICE)
 VALUES(1, '14/11/2021 10:00', '18/11/2021 10:00', TRUE, 4, 1000);
 /* COTTAGE_RESERVATIONS-PAST */
-INSERT INTO cottage_reservation(COTTAGE_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME)
-VALUES(1, 5, FALSE, TRUE, '14/11/2021 12:00');
+INSERT INTO cottage_reservation(COTTAGE_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME, END_TIME, DISCOUNT)
+VALUES(1, 5, FALSE, TRUE, '14/11/2021 12:00', '15/11/2021 12:00', FALSE);
 /* COTTAGE_RESERVATIONS-UPCOMING */
-INSERT INTO cottage_reservation(COTTAGE_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME)
-VALUES(1, 5, FALSE, TRUE, '15/11/2022 12:00');
+INSERT INTO cottage_reservation(COTTAGE_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME, END_TIME, DISCOUNT)
+VALUES(1, 5, FALSE, TRUE, '15/11/2022 12:00', '16/11/2022 12:00', FALSE);
+
+/* BOAT RESERVATIONS */
+INSERT INTO cottage_reservation(BOAT_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME, END_TIME, DISCOUNT)
+VALUES(1, 5, FALSE, TRUE, '14/11/2021 12:00', '18/11/2021 12:00', FALSE);
+
+
+INSERT INTO cottage_reservation(BOAT_ID, CLIENT_ID, DELETED, RESERVED, STARTING_TIME, END_TIME, DISCOUNT)
+VALUES(1, 5, FALSE, TRUE, '14/11/2022 12:00', '18/11/2022 12:00', FALSE);

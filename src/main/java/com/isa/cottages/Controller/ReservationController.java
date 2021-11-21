@@ -44,7 +44,7 @@ public class ReservationController {
         if(cottage == null) {
             throw new Exception("Cottage with this id does not exist.");
         }
-        model.addAttribute("cottageReservations", reservationService.findActionsByCottage(id));
+        model.addAttribute("cottageReservations", reservationService.findDiscountsByCottage(id));
 
         return new ModelAndView("allActionsByCottage");
     }
@@ -85,7 +85,7 @@ public class ReservationController {
 
         model.addAttribute("cottageReservation", cottageReservation);
 
-        Collection<CottageReservation> cottageReservations = this.reservationService.findActionsByCottage(id);
+        Collection<CottageReservation> cottageReservations = this.reservationService.findDiscountsByCottage(id);
         model.addAttribute("cottageReservations", cottageReservations);
 
         return new ModelAndView("defineAction");
@@ -97,7 +97,7 @@ public class ReservationController {
 //        if (this.cottageService.findById(cottage.getId()) != null) {
 //            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
 //        }
-        Collection<CottageReservation> cottageReservations = this.reservationService.findActionsByCottage(id);
+        Collection<CottageReservation> cottageReservations = this.reservationService.findDiscountsByCottage(id);
         model.addAttribute("cottageReservations", cottageReservations);
 
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -105,7 +105,7 @@ public class ReservationController {
 
         cottageReservation.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
         cottageReservation.setCottage((Cottage) this.cottageService.findById(id));
-        this.reservationService.saveAction(cottageReservation);
+        this.reservationService.saveDiscount(cottageReservation);
         return new ModelAndView("redirect:/cottages/{id}/");
     }
 
