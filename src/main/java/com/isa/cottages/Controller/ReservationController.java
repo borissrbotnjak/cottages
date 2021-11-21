@@ -1,9 +1,6 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Model.Cottage;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Model.CottageReservation;
-import com.isa.cottages.Model.Report;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,21 +11,21 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/cottageReservations")
-public class CottageReservationController {
+@RequestMapping("/reservations")
+public class ReservationController {
 
-    private CottageReservationServiceImpl reservationService;
+    private ReservationServiceImpl reservationService;
     private UserServiceImpl userService;
     private CottageServiceImpl cottageService;
     private ReportServiceImpl reportService;
     private ClientServiceImpl clientService;
 
     @Autowired
-    public CottageReservationController(CottageReservationServiceImpl reservationService,
-                                        UserServiceImpl userService,
-                                        CottageServiceImpl cottageService,
-                                        ReportServiceImpl reportService,
-                                        ClientServiceImpl clientService) {
+    public ReservationController(ReservationServiceImpl reservationService,
+                                 UserServiceImpl userService,
+                                 CottageServiceImpl cottageService,
+                                 ReportServiceImpl reportService,
+                                 ClientServiceImpl clientService) {
         this.reservationService = reservationService;
         this.userService = userService;
         this.cottageService = cottageService;
@@ -52,7 +49,7 @@ public class CottageReservationController {
         return new ModelAndView("allActionsByCottage");
     }
 
-    @GetMapping("/upcomingReservations")
+    @GetMapping("/upcomingReservations/cottages")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView showUpcomingReservations(Model model) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -63,7 +60,7 @@ public class CottageReservationController {
         return new ModelAndView("upcomingCottageReservations");
     }
 
-    @GetMapping("/reservationHistory")
+    @GetMapping("/reservationHistory/cottages")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -134,5 +131,18 @@ public class CottageReservationController {
         report.setCottageOwner(cottageOwner);
         this.reportService.save(report);
         return new ModelAndView("redirect:/cottageReservations/reservationHistory/");
+    }
+
+    @GetMapping("/reservationHistory/boats")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showBoatsHistory(Model model, String keyword) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        if (keyword != null) {
+            //model.addAttribute("reservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("reservations", this.reservationService.getPastBoatReservations());
+        }
+        return new ModelAndView("boatsReservationHistory");
     }
 }

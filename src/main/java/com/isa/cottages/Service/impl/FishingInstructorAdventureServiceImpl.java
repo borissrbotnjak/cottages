@@ -46,4 +46,13 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         this.adventureRepository.save(fia);
         return fia;
     }
+
+    @Override
+    public List<FishingInstructorAdventure> sortByInstructorInfo(Boolean asc) {
+        if (asc) {
+            return this.adventureRepository.findByOrderByInstructorInfoAsc();
+        } else {
+            return this.adventureRepository.findByOrderByInstructorInfoDesc();
+        }
+    }
 }

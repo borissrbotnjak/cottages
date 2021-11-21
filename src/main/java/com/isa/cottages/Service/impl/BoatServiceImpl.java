@@ -39,4 +39,9 @@ public class BoatServiceImpl implements BoatService {
     public Collection<Boat> getAll() {
         return this.boatRepository.findAll();
     }
+
+    @Override
+    public List<Boat> findByKeyword(String keyword) {
+        return this.boatRepository.findByKeyword(keyword);
+    }
 }

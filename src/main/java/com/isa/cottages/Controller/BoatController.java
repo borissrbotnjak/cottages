@@ -26,10 +26,21 @@ public class BoatController {
     }
 
     @GetMapping("/allBoats")
-    public ModelAndView getAllBoats(Model model) throws Exception {
-        model.addAttribute("boats", this.boatService.getAll());
-        model.addAttribute("principal", this.userService.getUserFromPrincipal());
-        return new ModelAndView("boats");
+    public ModelAndView getAllBoats(Model model, String keyword) throws Exception {
+        if (keyword != null) {
+            model.addAttribute("boats", this.boatService.findByKeyword(keyword));
+        } else {
+            model.addAttribute("boats", this.boatService.getAll());
+        }
+
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boats");
+        } catch (Exception e) {
+            System.out.println("error all boats");
+            return new ModelAndView("home");
+        }
     }
 
     @GetMapping("/{id}")

@@ -28,6 +28,10 @@ public class CottageReservation implements Serializable {
     private LocalDateTime startingTime;
 
     @Column
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime endTime;
+
+    @Column
     private Boolean action = false;
 
     @Column
@@ -67,4 +71,12 @@ public class CottageReservation implements Serializable {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", nullable = true, referencedColumnName = "id")
     private Client client;
+
+    @ManyToOne(targetEntity = BoatOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "boat_owner_id", nullable = true, referencedColumnName = "id")
+    private BoatOwner boatOwner;
+
+    @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "boat_id", nullable = true, referencedColumnName = "id")
+    private Boat boat;
 }

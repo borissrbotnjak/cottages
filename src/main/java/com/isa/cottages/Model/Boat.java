@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +20,24 @@ public class Boat implements Serializable {
     @Column
     private String boatName;
 
+    @Column
+    private String residence;
+
+    @Column
+    private String city;
+
+    @Column
+    private String state;
+
+    @Column
+    private String description;
+
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;
+
+    @Column
+    private Double averageRating = 0.0;
+
+    @ElementCollection
+    private Set<Integer> ratings;
 }

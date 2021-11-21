@@ -20,7 +20,7 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @PreAuthorize("hasRole('CLIENT', 'COTTAGE_OWNER')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'COTTAGE_OWNER')")
     @GetMapping("/profile/{id}")
     public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         Client client = clientService.findById(id);

@@ -1,10 +1,12 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Model.CottageReservation;
 import com.isa.cottages.Repository.CottageReservationRepository;
-import com.isa.cottages.Service.CottageReservationService;
+import com.isa.cottages.Service.ClientService;
+import com.isa.cottages.Service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +14,22 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class CottageReservationServiceImpl implements CottageReservationService {
+public class ReservationServiceImpl implements ReservationService {
 
     private CottageReservationRepository reservationRepository;
     private UserServiceImpl userService;
+    private ClientService clientService;
     private CottageServiceImpl cottageService;
 
     @Autowired
-    public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
-                                         UserServiceImpl userService,
-                                         CottageServiceImpl cottageService){
+    public ReservationServiceImpl(CottageReservationRepository reservationRepository,
+                                  UserServiceImpl userService,
+                                  CottageServiceImpl cottageService,
+                                  ClientServiceImpl clientService){
         this.reservationRepository = reservationRepository;
         this.userService = userService;
         this.cottageService = cottageService;
+        this.clientService = clientService;
     }
 
     @Override
@@ -48,10 +53,26 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> pastOnes = new ArrayList<CottageReservation>();
 
         for (CottageReservation res:all) {
-            if((res.getStartingTime().isBefore(LocalDateTime.now()))) {
+            if((res.getCottage() != null) && (res.getStartingTime().isBefore(LocalDateTime.now()))) {
                 pastOnes.add(res);
             }
         }
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> getPastBoatReservations() throws Exception {
+        Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+        List<CottageReservation> all = this.reservationRepository.getAllReserved();
+        List<CottageReservation> pastOnes = new ArrayList<>();
+
+        for (CottageReservation res : all) {
+            if (!res.getAction() && (res.getBoat() != null) && (res.getStartingTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now()))
+                    && (Objects.equals(res.getClient().getId(), cl.getId()))) {
+                pastOnes.add(res);
+            }
+        }
+
         return pastOnes;
     }
 

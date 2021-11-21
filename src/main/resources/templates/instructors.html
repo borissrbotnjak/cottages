@@ -35,7 +35,7 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/cottages/allCottages;'}">All cottages</a>
+          <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
@@ -73,6 +73,11 @@
       <form th:action="@{'/adventures/allAdventures'}" method="get">
         <input type="text" placeholder="Name or address.." name="keyword"/>
         <button type="submit" class="btn btn-dark mt-2">Search</button>
+      </form>
+    </div>
+    <div class="col col-lg-3">
+      <form th:action="@{'/adventures/allAdventures/sortByNameAsc'}" method="get">
+        <button type="submit" class="btn btn-dark mt-2">Sort by name ascending</button>
       </form>
     </div>
     <div class="row">

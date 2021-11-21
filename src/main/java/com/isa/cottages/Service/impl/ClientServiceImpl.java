@@ -21,6 +21,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public Client findByEmail(String email) throws Exception {
+        Client cl = this.clientRepository.findByEmail(email);
+        if (cl == null) {
+            throw new Exception("No such email(Patient service)");
+        }
+        return cl;
+    }
+
+    @Override
     public Client updateProfile(Client client) throws Exception {
         Client forUpdate = this.findById(client.getId());
 

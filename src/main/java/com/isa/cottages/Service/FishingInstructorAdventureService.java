@@ -10,6 +10,6 @@ public interface FishingInstructorAdventureService {
     List<FishingInstructorAdventure> findByKeyword(String keyword);
     FishingInstructorAdventure saveAdventure(FishingInstructorAdventure FishingInstructorAdventure);
 
-
+    List<FishingInstructorAdventure> sortByInstructorInfo(Boolean asc);
 
 }

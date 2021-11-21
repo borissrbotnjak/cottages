@@ -12,4 +12,6 @@ public interface BoatService {
     Boat saveBoat(Boat boat);
 
     Collection<Boat> getAll();
+
+    List<Boat> findByKeyword(String keyword);
 }

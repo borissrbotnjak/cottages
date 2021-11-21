@@ -23,4 +23,7 @@ public interface FishingInstructorAdventureRepository extends JpaRepository<Fish
             + "or lower(c.adventure_description) like lower(concat('%', ?1, '%')) "
             , nativeQuery = true)
     List<FishingInstructorAdventure> findByKeyword(@Param("keyword") String keyword);
+
+    List<FishingInstructorAdventure> findByOrderByInstructorInfoAsc();
+    List<FishingInstructorAdventure> findByOrderByInstructorInfoDesc();
 }

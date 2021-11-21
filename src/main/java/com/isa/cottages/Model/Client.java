@@ -25,5 +25,5 @@ public class Client extends User {
     private LoyaltyProgram  loyaltyProgram;
 
     @OneToMany(mappedBy = "client", targetEntity = CottageReservation.class)
-    private Set<CottageReservation> cottageReservations = new HashSet<>();
+    private Set<CottageReservation> Reservations = new HashSet<>();
 }
