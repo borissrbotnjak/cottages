@@ -32,7 +32,7 @@ public class CottageReservation implements Serializable {
     private LocalDateTime endTime;
 
     @Column
-    private Boolean action = false;
+    private Boolean discount = false;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

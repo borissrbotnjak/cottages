@@ -49,17 +49,6 @@ public class ReservationController {
         return new ModelAndView("allDiscountsByCottage");
     }
 
-    @GetMapping("/upcomingReservations/cottages")
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView showUpcomingReservations(Model model) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
-
-        model.addAttribute("cottageReservations", this.reservationService.getUpcomingReservations());
-
-        return new ModelAndView("upcomingCottageReservations");
-    }
-
     @GetMapping("/upcomingReservations/{id}")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView showUpcomingReservations(Model model, @PathVariable Long id) throws Exception {
@@ -69,21 +58,6 @@ public class ReservationController {
         model.addAttribute("cottageReservations", this.reservationService.getUpcomingReservations(id));
 
         return new ModelAndView("upcomingCottageReservations");
-    }
-
-    @GetMapping("/reservationHistory/cottages")
-    @GetMapping("/reservationHistory/{id}")
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
-
-        if (keyword != null) {
-            model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
-        } else {
-            model.addAttribute("cottageReservations", this.reservationService.getPastReservations());
-        }
-        return new ModelAndView("cottageReservationHistory");
     }
 
     @GetMapping("/reservationHistory/{id}")
@@ -133,7 +107,7 @@ public class ReservationController {
         model.addAttribute("principal", cottageOwner);
 
         cottageReservation.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-        cottageReservation.setCottage((Cottage) this.cottageService.findById(id));
+        cottageReservation.setCottage(this.cottageService.findById(id));
         this.reservationService.saveDiscount(cottageReservation);
         return new ModelAndView("redirect:/cottages/{id}/");
     }
