@@ -20,13 +20,11 @@ public class CottageController {
 
     private CottageServiceImpl cottageService;
     private UserServiceImpl userService;
-    private CottageOwnerServiceImpl cottageOwnerService;
 
     @Autowired
-    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService, CottageOwnerServiceImpl cottageOwnerService) {
+    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService) {
         this.cottageService = cottageService;
         this.userService = userService;
-        this.cottageOwnerService = cottageOwnerService;
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -40,7 +38,7 @@ public class CottageController {
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
 
-        return new ModelAndView("addCottageForm");
+        return new ModelAndView("cottage/addCottageForm");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -75,14 +73,14 @@ public class CottageController {
         } else {
             model.addAttribute("cottages", cottageService.findByCottageOwner(id));
         }
-        return new ModelAndView("allMyCottages");
+        return new ModelAndView("cottage/allMyCottages");
     }
 
     @GetMapping("/{id}")
     public ModelAndView showCottage(@PathVariable("id") Long id, Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
         model.addAttribute("cottage", this.cottageService.findById(id));
-        return new ModelAndView("cottage");
+        return new ModelAndView("cottage/cottage");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -96,7 +94,7 @@ public class CottageController {
 
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
-        return new ModelAndView("editCottage");
+        return new ModelAndView("cottage/editCottage");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -143,7 +141,7 @@ public class CottageController {
 
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
-        return new ModelAndView("editCottage");
+        return new ModelAndView("cottage/editCottage");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -169,7 +167,7 @@ public class CottageController {
         Cottage cottage = this.cottageService.findById(id);
         model.addAttribute("cottage", cottage);
 
-        return new ModelAndView("defineAvailability");
+        return new ModelAndView("cottage/defineAvailability");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")

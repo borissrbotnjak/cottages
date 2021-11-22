@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -18,25 +17,22 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>My Cottages</title>
+    <title>Make Cottage Reservation</title>
 </head>
 <body>
-
-
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
@@ -58,38 +54,8 @@
     </nav>
 </div>
 
-
-<div class="container">
-    </br>
-    <h3>Cottage actions</h3>
-    <br>
-    <div class="row">
-        <button type="button" class="btn mt-2"><a th:href="${'/cottageReservations/__${cottage.id}__/defineAction'}">Define new action</a></button>
-    </div>
-        </br></br></br></br>
-        <div class="table">
-            </br>
-            <table width="90%">
-                <tr>
-                    <th>Available from:</th>
-                    <th>Available until:</th>
-                    <th>Max number of persons:</th>
-                    <th>Additional services:</th>
-                    <th>Price:</th>
-                    <th></th>
-                </tr>
-                <tr th:each="cottageReservation:${cottageReservations}">
-                    <td th:text="${cottageReservation.actionAvailableFrom}"></td>
-                    <td th:text="${cottageReservation.actionAvailableUntil}"></td>
-                    <td th:text="${cottageReservation.maxPersons}"></td>
-                    <td th:text="${cottageReservation.additionalServices}"></td>
-                    <td th:text="${cottageReservation.price}"></td>
-                    <td><a>Reserve</a></td>
-                  </tr>
-            </table>
-        </div>
-    </div>
-</div>
+<div class="container center-align lighten-5">
+    <h2>Make cottage reservation with client</h2>
 </div>
 
 <!-- Optional JavaScript -->
@@ -97,6 +63,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 </body>
 </html>

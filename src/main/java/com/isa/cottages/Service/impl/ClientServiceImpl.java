@@ -3,7 +3,6 @@ package com.isa.cottages.Service.impl;
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Repository.ClientRepository;
 import com.isa.cottages.Service.ClientService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class ClientServiceImpl implements ClientService {
     public Client findByEmail(String email) throws Exception {
         Client cl = this.clientRepository.findByEmail(email);
         if (cl == null) {
-            throw new Exception("No such email(Patient service)");
+            throw new Exception("No such email(Client service)");
         }
         return cl;
     }

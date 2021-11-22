@@ -1,10 +1,7 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Exception.ResourceConflictException;
-import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
-import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,15 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class CottageOwnerController {
 
     private CottageOwnerServiceImpl cottageOwnerService;
-
-    private CottageServiceImpl cottageService;
-
     private UserServiceImpl userService;
 
     @Autowired
-    public CottageOwnerController (CottageOwnerServiceImpl cottageOwnerService, CottageServiceImpl cottageService, UserServiceImpl userService){
+    public CottageOwnerController (CottageOwnerServiceImpl cottageOwnerService, UserServiceImpl userService){
         this.cottageOwnerService = cottageOwnerService;
-        this.cottageService = cottageService;
         this.userService = userService;
     }
 
@@ -35,7 +28,7 @@ public class CottageOwnerController {
     public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = cottageOwnerService.findById(id);
         model.addAttribute("principal", cottageOwner);
-        return new ModelAndView("profileCottageOwner");
+        return new ModelAndView("cottage/profile");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -43,7 +36,7 @@ public class CottageOwnerController {
     public ModelAndView updateProfile(Model model, @PathVariable("id") Long id) throws Exception {
         CottageOwner cottageOwner = this.cottageOwnerService.findById(id);
         model.addAttribute("principal", cottageOwner);
-        return new ModelAndView("editOwnerProfile");
+        return new ModelAndView("cottage/editProfile");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")

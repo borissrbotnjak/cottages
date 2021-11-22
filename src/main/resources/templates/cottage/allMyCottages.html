@@ -2,8 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <!--Import Google Icon Font-->
+    <meta charset="utf-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -19,10 +18,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Cottage reservation History</title>
+    <title>My Cottages</title>
 </head>
 <body>
-
 
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -36,13 +34,12 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
@@ -56,38 +53,54 @@
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
             </ul>
-
         </div>
     </nav>
 </div>
 
 <div class="container">
-<div id="cottages" class="table">
     </br>
-    <h3>Cottage reservation history</h3>
-    </br>
-    <form th:action="@{'/cottageReservations/reservationHistory/__${principal.id}__'}" method="get">
-        <input type="text" placeholder="Search client..." name="keyword"/>
-        <button type="submit" class="btn btn-dark mt-2">Search</button>
-        </br>
-    </form>
-    </br></br></br>
-    <table width="90%">
-        <tr>
-            <th>Cottage name:</th>
-            <th>Reservation start:</th>
-            <th>Client name:</th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr th:each="cottageReservation:${cottageReservations}">
-            <td th:text="${cottageReservation.cottage.getName()}"></td>
-            <td th:text="${cottageReservation.startingTime}"></td>
-            <td th:text="${cottageReservation.client.getFullName()}"></td>
-<!--            <td><a th:href="@{/client/profile/__${client.id}__}">View profile</a></td>-->
-            <td><a th:href="@{/cottageReservations/writeReport}">Write report</a></td>
-        </tr>
-    </table>
+    <h3>My cottages</h3>
+    <br>
+    <div class="row">
+        <button type="button" class="btn mt-2"><a th:href="${'/cottages/addCottage/__${principal.id}__'}">Add new cottage</a></button>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col col-lg-5">
+            <form th:action="@{'/cottages/allMyCottages/__${principal.id}__'}" method="get">
+                <input type="text" placeholder="Name or address..." name="keyword"/>
+                <button type="submit" class="btn btn-dark mt-2">Search</button>
+                </br>
+            </form>
+        </div>
+        </br></br></br></br>
+        <div class="table">
+            </br>
+            <table id="cottages" width="90%">
+                <tr>
+                    <th>Name:</th>
+                    <th>Residence:</th>
+                    <th>City:</th>
+                    <th>State:</th>
+                    <th>Average rating:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="cottage:${cottages}">
+                    <td th:text="${cottage.name}"></td>
+                    <td th:text="${cottage.residence}"></td>
+                    <td th:text="${cottage.city}"></td>
+                    <td th:text="${cottage.state}"></td>
+                    <td th:text="${cottage.averageRating}"></td>
+                    <td><a th:href="${'/cottages/' + cottage.getId()}">View cottage</a></td>
+                    <td><a th:href="@{'/cottages/allMyCottages/__${principal.id}__/editCottage/__${cottage.id}__'}">Edit</a></td>
+                    <td><a th:href="@{'/cottages/allMyCottages/__${principal.id}__/remove/__${cottage.id}__'}">Remove</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
 </div>
 

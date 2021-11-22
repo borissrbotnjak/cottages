@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -17,10 +18,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Define discount</title>
+    <title>Profile</title>
 </head>
 <body>
-
 
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -28,13 +28,14 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
@@ -46,9 +47,6 @@
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
             </ul>
@@ -57,32 +55,88 @@
 </div>
 
 <div class="container">
+<div class="row">
     </br>
-    <div class="center-align lighten-5">
-        <h1>Define discount</h1>
-        <form th:action="@{'/cottageReservations/__${cottage.id}__/defineDiscount/submit'}" th:object="${cottageReservation}" method="post">
-
-            <br><label for="discountFrom">Discount available from:</label>
-            <input id="discountFrom" type="datetime-local" th:field="*{discountAvailableFrom}"/>
-
-            <br><label for="discountUntil">Discount available until:</label>
-            <input id="discountUntil" type="datetime-local" th:field="*{discountAvailableUntil}"/>
-
-            <br><label for="maxPersons">Max number of persons:</label>
-            <input id="maxPersons" type="number" th:field="*{maxPersons}"/>
-
-            <br><label for="additionalServices">Additional services:</label>
-            <input id="additionalServices" type="text" th:field="*{additionalServices}"/>
-
-            <br><label for="price">Price:</label>
-            <input id="price" th:field="*{price}"/>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
-            </div>
-        </form>
+    <div class="col-md-4">
+        </br></br>
+        <a th:href="@{/cottageOwner/profile/__${principal.id}__/editProfile}">Edit profile</a>
+        </br>
+        <a th:href="@{/auth/change-password}">Change password</a>
     </div>
 </div>
+</div>
+
+<div class="center-align">
+    <form th:object="${principal}" method="get">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="profile-img">
+                    <img src="https://kctherapy.com/wp-content/uploads/2019/09/default-user-avatar-300x293.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+    <div th:object="${principal}">
+
+    </div>
+
+        <div class="row">
+            <div class="col-md-8">
+            <label>Name:</label>
+            </div>
+            <div class="col-md-8">
+                <p th:text="${principal.getFullName()}"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <label>Email:</label>
+            </div>
+            <div class="col-md-8">
+                <p th:text="${principal.email}"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <label>Phone number</label>
+            </div>
+            <div class="col-md-8">
+                <p th:text="${principal.phoneNumber}"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <label>Residence</label>
+            </div>
+            <div class="col-md-8">
+                <p th:text="${principal.residence}"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <label>City</label>
+            </div>
+            <div class="col-md-8">
+                <p th:text="${principal.city}"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <label>State</label>
+            </div>
+            <div class="col-md-8">
+                <p th:text="${principal.state}"></p>
+            </div>
+        </div>
+
+    </form>
+</div>
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

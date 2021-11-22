@@ -34,8 +34,8 @@
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
-            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}>Upcoming reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}>Upcoming reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
             <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
             <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
           </div>
@@ -180,7 +180,9 @@
             </div>
 
             </br></br>
-            <a th:href="@{'/cottageReservations/allActionsByCottage/__${cottage.id}__'}">View actions</a>
+            <a th:href="@{'/cottageReservations/allDiscounts/__${cottage.id}__'}">View discounts</a>
+            </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define discount</a>
             </br></br>
             <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
             </br></br>
@@ -188,7 +190,6 @@
             </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
             </br></br>
-            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${cottage.id}__/defineAction'}">Define action</a>
           </div>
         </div>
       </div>

@@ -73,7 +73,7 @@ public class AuthenticationController {
     public ModelAndView registrationOwnerForm(Model model){
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
-        return new ModelAndView("registrationOwner");
+        return new ModelAndView("cottage/registration");
     }
 
     @PostMapping("/signupOwner/submit")

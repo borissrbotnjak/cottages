@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <!--Import Google Icon Font-->
+    <meta charset="UTF-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -18,7 +17,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Update profile</title>
+    <title>Define availability</title>
 </head>
 <body>
 
@@ -34,8 +33,8 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/reservationHistory/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
@@ -47,6 +46,9 @@
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
             </ul>
@@ -54,30 +56,24 @@
     </nav>
 </div>
 
+<div class="container">
+    </br>
+    <div class="center-align lighten-5">
+        <form th:action="@{'/cottages/__${cottage.id}__/defineAvailability/submit'}" th:object="${cottage}" method="post">
+            <br><label for="availableFrom">Available From:</label>
+            <input id="availableFrom" type="datetime-local" th:field="*{availableFrom}"/>
 
-    <div class="container">
-        <div class="center-align blue lighten-5">
-        <h1>Edit profile</h1>
-        <form th:action="@{'/cottageOwner/profile/__${principal.id}__/editProfile/submit'}" th:object="${principal}" method="post">
-            <br><label for="firstName">FirstName:</label>
-            <input id="firstName" type="text" th:field="*{firstName}"/>
-            <br><label for="lastName">LastName:</label>
-            <input id="lastName" type="text" th:field="*{lastName}"/>
-            <br><label for="residence">Residence:</label>
-            <input id="residence" type="text" th:field="*{residence}"/>
-            <br><label for="city">City:</label>
-            <input id="city" type="text" th:field="*{city}"/>
-            <br><label for="state">State:</label>
-            <input id="state" type="text" th:field="*{state}"/>
-            <br><label for="phoneNumber">Phone Number:</label>
-            <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+            <br><label for="availableUntil">Available Until:</label>
+            <input id="availableUntil" type="datetime-local" th:field="*{availableUntil}"/>
+
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
             </div>
-
         </form>
-        </div>
     </div>
+</div>
+
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -3,8 +3,6 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
-import com.isa.cottages.Service.impl.ClientServiceImpl;
-import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +27,7 @@ public class UserController {
 
     @GetMapping("/index")
     @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT')")
-    public ModelAndView indexPage(Authentication auth, Model model) throws Exception {
+    public ModelAndView indexPage(Authentication auth) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
         if (u.getEnabled() == false) {
             throw new Exception("Your account is not activated, please check your email.");
@@ -58,7 +56,7 @@ public class UserController {
     public ModelAndView cottageOwnerHome(Model model, Authentication auth) {
         CottageOwner cottageOwner = (CottageOwner) this.userService.findByEmail(auth.getName());
         model.addAttribute("user", cottageOwner);
-        return new ModelAndView("cottage-owner-home");
+        return new ModelAndView("cottage/myHome");
     }
 
     @GetMapping("/boat-owner/home")

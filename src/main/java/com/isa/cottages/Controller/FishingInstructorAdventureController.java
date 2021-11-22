@@ -1,6 +1,5 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Service.impl.FishingInstructorAdventureServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
