@@ -29,4 +29,6 @@ public class UserRequest {
     private String state;
 
     private String phoneNumber;
+
+    private RegistrationType registrationType;
 }

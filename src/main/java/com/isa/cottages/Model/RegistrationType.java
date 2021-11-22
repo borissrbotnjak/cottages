@@ -1,7 +1,7 @@
 package com.isa.cottages.Model;
 
-public enum RegistrationType {COTTAGE_ADVERTISER("CottageAdvertiser"),
-    BOAT_ADVERTISER("BoatAdvertiser");
+public enum RegistrationType {COTTAGE_ADVERTISER("Cottage Advertiser"),
+    BOAT_ADVERTISER("Boat Advertiser");
 
     private final String displayName;
 
