@@ -5,20 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Getter
+@DiscriminatorValue("boat_reservation")
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class BoatReservation implements Serializable {
+@NoArgsConstructor
+public class BoatReservation extends Reservation{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @ManyToOne(targetEntity = BoatOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "boat_owner_id", nullable = true, referencedColumnName = "id")
+    private BoatOwner boatOwner;
+
+    @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "boat_id", nullable = true, referencedColumnName = "id")
+    private Boat boat;
+
 }

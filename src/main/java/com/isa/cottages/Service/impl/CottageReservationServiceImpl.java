@@ -41,7 +41,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> upcoming = new ArrayList<>();
 
         for (CottageReservation res: all) {
-            if((res.getStartingTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
                 upcoming.add(res);
             }
         }
@@ -56,7 +56,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> pastOnes = new ArrayList<>();
 
         for (CottageReservation res:all) {
-            if((res.getStartingTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
                 pastOnes.add(res);
             }
         }
@@ -69,7 +69,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
         cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
-        cr.setMaxPersons(cottageReservation.getMaxPersons());
+        cr.setNumPersons(cottageReservation.getNumPersons());
         cr.setPrice(cottageReservation.getPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
         cr.setCottageOwner(cottageReservation.getCottageOwner());

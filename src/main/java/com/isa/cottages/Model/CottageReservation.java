@@ -9,56 +9,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
+@DiscriminatorValue("cottage_reservation")
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class CottageReservation implements Serializable {
+@NoArgsConstructor
+public class CottageReservation extends Reservation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate date;
-
-    @Column
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime startingTime;
-
-    @Column
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime endTime;
-
-    @Column
-    private Boolean discount = false;
-
-    @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime discountAvailableFrom;
-
-    @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime discountAvailableUntil;
-
-    @Column
-    private Long maxPersons;
-
-    @Column
-    private String additionalServices;
-
-    @Column
-    private Double price;
-
-    @Column
-    private Double duration;
-
-    @Column
-    private Boolean reserved = false;
-
-    @Column
-    private Boolean deleted = false;
 
     @ManyToOne(targetEntity = CottageOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "cottage_owner_id", nullable = true, referencedColumnName = "id")
@@ -68,15 +25,4 @@ public class CottageReservation implements Serializable {
     @JoinColumn(name = "cottage_id", nullable = true, referencedColumnName = "id")
     private Cottage cottage;
 
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "client_id", nullable = true, referencedColumnName = "id")
-    private Client client;
-
-    @ManyToOne(targetEntity = BoatOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "boat_owner_id", nullable = true, referencedColumnName = "id")
-    private BoatOwner boatOwner;
-
-    @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "boat_id", nullable = true, referencedColumnName = "id")
-    private Boat boat;
 }

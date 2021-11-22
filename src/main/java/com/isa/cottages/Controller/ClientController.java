@@ -25,7 +25,7 @@ public class ClientController {
     public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         Client client = clientService.findById(id);
         model.addAttribute("user", client);
-        return new ModelAndView("profileClient");
+        return new ModelAndView("client/profile");
     }
 
     @PreAuthorize("hasRole('CLIENT')")
@@ -33,7 +33,7 @@ public class ClientController {
     public ModelAndView updateProfile(Model model, @PathVariable("id") Long id) throws Exception {
         Client client = this.clientService.findById(id);
         model.addAttribute("user", client);
-        return new ModelAndView("profileUpdateForm");
+        return new ModelAndView("client/profileUpdateForm");
     }
 
     @PreAuthorize("hasRole('CLIENT')")

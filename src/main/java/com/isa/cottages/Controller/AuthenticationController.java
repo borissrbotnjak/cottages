@@ -51,7 +51,7 @@ public class AuthenticationController {
     public ModelAndView registrationForm(Model model){
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
-        return new ModelAndView("registrationClient");
+        return new ModelAndView("client/registration");
     }
 
     @PostMapping("/signup/submit")

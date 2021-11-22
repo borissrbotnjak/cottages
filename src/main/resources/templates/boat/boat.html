@@ -28,12 +28,8 @@
             Reservations
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" href=# >Make cottage reservation</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" href=#>Make boat reservation</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottage/upcoming'}">Upcoming cottage reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/upcoming'}> Upcoming reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/history'}>Reservation history</a>
           </div>
         </li>
         <li class="nav-item">

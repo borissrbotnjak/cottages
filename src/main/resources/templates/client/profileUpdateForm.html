@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -31,6 +31,15 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Reservations
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/upcoming'}>Upcoming reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/history'}>Reservation history</a>
+          </div>
+        </li>
         <li class="nav-item">
           <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
         </li>

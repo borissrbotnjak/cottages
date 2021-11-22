@@ -4,7 +4,6 @@ import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -36,7 +35,7 @@ public class BoatController {
 
         try {
             model.addAttribute("principal", this.userService.getUserFromPrincipal());
-            return new ModelAndView("boats");
+            return new ModelAndView("boat/boats");
         } catch (Exception e) {
             System.out.println("error all boats");
             return new ModelAndView("home");
@@ -47,7 +46,7 @@ public class BoatController {
     public ModelAndView showBoat(@PathVariable("id") Long id, Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
         model.addAttribute("boat", this.boatService.findById(id));
-        return new ModelAndView("boat");
+        return new ModelAndView("boat/boat");
     }
 
     @GetMapping(value = "/addBoat")
