@@ -10,17 +10,18 @@
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 
     <title>Registration</title>
 </head>
 <body>
 
 
-<div class="container mySpace">
+<div class="container">
     <div class="center-align blue lighten-5">
         <h1>Registration</h1>
         <form th:action="@{/auth/signupOwner/submit}" th:object="${userRequest}" method="post">
@@ -74,20 +75,21 @@
             <input id="state" type="text" th:field="*{state}"/>
             <br><label for="phoneNumber">Phone Number:</label>
             <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
-<!--            <div class="form-group">-->
-<!--                <label for="registrationType">Registration type:</label>-->
-<!--                <select class="form-control" id="registrationType" th:field="*{registrationType}">-->
-<!--                    <option value="">Select a type</option>-->
-<!--                    <option th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"-->
-<!--                            th:value="${registrationTypeOpt}"-->
-<!--                            th:text="${registrationTypeOpt.getDisplayName()}">-->
-<!--                    </option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            <br>-->
+            <div class="form-group">
+                <label for="registrationType">Registration type:</label>
+                <select class="form-control" id="registrationType">
+                    <option name="registrationType" value="">Select registration type</option>
+                    <option name="registrationType" th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
+                            th:value="${registrationTypeOpt}"
+                            th:text="${registrationTypeOpt.getDisplayName()}">
+                    </option>
+                </select>
+            </div>
+            <br>
 
 <!--            <br><label for="explanationOfRegistration">Explanation of registration</label>-->
 <!--            <input id="explanationOfRegistration" type="text" th:field="*{explanationOfRegistration}"/>-->
+
 
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-success">Submit</button>

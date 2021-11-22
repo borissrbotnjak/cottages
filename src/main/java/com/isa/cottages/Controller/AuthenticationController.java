@@ -85,9 +85,8 @@ public class AuthenticationController {
         if (result.hasErrors()) {
             return new ModelAndView("redirect:/auth/signupOwner");
         }
-        //Provera da li je oznacio da je RegistrationType == COTTAGE_ADVERTISER/BOAT_ADVERTISER
         this.userService.saveCottageOwner(userRequest);
-
+        userRequest.setRegistrationType(userRequest.getRegistrationType());
         return new ModelAndView("redirect:/auth/home");
     }
 

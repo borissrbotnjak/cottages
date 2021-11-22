@@ -57,4 +57,13 @@ public class CottageOwnerController {
             return new ModelAndView("home");
         }
     }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/deleteAccount")
+    public ModelAndView deleteAccount(Model model) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        return new ModelAndView("");
+    }
 }
