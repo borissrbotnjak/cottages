@@ -59,7 +59,7 @@
 <div class="container">
     <div class="center-align">
     <h1>Write report</h1>
-    <form th:action="@{/cottageReservations/writeReport/submit}" th:object="${report}" method="post">
+    <form th:action="@{/cottageReservations/writeReport/__${id}__/submit}" th:object="${report}" method="post">
         <br><label for="text">Comment</label>
         <input id="text" type="text" th:field="*{text}"/>
 

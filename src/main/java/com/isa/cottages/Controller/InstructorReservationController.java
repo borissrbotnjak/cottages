@@ -1,9 +1,7 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Service.impl.BoatReservationServiceImpl;
 import com.isa.cottages.Service.impl.InstructorReservationsServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/instructorReservations/")
+@RequestMapping("/instructorReservations")
 public class InstructorReservationController {
 
     private UserServiceImpl userService;

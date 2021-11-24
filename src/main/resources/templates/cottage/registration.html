@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset= "UTF-8" >
-    <!--Import Google Icon Font-->
+    <!-- Required meta tags -->
+    <meta charset="utf-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -12,8 +12,12 @@
     <!-- Compiled and minified CSS -->
 <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
 
+
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 
     <title>Registration</title>
@@ -21,13 +25,13 @@
 <body>
 
 
-<div class="container">
-    <div class="center-align blue lighten-5">
+<div class="container center-align">
+    <div class="blue lighten-5">
         <h1>Registration</h1>
         <form th:action="@{/auth/signupOwner/submit}" th:object="${userRequest}" method="post">
-            <br><label for="firstName">FirstName:</label>
+            <br><label for="firstName">First Name:</label>
             <input id="firstName" type="text" th:field="*{firstName}"/>
-            <br><label for="lastName">LastName:</label>
+            <br><label for="lastName">Last Name:</label>
             <input id="lastName" type="text" th:field="*{lastName}"/>
             <br><label for="email">Email:</label>
             <input id="email" type="email" th:field="*{email}"/>
@@ -43,7 +47,6 @@
                                             </span>
                     <label>Password:</label>
                     <input id="password"
-                           class="form-control"
                            type="password"
                            th:field="*{password}"/>
                 </div>
@@ -51,6 +54,7 @@
                    th:each="error: ${#fields.errors('password')}"
                    th:text="${error}">Validation error</p>
             </div>
+
             <div class="form-group"
                  th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
                 <div class="input-group">
@@ -59,7 +63,6 @@
                                             </span>
                     <label>Confirm Password:</label>
                     <input id="confirmPassword"
-                           class="form-control"
                            type="password"
                            th:field="*{confirmPassword}">
                 </div>
@@ -67,7 +70,7 @@
                    th:each="error: ${#fields.errors('confirmPassword')}"
                    th:text="${error}">Validation error</p>
             </div>
-            <br><label for="residence">Residence:</label>
+            <label for="residence">Residence:</label>
             <input id="residence" type="text" th:field="*{residence}"/>
             <br><label for="city">City:</label>
             <input id="city" type="text" th:field="*{city}"/>
@@ -76,26 +79,31 @@
             <br><label for="phoneNumber">Phone Number:</label>
             <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
             <br>
-            <div class="form-group">
+            <div class="input-field">
                 <label for="registrationType">Choose registration type:</label>
-                <select class="form-control" id="registrationType" th:field="*{registrationType}">
+                <select id="registrationType" th:field="*{registrationType}">
                     <option value="">Select a type</option>
                     <option th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
                             th:value="${registrationTypeOpt}"
                             th:text="${registrationTypeOpt.getDisplayName()}"></option>
-                </select>
+                    </select>
             </div>
-
-            <!--            <br><label for="explanationOfRegistration">Explanation of registration</label>-->
-<!--            <input id="explanationOfRegistration" type="text" th:field="*{explanationOfRegistration}"/>-->
-
+            <br><label for="explanationOfRegistration">Explanation Of Registration:</label>
+            <input id="explanationOfRegistration" type="text" th:field="*{explanationOfRegistration}"/>
+            </br></br>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-block btn-success">Submit</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </form>
     </div>
 </div>
+
+<!-- Optional JavaScript-->
+<!-- jQuery first, then Popper.js, then Bootstrap JS-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 </body>
 </html>

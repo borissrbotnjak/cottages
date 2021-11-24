@@ -77,7 +77,7 @@
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="*{cottageReservation.cottage.getName()}"></td>
-                    <td th:text="*{cottageReservation.startingTime}"></td>
+                    <td th:text="*{cottageReservation.startTime}"></td>
                     <td th:text="*{cottageReservation.client.getFullName()}"></td>
                 </tr>
             </table>

@@ -2,7 +2,6 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +121,7 @@ public class CottageController {
 
         try {
             model.addAttribute("principal", this.userService.getUserFromPrincipal());
-            return new ModelAndView("cottages");
+            return new ModelAndView("cottage/cottages");
         } catch (Exception e) {
             //System.out.println("error all cottages");
             return new ModelAndView("cottagesGuests");

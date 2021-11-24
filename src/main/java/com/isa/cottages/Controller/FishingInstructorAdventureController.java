@@ -28,7 +28,7 @@ public class FishingInstructorAdventureController {
 
         try {
             model.addAttribute("principal", this.userService.getUserFromPrincipal());
-            return new ModelAndView("instructors");
+            return new ModelAndView("instructor/instructors");
         } catch (Exception e) {
             System.out.println("\n\n\n error all adventures \n\n\n ");
             return new ModelAndView("home");
@@ -39,6 +39,6 @@ public class FishingInstructorAdventureController {
     public ModelAndView showAdventure(@PathVariable("id") Long id, Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
         model.addAttribute("instructor", this.adventureService.findById(id));
-        return new ModelAndView("instructor");
+        return new ModelAndView("instructor/instructor");
     }
 }

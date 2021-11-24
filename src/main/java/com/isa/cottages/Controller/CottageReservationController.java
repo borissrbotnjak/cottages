@@ -109,10 +109,11 @@ public class CottageReservationController {
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/writeReport")
-    public ModelAndView reportForm(Model model) throws Exception {
+    @GetMapping("/writeReport/{id}")
+    public ModelAndView reportForm(Model model, @PathVariable Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
+        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
 
         Report report = new Report();
         model.addAttribute("report", report);
@@ -122,14 +123,16 @@ public class CottageReservationController {
 
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @PostMapping("/writeReport/submit")
-    public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report) throws Exception {
+    @PostMapping("/writeReport/{id}/submit")
+    public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,
+                                         @PathVariable Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
+        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
 
         report.setCottageOwner(cottageOwner);
         this.reportService.save(report);
-        return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/");
+        return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{id}/");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")

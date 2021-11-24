@@ -16,16 +16,13 @@ public class CottageServiceImpl implements CottageService {
     private CottageRepository cottageRepository;
     private UserServiceImpl userService;
     private CottageOwnerServiceImpl cottageOwnerService;
-    private CottageOwnerRepository cottageOwnerRepository;
 
     @Autowired
     public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
-                              CottageOwnerServiceImpl cottageOwnerService,
-                              CottageOwnerRepository cottageOwnerRepository){
+                              CottageOwnerServiceImpl cottageOwnerService){
         this.cottageRepository = cottageRepository;
         this.userService = userService;
         this.cottageOwnerService = cottageOwnerService;
-        this.cottageOwnerRepository = cottageOwnerRepository;
     }
 
     @Override
@@ -49,6 +46,9 @@ public class CottageServiceImpl implements CottageService {
         c.setPromotionalDescription(cottage.getPromotionalDescription());
         c.setAdditionalServices(cottage.getAdditionalServices());
         c.setCottageOwner(cottage.getCottageOwner());
+        c.setAvailableFrom(cottage.getAvailableFrom());
+        c.setAvailableUntil(cottage.getAvailableUntil());
+
         this.cottageRepository.save(c);
 
         return c;
@@ -105,6 +105,8 @@ public class CottageServiceImpl implements CottageService {
         forUpdate.setPromotionalDescription(cottage.getPromotionalDescription());
         forUpdate.setAdditionalServices(cottage.getAdditionalServices());
         forUpdate.setCottageOwner(cottage.getCottageOwner());
+        forUpdate.setAvailableFrom(cottage.getAvailableFrom());
+        forUpdate.setAvailableUntil(cottage.getAvailableUntil());
 
         this.cottageRepository.save(forUpdate);
         return forUpdate;

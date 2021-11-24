@@ -104,8 +104,7 @@ public class UserServiceImpl implements UserService {
         co.setCity(userRequest.getCity());
         co.setState(userRequest.getState());
         co.setPhoneNumber(userRequest.getPhoneNumber());
-//        co.setUserRole(userRequest.getUserRole());
-//        co.setRegistrationType(userRequest.getRegistrationType());
+        co.setExplanationOfRegistration(userRequest.getExplanationOfRegistration());
         co.setRegistrationType(RegistrationType.COTTAGE_ADVERTISER);
         co.setUserRole(UserRole.COTTAGE_OWNER);
 
@@ -126,9 +125,7 @@ public class UserServiceImpl implements UserService {
         bo.setCity(userRequest.getCity());
         bo.setState(userRequest.getState());
         bo.setPhoneNumber(userRequest.getPhoneNumber());
-        bo.setRegistrationType(userRequest.getRegistrationType());
-//        bo.setUserRole(userRequest.getUserRole());
-//        bo.setExplanationOfRegistration(userRequest.getExplanationOfRegistration());
+        bo.setExplanationOfRegistration(userRequest.getExplanationOfRegistration());
         bo.setRegistrationType(RegistrationType.BOAT_ADVERTISER);
         bo.setUserRole(UserRole.BOAT_OWNER);
 

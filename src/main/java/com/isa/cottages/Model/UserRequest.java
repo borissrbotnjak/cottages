@@ -3,11 +3,7 @@ package com.isa.cottages.Model;
 import com.isa.cottages.FieldMatch.FieldMatch;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.Column;
 
 @Setter
 @Getter
@@ -41,4 +37,6 @@ public class UserRequest {
     private Boolean enabled = false;
 
     private UserRole userRole;
+
+    private String explanationOfRegistration;
 }

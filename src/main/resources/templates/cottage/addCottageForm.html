@@ -91,6 +91,12 @@
             <br><label for="additionalServices">Additional Services:</label>
             <input id="additionalServices" type="text" th:field="*{additionalServices}"/>
 
+            <br><label for="availableFrom">Available From:</label>
+            <input id="availableFrom" type="datetime-local" th:field="*{availableFrom}"/>
+
+            <br><label for="availableUntil">Available Until:</label>
+            <input id="availableUntil" type="datetime-local" th:field="*{availableUntil}"/>
+
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-success">Submit</button>
             </div>

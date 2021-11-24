@@ -2,7 +2,6 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
-import com.isa.cottages.Model.CottageReservation;
 import com.isa.cottages.Repository.BoatReservationRepository;
 import com.isa.cottages.Service.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;

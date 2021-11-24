@@ -82,10 +82,10 @@
         </tr>
         <tr th:each="cottageReservation:${cottageReservations}">
             <td th:text="${cottageReservation.cottage.getName()}"></td>
-            <td th:text="${cottageReservation.startingTime}"></td>
+            <td th:text="${cottageReservation.startTime}"></td>
             <td th:text="${cottageReservation.client.getFullName()}"></td>
 <!--            <td><a th:href="@{/client/profile/__${client.id}__}">View profile</a></td>-->
-            <td><a th:href="@{/cottageReservations/writeReport}">Write report</a></td>
+            <td><a th:href="@{/cottageReservations/writeReport/__${id}__}">Write report</a></td>
         </tr>
     </table>
 </div>

@@ -3,17 +3,20 @@ package com.isa.cottages.Service.impl;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Repository.FishingInstructorAdventureRepository;
 import com.isa.cottages.Service.FishingInstructorAdventureService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class FishingInstructorAdventureServiceImpl implements FishingInstructorAdventureService {
 
     private FishingInstructorAdventureRepository adventureRepository;
 
+    @Autowired
+    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository) {
+        this.adventureRepository = adventureRepository;
+    }
 
     @Override
     public FishingInstructorAdventure findById(Long id) throws Exception {
