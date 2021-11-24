@@ -92,43 +92,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CottageOwner saveCottageOwner(UserRequest userRequest){
+    public User saveCottageOwner(UserRequest userRequest){
 
         CottageOwner co = new CottageOwner();
         co.setEnabled(true);
-        co.setFirstName(co.getFirstName());
-        co.setLastName(co.getLastName());
-        co.setEmail(co.getEmail());
-        co.setPassword(co.getPassword());
-        co.setResidence(co.getResidence());
-        co.setCity(co.getCity());
-        co.setState(co.getState());
-        co.setPhoneNumber(co.getPhoneNumber());
-        co.setRegistrationType(co.getRegistrationType());
-        co.setExplanationOfRegistration(co.getExplanationOfRegistration());
-
+        co.setFirstName(userRequest.getFirstName());
+        co.setLastName(userRequest.getLastName());
+        co.setEmail(userRequest.getEmail());
+        co.setPassword(userRequest.getPassword());
+        co.setResidence(userRequest.getResidence());
+        co.setCity(userRequest.getCity());
+        co.setState(userRequest.getState());
+        co.setPhoneNumber(userRequest.getPhoneNumber());
+//        co.setUserRole(userRequest.getUserRole());
+//        co.setRegistrationType(userRequest.getRegistrationType());
+        co.setRegistrationType(RegistrationType.COTTAGE_ADVERTISER);
         co.setUserRole(UserRole.COTTAGE_OWNER);
-        this.userRepository.save(co);
 
+        this.userRepository.save(co);
         return co;
     }
 
     @Override
-    public BoatOwner saveBoatOwner(UserRequest userRequest){
+    public User saveBoatOwner(UserRequest userRequest){
 
         BoatOwner bo = new BoatOwner();
-        bo.setEnabled(false);
-        bo.setEmail(bo.getEmail());
-        bo.setPassword(bo.getPassword());
-        bo.setFirstName(bo.getFirstName());
-        bo.setLastName(bo.getLastName());
-        bo.setResidence(bo.getResidence());
-        bo.setCity(bo.getCity());
-        bo.setState(bo.getState());
-        bo.setPhoneNumber(bo.getPhoneNumber());
-        bo.setRegistrationType(bo.getRegistrationType());
-        bo.setExplanationOfRegistration(bo.getExplanationOfRegistration());
-
+        bo.setEnabled(true);
+        bo.setEmail(userRequest.getEmail());
+        bo.setPassword(userRequest.getPassword());
+        bo.setFirstName(userRequest.getFirstName());
+        bo.setLastName(userRequest.getLastName());
+        bo.setResidence(userRequest.getResidence());
+        bo.setCity(userRequest.getCity());
+        bo.setState(userRequest.getState());
+        bo.setPhoneNumber(userRequest.getPhoneNumber());
+        bo.setRegistrationType(userRequest.getRegistrationType());
+//        bo.setUserRole(userRequest.getUserRole());
+//        bo.setExplanationOfRegistration(userRequest.getExplanationOfRegistration());
+        bo.setRegistrationType(RegistrationType.BOAT_ADVERTISER);
         bo.setUserRole(UserRole.BOAT_OWNER);
 
         this.userRepository.save(bo);

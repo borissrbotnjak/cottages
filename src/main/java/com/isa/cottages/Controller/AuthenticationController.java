@@ -24,13 +24,17 @@ public class AuthenticationController {
     private UserServiceImpl userService;
 
     @Autowired
-    public AuthenticationController(UserServiceImpl userService) {
+    public AuthenticationController(UserServiceImpl userService)
+    {
         this.userService = userService;
     }
 
     @GetMapping("/login")
-    public ModelAndView loginForm(Model model) {
+    public ModelAndView loginForm(Model model, String email) {
+        User user1 = userService.findByEmail(email);
         UserDTO user = new UserDTO();
+//        UserRequest userRequest = new UserRequest();
+//        model.addAttribute("userRequest", userRequest);
         model.addAttribute("user", user);
         return new ModelAndView("login");
     }
@@ -69,6 +73,7 @@ public class AuthenticationController {
         return new ModelAndView("redirect:/auth/home");
     }
 
+
     @GetMapping("/signupOwner")
     public ModelAndView registrationOwnerForm(Model model){
         UserRequest userRequest = new UserRequest();
@@ -77,7 +82,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signupOwner/submit")
-    public ModelAndView addOwner(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
+    public ModelAndView addOwner(@ModelAttribute("userRequest") @Valid UserRequest userRequest,
+                                 BindingResult result, @ModelAttribute User user) {
         User existUser = this.userService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Email already exists.");
@@ -85,8 +91,18 @@ public class AuthenticationController {
         if (result.hasErrors()) {
             return new ModelAndView("redirect:/auth/signupOwner");
         }
-        this.userService.saveCottageOwner(userRequest);
+
         userRequest.setRegistrationType(userRequest.getRegistrationType());
+//        userService.saveCottageOwner(userRequest);
+        if(userRequest.getRegistrationType() == RegistrationType.COTTAGE_ADVERTISER) {
+            userService.saveCottageOwner(userRequest);
+            user.setUserRole(UserRole.COTTAGE_OWNER);
+            user.setRegistrationType(RegistrationType.COTTAGE_ADVERTISER);
+        } else if (userRequest.getRegistrationType() == RegistrationType.BOAT_ADVERTISER) {
+            userService.saveBoatOwner(userRequest);
+            user.setUserRole(UserRole.BOAT_OWNER);
+            user.setRegistrationType(RegistrationType.BOAT_ADVERTISER);
+        }
         return new ModelAndView("redirect:/auth/home");
     }
 

@@ -14,12 +14,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class BoatOwner extends User {
 
-    @OneToMany(mappedBy = "boatOwner", cascade = CascadeType.ALL)
-    private Set<Boat> boats = new HashSet<>();
-
-    @Column
-    private RegistrationType registrationType;
-
     @Column
     private String explanationOfRegistration;
+
+    @Column
+    private UserRole userRole = UserRole.BOAT_OWNER;
+
+    @Column
+    private RegistrationType registrationType = RegistrationType.BOAT_ADVERTISER;
+
+    @OneToMany(mappedBy = "boatOwner", cascade = CascadeType.ALL)
+    private Set<Boat> boats = new HashSet<>();
 }

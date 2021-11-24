@@ -56,7 +56,10 @@ public class User implements Serializable {
     private Boolean enabled = false;
 
     @Column
-    UserRole userRole;
+    private UserRole userRole;
+
+    @Column
+    private RegistrationType registrationType;
 
     public String getFullName() {
         return this.firstName + " " + this.lastName;

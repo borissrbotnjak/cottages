@@ -75,19 +75,18 @@
             <input id="state" type="text" th:field="*{state}"/>
             <br><label for="phoneNumber">Phone Number:</label>
             <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+            <br>
             <div class="form-group">
-                <label for="registrationType">Registration type:</label>
-                <select class="form-control" id="registrationType">
-                    <option name="registrationType" value="">Select registration type</option>
-                    <option name="registrationType" th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
+                <label for="registrationType">Choose registration type:</label>
+                <select class="form-control" id="registrationType" th:field="*{registrationType}">
+                    <option value="">Select a type</option>
+                    <option th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
                             th:value="${registrationTypeOpt}"
-                            th:text="${registrationTypeOpt.getDisplayName()}">
-                    </option>
+                            th:text="${registrationTypeOpt.getDisplayName()}"></option>
                 </select>
             </div>
-            <br>
 
-<!--            <br><label for="explanationOfRegistration">Explanation of registration</label>-->
+            <!--            <br><label for="explanationOfRegistration">Explanation of registration</label>-->
 <!--            <input id="explanationOfRegistration" type="text" th:field="*{explanationOfRegistration}"/>-->
 
 
