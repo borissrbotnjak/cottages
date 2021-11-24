@@ -3,6 +3,12 @@ package com.isa.cottages.Model;
 import com.isa.cottages.FieldMatch.FieldMatch;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -31,4 +37,8 @@ public class UserRequest {
     private String phoneNumber;
 
     private RegistrationType registrationType;
+
+    private Boolean enabled = false;
+
+    private UserRole userRole;
 }
