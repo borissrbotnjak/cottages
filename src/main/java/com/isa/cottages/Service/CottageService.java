@@ -8,9 +8,6 @@ import java.util.List;
 public interface CottageService {
 
     Cottage findById(Long id) throws Exception;
-
-    Cottage saveCottage(Cottage cottage) throws Exception;
-
     Collection<Cottage> findAll();
 
     List<Cottage> findByCottageOwner(Long id) throws Exception;
@@ -18,7 +15,12 @@ public interface CottageService {
     List<Cottage> findByKeyword(String keyword);
     List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception;
 
-    Cottage updateCottage(Cottage cottage) throws Exception;
     Cottage defineAvailability(Cottage cottage) throws Exception;
+
+    Cottage saveCottage(Cottage cottage) throws Exception;
+    Cottage updateCottage(Cottage cottage) throws Exception;
     void removeCottage(Cottage cottage, Long oid) throws Exception;
+
+    Boolean canUpdateOrDelete(Long id) throws Exception;
+
 }

@@ -93,6 +93,7 @@ public class CottageController {
 
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
+
         return new ModelAndView("cottage/editCottage");
     }
 
@@ -107,7 +108,14 @@ public class CottageController {
 //        model.addAttribute("cottage", cottage);
 
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-        this.cottageService.updateCottage(cottage);
+
+        boolean update = this.cottageService.canUpdateOrDelete(id);
+        if (!update) {
+            return new ModelAndView("cottage/errors/errorUpdateCottage");
+        } else {
+            this.cottageService.updateCottage(cottage);
+        }
+
         return new ModelAndView("redirect:/cottages/{id}/");
     }
 
@@ -153,7 +161,15 @@ public class CottageController {
 
         Cottage cottage = this.cottageService.findById(cid);
 //        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-        this.cottageService.removeCottage(cottage, id);
+
+        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+
+        boolean update = this.cottageService.canUpdateOrDelete(id);
+        if (!update) {
+            return new ModelAndView("cottage/errors/errorDeleteCottage");
+        } else {
+            this.cottageService.removeCottage(cottage, id);
+        }
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
     }
 

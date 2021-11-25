@@ -56,6 +56,9 @@ public class User implements Serializable {
     private Boolean enabled = false;
 
     @Column
+    private Boolean deleted = false;
+
+    @Column
     private UserRole userRole;
 
     @Column

@@ -51,6 +51,9 @@ public class Cottage implements Serializable {
     private String additionalServices;
 
     @Column
+    private Boolean reserved;
+
+    @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime availableFrom;
 

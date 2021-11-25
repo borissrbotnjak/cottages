@@ -2,7 +2,6 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Repository.CottageOwnerRepository;
 import com.isa.cottages.Repository.CottageRepository;
 import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +138,17 @@ public class CottageServiceImpl implements CottageService {
 //        this.cottageOwnerRepository.save(forUpdate);
         this.cottageOwnerService.updateCottages(cottageOwner);
         updateCottage(c);
+    }
+
+    @Override
+    public Boolean canUpdateOrDelete(Long id) throws Exception {
+        boolean updateOrDelete = true;
+        Cottage cottage = findById(id);
+
+        if (cottage.getReserved() == true) {
+            updateOrDelete = false;
+        }
+            return updateOrDelete;
     }
 }
 

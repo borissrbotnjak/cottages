@@ -7,6 +7,7 @@ import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -162,5 +163,29 @@ public class AuthenticationController {
     @GetMapping("confirm")
     public String confirm(@RequestParam("token") String token){
         return userService.confirmToken(token);
+    }
+
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER')")
+    @GetMapping("/deleteAccount")
+    public ModelAndView deleteAccount(Model model) throws Exception {
+        User user = this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", user);
+
+        Request request = new Request();
+        model.addAttribute("request", request);
+
+        return new ModelAndView("deleteAccount");
+    }
+
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER')")
+    @PostMapping("/deleteAccount/submit")
+    public ModelAndView deleteAccountSubmit(Model model, @ModelAttribute Request request) throws Exception {
+        User user = this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", user);
+
+        if(user.getUserRole() == UserRole.COTTAGE_OWNER) {
+            return new ModelAndView("redirect:/cottageOwner/profile/" + user.getId());
+        }
+        return new ModelAndView("home");
     }
 }
