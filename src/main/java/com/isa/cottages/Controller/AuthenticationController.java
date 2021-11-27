@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/auth")
 public class AuthenticationController {
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
     @Autowired
     public AuthenticationController(UserServiceImpl userService)
@@ -95,7 +95,7 @@ public class AuthenticationController {
 
         userRequest.setRegistrationType(userRequest.getRegistrationType());
 //        userService.saveCottageOwner(userRequest);
-        if(userRequest.getRegistrationType() == RegistrationType.COTTAGE_ADVERTISER) {
+        if (userRequest.getRegistrationType() == RegistrationType.COTTAGE_ADVERTISER) {
             userService.saveCottageOwner(userRequest);
             user.setUserRole(UserRole.COTTAGE_OWNER);
             user.setRegistrationType(RegistrationType.COTTAGE_ADVERTISER);
@@ -107,9 +107,30 @@ public class AuthenticationController {
         return new ModelAndView("redirect:/auth/home");
     }
 
+    @GetMapping("/signupInstructor")
+    public ModelAndView registrationInstructorForm(Model model) {
+        UserRequest userRequest = new UserRequest();
+        model.addAttribute(userRequest);
+        return new ModelAndView("cottage/registration");
+    }
+
+    @PostMapping("/signupInstructor/submit")
+    public ModelAndView addInstructor(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
+        User existUser = this.userService.findByEmail(userRequest.getEmail());
+        if (existUser != null) {
+            throw new ResourceConflictException(userRequest.getId(), "Email already exists.");
+        }
+        if (result.hasErrors()) {
+            return new ModelAndView("redirect:/auth/signupInstructor");
+        }
+        this.userService.saveInstructor(userRequest);
+        userRequest.setRegistrationType(userRequest.getRegistrationType());
+        return new ModelAndView("redirect:/auth/home");
+    }
+
     //Promena lozinke nakon prvog prijavljivanja za Administratora
     @GetMapping("/change-password-first")
-    public ModelAndView changePasswordForm(Model model){
+    public ModelAndView changePasswordForm(Model model) {
         ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO = new ChangePasswordAfterFirstLoginDTO();
         model.addAttribute(changePasswordAfterFirstLoginDTO);
         return new ModelAndView("change-password-first");

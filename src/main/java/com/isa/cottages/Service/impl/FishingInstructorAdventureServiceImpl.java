@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class FishingInstructorAdventureServiceImpl implements FishingInstructorAdventureService {
 
-    private FishingInstructorAdventureRepository adventureRepository;
+    private final FishingInstructorAdventureRepository adventureRepository;
 
     @Autowired
     public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository) {
@@ -42,7 +42,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         fia.setAdventureCity(fishingInstructorAdventure.getAdventureCity());
         fia.setAdventureState(fishingInstructorAdventure.getAdventureState());
         fia.setAdventureResidence(fishingInstructorAdventure.getAdventureResidence());
-        fia.setInstructorInfo(fishingInstructorAdventure.getInstructorInfo());
+
         fia.setAdventureDescription(fishingInstructorAdventure.getAdventureDescription());
         fia.setAverageRating(fishingInstructorAdventure.getAverageRating());
 

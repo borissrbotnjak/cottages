@@ -1,6 +1,9 @@
 package com.isa.cottages.Model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,5 +43,9 @@ public class FishingInstructorAdventure implements Serializable {
 
     @Column
     private String instructorInfo;
+
+    @ManyToOne(targetEntity = Instructor.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")
+    private Instructor instructor;
 
 }
