@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/cottages")
@@ -201,5 +202,89 @@ public class CottageController {
         this.cottageService.defineAvailability(cottage);
 
         return new ModelAndView("redirect:/cottages/{id}/");
+    }
+
+    @GetMapping("/allCottages/sortByNameDesc")
+    public ModelAndView sortByNameDesc(Model model) {
+        List<Cottage> sorted = this.cottageService.orderByNameDesc();
+        model.addAttribute("cottages", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            // return new ModelAndView("cottage/cottagesGuests");
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allCottages/sortByNameAsc")
+    public ModelAndView sortByNameAsc(Model model) {
+        List<Cottage> sorted = this.cottageService.orderByNameAsc();
+        model.addAttribute("cottages", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            // return new ModelAndView("cottage/cottagesGuests");
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allCottages/sortByRatingDesc")
+    public ModelAndView sortByRatingDesc(Model model) {
+        List<Cottage> sorted = this.cottageService.orderByRatingDesc();
+        model.addAttribute("cottages", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            // return new ModelAndView("cottage/cottagesGuests");
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allCottages/sortByRatingAsc")
+    public ModelAndView sortByRatingAsc(Model model) {
+        List<Cottage> sorted = this.cottageService.orderByRatingAsc();
+        model.addAttribute("cottages", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            // return new ModelAndView("cottage/cottagesGuests");
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allCottages/SortByAddressAsc")
+    public ModelAndView orderByAddressAsc(Model model) {
+        List<Cottage> sorted = this.cottageService.orderByAddressAsc();
+        model.addAttribute("cottages", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            // return new ModelAndView("cottage/cottagesGuests");
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allCottages/SortByAddressDesc")
+    public ModelAndView orderByAddressDesc(Model model) {
+        List<Cottage> sorted = this.cottageService.orderByAddressDesc();
+        model.addAttribute("cottages", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            // return new ModelAndView("cottage/cottagesGuests");
+            return new ModelAndView("home");
+        }
     }
 }

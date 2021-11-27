@@ -23,25 +23,25 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Reservations
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/upcoming'}> Upcoming reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/history'}>Reservation history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Reservation history</a>
           </div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
         </li>
-        <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+        <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
           <a class="nav-link"th:href="${'/boats/allBoats'}">All boats</a>
         </li>
-        <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+        <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">

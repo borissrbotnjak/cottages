@@ -150,5 +150,35 @@ public class CottageServiceImpl implements CottageService {
         }
             return updateOrDelete;
     }
+
+    @Override
+    public List<Cottage> orderByNameDesc() {
+        return this.cottageRepository.findByOrderByNameDesc();
+    }
+
+    @Override
+    public List<Cottage> orderByNameAsc() {
+        return this.cottageRepository.findByOrderByNameAsc();
+    }
+
+    @Override
+    public List<Cottage> orderByRatingAsc() {
+        return this.cottageRepository.findByOrderByAverageRatingAsc();
+    }
+    @Override
+    public List<Cottage> orderByRatingDesc() {
+        return this.cottageRepository.findByOrderByAverageRatingDesc();
+    }
+
+    @Override
+    public List<Cottage> orderByAddressDesc() {
+        return this.cottageRepository.findByOrderByResidenceDescCityDescStateDesc();
+    }
+
+    @Override
+    public List<Cottage> orderByAddressAsc() {
+        return this.cottageRepository.findByOrderByResidenceAscCityAscStateAsc();
+    }
+
 }
 

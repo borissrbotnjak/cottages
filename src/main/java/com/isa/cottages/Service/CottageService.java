@@ -23,4 +23,10 @@ public interface CottageService {
 
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
+    List<Cottage> orderByNameDesc();
+    List<Cottage> orderByNameAsc();
+    List<Cottage> orderByRatingAsc();
+    List<Cottage> orderByRatingDesc();
+    List<Cottage> orderByAddressDesc();
+    List<Cottage> orderByAddressAsc();
 }

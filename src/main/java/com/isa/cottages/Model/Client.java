@@ -24,6 +24,6 @@ public class Client extends User {
     @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
     private LoyaltyProgram  loyaltyProgram;
 
-    @OneToMany(mappedBy = "client", targetEntity = CottageReservation.class)
-    private Set<CottageReservation> Reservations = new HashSet<>();
+    @OneToMany(mappedBy = "client", targetEntity = Reservation.class)
+    private Set<Reservation> Reservations = new HashSet<>();
 }

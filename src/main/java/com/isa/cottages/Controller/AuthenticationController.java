@@ -182,9 +182,13 @@ public class AuthenticationController {
     public ModelAndView deleteAccountSubmit(Model model, @ModelAttribute Request request) throws Exception {
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
+        // TODO: napraviti repo i service za request
 
         if(user.getUserRole() == UserRole.COTTAGE_OWNER) {
             return new ModelAndView("redirect:/cottageOwner/profile/" + user.getId());
+        }
+        else if(user.getUserRole() == UserRole.CLIENT) {
+            return new ModelAndView("redirect:/client/profile/" + user.getId());
         }
         return new ModelAndView("home");
     }

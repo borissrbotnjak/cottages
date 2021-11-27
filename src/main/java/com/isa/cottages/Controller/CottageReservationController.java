@@ -156,4 +156,30 @@ public class CottageReservationController {
 
         return new ModelAndView("cottage/makeCottageReservationWithClient");
     }
+
+    @GetMapping("/history")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        if (keyword != null) {
+            //model.addAttribute("reservations", );
+        } else {
+            model.addAttribute("reservations", this.reservationService.getPastReservations());
+        }
+        return new ModelAndView("cottage/reservationHistory");
+    }
+
+    @GetMapping("/upcoming")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showUpcomingReservations(Model model, String keyword) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        if (keyword != null) {
+            //model.addAttribute("reservations", );
+        } else {
+            model.addAttribute("reservations", this.reservationService.getUpcomingReservations());
+        }
+        return new ModelAndView("cottage/upcomingReservations");
+    }
 }

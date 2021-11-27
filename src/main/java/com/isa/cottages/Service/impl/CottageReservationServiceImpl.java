@@ -1,8 +1,6 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.Cottage;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Model.CottageReservation;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.CottageReservationRepository;
 import com.isa.cottages.Service.CottageReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +15,30 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     private CottageReservationRepository reservationRepository;
     private UserServiceImpl userService;
     private CottageServiceImpl cottageService;
+    private ClientServiceImpl clientService;
 
     @Autowired
     public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
                                          UserServiceImpl userService,
-                                         CottageServiceImpl cottageService){
+                                         CottageServiceImpl cottageService,
+                                         ClientServiceImpl clientService) {
         this.reservationRepository = reservationRepository;
         this.userService = userService;
         this.cottageService = cottageService;
+        this.clientService = clientService;
     }
 
     @Override
     public List<CottageReservation> getAllOwnersReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
-        return this.reservationRepository.getAllReserved(id);
+        return this.reservationRepository.getAllReservedByOwner(id);
     }
 
     @Override
     public List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        List<CottageReservation> all = this.reservationRepository.getAllReserved(id);
+        List<CottageReservation> all = this.reservationRepository.getAllReservedByOwner(id);
         List<CottageReservation> upcoming = new ArrayList<>();
 
         for (CottageReservation res: all) {
@@ -52,7 +53,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     public List<CottageReservation> getOwnersPastReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 //        List<Cottage> cottage = this.cottageService.findByCottageOwner(id);
-        List<CottageReservation> all = this.reservationRepository.getAllReserved(id);
+        List<CottageReservation> all = this.reservationRepository.getAllReservedByOwner(id);
         List<CottageReservation> pastOnes = new ArrayList<>();
 
         for (CottageReservation res:all) {
@@ -92,6 +93,34 @@ public class CottageReservationServiceImpl implements CottageReservationService 
             }
         }
         return cr;
+    }
+
+    @Override
+    public List<CottageReservation> getUpcomingReservations() throws Exception {
+        Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+        List<CottageReservation> all = this.reservationRepository.getAllReserved();
+        List<CottageReservation> upcoming = new ArrayList<>();
+
+        for (CottageReservation res: all) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cl.getId()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public List<CottageReservation> getPastReservations() throws Exception {
+        Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+        List<CottageReservation> all = this.reservationRepository.getAllReserved();
+        List<CottageReservation> pastOnes = new ArrayList<>();
+
+        for (CottageReservation res: all) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cl.getId()))) {
+                pastOnes.add(res);
+            }
+        }
+        return pastOnes;
     }
 
     @Override
