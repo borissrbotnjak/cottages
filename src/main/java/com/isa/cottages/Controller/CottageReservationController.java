@@ -157,7 +157,7 @@ public class CottageReservationController {
         return new ModelAndView("cottage/makeCottageReservationWithClient");
     }
 
-    @GetMapping("/history")
+        @GetMapping("/history")
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
@@ -167,6 +167,7 @@ public class CottageReservationController {
         } else {
             model.addAttribute("reservations", this.reservationService.getPastReservations());
         }
+        // TODO: dodaj stranicu
         return new ModelAndView("cottage/reservationHistory");
     }
 
@@ -180,6 +181,7 @@ public class CottageReservationController {
         } else {
             model.addAttribute("reservations", this.reservationService.getUpcomingReservations());
         }
+        // TODO: Dopuni stranicu
         return new ModelAndView("cottage/upcomingReservations");
     }
 }

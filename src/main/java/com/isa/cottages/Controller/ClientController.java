@@ -2,6 +2,7 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Service.impl.ClientServiceImpl;
+import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,19 @@ import org.springframework.web.servlet.ModelAndView;
 public class ClientController {
 
     private ClientServiceImpl clientService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public ClientController(ClientServiceImpl clientService){
+    public ClientController(ClientServiceImpl clientService, UserServiceImpl userService){
         this.clientService = clientService;
+        this.userService = userService;
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/home")
+    public ModelAndView showHomePage(Model model) throws Exception {
+        model.addAttribute("user", this.userService.getUserFromPrincipal());
+        return new ModelAndView("client/home");
     }
 
     @PreAuthorize("hasAnyRole('CLIENT', 'COTTAGE_OWNER')")
