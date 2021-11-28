@@ -18,13 +18,13 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private ConfirmationTokenService tokenService;
-    private EmailSender emailSender;
-    private AuthenticationFacade facade;
+    private final UserRepository userRepository;
+    private final ConfirmationTokenService tokenService;
+    private final EmailSender emailSender;
+    private final AuthenticationFacade facade;
 
     @Autowired
-    public UserServiceImpl (UserRepository userRepository, ConfirmationTokenService tokenService, EmailSender emailSender, AuthenticationFacade facade){
+    public UserServiceImpl(UserRepository userRepository, ConfirmationTokenService tokenService, EmailSender emailSender, AuthenticationFacade facade) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.emailSender = emailSender;
@@ -113,7 +113,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveBoatOwner(UserRequest userRequest){
+    public User saveInstructor(UserRequest userRequest) {
+
+        Instructor i = new Instructor();
+        i.setEnabled(true);
+        i.setFirstName(userRequest.getFirstName());
+        i.setLastName(userRequest.getLastName());
+        i.setEmail(userRequest.getEmail());
+        i.setPassword(userRequest.getPassword());
+        i.setResidence(userRequest.getResidence());
+        i.setCity(userRequest.getCity());
+        i.setState(userRequest.getState());
+        i.setPhoneNumber(userRequest.getPhoneNumber());
+
+        i.setUserRole(UserRole.INSTRUCTOR);
+        this.userRepository.save(i);
+
+        return i;
+    }
+
+    @Override
+    public User saveBoatOwner(UserRequest userRequest) {
 
         BoatOwner bo = new BoatOwner();
         bo.setEnabled(true);
