@@ -11,5 +11,10 @@ public interface FishingInstructorAdventureService {
     FishingInstructorAdventure saveAdventure(FishingInstructorAdventure FishingInstructorAdventure);
 
     List<FishingInstructorAdventure> sortByInstructorInfo(Boolean asc);
-
+    List<FishingInstructorAdventure> findByOrderByAdventureNameAsc();
+    List<FishingInstructorAdventure> findByOrderByAdventureNameDesc();
+    List<FishingInstructorAdventure> findByOrderByRatingAsc();
+    List<FishingInstructorAdventure> findByOrderByRatingDesc();
+    List<FishingInstructorAdventure> findByOrderByAddressAsc();
+    List<FishingInstructorAdventure> findByOrderByAddressDesc();
 }

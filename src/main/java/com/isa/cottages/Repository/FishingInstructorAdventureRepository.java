@@ -1,5 +1,6 @@
 package com.isa.cottages.Repository;
 
+import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,10 @@ public interface FishingInstructorAdventureRepository extends JpaRepository<Fish
 
     List<FishingInstructorAdventure> findByOrderByInstructorInfoAsc();
     List<FishingInstructorAdventure> findByOrderByInstructorInfoDesc();
+    List<FishingInstructorAdventure> findByOrderByAdventureNameAsc();
+    List<FishingInstructorAdventure> findByOrderByAdventureNameDesc();
+    List<FishingInstructorAdventure> findByOrderByAverageRatingAsc();
+    List<FishingInstructorAdventure> findByOrderByAverageRatingDesc();
+    List<FishingInstructorAdventure> findByOrderByAdventureResidenceAscAdventureCityAscAdventureStateAsc();
+    List<FishingInstructorAdventure> findByOrderByAdventureResidenceDescAdventureCityDescAdventureStateDesc();
 }

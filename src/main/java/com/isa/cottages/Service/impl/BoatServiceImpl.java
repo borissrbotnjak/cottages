@@ -44,4 +44,22 @@ public class BoatServiceImpl implements BoatService {
     public List<Boat> findByKeyword(String keyword) {
         return this.boatRepository.findByKeyword(keyword);
     }
+
+    @Override
+    public List<Boat> orderByNameDesc() { return this.boatRepository.findByOrderByBoatNameDesc(); }
+
+    @Override
+    public List<Boat> orderByNameAsc() { return this.boatRepository.findByOrderByBoatNameAsc(); }
+
+    @Override
+    public List<Boat> orderByRatingAsc() { return this.boatRepository.findByOrderByAverageRatingAsc();  }
+
+    @Override
+    public List<Boat> orderByRatingDesc() { return this.boatRepository.findByOrderByAverageRatingAsc();  }
+
+    @Override
+    public List<Boat> orderByAddressDesc() { return this.boatRepository.findByOrderByResidenceDescCityDescStateDesc(); }
+
+    @Override
+    public List<Boat> orderByAddressAsc() { return this.boatRepository.findByOrderByResidenceAscCityAscStateAsc(); }
 }

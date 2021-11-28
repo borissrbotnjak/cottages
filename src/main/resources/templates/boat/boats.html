@@ -49,6 +49,12 @@
                 <li class="nav-item" sec:authorize="isAnonymous()">
                     <a class="nav-link" th:href="${'/auth/signup'}">Register</a>
                 </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/auth/home'}">Home</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/home'}">Home</a>
+                </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
                 </li>
@@ -65,41 +71,41 @@
 
 </br>
 <div class="container">
-    <div class="row my-2">
-        <div class="col col-lg-3">
-            <form th:action="@{'/boats/allBoats'}" method="get">
-                <input type="text" placeholder="Name or address.." name="keyword"/>
-                <button type="submit" class="btn btn-dark mt-2">Search</button>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col col-lg-7">
-                <h5>Sort by Name </h5>
-                <a th:href="${'/boats/allBoats/sortByNameAsc'}">Ascending</a>
-                </br><a th:href="${'/boats/allBoats/sortByNameDesc'}">Descending</a> </br></br>
-            </div>
-            <div class="col">
-                <h5>Sort by Average Rating </h5>
-                <a th:href="${'/boats/allBoats/sortByRatingAsc'}">Ascending</a>
-                </br><a th:href="${'/boats/allBoats/sortByRatingDesc'}">Descending</a> </br></br>
-            </div>
-        </div>
-    </div>
+    <form th:action="@{'/boats/allBoats'}" method="get">
+        <input type="text" placeholder="Name, address..." name="keyword"/>
+        <button type="submit" class="btn btn-dark mt-2">Search</button>
+        </br>
+    </form>
 
     </br>
 
     <div>
         <table id="boats" width="90%">
             <tr>
-                <th>Boat name:</th>
-                <th>Address:</th>
+                <th>
+                    Boat name
+                    <a th:href="${'/boats/allBoats/sortByNameDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/boats/allBoats/sortByNameAsc'}"><font color="black">▲</font></a>
+                </th>
+                <th>
+                    Address
+                    <a th:href="${'/boats/allBoats/SortByAddressDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/boats/allBoats/SortByAddressAsc'}"><font color="black">▲</font></a>
+                </th>
                 <th></th>
+                <th></th>
+                <th>
+                    Rating
+                    <a th:href="${'/boats/allBoats/sortByRatingDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/boats/allBoats/sortByRatingAsc'}"><font color="black">▲</font></a>
+                </th>
                 <th></th>
             </tr>
             <tr th:each="boat:${boats}">
                 <td th:text="${boat.boatName}"></td>
                 <td th:text="${boat.boatOwner.getState()}"></td>
                 <td th:text="${boat.boatOwner.getCity()}"></td>
+                <td th:text="${boat.boatOwner.getResidence()}"></td>
                 <td><a th:href="${'/boats/' + boat.getId()}">View boat</a></td>
             </tr>
         </table>

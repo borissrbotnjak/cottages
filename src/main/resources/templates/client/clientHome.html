@@ -23,8 +23,8 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/upcoming'}>Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href=@{'/boatReservations/history'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}">Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Reservation history</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -38,6 +38,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/client/profile/__${user.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" >
+                    <a class="nav-link" href="#">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>

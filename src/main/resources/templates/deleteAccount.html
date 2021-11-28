@@ -34,8 +34,8 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}"> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}">Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
@@ -48,6 +48,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/home'}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>

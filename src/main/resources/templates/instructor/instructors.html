@@ -26,12 +26,14 @@
             Reservations
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" href=# >Make cottage reservation</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" href=#>Make boat reservation</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottage/upcoming'}">Upcoming cottage reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boats/upcoming'}">Upcoming boat reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/cottages/history'}">Cottage reservation history</a>
-            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/boat/history'}">Boat reservations history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming boat reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Boat reservation history</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/upcoming'}"> Upcoming instructor reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/history'}">Instructor reservation history</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
           </div>
         </li>
         <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
@@ -51,6 +53,9 @@
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="${'/auth/signup'}">Register</a>
+        </li>
+        <li class="nav-item" >
+          <a class="nav-link" th:href="${'/auth/home'}">Home</a>
         </li>
         <li class="nav-item" sec:authorize="hasRole('CLIENT')">
           <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
@@ -75,23 +80,6 @@
         <button type="submit" class="btn btn-dark mt-2">Search</button>
       </form>
     </div>
-    <div class="col col-lg-3">
-      <form th:action="@{'/adventures/allAdventures/sortByNameAsc'}" method="get">
-        <button type="submit" class="btn btn-dark mt-2">Sort by name ascending</button>
-      </form>
-    </div>
-    <div class="row">
-      <div class="col col-lg-7">
-        <h5>Sort by Name </h5>
-        <a th:href="${'/adventures/allAdventures/sortByNameAsc'}">Ascending</a>
-        </br><a th:href="${'/adventures/allAdventures/sortByNameDesc'}">Descending</a> </br></br>
-      </div>
-      <div class="col">
-        <h5>Sort by Average Rating </h5>
-        <a th:href="${'/adventures/allAdventuressortByRatingAsc'}">Ascending</a>
-        </br><a th:href="${'/adventures/allAdventures/sortByRatingDesc'}">Descending</a> </br></br>
-      </div>
-    </div>
   </div>
 
   </br>
@@ -99,10 +87,22 @@
   <div>
     <table id="cottages" width="90%">
       <tr>
-        <th>Instructor name:</th>
-        <th>Adventure:</th>
-        <th>Adventure description:</th>
-        <th>Rating:</th>
+        <th>
+          Instructor name
+          <a th:href="${'/adventures/allAdventures/sortByInstructorNameDesc'}"><font color="black">▼</font></a>
+          <a th:href="${'/adventures/allAdventures/sortByInstructorNameAsc'}"><font color="black">▲</font></a>
+        </th>
+        <th>
+          Adventure
+          <a th:href="${'/adventures/allAdventures/sortByAdventureNameDesc'}"><font color="black">▼</font></a>
+          <a th:href="${'/adventures/allAdventures/sortByAdventureNameAsc'}"><font color="black">▲</font></a>
+        </th>
+        <th>Adventure description</th>
+        <th>
+          Rating
+          <a th:href="${'/adventures/allAdventures/sortByRatingDesc'}"><font color="black">▼</font></a>
+          <a th:href="${'/adventures/allAdventures/sortByRatingAsc'}"><font color="black">▲</font></a>
+        </th>
         <th></th>
       </tr>
       <tr th:each="instructor:${instructors}">

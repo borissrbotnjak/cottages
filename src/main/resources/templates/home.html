@@ -25,13 +25,18 @@
                     <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${'/auth/signup'}">Register</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Register
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="nav-link" th:href="${'/auth/signup'}"><font color="black">As client</font></a>
+                        <div class="dropdown-divider"></div>
+                        <a class="nav-link" th:href="${'/auth/signupOwner'}"><font color="black">As owner</font></a>
+                    </div>
                 </li>
-                <li class="nav-item"></li>
-                    <a class="nav-link" th:href="${'/auth/signupOwner'}">Register owner</a>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/login'}">Log in</a>
                 </li>

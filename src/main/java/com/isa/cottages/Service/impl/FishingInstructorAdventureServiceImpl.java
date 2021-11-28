@@ -51,6 +51,24 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     }
 
     @Override
+    public List<FishingInstructorAdventure> findByOrderByAdventureNameAsc() { return this.adventureRepository.findByOrderByAdventureNameAsc(); }
+
+    @Override
+    public List<FishingInstructorAdventure> findByOrderByAdventureNameDesc() { return this.adventureRepository.findByOrderByAdventureNameDesc(); }
+
+    @Override
+    public List<FishingInstructorAdventure> findByOrderByRatingAsc() { return this.adventureRepository.findByOrderByAverageRatingAsc(); }
+
+    @Override
+    public List<FishingInstructorAdventure> findByOrderByRatingDesc() { return this.adventureRepository.findByOrderByAverageRatingDesc(); }
+
+    @Override
+    public List<FishingInstructorAdventure> findByOrderByAddressAsc() { return this.adventureRepository.findByOrderByAdventureResidenceAscAdventureCityAscAdventureStateAsc(); }
+
+    @Override
+    public List<FishingInstructorAdventure> findByOrderByAddressDesc() { return this.adventureRepository.findByOrderByAdventureResidenceDescAdventureCityDescAdventureStateDesc(); }
+
+    @Override
     public List<FishingInstructorAdventure> sortByInstructorInfo(Boolean asc) {
         if (asc) {
             return this.adventureRepository.findByOrderByInstructorInfoAsc();

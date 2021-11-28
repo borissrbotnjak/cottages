@@ -2,6 +2,7 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Boat;
+import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/boats")
@@ -65,5 +68,84 @@ public class BoatController {
         }
         this.boatService.saveBoat(boat);
         return new ModelAndView("redirect:/boats/");
+    }
+
+
+    @GetMapping("/allBoats/sortByNameDesc")
+    public ModelAndView sortByNameDesc(Model model) {
+        List<Boat> sorted = this.boatService.orderByNameDesc();
+        model.addAttribute("boats", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boat/boats");
+        } catch (Exception e) {
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allBoats/sortByNameAsc")
+    public ModelAndView sortByNameAsc(Model model) {
+        List<Boat> sorted = this.boatService.orderByNameAsc();
+        model.addAttribute("boats", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boat/boats");
+        } catch (Exception e) {
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allBoats/sortByRatingDesc")
+    public ModelAndView sortByRatingDesc(Model model) {
+        List<Boat> sorted = this.boatService.orderByRatingDesc();
+        model.addAttribute("boats", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boat/boats");
+        } catch (Exception e) {
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allBoats/sortByRatingAsc")
+    public ModelAndView sortByRatingAsc(Model model) {
+        List<Boat> sorted = this.boatService.orderByRatingAsc();
+        model.addAttribute("boats", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boat/boats");
+        } catch (Exception e) {
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allBoats/SortByAddressAsc")
+    public ModelAndView orderByAddressAsc(Model model) {
+        List<Boat> sorted = this.boatService.orderByAddressAsc();
+        model.addAttribute("boats", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boat/boats");
+        } catch (Exception e) {
+            return new ModelAndView("home");
+        }
+    }
+
+    @GetMapping("/allBoats/SortByAddressDesc")
+    public ModelAndView orderByAddressDesc(Model model) {
+        List<Boat> sorted = this.boatService.orderByAddressDesc();
+        model.addAttribute("boats", sorted);
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("boat/boats");
+        } catch (Exception e) {
+            return new ModelAndView("home");
+        }
     }
 }

@@ -59,6 +59,9 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
                 </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/home'}">Home</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
