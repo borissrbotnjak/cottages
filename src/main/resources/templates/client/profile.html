@@ -98,8 +98,8 @@
             <div class="col-md-4">
                 <div class="profile-work">
                     <p>Other</p>
-                    <a th:href="@{/client/profile/__${user.id}__/editProfile}">Edit profile</a><br/></br>
-                    <a th:href="@{/auth/deleteAccount}">Delete account</a><br/>
+                    <a th:href="@{/client/profile/__${user.id}__/editProfile}" sec:authorize="hasRole('CLIENT')">Edit profile</a><br/></br>
+                    <a th:href="@{/auth/deleteAccount}" sec:authorize="hasRole('CLIENT')">Delete account</a><br/>
                     <!-- <a href="">Complaints</a><br/> -->
                 </div>
             </div>
