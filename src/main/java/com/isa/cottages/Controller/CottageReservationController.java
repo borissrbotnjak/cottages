@@ -131,7 +131,7 @@ public class CottageReservationController {
         model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
 
         report.setCottageOwner(cottageOwner);
-        this.reportService.save(report);
+        reportService.save(report);
         return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{id}/");
     }
 

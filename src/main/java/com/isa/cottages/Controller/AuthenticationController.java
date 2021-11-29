@@ -1,10 +1,9 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
-import com.isa.cottages.DTO.ChangePasswordDTO;
-import com.isa.cottages.DTO.UserDTO;
+import com.isa.cottages.DTO.*;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
+import com.isa.cottages.Service.impl.RequestServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,19 +22,18 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     private final UserServiceImpl userService;
+    private RequestServiceImpl requestService;
 
     @Autowired
-    public AuthenticationController(UserServiceImpl userService)
-    {
+    public AuthenticationController(UserServiceImpl userService, RequestServiceImpl requestService) {
         this.userService = userService;
+        this.requestService = requestService;
     }
 
     @GetMapping("/login")
     public ModelAndView loginForm(Model model, String email) {
         User user1 = userService.findByEmail(email);
         UserDTO user = new UserDTO();
-//        UserRequest userRequest = new UserRequest();
-//        model.addAttribute("userRequest", userRequest);
         model.addAttribute("user", user);
         return new ModelAndView("login");
     }
@@ -75,26 +73,25 @@ public class AuthenticationController {
     }
 
 
-    @GetMapping("/signupOwner")
-    public ModelAndView registrationOwnerForm(Model model){
+    @GetMapping("/signupAdvertiser")
+    public ModelAndView registrationAdvertiserForm(Model model){
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
         return new ModelAndView("cottage/registration");
     }
 
-    @PostMapping("/signupOwner/submit")
-    public ModelAndView addOwner(@ModelAttribute("userRequest") @Valid UserRequest userRequest,
+    @PostMapping("/signupAdvertiser/submit")
+    public ModelAndView addAdvertiser(@ModelAttribute("userRequest") @Valid UserRequest userRequest,
                                  BindingResult result, @ModelAttribute User user) {
         User existUser = this.userService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Email already exists.");
         }
         if (result.hasErrors()) {
-            return new ModelAndView("redirect:/auth/signupOwner");
+            return new ModelAndView("redirect:/auth/signupAdvertiser");
         }
 
         userRequest.setRegistrationType(userRequest.getRegistrationType());
-//        userService.saveCottageOwner(userRequest);
         if (userRequest.getRegistrationType() == RegistrationType.COTTAGE_ADVERTISER) {
             userService.saveCottageOwner(userRequest);
             user.setUserRole(UserRole.COTTAGE_OWNER);
@@ -203,7 +200,7 @@ public class AuthenticationController {
     public ModelAndView deleteAccountSubmit(Model model, @ModelAttribute Request request) throws Exception {
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
-        // TODO: napraviti repo i service za request
+        requestService.save(request);
 
         if(user.getUserRole() == UserRole.COTTAGE_OWNER) {
             return new ModelAndView("redirect:/cottageOwner/profile/" + user.getId());
