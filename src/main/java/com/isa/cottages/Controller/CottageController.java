@@ -99,6 +99,21 @@ public class CottageController {
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/allMyCottages/{id}/editCottage/{cid}")
+    public ModelAndView updateCottage(Model model, @PathVariable("id") Long id,
+                                      @PathVariable("cid") Long cid) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        Cottage cottage = this.cottageService.findById(cid);
+        model.addAttribute("cottage", cottage);
+
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
+        model.addAttribute("cottages", cottages);
+        return new ModelAndView("cottage/editCottage");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/edit/submit")
     public ModelAndView edit(@PathVariable Long id, Model model, Cottage cottage) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -138,21 +153,6 @@ public class CottageController {
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/allMyCottages/{id}/editCottage/{cid}")
-    public ModelAndView updateCottage(Model model, @PathVariable("id") Long id,
-                                      @PathVariable("cid") Long cid) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
-
-        Cottage cottage = this.cottageService.findById(cid);
-        model.addAttribute("cottage", cottage);
-
-        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
-        model.addAttribute("cottages", cottages);
-        return new ModelAndView("cottage/editCottage");
-    }
-
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping(value = "/allMyCottages/{id}/remove/{cid}")
     public ModelAndView removeCottage(@PathVariable Long cid,
                                       @PathVariable Long id,
@@ -161,16 +161,18 @@ public class CottageController {
         model.addAttribute("principal", cottageOwner);
 
         Cottage cottage = this.cottageService.findById(cid);
-//        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
 
-        cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-
-        boolean update = this.cottageService.canUpdateOrDelete(id);
-        if (!update) {
+        boolean delete = this.cottageService.canUpdateOrDelete(cid);
+        if (!delete) {
             return new ModelAndView("cottage/errors/errorDeleteCottage");
         } else {
             this.cottageService.removeCottage(cottage, id);
+            cottage.setDeleted(true);
+            this.cottageService.updateCottage(cottage);
         }
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(cid);
+        model.addAttribute("cottages", cottages);
+
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
     }
 
@@ -188,9 +190,7 @@ public class CottageController {
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/defineAvailability/submit")
-    public ModelAndView defineAvailability(Model model, @PathVariable Long id, @ModelAttribute Cottage cottage,
-                                           @RequestParam String availableFrom,
-                                           @RequestParam String availableUntil) throws Exception {
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id, @ModelAttribute Cottage cottage) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
