@@ -133,11 +133,10 @@ public class CottageServiceImpl implements CottageService {
         Set<Cottage> cottages = cottageOwner.getCottages();
         cottages.remove(c);
         cottageOwner.setCottages(cottages);
+        cottage.setDeleted(true);
 
         c.setCottageOwner(null);
-//        this.cottageOwnerRepository.save(forUpdate);
         this.cottageOwnerService.updateCottages(cottageOwner);
-        updateCottage(c);
     }
 
     @Override
