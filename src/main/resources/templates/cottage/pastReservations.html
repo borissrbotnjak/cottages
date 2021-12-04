@@ -32,17 +32,31 @@
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Reservations
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}"> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}">Reservation history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
-                    </div>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Reservations
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}"> Upcoming reservations</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}">Reservation history</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming boat reservations</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Boat reservation history</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/upcoming'}"> Upcoming instructor reservations</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/history'}">Instructor reservation history</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
+                    <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
+                </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All instructors</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
@@ -62,20 +76,25 @@
     </br>
     <h3>Cottage reservation history</h3>
     </br>
-    <form th:action="@{'/cottageReservations/reservationHistory/__${principal.id}__'}" method="get">
+    <form sec:authorize="hasRole('COTTAGE_OWNER')" th:action="@{'/cottageReservations/reservationHistory/__${principal.id}__'}" method="get">
         <input type="text" placeholder="Search client..." name="keyword"/>
         <button type="submit" class="btn btn-dark mt-2">Search</button>
         </br>
     </form>
+    <form sec:authorize="hasRole('CLIENT')" th:action="@{'/cottageReservations/history/'}" method="get">
+        <input type="text" placeholder="Search cottage..." name="keyword"/>
+        <button type="submit" class="btn btn-dark mt-2">Search</button>
+        </br>
+    </form>
     </br></br></br>
-    <table width="90%">
+    <table sec:authorize="hasRole('COTTAGE_OWNER')" width="90%">
         <tr>
             <th>Cottage name:</th>
             <th>Reservation start:</th>
             <th>Client name:</th>
             <th></th>
             <th></th>
-            <th sec:authorize="hasRole('CLIENT')"></th>
+            <th></th>
         </tr>
         <tr th:each="cottageReservation:${cottageReservations}">
             <td th:text="${cottageReservation.cottage.getName()}"></td>
@@ -83,7 +102,20 @@
             <td th:text="${cottageReservation.client.getFullName()}"></td>
             <td><a th:href="@{/client/profile/__${cottageReservation.client.getId()}__}">View profile</a></td>
             <td><a th:href="@{/cottageReservations/writeReport/__${id}__}">Write report</a></td>
-            <td><a sec:authorize="hasRole('CLIENT')" th:href="${'/complaints/cottage/new/' + cottageReservation.getCottage().getId() }">Make Complaint</a></td>
+        </tr>
+    </table>
+    <table sec:authorize="hasRole('CLIENT')" width="90%">
+        <tr>
+            <th>Cottage name:</th>
+            <th>Reservation start:</th>
+            <th>Reservation end:</th>
+            <th></th>
+        </tr>
+        <tr th:each="cottageReservation:${cottageReservations}">
+            <td th:text="${cottageReservation.cottage.getName()}"></td>
+            <td th:text="${cottageReservation.startTime}"></td>
+            <td th:text="${cottageReservation.endTime}"></td>
+            <td><a th:href="${'/complaints/cottage/new/' + cottageReservation.getCottage().getId() }">Make Complaint</a></td>
         </tr>
     </table>
 </div>

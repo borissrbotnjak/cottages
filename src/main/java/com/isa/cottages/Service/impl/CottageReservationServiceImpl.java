@@ -102,7 +102,8 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> upcoming = new ArrayList<>();
 
         for (CottageReservation res: all) {
-            if((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cl.getId()))) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
+                    && (Objects.equals(res.getCottageOwner().getId(), cl.getId()))) {
                 upcoming.add(res);
             }
         }
@@ -116,7 +117,8 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         List<CottageReservation> pastOnes = new ArrayList<>();
 
         for (CottageReservation res: all) {
-            if((res.getStartTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cl.getId()))) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now())) &&
+                    (Objects.equals(res.getClient().getId(), cl.getId()))) {
                 pastOnes.add(res);
             }
         }

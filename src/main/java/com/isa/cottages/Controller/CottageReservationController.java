@@ -163,12 +163,13 @@ public class CottageReservationController {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         if (keyword != null) {
-            //model.addAttribute("reservations", );
+            // TODO: Dodaj pretragu
+            //model.addAttribute("reservations", this.reservationService.findByKeyword(keyword));
         } else {
-            model.addAttribute("reservations", this.reservationService.getPastReservations());
+            model.addAttribute("cottageReservations", this.reservationService.getPastReservations());
         }
         // TODO: dodaj stranicu
-        return new ModelAndView("cottage/reservationHistory");
+        return new ModelAndView("cottage/pastReservations");
     }
 
     @GetMapping("/upcoming")
@@ -177,9 +178,10 @@ public class CottageReservationController {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         if (keyword != null) {
-            //model.addAttribute("reservations", );
+            // TODO: Dodaj pretragu
+            //model.addAttribute("reservations", this.reservationService.findByKeyword(keyword));
         } else {
-            model.addAttribute("reservations", this.reservationService.getUpcomingReservations());
+            model.addAttribute("cottageReservations", this.reservationService.getUpcomingReservations());
         }
         // TODO: Dopuni stranicu
         return new ModelAndView("cottage/upcomingReservations");
