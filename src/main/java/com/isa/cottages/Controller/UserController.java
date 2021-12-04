@@ -72,7 +72,7 @@ public class UserController {
     public ModelAndView clientHome(Model model, Authentication auth){
         Client client = (Client) userService.findByEmail(auth.getName());
         model.addAttribute("user", client);
-        return new ModelAndView("client/clientHome");
+        return new ModelAndView("client/home");
     }
 
 

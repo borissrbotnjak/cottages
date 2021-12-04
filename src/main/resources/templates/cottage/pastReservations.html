@@ -36,8 +36,8 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}"> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}">Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
@@ -75,6 +75,7 @@
             <th>Client name:</th>
             <th></th>
             <th></th>
+            <th sec:authorize="hasRole('CLIENT')"></th>
         </tr>
         <tr th:each="cottageReservation:${cottageReservations}">
             <td th:text="${cottageReservation.cottage.getName()}"></td>
@@ -82,6 +83,7 @@
             <td th:text="${cottageReservation.client.getFullName()}"></td>
             <td><a th:href="@{/client/profile/__${cottageReservation.client.getId()}__}">View profile</a></td>
             <td><a th:href="@{/cottageReservations/writeReport/__${id}__}">Write report</a></td>
+            <td><a sec:authorize="hasRole('CLIENT')" th:href="${'/complaints/cottage/new/' + cottageReservation.getCottage().getId() }">Make Complaint</a></td>
         </tr>
     </table>
 </div>

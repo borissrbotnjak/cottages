@@ -87,11 +87,13 @@
                 <th>Boat name:</th>
                 <th>Reservation start:</th>
                 <th>Reservation end:</th>
+                <th></th>
             </tr>
             <tr th:each="reservation:${reservations}">
                 <td th:text="${reservation.boat.getBoatName()}"></td>
                 <td th:text="${reservation.startTime}"></td>
                 <td th:text="${reservation.endTime}"></td>
+                <td><a th:href="${'/complaints/boat/new/' + reservation.getBoat().getId() }">Make Complaint</a></td>
             </tr>
         </table>
     </div>

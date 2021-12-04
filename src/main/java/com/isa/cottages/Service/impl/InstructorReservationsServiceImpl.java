@@ -1,5 +1,6 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.InstructorReservation;
 import com.isa.cottages.Repository.InstructorReservationRepository;
@@ -55,4 +56,7 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
         }
         return upcoming;
     }
+
+    @Override
+    public List<InstructorReservation> findAllByClient(Client client) { return this.reservationRepository.findAllByClient(client.getId()); }
 }

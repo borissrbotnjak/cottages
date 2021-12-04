@@ -1,5 +1,6 @@
 package com.isa.cottages.Repository;
 
+import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.CottageReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,10 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.cottage_owner_id = ?1", nativeQuery = true)
     List<CottageReservation> getAllReservedByOwner(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM RESERVATION RES WHERE RES.DELETED=FALSE AND RES.RESERVED=TRUE" +
+            "AND RES.COTTAGE_ID IS NOT NULL AND RES.CLIENT_ID=?1", nativeQuery = true)
+    List<CottageReservation> findAllByClient(@Param("client_id") Long clientId);
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.cottage_owner_id is not null", nativeQuery = true)

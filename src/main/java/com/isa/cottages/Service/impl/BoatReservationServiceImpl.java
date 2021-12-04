@@ -27,6 +27,9 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> findAllByClient(Client client) { return this.reservationRepository.findAllByClient(client.getId()); }
+
+    @Override
     public List<BoatReservation> getPastReservations() throws Exception {
         Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
         List<BoatReservation> all = this.reservationRepository.getAllReservations();

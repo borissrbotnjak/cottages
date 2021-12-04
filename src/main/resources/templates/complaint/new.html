@@ -19,7 +19,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <title>Instructor reservation history</title>
+  <title>Boat reservation History</title>
 </head>
 <body>
 
@@ -59,6 +59,9 @@
         <li class="nav-item">
           <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
         </li>
+        <li class="nav-item" >
+          <a class="nav-link" th:href="${'/client/home'}">Home</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
         </li>
@@ -68,36 +71,29 @@
   </nav>
 </div>
 
-<div class="container">
-  <div id="cottages" class="table">
-    </br>
-    <h3>Instructor reservation history</h3>
-    </br>
-    <form th:action="@{'/instructorReservations/History'}" method="get">
-      <input type="text" placeholder="Search..." name="keyword"/>
-      <button type="submit" class="btn btn-dark mt-2">Search</button>
-      </br>
-    </form>
-    </br></br></br>
-    <table width="90%">
-      <tr>
-        <th>Instructor name:</th>
-        <th>Adventure name:</th>
-        <th>Reservation start:</th>
-        <th>Reservation end:</th>
-        <th sec:authorize="hasRole('CLIENT')"></th>
-      </tr>
-      <tr th:each="reservation:${reservations}">
-        <td th:text="${reservation.fishingInstructorAdventure.instructorInfo}"></td>
-        <td th:text="${reservation.fishingInstructorAdventure.adventureName}"></td>
-        <td th:text="${reservation.startTime}"></td>
-        <td th:text="${reservation.endTime}"></td>
-        <td><a sec:authorize="hasRole('CLIENT')"
-               th:href="${'/complaints/instructor/new/' + reservation.getFishingInstructorAdventure().getId() }">Make Complaint</a></td>
-      </tr>
-    </table>
+<form th:if="${complaint.getBoat() != null}" th:action="@{'/complaints/boat/new/' + __${entity_id}__}" th:object="${complaint}" method="post">
+  <br><label for="boatComplaintText">Complaint:</label>
+  <input id="boatComplaintText" type="text" th:field="*{text}"/>
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark mt-2">Submit</button>
   </div>
-</div>
+</form>
+
+<form th:if="${complaint.getCottage() != null}" th:action="@{'/complaints/cottage/new/' + __${entity_id}__}" th:object="${complaint}" method="post">
+  <br><label for="cottageComplaintText">Complaint:</label>
+  <input id="cottageComplaintText" type="text" th:field="*{text}"/>
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark mt-2">Submit</button>
+  </div>
+</form>
+
+<form th:if="${complaint.getInstructor() != null}" th:action="@{'/complaints/instructor/new/' + __${entity_id}__}" th:object="${complaint}" method="post">
+  <br><label for="instructorComplaintText">Complaint:</label>
+  <input id="instructorComplaintText" type="text" th:field="*{text}"/>
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark mt-2">Submit</button>
+  </div>
+</form>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

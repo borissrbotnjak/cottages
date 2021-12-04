@@ -1,5 +1,6 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.CottageReservation;
 
 import java.util.List;
@@ -16,5 +17,6 @@ public interface CottageReservationService {
     CottageReservation saveDiscount(CottageReservation cottageReservation);
     List<CottageReservation> findDiscountsByCottage(Long id) throws Exception;
 
+    List<CottageReservation> findAllByClient(Client client);
     List<CottageReservation> findClient(String keyword) throws Exception;
 }

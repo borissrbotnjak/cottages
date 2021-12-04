@@ -124,6 +124,11 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public List<CottageReservation> findAllByClient(Client client){
+        return this.reservationRepository.findAllByClient(client.getId());
+    }
+
+    @Override
     public List<CottageReservation> findClient(String keyword) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
