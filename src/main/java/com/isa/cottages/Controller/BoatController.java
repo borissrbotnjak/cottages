@@ -148,4 +148,5 @@ public class BoatController {
             return new ModelAndView("home");
         }
     }
+
 }

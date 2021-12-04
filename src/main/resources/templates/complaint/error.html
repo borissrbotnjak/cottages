@@ -71,33 +71,7 @@
     </nav>
 </div>
 
-<div class="container">
-    <div id="cottages" class="table">
-        </br>
-        <h3>Boat reservation history</h3>
-        </br>
-        <form th:action="@{'/boatReservations/history'}" method="get">
-            <input type="text" placeholder="Search..." name="keyword"/>
-            <button type="submit" class="btn btn-dark mt-2">Search</button>
-            </br>
-        </form>
-        </br></br></br>
-        <table width="90%">
-            <tr>
-                <th>Boat name:</th>
-                <th>Reservation start:</th>
-                <th>Reservation end:</th>
-                <th></th>
-            </tr>
-            <tr th:each="reservation:${reservations}">
-                <td th:text="${reservation.boat.getBoatName()}"></td>
-                <td th:text="${reservation.startTime}"></td>
-                <td th:text="${reservation.endTime}"></td>
-                <td><a th:href="${'/complaints/boat/new/' + reservation.getBoat().getId() }">Make Complaint</a></td>
-            </tr>
-        </table>
-    </div>
-</div>
+<h3> Došlo je do greške. Vratite se na istoriju rezervacija i pokušajte ponovo. </h3>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

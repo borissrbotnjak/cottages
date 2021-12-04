@@ -19,10 +19,10 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
 
 /* BOATS */
-INSERT INTO BOAT(boat_name, boat_owner_id)
-VALUES('Dalila', 4);
-INSERT INTO BOAT(boat_name, boat_owner_id)
-VALUES('Zaklina', 4);
+INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
+VALUES('Dalila', 4, 4.7);
+INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
+VALUES('Zaklina', 4, 4.1);
 
 /* COTTAGES */
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED)

@@ -55,7 +55,7 @@ public class BoatServiceImpl implements BoatService {
     public List<Boat> orderByRatingAsc() { return this.boatRepository.findByOrderByAverageRatingAsc();  }
 
     @Override
-    public List<Boat> orderByRatingDesc() { return this.boatRepository.findByOrderByAverageRatingAsc();  }
+    public List<Boat> orderByRatingDesc() { return this.boatRepository.findByOrderByAverageRatingDesc();  }
 
     @Override
     public List<Boat> orderByAddressDesc() { return this.boatRepository.findByOrderByResidenceDescCityDescStateDesc(); }
