@@ -85,14 +85,30 @@
         <table width="90%">
             <tr>
                 <th>Boat name:</th>
-                <th>Reservation start:</th>
-                <th>Reservation end:</th>
+                <th>Owner name:</th>
+                <th>
+                    Reservation start
+                    <a th:href="${'/boatReservations/history/sortByDateDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/boatReservations/history/sortByDateAsc'}"><font color="black">▲</font></a>
+                </th>
+                <th>
+                    Duration
+                    <a th:href="${'/boatReservations/history/sortByDurationDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/boatReservations/history/sortByDurationAsc'}"><font color="black">▲</font></a>
+                </th>
+                <th>
+                    Price
+                    <a th:href="${'/boatReservations/history/sortByPriceDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/boatReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
+                </th>
                 <th></th>
             </tr>
             <tr th:each="reservation:${reservations}">
-                <td th:text="${reservation.boat.getBoatName()}"></td>
+                <td th:text="${reservation.boat.boatName}"></td>
+                <td th:text="${reservation.boat.getBoatOwner().getFullName()}"></td>
                 <td th:text="${reservation.startTime}"></td>
-                <td th:text="${reservation.endTime}"></td>
+                <td th:text="${reservation.duration}"></td>
+                <td th:text="${reservation.price}"></td>
                 <td><a th:href="${'/complaints/boat/new/' + reservation.getBoat().getId() }">Make Complaint</a></td>
             </tr>
         </table>

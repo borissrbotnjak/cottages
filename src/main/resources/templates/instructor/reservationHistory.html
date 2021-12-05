@@ -59,6 +59,12 @@
         <li class="nav-item">
           <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
         </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link" th:href="${'/auth/home'}">Home</a>
+        </li>
+        <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+          <a class="nav-link" th:href="${'/client/home'}">Home</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
         </li>
@@ -81,17 +87,31 @@
     </br></br></br>
     <table width="90%">
       <tr>
-        <th>Instructor name:</th>
-        <th>Adventure name:</th>
-        <th>Reservation start:</th>
-        <th>Reservation end:</th>
+        <th>Instructor name</th>
+        <th>Adventure name</th>
+        <th>
+          Reservation start
+          <a th:href="${'/instructorReservations/history/sortByDateDesc'}"><font color="black">▼</font></a>
+          <a th:href="${'/instructorReservations/history/sortByDateAsc'}"><font color="black">▲</font></a>
+        </th>
+        <th>
+          Duration
+          <a th:href="${'/instructorReservations/history/sortByDurationDesc'}"><font color="black">▼</font></a>
+          <a th:href="${'/instructorReservations/history/sortByDurationAsc'}"><font color="black">▲</font></a>
+        </th>
+        <th>
+          Price
+          <a th:href="${'/instructorReservations/history/sortByPriceDesc'}"><font color="black">▼</font></a>
+          <a th:href="${'/instructorReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
+        </th>
         <th sec:authorize="hasRole('CLIENT')"></th>
       </tr>
       <tr th:each="reservation:${reservations}">
         <td th:text="${reservation.fishingInstructorAdventure.instructorInfo}"></td>
         <td th:text="${reservation.fishingInstructorAdventure.adventureName}"></td>
         <td th:text="${reservation.startTime}"></td>
-        <td th:text="${reservation.endTime}"></td>
+        <td th:text="${reservation.duration}"></td>
+        <td th:text="${reservation.price}"></td>
         <td><a sec:authorize="hasRole('CLIENT')"
                th:href="${'/complaints/instructor/new/' + reservation.getFishingInstructorAdventure().getId() }">Make Complaint</a></td>
       </tr>

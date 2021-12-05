@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +25,54 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         this.clientService = clientService;
         this.userService = userService;
         this.reservationRepository = boatReservationRepository;
+    }
+
+    @Override
+    public List<BoatReservation> findByOrderByStartTimeAsc() throws Exception {
+        List<BoatReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(BoatReservation::getStartTime));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> findByOrderByStartTimeDesc() throws Exception {
+        List<BoatReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(BoatReservation::getStartTime).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> findByOrderByDurationAsc() throws Exception {
+        List<BoatReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(BoatReservation::getDuration));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> findByOrderByDurationDesc() throws Exception {
+        List<BoatReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(BoatReservation::getDuration).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> findByOrderByPriceAsc() throws Exception {
+        List<BoatReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(BoatReservation::getPrice));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> findByOrderByPriceDesc() throws Exception {
+        List<BoatReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(BoatReservation::getPrice).reversed());
+
+        return pastOnes;
     }
 
     @Override

@@ -41,6 +41,9 @@
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
+                    <a class="nav-link" th:href="${'/cottages/allCottages'}">All Cottages</a>
+                </li>
+                <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">

@@ -48,4 +48,59 @@ public class BoatReservationController {
         }
         return new ModelAndView("boat/upcomingReservations");
     }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/history/sortByDateAsc")
+    public ModelAndView sortPastReservationsByDateAsc(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("reservations", this.reservationService.findByOrderByStartTimeAsc());
+
+        return new ModelAndView("boat/reservationHistory");
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/history/sortByDateDesc")
+    public ModelAndView sortPastReservationsByDateDesc(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("reservations", this.reservationService.findByOrderByStartTimeDesc());
+
+        return new ModelAndView("boat/reservationHistory");
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/history/sortByDurationAsc")
+    public ModelAndView sortPastReservationsByDurationAsc(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("reservations", this.reservationService.findByOrderByDurationAsc());
+
+        return new ModelAndView("boat/reservationHistory");
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/history/sortByDurationDesc")
+    public ModelAndView sortPastReservationsByDurationDesc(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("reservations", this.reservationService.findByOrderByDurationDesc());
+
+        return new ModelAndView("boat/reservationHistory");
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/history/sortByPriceAsc")
+    public ModelAndView sortPastReservationsByPriceAsc(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("reservations", this.reservationService.findByOrderByPriceAsc());
+
+        return new ModelAndView("boat/reservationHistory");
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/history/sortByPriceDesc")
+    public ModelAndView sortPastReservationsByPriceDesc(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        model.addAttribute("reservations", this.reservationService.findByOrderByPriceDesc());
+
+        return new ModelAndView("boat/reservationHistory");
+    }
+
 }
