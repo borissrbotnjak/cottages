@@ -18,6 +18,7 @@ public interface CottageService {
     Cottage defineAvailability(Cottage cottage) throws Exception;
 
     Cottage saveCottage(Cottage cottage) throws Exception;
+    Cottage saveImage(Cottage cottage);
     Cottage updateCottage(Cottage cottage) throws Exception;
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 

@@ -42,10 +42,10 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
+                    <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                    <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
@@ -61,7 +61,11 @@
     <h3>Cottage discounts</h3>
     <br>
     <div class="row">
-        <button type="button" class="btn mt-2"><a th:href="${'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define new discount</a></button>
+        <button type="button" class="btn mt-2">
+            <a sec:authorize="hasRole('COTTAGE_OWNER')"
+               th:href="${'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define new discount
+            </a>
+        </button>
     </div>
         </br></br></br></br>
         <div class="table">

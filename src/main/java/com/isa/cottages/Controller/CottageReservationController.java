@@ -59,8 +59,9 @@ public class CottageReservationController {
 
     @GetMapping("/allDiscounts/{id}")
     public ModelAndView getDiscountsByCottage(@PathVariable Long id, Model model) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
+        User user =
+                this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", user);
 
         Cottage cottage = this.cottageService.findById(id);
         model.addAttribute("cottage", cottage);
@@ -76,8 +77,8 @@ public class CottageReservationController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/{id}/defineDiscount")
     public ModelAndView defineDiscount(@PathVariable Long id, Model model) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
+        User user = this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", user);
 
         model.addAttribute("cottage", this.cottageService.findById(id));
         CottageReservation cottageReservation = new CottageReservation();
@@ -99,8 +100,8 @@ public class CottageReservationController {
         Collection<CottageReservation> cottageReservations = this.reservationService.findDiscountsByCottage(id);
         model.addAttribute("cottageReservations", cottageReservations);
 
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
+        User user = this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", user);
 
         cottageReservation.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
         cottageReservation.setCottage(this.cottageService.findById(id));

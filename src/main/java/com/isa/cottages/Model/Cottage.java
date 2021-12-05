@@ -6,8 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.lang.String;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,7 +36,7 @@ public class Cottage implements Serializable {
     private String promotionalDescription;
 
     @Column
-    private String image;
+    private String imageUrl;
 
     @Column
     private Long numberOfRooms;
@@ -76,4 +76,8 @@ public class Cottage implements Serializable {
 
     @OneToMany(mappedBy = "cottage", targetEntity = CottageReservation.class)
     private Set<CottageReservation> cottageReservations = new HashSet<>();
+
+    public Cottage(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

@@ -9,10 +9,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collection;
-import java.util.List;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/cottages")
@@ -43,10 +45,26 @@ public class CottageController {
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/addCottage/{id}/submit")
-    public ModelAndView addCottage(@PathVariable Long id, @ModelAttribute Cottage cottage, Model model) throws Exception {
+    public ModelAndView addCottage(@PathVariable Long id, @ModelAttribute Cottage cottage,
+                                   @RequestParam("image") MultipartFile image,
+                                   Model model) throws Exception {
 //        if (this.cottageService.findById(cottage.getId()) != null) {
 //            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
 //        }
+        Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
+        try {
+            InputStream inputStream = image.getInputStream();
+            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
+                    StandardCopyOption.REPLACE_EXISTING);
+            cottage.setImageUrl(image.getOriginalFilename().toLowerCase());
+            this.cottageService.saveCottage(cottage);
+            model.addAttribute("cottage", cottage);
+            model.addAttribute("imageUrl", cottage.getImageUrl());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
 
@@ -54,6 +72,7 @@ public class CottageController {
         model.addAttribute("principal", cottageOwner);
 
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+
         this.cottageService.saveCottage(cottage);
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}/");
     }
@@ -63,8 +82,6 @@ public class CottageController {
     public ModelAndView getAllMyCottages (@PathVariable Long id, Model model, String keyword) throws Exception{
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-//        Cottage cottage = new Cottage();
-//        model.addAttribute("cottage", cottage);
         if(cottageOwner == null) {
             throw new Exception("Cottage owner does not exist.");
         }
@@ -121,7 +138,6 @@ public class CottageController {
 
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
-//        model.addAttribute("cottage", cottage);
 
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
 

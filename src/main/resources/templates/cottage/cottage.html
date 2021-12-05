@@ -2,16 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8"><!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
-  <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
--->
-  <link rel="stylesheet" href="../../static/css/profileCSS.css">
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <title>Cottage</title>
 </head>
@@ -43,7 +48,7 @@
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
         </li>
-        <li class="nav-item" >
+        <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
         </li>
         <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
@@ -76,6 +81,12 @@
       <div class="col-md-8">
         <div class="tab-content profile-tab" id="myTabContent">
           <div id="profile">
+            <p align="center">
+              <img alt="" th:src="@{'/getImage/'+${cottage.imageUrl}+ '/' +${principal.id}}">
+            </p>
+              <p>
+                <img alt="" th:src="${cottage.imageUrl}">
+              </p>
             <div class="row">
               <div class="col-md-6">
                 <label>Name</label>
@@ -177,15 +188,15 @@
             </div>
 
             </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
+            </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
+            </br></br>
             <a th:href="@{'/cottageReservations/allDiscounts/__${cottage.id}__'}">View discounts</a>
             </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define discount</a>
             </br></br>
             <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
-            </br></br>
-            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
-            </br></br>
-            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
             </br></br>
           </div>
         </div>
@@ -193,8 +204,6 @@
     </div>
   </form>
 </div>
-
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

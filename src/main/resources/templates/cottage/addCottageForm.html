@@ -59,42 +59,49 @@
 
     <div class="container center-align lighten-5">
         <h1>Add cottage</h1>
-        <form th:action="@{/cottages/addCottage/__${principal.id}__/submit}" th:object="${cottage}" method="post">
+        <form th:action="@{/cottages/addCottage/__${principal.id}__/submit}" method="post" enctype="multipart/form-data">
 
             <br><label for="name">Name:</label>
-            <input id="name" type="text" th:field="*{name}"/>
+            <input id="name" type="text" th:field="*{cottage.name}"/>
 
             <br><label for="residence">Residence:</label>
-            <input id="residence" type="text" th:field="*{residence}"/>
+            <input id="residence" type="text" th:field="*{cottage.residence}"/>
 
             <br><label for="city">City:</label>
-            <input id="city" type="text" th:field="*{city}"/>
+            <input id="city" type="text" th:field="*{cottage.city}"/>
 
             <br><label for="state">State:</label>
-            <input id="state" type="text" th:field="*{state}"/>
+            <input id="state" type="text" th:field="*{cottage.state}"/>
 
             <br><label for="promotionalDescription">Promotional Description:</label>
-            <input id="promotionalDescription" type="text" th:field="*{promotionalDescription}"/>
+            <input id="promotionalDescription" type="text" th:field="*{cottage.promotionalDescription}"/>
 
             <br><label for="numberOfRooms">Number of rooms:</label>
-            <input id="numberOfRooms" type="number" th:field="*{numberOfRooms}"/>
+            <input id="numberOfRooms" type="number" th:field="*{cottage.numberOfRooms}"/>
 
             <br><label for="numberOfBeds">Number of beds:</label>
-            <input id="numberOfBeds" type="number" th:field="*{numberOfBeds}"/>
+            <input id="numberOfBeds" type="number" th:field="*{cottage.numberOfBeds}"/>
 
             <br><label for="rules">Rules:</label>
-            <input id="rules" type="text" th:field="*{rules}"/>
+            <input id="rules" type="text" th:field="*{cottage.rules}"/>
 
             <br><label for="additionalServices">Additional Services:</label>
-            <input id="additionalServices" type="text" th:field="*{additionalServices}"/>
+            <input id="additionalServices" type="text" th:field="*{cottage.additionalServices}"/>
 
             <br><label for="availableFrom">Available From:</label>
-            <input id="availableFrom" type="datetime-local" th:field="*{availableFrom}"/>
+            <input id="availableFrom" type="datetime-local" th:field="*{cottage.availableFrom}"/>
 
             <br><label for="availableUntil">Available Until:</label>
-            <input id="availableUntil" type="datetime-local" th:field="*{availableUntil}"/>
+            <input id="availableUntil" type="datetime-local" th:field="*{cottage.availableUntil}"/>
 
             <div class="form-group">
+                <label for="customFile">Image</label>
+                </br><input type="file" name="image" id="customFile"/>
+            </div>
+
+            </br>
+            <div class="form-group">
+                <button type="reset" class="btn bg-dark btn-primary">Reset</button>
                 <button type="submit" class="btn btn-block btn-success">Submit</button>
             </div>
         </form>
