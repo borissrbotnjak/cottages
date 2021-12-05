@@ -51,16 +51,16 @@
                 </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All instructors</a>
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/adventures/allAdventures'}">All instructors</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                    <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
