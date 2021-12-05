@@ -12,4 +12,5 @@ public interface FishingInstructorAdventureService {
 
     List<FishingInstructorAdventure> sortByInstructorInfo(Boolean asc);
 
+    List<FishingInstructorAdventure> findByInstructor(Long id) throws Exception;
 }

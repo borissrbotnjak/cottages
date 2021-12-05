@@ -38,5 +38,10 @@
         <h4>Welcome Client</h4>
         <a th:href="${'client/home'}">Home</a>
     </div>
+
+    <div sec:authorize="hasRole('INSTRUCTOR')" th:align="center">
+        <h4>Welcome Instructor</h4>
+        <a th:href="${'instructor/home'}">Home</a>
+    </div>
 </body>
 </html>

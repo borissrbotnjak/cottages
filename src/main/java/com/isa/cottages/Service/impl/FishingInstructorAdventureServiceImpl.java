@@ -1,21 +1,26 @@
 package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.FishingInstructorAdventure;
+import com.isa.cottages.Model.Instructor;
 import com.isa.cottages.Repository.FishingInstructorAdventureRepository;
 import com.isa.cottages.Service.FishingInstructorAdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FishingInstructorAdventureServiceImpl implements FishingInstructorAdventureService {
 
     private final FishingInstructorAdventureRepository adventureRepository;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository) {
+    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, UserServiceImpl userService) {
         this.adventureRepository = adventureRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -57,5 +62,19 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         } else {
             return this.adventureRepository.findByOrderByInstructorInfoDesc();
         }
+    }
+
+    @Override
+    public List<FishingInstructorAdventure> findByInstructor(Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        List<FishingInstructorAdventure> all = this.adventureRepository.findByInstructor(id);
+        List<FishingInstructorAdventure> myAdventures = new ArrayList<FishingInstructorAdventure>();
+
+        for (FishingInstructorAdventure fia : all) {
+            if (Objects.equals(fia.getInstructor().getId(), instructor.getId())) {
+                myAdventures.add(fia);
+            }
+        }
+        return myAdventures;
     }
 }

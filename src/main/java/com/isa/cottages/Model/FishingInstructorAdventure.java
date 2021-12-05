@@ -36,6 +36,15 @@ public class FishingInstructorAdventure implements Serializable {
     private String adventureDescription;
 
     @Column
+    private Integer maxClients;
+
+    @ElementCollection
+    private Set<String> images;
+
+    @Column
+    private String conductRules;
+
+    @Column
     private Double averageRating = 0.0;
 
     @ElementCollection
