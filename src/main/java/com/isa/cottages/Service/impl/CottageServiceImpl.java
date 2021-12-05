@@ -6,7 +6,10 @@ import com.isa.cottages.Repository.CottageRepository;
 import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -47,10 +50,18 @@ public class CottageServiceImpl implements CottageService {
         c.setCottageOwner(cottage.getCottageOwner());
         c.setAvailableFrom(cottage.getAvailableFrom());
         c.setAvailableUntil(cottage.getAvailableUntil());
+        c.setImageUrl(cottage.getImageUrl());
 
         this.cottageRepository.save(c);
 
         return c;
+    }
+
+    @Override
+    public Cottage saveImage(Cottage cottage) {
+        Cottage cottageToSave = new Cottage(cottage.getImageUrl());
+
+        return cottageRepository.save(cottageToSave);
     }
 
     @Override

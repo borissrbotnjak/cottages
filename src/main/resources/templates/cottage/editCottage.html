@@ -40,10 +40,10 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
+          <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+          <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
@@ -56,39 +56,39 @@
   <div class="container">
     <div class="center-align blue lighten-5">
 <!--      <form th:action="@{'/cottages/allMyCottages/__${principal.id}__/editCottage/__${cottage.id}__/submit'}" th:object="${cottage}" method="post">-->
-        <form th:action="@{'/cottages/__${cottage.id}__/edit/submit'}" th:object="${cottage}" method="post">
+        <form th:action="@{'/cottages/__${cottage.id}__/edit/submit'}" method="post" enctype="multipart/form-data">
             <br><label for="name">Name:</label>
-            <input id="name" type="text" th:field="*{name}"/>
+            <input id="name" type="text" th:field="*{cottage.name}"/>
 
             <br><label for="residence">Residence:</label>
-            <input id="residence" type="text" th:field="*{residence}"/>
+            <input id="residence" type="text" th:field="*{cottage.residence}"/>
 
             <br><label for="city">City:</label>
-            <input id="city" type="text" th:field="*{city}"/>
+            <input id="city" type="text" th:field="*{cottage.city}"/>
 
             <br><label for="state">State:</label>
-            <input id="state" type="text" th:field="*{state}"/>
+            <input id="state" type="text" th:field="*{cottage.state}"/>
 
             <br><label for="promotionalDescription">Promotional Description:</label>
-            <input id="promotionalDescription" type="text" th:field="*{promotionalDescription}"/>
+            <input id="promotionalDescription" type="text" th:field="*{cottage.promotionalDescription}"/>
 
             <br><label for="numberOfRooms">Number of rooms:</label>
-            <input id="numberOfRooms" type="text" th:field="*{numberOfRooms}"/>
+            <input id="numberOfRooms" type="text" th:field="*{cottage.numberOfRooms}"/>
 
             <br><label for="numberOfBeds">Number of beds:</label>
-            <input id="numberOfBeds" type="text" th:field="*{numberOfBeds}"/>
+            <input id="numberOfBeds" type="text" th:field="*{cottage.numberOfBeds}"/>
 
             <br><label for="rules">Rules:</label>
-            <input id="rules" type="text" th:field="*{rules}"/>
+            <input id="rules" type="text" th:field="*{cottage.rules}"/>
 
             <br><label for="additionalServices">Additional services:</label>
-            <input id="additionalServices" type="text" th:field="*{additionalServices}"/>
+            <input id="additionalServices" type="text" th:field="*{cottage.additionalServices}"/>
 
             <br><label for="availableFrom">Available From:</label>
-            <input id="availableFrom" type="datetime-local" th:field="*{availableFrom}"/>
+            <input id="availableFrom" type="datetime-local" th:field="*{cottage.availableFrom}"/>
 
             <br><label for="availableUntil">Available Until:</label>
-            <input id="availableUntil" type="datetime-local" th:field="*{availableUntil}"/>
+            <input id="availableUntil" type="datetime-local" th:field="*{cottage.availableUntil}"/>
 
             <div class="form-group">
           <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
