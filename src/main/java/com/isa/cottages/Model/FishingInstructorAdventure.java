@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -36,7 +39,7 @@ public class FishingInstructorAdventure implements Serializable {
     private String adventureDescription;
 
     @Column
-    private Integer maxClients;
+    private String maxClients;
 
     @ElementCollection
     private Set<String> images;
@@ -51,10 +54,42 @@ public class FishingInstructorAdventure implements Serializable {
     private Set<Integer> ratings;
 
     @Column
+    private Boolean reserved;
+
+    @Column
+    private Boolean deleted = false;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableUntil;
+
+    @Column
+    private String gearIncluded;
+
+    @Column
+    private Double price;
+
+    @Column
+    private Double cancellationFeePercent;
+
+    @Column
     private String instructorInfo;
 
     @ManyToOne(targetEntity = Instructor.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")
     private Instructor instructor;
 
+    @OneToMany(mappedBy = "adventure", targetEntity = AdventureReservation.class)
+    private Set<AdventureReservation> adventureReservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "adventure", targetEntity = AdditionalService.class)
+    private Set<AdditionalService> additionalServices = new HashSet<>();
+
+    public FishingInstructorAdventure(Set<String> images) {
+        this.images = images;
+    }
 }

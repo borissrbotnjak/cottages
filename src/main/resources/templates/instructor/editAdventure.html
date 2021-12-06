@@ -40,23 +40,28 @@
             <br><label for="promotionalDescription">Promotional Description:</label>
             <input id="promotionalDescription" th:field="*{adventureDescription}" type="text"/>
 
-            <br><label for="numberOfRooms">Number of rooms:</label>
-            <input id="numberOfRooms" th:field="*{numberOfRooms}" type="text"/>
+            <br><label for="instructorInfo">Aboug instructor:</label>
+            <input id="instructorInfo" th:field="*{instructorInfo}" type="text"/>
 
-            <br><label for="numberOfBeds">Number of beds:</label>
-            <input id="numberOfBeds" th:field="*{numberOfBeds}" type="text"/>
+            <br><label for="maxClients">Number of maximum Clients:</label>
+            <input id="maxClients" th:field="*{maxClients}" type="number"/>
 
-            <br><label for="rules">Rules:</label>
-            <input id="rules" th:field="*{rules}" type="text"/>
+            <br><label for="price">Price:</label>
+            <input id="price" th:field="*{price}" type="number"/>
 
-            <br><label for="additionalServices">Additional services:</label>
-            <input id="additionalServices" th:field="*{additionalServices}" type="text"/>
+            <br><label for="cancellationFeePercent">Cancelation Fee in %:</label>
+            <input id="cancellationFeePercent" th:field="*{cancellationFeePercent}" type="number"/>
+
+            <br><label for="conductRules">Rules:</label>
+            <input id="conductRules" th:field="*{conductRules}" type="text"/>
 
             <br><label for="availableFrom">Available From:</label>
             <input id="availableFrom" th:field="*{availableFrom}" type="datetime-local"/>
 
             <br><label for="availableUntil">Available Until:</label>
             <input id="availableUntil" th:field="*{availableUntil}" type="datetime-local"/>
+
+            <!--todo add images and additional services -->
 
             <div class="form-group">
                 <button class="btn btn-block btn-success bg-dark" type="submit">Submit</button>
