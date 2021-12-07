@@ -37,7 +37,48 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     }
 
     @Override
-    public List<FishingInstructorAdventure> findByKeyword(String keyword) { return this.adventureRepository.findByKeyword(keyword); }
+    public Boolean canUpdateOrDelete(Long id) throws Exception {
+        boolean updateOrDelete = true;
+        FishingInstructorAdventure adventure = findById(id);
+
+        if (adventure.getReserved() != null) {
+            updateOrDelete = false;
+        }
+        return updateOrDelete;
+    }
+
+    @Override
+    public List<FishingInstructorAdventure> findByKeyword(String keyword) {
+        return this.adventureRepository.findByKeyword(keyword);
+    }
+
+    @Override
+    public FishingInstructorAdventure updateAdventure(FishingInstructorAdventure adventure) throws Exception {
+        FishingInstructorAdventure forUpdate = findById(adventure.getId());
+
+        forUpdate.setAdventureName(adventure.getAdventureName());
+        forUpdate.setAdventureResidence(adventure.getAdventureResidence());
+        forUpdate.setAdventureCity(adventure.getAdventureCity());
+        forUpdate.setAdventureState(adventure.getAdventureState());
+        forUpdate.setAdventureDescription(adventure.getAdventureDescription());
+        forUpdate.setMaxClients(adventure.getMaxClients());
+        forUpdate.setQuickReservation(adventure.getQuickReservation());
+        forUpdate.setImages(adventure.getImages());
+        forUpdate.setAdditionalServices(adventure.getAdditionalServices());
+        forUpdate.setConductRules(adventure.getConductRules());
+        forUpdate.setAverageRating(adventure.getAverageRating());
+        forUpdate.setRatings(adventure.getRatings());
+        forUpdate.setReserved(adventure.getReserved());
+        forUpdate.setGearIncluded(adventure.getGearIncluded());
+        forUpdate.setPrice(adventure.getPrice());
+        forUpdate.setCancellationFeePercent(adventure.getCancellationFeePercent());
+        forUpdate.setInstructorInfo(adventure.getInstructorInfo());
+        forUpdate.setAvailableFrom(adventure.getAvailableFrom());
+        forUpdate.setAvailableUntil(adventure.getAvailableUntil());
+
+        this.adventureRepository.save(forUpdate);
+        return forUpdate;
+    }
 
     @Override
     public FishingInstructorAdventure saveAdventure(FishingInstructorAdventure fishingInstructorAdventure) {

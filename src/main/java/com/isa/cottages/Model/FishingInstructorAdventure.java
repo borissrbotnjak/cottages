@@ -41,6 +41,9 @@ public class FishingInstructorAdventure implements Serializable {
     @Column
     private String maxClients;
 
+    @Column
+    private Boolean quickReservation;
+
     @ElementCollection
     private Set<String> images;
 

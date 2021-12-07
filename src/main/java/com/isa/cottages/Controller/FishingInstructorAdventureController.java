@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,7 +65,7 @@ public class FishingInstructorAdventureController {
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @GetMapping("/addCottage/{id}")
+    @GetMapping("/addAdventure/{id}")
     public ModelAndView addAdventureForm(@PathVariable Long id, Model model) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
@@ -74,7 +75,7 @@ public class FishingInstructorAdventureController {
         Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
         model.addAttribute("adventures", adventures);
 
-        return new ModelAndView("adventure/addAdventureForm");
+        return new ModelAndView("instructor/addAdventureForm");
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
@@ -89,7 +90,52 @@ public class FishingInstructorAdventureController {
 
         Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
         model.addAttribute("adventures", adventures);
-        return new ModelAndView("adventure/editAdventure");
+        return new ModelAndView("instructor/editAdventure");
+    }
+
+   /* @PreAuthorize("hasRole('INSTRUCTOR')")
+    @GetMapping(value = "/allMyAdventures/{id}/remove/{aid}")
+    public ModelAndView removeCottage(@PathVariable Long id,
+                                      @PathVariable Long aid,
+                                      Model model) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+
+        FishingInstructorAdventure instructor = this.adventureService.findById(id);
+
+        boolean delete = this.adventureService.canUpdateOrDelete(id);
+        if (!delete) {
+            return new ModelAndView("cottage/errors/errorDeleteCottage");
+        } else {
+            this.cottageService.removeCottage(cottage, id);
+            cottage.setDeleted(true);
+            this.cottageService.updateCottage(cottage);
+        }
+        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(cid);
+        model.addAttribute("cottages", cottages);
+
+        return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
+    }*/
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping("/{id}/edit/submit")
+    public ModelAndView edit(@PathVariable Long id, Model model, FishingInstructorAdventure adventure) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+
+        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
+        model.addAttribute("adventures", adventures);
+
+        adventure.setInstructor((Instructor) this.userService.getUserFromPrincipal());
+
+        boolean update = this.adventureService.canUpdateOrDelete(id);
+        if (!update) {
+            return new ModelAndView("adventure/errors/errorUpdateAdventure");
+        } else {
+            this.adventureService.updateAdventure(adventure);
+        }
+
+        return new ModelAndView("redirect:/adventures/{id}/");
     }
 
 }
