@@ -40,4 +40,8 @@ public class Boat implements Serializable {
 
     @ElementCollection
     private Set<Integer> ratings;
+
+    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
+    private Client subscriber;
 }

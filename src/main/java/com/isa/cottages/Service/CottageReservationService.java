@@ -2,6 +2,7 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.CottageReservation;
+import com.isa.cottages.Model.InstructorReservation;
 
 import java.util.List;
 
@@ -19,4 +20,11 @@ public interface CottageReservationService {
 
     List<CottageReservation> findAllByClient(Client client);
     List<CottageReservation> findClient(String keyword) throws Exception;
+
+    List<CottageReservation> findByOrderByStartTimeAsc() throws Exception;
+    List<CottageReservation> findByOrderByStartTimeDesc() throws Exception;
+    List<CottageReservation> findByOrderByDurationAsc() throws Exception;
+    List<CottageReservation> findByOrderByDurationDesc() throws Exception;
+    List<CottageReservation> findByOrderByPriceAsc() throws Exception;
+    List<CottageReservation> findByOrderByPriceDesc() throws Exception;
 }

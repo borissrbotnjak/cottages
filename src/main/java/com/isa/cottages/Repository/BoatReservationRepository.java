@@ -21,4 +21,14 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     @Query(value = "SELECT * FROM RESERVATION RES WHERE RES.DELETED=FALSE AND RES.RESERVED=TRUE" +
             "AND RES.BOAT_ID IS NOT NULL AND RES.CLIENT_ID=?1", nativeQuery = true)
     List<BoatReservation> findAllByClient(@Param("client_id") Long clientId);
+/*
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true"  +
+            "and res.boat_id is not null and res.start_time <= CURRENT_TIMESTAMP " +
+            "AND res.end_time <= CURRENT_TIMESTAMP", nativeQuery = true)
+    List<BoatReservation> findByOrderByStartTimeAsc();
+    List<BoatReservation> findByOrderByStartTimeDesc();
+    List<BoatReservation> findByOrderByDurationAsc();
+    List<BoatReservation> findByOrderByDurationDesc();
+    List<BoatReservation> findByOrderByPriceAsc();
+    List<BoatReservation> findByOrderByPriceDesc();*/
 }

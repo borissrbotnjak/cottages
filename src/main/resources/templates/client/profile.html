@@ -117,6 +117,16 @@
                     <p>Other</p>
                     <a th:href="@{/client/profile/__${user.id}__/editProfile}" sec:authorize="hasRole('CLIENT')">Edit profile</a><br/></br>
                     <a th:href="@{/auth/deleteAccount}" sec:authorize="hasRole('CLIENT')">Delete account</a><br/>
+                    <div class="nav-item dropdown">
+                        <a href="#" id="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Subscriptions
+                        </a>
+                        <div sec:authorize="hasRole('CLIENT')" class="dropdown-menu" aria-labelledby="dropdown">
+                            <a th:href="@{/subscriptions/cottage}" >Cottage subscriptions</a><br/>
+                            <a th:href="@{'/subscriptions/boat'}" >Boat subscriptions</a><br/>
+                            <a th:href="@{'/subscriptions/instructor'}" >Instructors subscriptions</a><br/>
+                        </div>
+                    </div>
                     <!-- <a href="">Complaints</a><br/> -->
                 </div>
             </div>
@@ -246,6 +256,16 @@
                                 kategorije, korisnik ostvaruje dodatni popust koji se primenjuje na svaku
                                 rezervaciju leka, kao i na svaki pregled i savetovanje.
                             </h4>
+                        </div>
+                        </br>
+                        </br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Penalties</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.getLoyaltyProgram().getPenalties()}"></p>
+                            </div>
                         </div>
                     </div>
 

@@ -50,6 +50,9 @@
                     <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
                 </div>
                 </li>
+                <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
+                    <a class="nav-link" th:href="${'/cottages/allCottages'}">All Cottages</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
@@ -61,6 +64,15 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/auth/home'}">Home</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/home'}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
@@ -107,14 +119,28 @@
     <table sec:authorize="hasRole('CLIENT')" width="90%">
         <tr>
             <th>Cottage name:</th>
-            <th>Reservation start:</th>
-            <th>Reservation end:</th>
+            <th>
+                Reservation start
+                <a th:href="${'/cottageReservations/history/sortByDateDesc'}"><font color="black">▼</font></a>
+                <a th:href="${'/cottageReservations/history/sortByDateAsc'}"><font color="black">▲</font></a>
+            </th>
+            <th>
+                Duration
+                <a th:href="${'/cottageReservations/history/sortByDurationDesc'}"><font color="black">▼</font></a>
+                <a th:href="${'/cottageReservations/history/sortByDurationAsc'}"><font color="black">▲</font></a>
+            </th>
+            <th>
+                Price
+                <a th:href="${'/cottageReservations/history/sortByPriceDesc'}"><font color="black">▼</font></a>
+                <a th:href="${'/cottageReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
+            </th>
             <th></th>
         </tr>
         <tr th:each="cottageReservation:${cottageReservations}">
             <td th:text="${cottageReservation.cottage.getName()}"></td>
             <td th:text="${cottageReservation.startTime}"></td>
-            <td th:text="${cottageReservation.endTime}"></td>
+            <td th:text="${cottageReservation.duration}"></td>
+            <td th:text="${cottageReservation.price}"></td>
             <td><a th:href="${'/complaints/cottage/new/' + cottageReservation.getCottage().getId() }">Make Complaint</a></td>
         </tr>
     </table>

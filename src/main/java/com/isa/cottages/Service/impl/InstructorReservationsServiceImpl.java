@@ -1,8 +1,6 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.BoatReservation;
-import com.isa.cottages.Model.Client;
-import com.isa.cottages.Model.InstructorReservation;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.InstructorReservationRepository;
 import com.isa.cottages.Service.InstructorReservationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +54,54 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
             }
         }
         return upcoming;
+    }
+
+    @Override
+    public List<InstructorReservation> findByOrderByStartTimeAsc() throws Exception {
+        List<InstructorReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(InstructorReservation::getStartTime));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<InstructorReservation> findByOrderByStartTimeDesc() throws Exception {
+        List<InstructorReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(InstructorReservation::getStartTime).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<InstructorReservation> findByOrderByDurationAsc() throws Exception {
+        List<InstructorReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(InstructorReservation::getDuration));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<InstructorReservation> findByOrderByDurationDesc() throws Exception {
+        List<InstructorReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(InstructorReservation::getDuration).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<InstructorReservation> findByOrderByPriceAsc() throws Exception {
+        List<InstructorReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(InstructorReservation::getPrice));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<InstructorReservation> findByOrderByPriceDesc() throws Exception {
+        List<InstructorReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(InstructorReservation::getPrice).reversed());
+
+        return pastOnes;
     }
 
     @Override

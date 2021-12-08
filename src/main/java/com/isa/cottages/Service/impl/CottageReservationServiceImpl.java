@@ -36,6 +36,54 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public List<CottageReservation> findByOrderByStartTimeAsc() throws Exception {
+        List<CottageReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(CottageReservation::getStartTime));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> findByOrderByStartTimeDesc() throws Exception {
+        List<CottageReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(CottageReservation::getStartTime).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> findByOrderByDurationAsc() throws Exception {
+        List<CottageReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(CottageReservation::getDuration));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> findByOrderByDurationDesc() throws Exception {
+        List<CottageReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(CottageReservation::getDuration).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> findByOrderByPriceAsc() throws Exception {
+        List<CottageReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(CottageReservation::getPrice));
+
+        return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> findByOrderByPriceDesc() throws Exception {
+        List<CottageReservation> pastOnes = getPastReservations();
+        pastOnes.sort(Comparator.comparing(CottageReservation::getPrice).reversed());
+
+        return pastOnes;
+    }
+
+    @Override
     public List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllReservedByOwner(id);

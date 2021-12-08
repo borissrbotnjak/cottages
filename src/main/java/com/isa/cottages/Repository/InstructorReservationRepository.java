@@ -19,4 +19,12 @@ public interface InstructorReservationRepository extends JpaRepository<Instructo
     @Query(value = "SELECT * FROM RESERVATION RES WHERE RES.DELETED=FALSE AND RES.RESERVED=TRUE" +
             "AND RES.INSTRUCTOR_ID IS NOT NULL AND RES.CLIENT_ID=?1", nativeQuery = true)
     List<InstructorReservation> findAllByClient(@Param("client_id") Long clientId);
+/*
+    List<InstructorReservation> findByOrderByStartTimeAsc();
+    List<InstructorReservation> findByOrderByStartTimeDesc();
+    List<InstructorReservation> findByOrderByDurationAsc();
+    List<InstructorReservation> findByOrderByDurationDesc();
+    List<InstructorReservation> findByOrderByPriceAsc();
+    List<InstructorReservation> findByOrderByPriceDesc();*/
+
 }

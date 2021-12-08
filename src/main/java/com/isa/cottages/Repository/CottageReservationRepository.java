@@ -2,6 +2,7 @@ package com.isa.cottages.Repository;
 
 import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.CottageReservation;
+import com.isa.cottages.Model.InstructorReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,4 +36,11 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
 //            "group by u.id " +
 //            "WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))", nativeQuery = true)
     List<CottageReservation> findClient(@Param("keyword") String keyword);
+/*
+    List<CottageReservation> findByOrderByStartTimeAsc();
+    List<CottageReservation> findByOrderByStartTimeDesc();
+    List<CottageReservation> findByOrderByDurationAsc();
+    List<CottageReservation> findByOrderByDurationDesc();
+    List<CottageReservation> findByOrderByPriceAsc();
+    List<CottageReservation> findByOrderByPriceDesc();*/
 }
