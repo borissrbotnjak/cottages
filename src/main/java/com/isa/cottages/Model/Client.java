@@ -26,4 +26,13 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "client", targetEntity = Reservation.class)
     private Set<Reservation> Reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "subscriber", targetEntity = Boat.class)
+    private Set<Boat> boatSubscriptions = new HashSet<>();
+
+    @OneToMany(mappedBy = "subscriber", targetEntity = Cottage.class)
+    private Set<Cottage> cottageSubscriptions = new HashSet<>();
+
+    @OneToMany(mappedBy = "subscriber", targetEntity = FishingInstructorAdventure.class)
+    private Set<FishingInstructorAdventure> instructorSubscriptions = new HashSet<>();
 }

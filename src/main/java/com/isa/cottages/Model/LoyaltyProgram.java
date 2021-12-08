@@ -40,6 +40,9 @@ public class LoyaltyProgram implements Serializable {
     @Column
     private Integer discountGold = 0;
 
+    @Column
+    private Integer penalties = 0;
+
     @OneToOne(mappedBy = "loyaltyProgram")
     private Client client;
 }

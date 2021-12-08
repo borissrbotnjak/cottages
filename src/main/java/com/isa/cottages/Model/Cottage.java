@@ -76,4 +76,8 @@ public class Cottage implements Serializable {
 
     @OneToMany(mappedBy = "cottage", targetEntity = CottageReservation.class)
     private Set<CottageReservation> cottageReservations = new HashSet<>();
+
+    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
+    private Client subscriber;
 }
