@@ -81,9 +81,6 @@ public class Cottage implements Serializable {
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
     private Client subscriber;
 
-    @OneToMany(mappedBy = "cottage", targetEntity = CottageReservation.class)
-    private Set<CottageReservation> cottageReservations = new HashSet<>();
-
     public Cottage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
