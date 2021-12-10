@@ -161,14 +161,33 @@
                 <p th:text="${cottage.rules}"></p>
               </div>
             </div>
-
             <div class="row">
               <div class="col-md-6">
-                <label>Additional services</label>
+                <label>Price</label>
               </div>
               <div class="col-md-6">
-                <p th:text="${cottage.additionalServices}"></p>
+                <p th:text="${cottage.price}"></p>
               </div>
+            </div>
+
+            <div class="row">
+              <table>
+                <thead>
+                <tr>
+                  <th> Additional service </th>
+                  <th> Price </th>
+                </tr>
+                </thead>
+                <tbody>
+<!--                <tr th:if="${cottage.additionalServices.empty}">-->
+<!--                  <td colspan="2"> No Additional services </td>-->
+<!--                </tr>-->
+                <tr th:each="additionalService : ${cottage.additionalServices}">
+                  <td><span th:text="${additionalService.name}"> Additional service </span></td>
+                  <td><span th:text="${additionalService.price}"> Price </span></td>
+                </tr>
+                </tbody>
+              </table>
             </div>
             <div class="row">
               <div class="col-md-6">

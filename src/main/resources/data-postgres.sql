@@ -34,6 +34,18 @@ VALUES('Vikendica 3', 'Srbija', 'Palic', 'Palic', 3, 2, 4.0, '', 3, TRUE, '08/08
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, IMAGE_URL)
 VALUES('Vikendica 4', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg');
 
+/* ADDITIONAL SERVICES */
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 500, 1);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga2', 300, 1);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 300, 2);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 300, 3);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 300, 4);
+
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description, instructor_info, average_rating)
 VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2);

@@ -1,15 +1,14 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Repository.AdditionalServiceRepository;
 import com.isa.cottages.Repository.CottageRepository;
 import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -18,13 +17,16 @@ public class CottageServiceImpl implements CottageService {
     private CottageRepository cottageRepository;
     private UserServiceImpl userService;
     private CottageOwnerServiceImpl cottageOwnerService;
+    private AdditionalServiceRepository additionalServiceRepository;
 
     @Autowired
     public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
-                              CottageOwnerServiceImpl cottageOwnerService){
+                              CottageOwnerServiceImpl cottageOwnerService,
+                              AdditionalServiceRepository additionalServiceRepository){
         this.cottageRepository = cottageRepository;
         this.userService = userService;
         this.cottageOwnerService = cottageOwnerService;
+        this.additionalServiceRepository = additionalServiceRepository;
     }
 
     @Override
@@ -51,10 +53,24 @@ public class CottageServiceImpl implements CottageService {
         c.setAvailableFrom(cottage.getAvailableFrom());
         c.setAvailableUntil(cottage.getAvailableUntil());
         c.setImageUrl(cottage.getImageUrl());
-
+        c.setReserved(false);
+        c.setDeleted(false);
+        c.setAdditionalServices(cottage.getAdditionalServices());
         this.cottageRepository.save(c);
 
         return c;
+    }
+
+    @Override
+    public AdditionalService saveAdditionalService(AdditionalService additionalService) throws Exception {
+        AdditionalService as = new AdditionalService();
+        as.setName(additionalService.getName());
+        as.setPrice(additionalService.getPrice());
+        as.setCottage(additionalService.getCottage());
+
+        this.additionalServiceRepository.save(as);
+
+        return as;
     }
 
     @Override
@@ -123,17 +139,6 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public Cottage defineAvailability(Cottage cottage) throws Exception {
-        Cottage forUpdate = findById(cottage.getId());
-
-        forUpdate.setAvailableFrom(cottage.getAvailableFrom());
-        forUpdate.setAvailableUntil(cottage.getAvailableUntil());
-
-        this.cottageRepository.save(forUpdate);
-        return forUpdate;
-    }
-
-    @Override
     public void removeCottage(Cottage cottage, Long oid) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) userService.findById(oid);
         if (cottageOwner == null) {
@@ -159,6 +164,17 @@ public class CottageServiceImpl implements CottageService {
             updateOrDelete = false;
         }
             return updateOrDelete;
+    }
+
+    @Override
+    public Cottage defineAvailability(Cottage cottage) throws Exception {
+        Cottage forUpdate = findById(cottage.getId());
+
+        forUpdate.setAvailableFrom(cottage.getAvailableFrom());
+        forUpdate.setAvailableUntil(cottage.getAvailableUntil());
+
+        this.cottageRepository.save(forUpdate);
+        return forUpdate;
     }
 
     @Override

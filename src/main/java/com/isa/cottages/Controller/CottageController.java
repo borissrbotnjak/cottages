@@ -1,5 +1,6 @@
 package com.isa.cottages.Controller;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
@@ -37,6 +38,12 @@ public class CottageController {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
 
+        for(int i=1; i<=3; i++) {
+            cottage.addAdditionalService(new AdditionalService());
+        }
+        List<AdditionalService> additionalService = new ArrayList<>();
+        model.addAttribute("additionalService", additionalService);
+
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
 
@@ -46,6 +53,7 @@ public class CottageController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/addCottage/{id}/submit")
     public ModelAndView addCottage(@PathVariable Long id, @ModelAttribute Cottage cottage,
+                                   @ModelAttribute AdditionalService additionalService,
                                    @RequestParam("image") MultipartFile image,
                                    Model model) throws Exception {
 //        if (this.cottageService.findById(cottage.getId()) != null) {
@@ -57,7 +65,6 @@ public class CottageController {
             Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
                     StandardCopyOption.REPLACE_EXISTING);
             cottage.setImageUrl(image.getOriginalFilename().toLowerCase());
-            this.cottageService.saveCottage(cottage);
             model.addAttribute("cottage", cottage);
             model.addAttribute("imageUrl", cottage.getImageUrl());
 
@@ -72,8 +79,14 @@ public class CottageController {
         model.addAttribute("principal", cottageOwner);
 
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+        cottage.setAdditionalServices(cottage.getAdditionalServices());
+        additionalService.setCottage(additionalService.getCottage());
+
+        model.addAttribute("additionalService", additionalService);
+        model.addAttribute("additionalServices", cottage.getAdditionalServices());
 
         this.cottageService.saveCottage(cottage);
+        this.cottageService.saveAdditionalService(additionalService);
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}/");
     }
 
@@ -151,23 +164,6 @@ public class CottageController {
         return new ModelAndView("redirect:/cottages/{id}/");
     }
 
-    @GetMapping("/allCottages")
-    public ModelAndView getAllCottages(Model model, String keyword) throws Exception {
-        if (keyword != null) {
-            model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
-        } else {
-            model.addAttribute("cottages", this.cottageService.findAll());
-        }
-
-        try {
-            model.addAttribute("principal", this.userService.getUserFromPrincipal());
-            return new ModelAndView("cottage/cottages");
-        } catch (Exception e) {
-            //System.out.println("error all cottages");
-            return new ModelAndView("cottagesGuests");
-        }
-    }
-
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping(value = "/allMyCottages/{id}/remove/{cid}")
     public ModelAndView removeCottage(@PathVariable Long cid,
@@ -190,6 +186,23 @@ public class CottageController {
         model.addAttribute("cottages", cottages);
 
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
+    }
+
+    @GetMapping("/allCottages")
+    public ModelAndView getAllCottages(Model model, String keyword) throws Exception {
+        if (keyword != null) {
+            model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
+        } else {
+            model.addAttribute("cottages", this.cottageService.findAll());
+        }
+
+        try {
+            model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            return new ModelAndView("cottage/cottages");
+        } catch (Exception e) {
+            //System.out.println("error all cottages");
+            return new ModelAndView("cottagesGuests");
+        }
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")

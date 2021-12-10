@@ -30,9 +30,6 @@ public class ImageUploaderController {
     @ResponseBody
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable("imageUrl") String imageUrl, @PathVariable("id") Long id,
                                                       Model model) throws  Exception{
-//        if (user == null) { throw new Exception("User does not exist."); }
-//        modell.addAttribute("user", user);
-//        model.addAttribute("principal", this.userService.getUserFromPrincipal());
         if(imageUrl.equals("") || imageUrl != null) {
             try {
                 Path filename = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads", imageUrl);
