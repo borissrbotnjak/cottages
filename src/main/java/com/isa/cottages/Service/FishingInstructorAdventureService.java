@@ -1,5 +1,6 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 
 import java.util.List;
@@ -12,6 +13,10 @@ public interface FishingInstructorAdventureService {
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
     List<FishingInstructorAdventure> findByKeyword(String keyword);
+
+    List<AdditionalService> findServicesByAdventure(FishingInstructorAdventure adventure);
+
+    AdditionalService saveService(AdditionalService additionalService);
 
     FishingInstructorAdventure updateAdventure(FishingInstructorAdventure adventure) throws Exception;
 

@@ -1,5 +1,7 @@
 package com.isa.cottages.Controller;
 
+
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Model.Instructor;
 import com.isa.cottages.Service.impl.FishingInstructorAdventureServiceImpl;
@@ -8,13 +10,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
+import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
@@ -25,7 +31,7 @@ public class FishingInstructorAdventureController {
     private UserServiceImpl userService;
 
     @GetMapping("/allAdventures")
-    public ModelAndView getAllAdventures(Model model, String keyword) throws Exception {
+    public ModelAndView getAllAdventures(Model model, String keyword) {
         if (keyword != null) {
             model.addAttribute("instructors", this.adventureService.findByKeyword(keyword));
         } else {
@@ -79,6 +85,38 @@ public class FishingInstructorAdventureController {
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping("/addAdventure/{id}/submit")
+    public ModelAndView addAdventure(@PathVariable Long id, @ModelAttribute FishingInstructorAdventure adventure,
+                                     @RequestParam("image") MultipartFile image,
+                                     Model model) throws Exception {
+
+        Path path = Paths.get("C:\\Users\\User\\Pictures\\Cottages");
+        try {
+            InputStream inputStream = image.getInputStream();
+            Files.copy(inputStream, path.resolve(Objects.requireNonNull(image.getOriginalFilename())),
+                    StandardCopyOption.REPLACE_EXISTING);
+            adventure.setImageUrl(image.getOriginalFilename().toLowerCase());
+            this.adventureService.saveAdventure(adventure);
+            model.addAttribute("adventure", adventure);
+            model.addAttribute("imageUrl", adventure.getImageUrl());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
+        model.addAttribute("adventures", adventures);
+
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+
+        adventure.setInstructor((Instructor) this.userService.getUserFromPrincipal());
+
+        this.adventureService.saveAdventure(adventure);
+        return new ModelAndView("redirect:/adventures/allMyAdventures/{id}/");
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping("/allMyAdventures/{id}/editAdventure/{aid}")
     public ModelAndView updateAdventure(Model model, @PathVariable("id") Long id,
                                         @PathVariable("aid") Long aid) throws Exception {
@@ -93,29 +131,42 @@ public class FishingInstructorAdventureController {
         return new ModelAndView("instructor/editAdventure");
     }
 
-   /* @PreAuthorize("hasRole('INSTRUCTOR')")
-    @GetMapping(value = "/allMyAdventures/{id}/remove/{aid}")
-    public ModelAndView removeCottage(@PathVariable Long id,
-                                      @PathVariable Long aid,
-                                      Model model) throws Exception {
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @GetMapping("/allMyAdventures/{id}/additionalServices/{aid}")
+    public ModelAndView additionalServices(Model model, @PathVariable("id") Long id,
+                                           @PathVariable("aid") Long aid) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
 
-        FishingInstructorAdventure instructor = this.adventureService.findById(id);
+        FishingInstructorAdventure adventure = this.adventureService.findById(aid);
+        model.addAttribute("adventure", adventure);
 
-        boolean delete = this.adventureService.canUpdateOrDelete(id);
-        if (!delete) {
-            return new ModelAndView("cottage/errors/errorDeleteCottage");
-        } else {
-            this.cottageService.removeCottage(cottage, id);
-            cottage.setDeleted(true);
-            this.cottageService.updateCottage(cottage);
-        }
-        Collection<Cottage> cottages = this.cottageService.findByCottageOwner(cid);
-        model.addAttribute("cottages", cottages);
+        Collection<AdditionalService> services = this.adventureService.findServicesByAdventure(adventure);
+        model.addAttribute("services", services);
 
-        return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
-    }*/
+        AdditionalService newService = new AdditionalService();
+        model.addAttribute("newService", newService);
+
+        return new ModelAndView("instructor/additionalServices");
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping("/addAdventure/{id}/submit/{adventureId}")
+    public ModelAndView addService(@PathVariable Long id, @PathVariable Long adventureId, @ModelAttribute AdditionalService service,
+                                   Model model) throws Exception {
+
+        service.setAdventure(this.adventureService.findById(adventureId));
+        this.adventureService.saveService(service);
+
+
+        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
+        model.addAttribute("adventures", adventures);
+
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+        return new ModelAndView("redirect:/adventures/allMyAdventures/{id}/");
+    }
+
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping("/{id}/edit/submit")
@@ -130,7 +181,7 @@ public class FishingInstructorAdventureController {
 
         boolean update = this.adventureService.canUpdateOrDelete(id);
         if (!update) {
-            return new ModelAndView("adventure/errors/errorUpdateAdventure");
+            return new ModelAndView("instructor/errors/errorUpdateAdventure");
         } else {
             this.adventureService.updateAdventure(adventure);
         }

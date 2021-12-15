@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8"><!--Import Google Icon Font-->
@@ -25,6 +25,8 @@
 <div class="container">
     </br>
     <h3>My adventures</h3>
+    <br>
+    <a class="nav-link" th:href="${'/instructor/profile/__${principal.id}__'}">Profile</a>
     <br>
     <div class="row">
         <button class="btn mt-2" type="button"><a th:href="${'/adventures/addAdventure/__${principal.id}__'}">Add new
@@ -61,6 +63,10 @@
                     <td th:text="${adventure.adventureState}"></td>
                     <td th:text="${adventure.averageRating}"></td>
                     <td><a th:href="${'/adventures/' + adventure.getId()}">View adventure</a></td>
+                    <td>
+                        <a th:href="@{'/adventures/allMyAdventures/__${principal.id}__/additionalServices/__${adventure.id}__'}">Additional
+                            Services</a>
+                    </td>
                     <td>
                         <a th:href="@{'/adventures/allMyAdventures/__${principal.id}__/editAdventure/__${adventure.id}__'}">Edit</a>
                     </td>

@@ -22,7 +22,7 @@ public class InstructorController {
     public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         Instructor instructor = instructorService.findById(id);
         model.addAttribute("principal", instructor);
-        return new ModelAndView("adventure/profile");
+        return new ModelAndView("instructor/profile");
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")

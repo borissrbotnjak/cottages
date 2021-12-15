@@ -1,7 +1,9 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Model.Instructor;
+import com.isa.cottages.Repository.AdditionalServiceRepository;
 import com.isa.cottages.Repository.FishingInstructorAdventureRepository;
 import com.isa.cottages.Service.FishingInstructorAdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,14 @@ import java.util.Objects;
 public class FishingInstructorAdventureServiceImpl implements FishingInstructorAdventureService {
 
     private final FishingInstructorAdventureRepository adventureRepository;
+    private final AdditionalServiceRepository serviceRepository;
     private final UserServiceImpl userService;
 
     @Autowired
-    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, UserServiceImpl userService) {
+    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, AdditionalServiceRepository serviceRepository, UserServiceImpl userService) {
         this.adventureRepository = adventureRepository;
         this.userService = userService;
+        this.serviceRepository = serviceRepository;
     }
 
     @Override
@@ -53,6 +57,16 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     }
 
     @Override
+    public List<AdditionalService> findServicesByAdventure(FishingInstructorAdventure adventure) {
+        return this.serviceRepository.findAllByAdventure(adventure);
+    }
+
+    @Override
+    public AdditionalService saveService(AdditionalService additionalService) {
+        return this.serviceRepository.save(additionalService);
+    }
+
+    @Override
     public FishingInstructorAdventure updateAdventure(FishingInstructorAdventure adventure) throws Exception {
         FishingInstructorAdventure forUpdate = findById(adventure.getId());
 
@@ -63,7 +77,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         forUpdate.setAdventureDescription(adventure.getAdventureDescription());
         forUpdate.setMaxClients(adventure.getMaxClients());
         forUpdate.setQuickReservation(adventure.getQuickReservation());
-        forUpdate.setImages(adventure.getImages());
+        forUpdate.setImageUrl(adventure.getImageUrl());
         forUpdate.setAdditionalServices(adventure.getAdditionalServices());
         forUpdate.setConductRules(adventure.getConductRules());
         forUpdate.setAverageRating(adventure.getAverageRating());
@@ -80,6 +94,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         return forUpdate;
     }
 
+
     @Override
     public FishingInstructorAdventure saveAdventure(FishingInstructorAdventure fishingInstructorAdventure) {
         FishingInstructorAdventure fia = new FishingInstructorAdventure();
@@ -88,7 +103,14 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         fia.setAdventureCity(fishingInstructorAdventure.getAdventureCity());
         fia.setAdventureState(fishingInstructorAdventure.getAdventureState());
         fia.setAdventureResidence(fishingInstructorAdventure.getAdventureResidence());
-
+        fia.setInstructor(fishingInstructorAdventure.getInstructor());
+        fia.setGearIncluded(fishingInstructorAdventure.getGearIncluded());
+        fia.setInstructorInfo(fishingInstructorAdventure.getInstructorInfo());
+        fia.setPrice(fishingInstructorAdventure.getPrice());
+        fia.setReserved(fishingInstructorAdventure.getReserved());
+        fia.setImageUrl(fishingInstructorAdventure.getImageUrl());
+        fia.setConductRules(fishingInstructorAdventure.getConductRules());
+        fia.setMaxClients(fishingInstructorAdventure.getMaxClients());
         fia.setAdventureDescription(fishingInstructorAdventure.getAdventureDescription());
         fia.setAverageRating(fishingInstructorAdventure.getAverageRating());
 

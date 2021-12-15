@@ -42,10 +42,10 @@ public class FishingInstructorAdventure implements Serializable {
     private String maxClients;
 
     @Column
-    private Boolean quickReservation;
+    private String quickReservation = "No";
 
-    @ElementCollection
-    private Set<String> images;
+    @Column
+    private String imageUrl;
 
     @Column
     private String conductRules;
@@ -92,7 +92,7 @@ public class FishingInstructorAdventure implements Serializable {
     @OneToMany(mappedBy = "adventure", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();
 
-    public FishingInstructorAdventure(Set<String> images) {
-        this.images = images;
+    public FishingInstructorAdventure(String images) {
+        this.imageUrl = imageUrl;
     }
 }
