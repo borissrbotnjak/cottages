@@ -19,6 +19,10 @@ public interface BoatRepository extends JpaRepository<Boat, Long> {
     /*@Query(value="SELECT c.* FROM Boat c WHERE lower(c.boat_name) like lower(concat('%', ?1, '%')) "
             , nativeQuery = true)*/
     List<Boat> findByKeyword(@Param("keyword") String keyword);
+
+    @Query(value = "SELECT * FROM Boat bo WHERE bo.boat_owner_id = ?1", nativeQuery = true)
+    List<Boat> findByBoatOwner(@Param("id") Long id);
+
     List<Boat> findByOrderByBoatNameDesc();
     List<Boat> findByOrderByBoatNameAsc();
     List<Boat> findByOrderByAverageRatingAsc();

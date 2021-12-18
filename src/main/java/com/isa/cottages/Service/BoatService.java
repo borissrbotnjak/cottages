@@ -13,7 +13,10 @@ public interface BoatService {
     Boat saveBoat(Boat boat);
 
     Collection<Boat> getAll();
+
+    List<Boat> findByBoatOwner(Long id) throws Exception;
     List<Boat> findByKeyword(String keyword);
+
     List<Boat> orderByNameDesc();
     List<Boat> orderByNameAsc();
     List<Boat> orderByRatingAsc();

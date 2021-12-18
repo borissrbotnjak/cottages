@@ -14,15 +14,15 @@ VALUES ('Vikendica', 'Petrusic', 'v@gmail.com', 'v', 'Novi Sad', 'Novi Sad', 'Sr
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Vikendica2', 'Petrusic2', 'v2@gmail.com', 'v2', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Cottage_owner', TRUE, 1);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
-VALUES ('Brod', 'Petrusic', 'brod@gmail.com', 'brod', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
+VALUES ('Brod', 'Petrusic', 'b@gmail.com', 'b', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id)
 VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
 
 /* BOATS */
-INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
-VALUES('Dalila', 4, 4.7);
-INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
-VALUES('Zaklina', 4, 4.1);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating)
+VALUES('Dalila', 5, 2, 250, 35, 8, '', '', 4, 4.7);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating)
+VALUES('Zaklina', 7, 2, 200, 40, 8, '', '', 4, 4.1);
 
 /* COTTAGES */
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL)

@@ -64,7 +64,7 @@ public class UserController {
     public ModelAndView boatOwnerHome(Model model, Authentication auth) {
         BoatOwner boatOwner = (BoatOwner) userService.findByEmail(auth.getName());
         model.addAttribute("user", boatOwner);
-        return new ModelAndView("boat-owner-home");
+        return new ModelAndView("boat/myHome");
     }
 
     @GetMapping("/client/home")

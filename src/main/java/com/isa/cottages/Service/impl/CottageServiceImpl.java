@@ -74,13 +74,6 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public Cottage saveImage(Cottage cottage) {
-        Cottage cottageToSave = new Cottage(cottage.getImageUrl());
-
-        return cottageRepository.save(cottageToSave);
-    }
-
-    @Override
     public Collection<Cottage> findAll() {
         return this.cottageRepository.findAll();
     }
@@ -133,6 +126,7 @@ public class CottageServiceImpl implements CottageService {
         forUpdate.setCottageOwner(cottage.getCottageOwner());
         forUpdate.setAvailableFrom(cottage.getAvailableFrom());
         forUpdate.setAvailableUntil(cottage.getAvailableUntil());
+        forUpdate.setImageUrl(cottage.getImageUrl());
 
         this.cottageRepository.save(forUpdate);
         return forUpdate;

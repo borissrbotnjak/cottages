@@ -145,7 +145,8 @@ public class CottageController {
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/edit/submit")
-    public ModelAndView edit(@PathVariable Long id, Model model, Cottage cottage) throws Exception {
+    public ModelAndView edit(@PathVariable Long id, Model model, Cottage cottage,
+                             @RequestParam("image") MultipartFile image) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
@@ -153,6 +154,19 @@ public class CottageController {
         model.addAttribute("cottages", cottages);
 
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
+
+        Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
+        try {
+            InputStream inputStream = image.getInputStream();
+            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
+                    StandardCopyOption.REPLACE_EXISTING);
+            cottage.setImageUrl(image.getOriginalFilename().toLowerCase());
+            model.addAttribute("cottage", cottage);
+            model.addAttribute("imageUrl", cottage.getImageUrl());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         boolean update = this.cottageService.canUpdateOrDelete(id);
         if (!update) {
