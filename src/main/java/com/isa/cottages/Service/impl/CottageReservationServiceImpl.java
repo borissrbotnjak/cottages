@@ -124,6 +124,9 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setCottageOwner(cottageReservation.getCottageOwner());
         cr.setCottage(cottageReservation.getCottage());
         cr.setDiscount(true);
+        cr.setDeleted(false);
+        cr.setReserved(false);
+        cr.setClient(cottageReservation.getClient());
         this.reservationRepository.save(cr);
 
         return cr;
@@ -184,4 +187,8 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         return this.reservationRepository.findClient(keyword);
     }
+
+//    public List<CottageReservation> findPastOwnersReservationsByClient(Long id, String keyword) throws Exception {
+//
+//    }
 }

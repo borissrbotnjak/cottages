@@ -1,5 +1,6 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Cottage;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ public interface CottageService {
     Cottage defineAvailability(Cottage cottage) throws Exception;
 
     Cottage saveCottage(Cottage cottage) throws Exception;
-    Cottage saveImage(Cottage cottage);
+    AdditionalService saveAdditionalService(AdditionalService additionalService) throws Exception;
     Cottage updateCottage(Cottage cottage) throws Exception;
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 

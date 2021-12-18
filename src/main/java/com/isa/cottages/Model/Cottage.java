@@ -46,9 +46,9 @@ public class Cottage implements Serializable {
 
     @Column
     private String rules;
-
+    
     @Column
-    private String additionalServices;
+    private Double price;
 
     @Column
     private Boolean reserved;
@@ -81,7 +81,15 @@ public class Cottage implements Serializable {
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
     private Client subscriber;
 
+    @OneToMany(mappedBy = "cottage", targetEntity = AdditionalService.class)
+    private List<AdditionalService> additionalServices = new ArrayList<>();
+
     public Cottage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void addAdditionalService(AdditionalService additionalService) {
+        this.additionalServices.add(additionalService);
+    }
+
 }

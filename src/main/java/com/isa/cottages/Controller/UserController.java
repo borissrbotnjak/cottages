@@ -45,12 +45,6 @@ public class UserController {
         return this.userService.findById(userId);
     }
 
-    @GetMapping("sys-admin/home")
-    @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView sysAdminHome(Model model) {
-        return new ModelAndView("sys-admin-home");
-    }
-
     @GetMapping("cottage-owner/home")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView cottageOwnerHome(Model model, Authentication auth) {
@@ -59,12 +53,18 @@ public class UserController {
         return new ModelAndView("cottage/myHome");
     }
 
+    @GetMapping("sys-admin/home")
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    public ModelAndView sysAdminHome(Model model) {
+        return new ModelAndView("sys-admin-home");
+    }
+
     @GetMapping("/boat-owner/home")
     @PreAuthorize("hasRole('BOAT_OWNER')")
     public ModelAndView boatOwnerHome(Model model, Authentication auth) {
         BoatOwner boatOwner = (BoatOwner) userService.findByEmail(auth.getName());
         model.addAttribute("user", boatOwner);
-        return new ModelAndView("boat-owner-home");
+        return new ModelAndView("boat/myHome");
     }
 
     @GetMapping("/client/home")

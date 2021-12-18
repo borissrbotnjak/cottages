@@ -21,6 +21,18 @@ public class Boat implements Serializable {
     private String boatName;
 
     @Column
+    private Long length;
+
+    @Column
+    private Long engineNumber;
+
+    @Column
+    private Long enginePower;
+
+    @Column
+    private Long maxSpeed;
+
+    @Column
     private String residence;
 
     @Column
@@ -28,6 +40,15 @@ public class Boat implements Serializable {
 
     @Column
     private String state;
+
+    @Column
+    private String imageUrl;
+
+    @Column
+    private Long capacity;
+
+    @Column
+    private String rules;
 
     @Column
     private String description;

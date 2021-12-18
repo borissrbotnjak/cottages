@@ -105,6 +105,7 @@ public class CottageReservationController {
 
         cottageReservation.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
         cottageReservation.setCottage(this.cottageService.findById(id));
+        cottageReservation.setDiscount(true);
         this.reservationService.saveDiscount(cottageReservation);
         return new ModelAndView("redirect:/cottageReservations/allDiscounts/{id}/");
     }

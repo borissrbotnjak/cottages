@@ -87,6 +87,38 @@
             </div>
             <div class="row">
               <div class="col-md-6">
+                <label>Length (in meters)</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.length}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Engine number</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.engineNumber}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Engine power (in KW)</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.enginePower}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Max speed (in mph)</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.maxSpeed}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
                 <label>Owner</label>
               </div>
               <div class="col-md-6">
@@ -117,6 +149,31 @@
                 <p th:text="${boat.getBoatOwner().getResidence()}"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Capacity</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.capacity}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Rules</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.rules}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Description</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.description}"></p>
+              </div>
+            </div>
+
             </br></br></br>
             <a th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
           </div>

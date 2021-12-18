@@ -29,8 +29,10 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
             "c.discount = true", nativeQuery = true)
     List<CottageReservation> findDiscountsByCottage(@Param("id") Long id);
 
-    @Query(value = "SELECT FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))",
-    nativeQuery = true)
+//    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%')) " +
+//            "and reservation_type like 'cottage_reservation'",
+            @Query(value = "SELECT * FROM users u WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))",
+            nativeQuery = true)
 //    @Query(value = "select u.* from reservation res left outer join users u" +
 //            "on res.client_id = u.id" +
 //            "group by u.id " +

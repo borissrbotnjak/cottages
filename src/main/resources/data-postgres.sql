@@ -15,20 +15,20 @@ VALUES ('Vikendica', 'Petrusic', 'v@gmail.com', 'v', 'Novi Sad', 'Novi Sad', 'Sr
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Vikendica2', 'Petrusic2', 'v2@gmail.com', 'v2', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Cottage_owner', TRUE, 1);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
-VALUES ('Brod', 'Petrusic', 'brod@gmail.com', 'brod', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
+VALUES ('Brod', 'Petrusic', 'b@gmail.com', 'b', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id)
 VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 
 /* BOATS */
-INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
-VALUES('Dalila', 4, 4.7);
-INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
-VALUES('Zaklina', 4, 4.1);
+
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating)
+VALUES('Dalila', 5, 2, 250, 35, 8, '', '', 4, 4.7);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating)
+VALUES('Zaklina', 7, 2, 200, 40, 8, '', '', 4, 4.1);
 INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
 VALUES('Kristina', 6, 4.6);
-
 /* COTTAGES */
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM,
                     AVAILABLE_UNTIL, IMAGE_URL, SUBSCRIBER_ID)
@@ -41,6 +41,18 @@ INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BED
 VALUES('Vikendica 3', 'Srbija', 'Palic', 'Palic', 3, 2, 4.0, '', 3, TRUE, '08/08/2021 12:00', '01/01/2022 12:00', '');
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, IMAGE_URL)
 VALUES('Vikendica 4', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg');
+
+/* ADDITIONAL SERVICES */
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 500, 1);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga2', 300, 1);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 300, 2);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 300, 3);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
+VALUES('usluga1', 300, 4);
 
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,

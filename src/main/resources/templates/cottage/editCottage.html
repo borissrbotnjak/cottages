@@ -81,14 +81,19 @@
             <br><label for="rules">Rules:</label>
             <input id="rules" type="text" th:field="*{cottage.rules}"/>
 
-            <br><label for="additionalServices">Additional services:</label>
-            <input id="additionalServices" type="text" th:field="*{cottage.additionalServices}"/>
+            <br><label for="price">Price:</label>
+            <input id="price" type="number" th:field="*{cottage.price}"/>
 
             <br><label for="availableFrom">Available From:</label>
             <input id="availableFrom" type="datetime-local" th:field="*{cottage.availableFrom}"/>
 
             <br><label for="availableUntil">Available Until:</label>
             <input id="availableUntil" type="datetime-local" th:field="*{cottage.availableUntil}"/>
+
+            <div class="form-group">
+                <label for="customFile">Image</label>
+                </br><input type="file" name="image" id="customFile"/>
+            </div>
 
             <div class="form-group">
           <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>

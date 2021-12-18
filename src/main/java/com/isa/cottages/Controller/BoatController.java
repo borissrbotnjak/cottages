@@ -2,7 +2,7 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Boat;
-import com.isa.cottages.Model.Cottage;
+import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,22 @@ public class BoatController {
             System.out.println("error all boats");
             return new ModelAndView("home");
         }
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/allMyBoats/{id}")
+    public ModelAndView getAllMyBoats (@PathVariable Long id, Model model, String keyword) throws Exception{
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        if(boatOwner == null) {
+            throw new Exception("Boat owner does not exist.");
+        }
+        if (keyword != null) {
+            model.addAttribute("boats", this.boatService.findByKeyword(keyword));
+        } else {
+            model.addAttribute("boats", boatService.findByBoatOwner(id));
+        }
+        return new ModelAndView("boat/allMyBoats");
     }
 
     @GetMapping("/{id}")
