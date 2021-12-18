@@ -53,6 +53,12 @@ public class Boat implements Serializable {
     @Column
     private String description;
 
+    @Column
+    private Boolean deleted = false;
+
+    @Column
+    private Boolean reserved = false;
+
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;
 

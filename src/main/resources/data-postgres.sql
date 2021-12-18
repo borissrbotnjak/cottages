@@ -22,13 +22,15 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 
 /* BOATS */
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
+VALUES('Dalila', 5, 2, 250, 35, 8, '', '', 4, 4.7, '', false, false);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
+VALUES('Zaklina', 7, 2, 200, 40, 8, '', '', 4, 4.1, '', false, false);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
+VALUES('Bojana', 7, 2, 300, 40, 8, '', '', 4, 4.1, '', false, true);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
+VALUES('Kristina', 7, 2, 200, 40, 8, '', '', 6, 4.6, '', false, true);
 
-INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating)
-VALUES('Dalila', 5, 2, 250, 35, 8, '', '', 4, 4.7);
-INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating)
-VALUES('Zaklina', 7, 2, 200, 40, 8, '', '', 4, 4.1);
-INSERT INTO BOAT(boat_name, boat_owner_id, average_rating)
-VALUES('Kristina', 6, 4.6);
 /* COTTAGES */
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM,
                     AVAILABLE_UNTIL, IMAGE_URL, SUBSCRIBER_ID)

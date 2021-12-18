@@ -18,10 +18,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>My Boats</title>
+    <title>Error</title>
 </head>
 <body>
-
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
@@ -43,9 +42,9 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
                 </li>
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>-->
-<!--                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
@@ -54,51 +53,9 @@
     </nav>
 </div>
 
-<div class="container">
-    </br>
-    <h3>My boats</h3>
-    <br>
-    <div class="row">
-        <button type="button" class="btn mt-2"><a th:href="${'/boats/addBoat/__${principal.id}__'}">Add new boat</a></button>
-    </div>
-    <br>
-
-    <div class="row">
-        <div class="col col-lg-5">
-            <form th:action="@{'/boats/allMyBoats/__${principal.id}__'}" method="get">
-                <input type="text" placeholder="Name or address..." name="keyword"/>
-                <button type="submit" class="btn btn-dark mt-2">Search</button>
-                </br>
-            </form>
-        </div>
-        </br></br></br></br>
-        <div class="table">
-            </br>
-            <table id="boats" width="90%">
-                <tr>
-                    <th>Name:</th>
-                    <th>Average rating:</th>
-                    <th>State:</th>
-                    <th>City:</th>
-                    <th>Residence:</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr th:each="boat:${boats}">
-                    <td th:text="${boat.boatName}"></td>
-                    <td th:text="${boat.averageRating}"></td>
-                    <td th:text="${boat.getBoatOwner().getState()}"></td>
-                    <td th:text="${boat.getBoatOwner().getCity()}"></td>
-                    <td th:text="${boat.getBoatOwner().getResidence()}"></td>
-                    <td><a th:href="${'/boats/' + boat.getId()}">View boat</a></td>
-                    <td><a th:href="@{'/boats/allMyBoats/__${principal.id}__/editBoat/__${boat.id}__'}">Edit</a></td>
-                    <td><a th:href="@{'/boats/allMyBoats/__${principal.id}__/remove/__${boat.id}__'}">Remove</a></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
+</br>
+<div class="container center-align" style="color:red">
+    <h4>You can not delete this boat because it is reserved.</h4>
 </div>
 
 <!-- Optional JavaScript -->

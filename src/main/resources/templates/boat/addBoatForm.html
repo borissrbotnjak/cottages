@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -14,13 +14,15 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <title>My Boats</title>
+    <title>Add Boat</title>
 </head>
 <body>
+
+
 
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -54,51 +56,55 @@
     </nav>
 </div>
 
-<div class="container">
-    </br>
-    <h3>My boats</h3>
-    <br>
-    <div class="row">
-        <button type="button" class="btn mt-2"><a th:href="${'/boats/addBoat/__${principal.id}__'}">Add new boat</a></button>
-    </div>
-    <br>
 
-    <div class="row">
-        <div class="col col-lg-5">
-            <form th:action="@{'/boats/allMyBoats/__${principal.id}__'}" method="get">
-                <input type="text" placeholder="Name or address..." name="keyword"/>
-                <button type="submit" class="btn btn-dark mt-2">Search</button>
-                </br>
-            </form>
+<div class="container center-align lighten-5">
+    <h1>Add cottage</h1>
+    <form th:action="@{/boats/addBoat/__${principal.id}__/submit}" method="post" enctype="multipart/form-data">
+
+        <br><label for="name">Name:</label>
+        <input id="name" type="text" th:field="*{boat.boatName}"/>
+
+        <br><label for="length">Length:</label>
+        <input id="length" type="number" th:field="*{boat.length}"/>
+
+        <br><label for="engineNumber">Engine Number:</label>
+        <input id="engineNumber" type="number" th:field="*{boat.engineNumber}"/>
+
+        <br><label for="enginePower">Engine Power:</label>
+        <input id="enginePower" type="number" th:field="*{boat.enginePower}"/>
+
+        <br><label for="maxSpeed">Max Speed:</label>
+        <input id="maxSpeed" type="number" th:field="*{boat.maxSpeed}"/>
+
+        <br><label for="residence">Residence:</label>
+        <input id="residence" type="text" th:field="*{boat.residence}"/>
+
+        <br><label for="city">City:</label>
+        <input id="city" type="text" th:field="*{boat.city}"/>
+
+        <br><label for="state">State:</label>
+        <input id="state" type="text" th:field="*{boat.state}"/>
+
+        <br><label for="capacity">Capacity:</label>
+        <input id="capacity" type="number" th:field="*{boat.capacity}"/>
+
+        <br><label for="rules">Rules:</label>
+        <input id="rules" type="text" th:field="*{boat.rules}"/>
+
+        <br><label for="description">Description:</label>
+        <input id="description" type="text" th:field="*{boat.description}"/>
+
+        <div class="form-group">
+            <label for="customFile">Image</label>
+            </br><input type="file" name="image" id="customFile"/>
         </div>
-        </br></br></br></br>
-        <div class="table">
-            </br>
-            <table id="boats" width="90%">
-                <tr>
-                    <th>Name:</th>
-                    <th>Average rating:</th>
-                    <th>State:</th>
-                    <th>City:</th>
-                    <th>Residence:</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr th:each="boat:${boats}">
-                    <td th:text="${boat.boatName}"></td>
-                    <td th:text="${boat.averageRating}"></td>
-                    <td th:text="${boat.getBoatOwner().getState()}"></td>
-                    <td th:text="${boat.getBoatOwner().getCity()}"></td>
-                    <td th:text="${boat.getBoatOwner().getResidence()}"></td>
-                    <td><a th:href="${'/boats/' + boat.getId()}">View boat</a></td>
-                    <td><a th:href="@{'/boats/allMyBoats/__${principal.id}__/editBoat/__${boat.id}__'}">Edit</a></td>
-                    <td><a th:href="@{'/boats/allMyBoats/__${principal.id}__/remove/__${boat.id}__'}">Remove</a></td>
-                </tr>
-            </table>
+
+        </br>
+        <div class="form-group">
+            <button type="reset" class="btn bg-dark btn-primary">Reset</button>
+            <button type="submit" class="btn btn-block btn-success">Submit</button>
         </div>
-    </div>
-</div>
+    </form>
 </div>
 
 <!-- Optional JavaScript -->

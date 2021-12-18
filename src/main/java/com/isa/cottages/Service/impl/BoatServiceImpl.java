@@ -2,28 +2,27 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
-import com.isa.cottages.Model.Cottage;
-import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class BoatServiceImpl implements BoatService {
 
     private BoatRepository boatRepository;
     private UserServiceImpl userService;
+    private BoatOwnerServiceImpl boatOwnerService;
 
     @Autowired
-    public BoatServiceImpl(BoatRepository boatRepository, UserServiceImpl userService){
+    public BoatServiceImpl(BoatRepository boatRepository,
+                           UserServiceImpl userService,
+                           BoatOwnerServiceImpl boatOwnerService){
         this.boatRepository = boatRepository;
         this.userService = userService;
+        this.boatOwnerService = boatOwnerService;
     }
 
     @Override
@@ -38,8 +37,69 @@ public class BoatServiceImpl implements BoatService {
     public Boat saveBoat(Boat boat) {
         Boat b = new Boat();
         b.setBoatName(boat.getBoatName());
+        b.setLength(boat.getLength());
+        b.setEngineNumber(boat.getEngineNumber());
+        b.setEnginePower(boat.getEnginePower());
+        b.setMaxSpeed(boat.getMaxSpeed());
+        b.setState(boat.getState());
+        b.setCity(boat.getCity());
+        b.setResidence(boat.getResidence());
+        b.setCapacity(boat.getCapacity());
+        b.setRules(boat.getRules());
+        b.setDescription(boat.getDescription());
+        b.setBoatOwner(boat.getBoatOwner());
+
         this.boatRepository.save(b);
         return b;
+    }
+
+    @Override
+    public Boat updateBoat(Boat boat) throws Exception {
+        Boat forUpdate = findById(boat.getId());
+
+        forUpdate.setBoatName(boat.getBoatName());
+        forUpdate.setLength(boat.getLength());
+        forUpdate.setEngineNumber(boat.getEngineNumber());
+        forUpdate.setEnginePower(boat.getEnginePower());
+        forUpdate.setMaxSpeed(boat.getMaxSpeed());
+        forUpdate.setState(boat.getState());
+        forUpdate.setCity(boat.getCity());
+        forUpdate.setResidence(boat.getResidence());
+        forUpdate.setCapacity(boat.getCapacity());
+        forUpdate.setRules(boat.getRules());
+        forUpdate.setDescription(boat.getDescription());
+        forUpdate.setBoatOwner(boat.getBoatOwner());
+
+        this.boatRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public void removeBoat(Boat boat, Long oid) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.findById(oid);
+        if (boatOwner == null) {
+            throw new Exception("Boat owner does not exist.");
+        }
+        Boat b = findById(boat.getId());
+
+        Set<Boat> boats = boatOwner.getBoats();
+        boats.remove(b);
+        boatOwner.setBoats(boats);
+        boat.setDeleted(true);
+
+        b.setBoatOwner(null);
+        this.boatOwnerService.updateBoats(boatOwner);
+    }
+
+    @Override
+    public Boolean canUpdateOrDelete(Long id) throws Exception {
+        boolean updateOrDelete = true;
+        Boat boat = findById(id);
+
+        if (boat.getReserved() == true) {
+            updateOrDelete = false;
+        }
+        return updateOrDelete;
     }
 
     @Override
