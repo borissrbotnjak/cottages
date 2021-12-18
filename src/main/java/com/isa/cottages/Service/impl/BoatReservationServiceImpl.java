@@ -1,7 +1,6 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.BoatReservation;
-import com.isa.cottages.Model.Client;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.BoatReservationRepository;
 import com.isa.cottages.Service.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,16 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     private ClientServiceImpl clientService;
     private UserServiceImpl userService;
     private BoatReservationRepository reservationRepository;
+    private BoatServiceImpl boatService;
 
     @Autowired
-    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService, BoatReservationRepository boatReservationRepository) {
+    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
+                                      BoatReservationRepository boatReservationRepository,
+                                      BoatServiceImpl boatService) {
         this.clientService = clientService;
         this.userService = userService;
         this.reservationRepository = boatReservationRepository;
+        this.boatService = boatService;
     }
 
     @Override
@@ -106,5 +109,39 @@ public class BoatReservationServiceImpl implements BoatReservationService {
             }
         }
         return upcoming;
+    }
+
+    @Override
+    public BoatReservation saveDiscount(BoatReservation boatReservation) {
+        BoatReservation br = new BoatReservation();
+
+        br.setDiscountAvailableFrom(boatReservation.getDiscountAvailableFrom());
+        br.setDiscountAvailableUntil(boatReservation.getDiscountAvailableUntil());
+        br.setNumPersons(boatReservation.getNumPersons());
+        br.setPrice(boatReservation.getPrice());
+        br.setAdditionalServices(boatReservation.getAdditionalServices());
+        br.setBoatOwner(boatReservation.getBoatOwner());
+        br.setBoat(boatReservation.getBoat());
+        br.setDiscount(true);
+        br.setDeleted(false);
+        br.setReserved(false);
+        br.setClient(boatReservation.getClient());
+        this.reservationRepository.save(br);
+
+        return br;
+    }
+
+    @Override
+    public List<BoatReservation> findDiscountsByBoat(Long id) throws Exception{
+        Boat boat = boatService.findById(id);
+        List<BoatReservation> all = this.reservationRepository.findDiscountsByBoat(id);
+        List<BoatReservation> br = new ArrayList<>();
+
+        for (BoatReservation b:all) {
+            if(Objects.equals(b.getBoat().getId(), boat.getId())) {
+                br.add(b);
+            }
+        }
+        return br;
     }
 }

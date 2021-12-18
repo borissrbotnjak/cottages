@@ -11,6 +11,9 @@ public interface BoatReservationService {
     List<BoatReservation> getUpcomingReservations() throws Exception;
     List<BoatReservation> findAllByClient(Client client);
 
+    BoatReservation saveDiscount(BoatReservation boatReservation);
+    List<BoatReservation> findDiscountsByBoat(Long id) throws Exception;
+
     List<BoatReservation> findByOrderByStartTimeAsc() throws Exception;
     List<BoatReservation> findByOrderByStartTimeDesc() throws Exception;
     List<BoatReservation> findByOrderByDurationAsc() throws Exception;

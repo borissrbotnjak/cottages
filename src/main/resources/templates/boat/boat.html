@@ -68,8 +68,8 @@
                     <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                       <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
                     </li>
-                    <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
-                      <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                    <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
+                      <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
                       <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
@@ -191,8 +191,11 @@
 
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/edit'}">Edit boat</a>
-
-            </br></br></br>
+            </br></br>
+            <a th:href="@{'/boatReservations/allDiscounts/__${boat.id}__'}">View discounts</a>
+            </br></br>
+            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${boat.id}__/defineDiscount'}">Define discount</a>
+            </br></br>
             <a th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
           </div>
         </div>

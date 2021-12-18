@@ -31,4 +31,8 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     List<BoatReservation> findByOrderByDurationDesc();
     List<BoatReservation> findByOrderByPriceAsc();
     List<BoatReservation> findByOrderByPriceDesc();*/
+
+    @Query(value = "SELECT * FROM reservation b WHERE b.boat_id = ?1 and " +
+            "b.discount = true", nativeQuery = true)
+    List<BoatReservation> findDiscountsByBoat(@Param("id") Long id);
 }

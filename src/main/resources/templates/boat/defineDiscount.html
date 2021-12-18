@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -18,7 +17,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Discounts</title>
+    <title>Define discount</title>
 </head>
 <body>
 
@@ -29,23 +28,22 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
-                    </div>
+<!--                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">&ndash;&gt;-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
+                        <!--                    </div>-->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
+                    <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                    <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
@@ -55,42 +53,29 @@
     </nav>
 </div>
 
-
 <div class="container">
     </br>
-    <h3>Cottage discounts</h3>
-    <br>
-    <div class="row">
-        <button type="button" class="btn mt-2">
-            <a sec:authorize="hasRole('COTTAGE_OWNER')"
-               th:href="${'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define new discount
-            </a>
-        </button>
+    <div class="center-align lighten-5">
+        <h1>Define discount</h1>
+        <form th:action="@{'/boatReservations/__${boat.id}__/defineDiscount/submit'}" th:object="${boatReservation}" method="post">
+
+            <br><label for="discountFrom">Discount available from:</label>
+            <input id="discountFrom" type="datetime-local" th:field="*{discountAvailableFrom}"/>
+
+            <br><label for="discountUntil">Discount available until:</label>
+            <input id="discountUntil" type="datetime-local" th:field="*{discountAvailableUntil}"/>
+
+            <br><label for="numPersons">Max number of persons:</label>
+            <input id="numPersons" type="number" th:field="*{numPersons}"/>
+
+            <br><label for="price">Price:</label>
+            <input type="number" id="price" th:field="*{price}"/>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
+            </div>
+        </form>
     </div>
-        </br></br></br></br>
-        <div class="table">
-            </br>
-            <table width="90%">
-                <tr>
-                    <th>Available from:</th>
-                    <th>Available until:</th>
-                    <th>Max number of persons:</th>
-                    <th>Additional services:</th>
-                    <th>Price:</th>
-                    <th></th>
-                </tr>
-                <tr th:each="cottageReservation:${cottageReservations}">
-                    <td th:text="${cottageReservation.discountAvailableFrom}"></td>
-                    <td th:text="${cottageReservation.discountAvailableUntil}"></td>
-                    <td th:text="${cottageReservation.numPersons}"></td>
-                    <td th:text="${cottageReservation.additionalServices}"></td>
-                    <td th:text="${cottageReservation.price}"></td>
-                    <td><a>Reserve</a></td>
-                  </tr>
-            </table>
-        </div>
-    </div>
-</div>
 </div>
 
 <!-- Optional JavaScript -->
