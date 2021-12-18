@@ -22,12 +22,12 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 
 /* BOATS */
-INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
-VALUES('Dalila', 5, 2, 250, 35, 8, '', '', 4, 4.7, '', false, false);
-INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
-VALUES('Zaklina', 7, 2, 200, 40, 8, '', '', 4, 4.1, '', false, false);
-INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
-VALUES('Bojana', 7, 2, 300, 40, 8, '', '', 4, 4.1, '', false, true);
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved, available_from, available_until)
+VALUES('Dalila', 5, 2, 250, 35, 8, '', '', 4, 4.7, '', false, false, '08/08/2021 12:00', '01/01/2022 12:00');
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved, available_from, available_until)
+VALUES('Zaklina', 7, 2, 200, 40, 8, '', '', 4, 4.1, '', false, false, '08/08/2021 12:00', '01/01/2022 12:00');
+INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved, available_from, available_until)
+VALUES('Bojana', 7, 2, 300, 40, 8, '', '', 4, 4.1, '', false, true, '08/08/2021 12:00', '01/01/2022 12:00');
 INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved)
 VALUES('Kristina', 7, 2, 200, 40, 8, '', '', 6, 4.6, '', false, true);
 

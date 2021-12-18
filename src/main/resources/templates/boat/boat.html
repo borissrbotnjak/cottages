@@ -35,10 +35,11 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Reservation history</a>
-            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>-->
-            <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>-->
-            <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
-            <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->                    -->
+            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+              <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>-->
+              <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>-->
+              <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
+              <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
                       </div>
                     </li>
                     <li class="nav-item" sec:authorize="!hasAnyRole('COTTAGE_OWNER', 'BOAT_OWNER')">
@@ -188,9 +189,27 @@
                 <p th:text="${boat.description}"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Available from</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.availableFrom}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Available until</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.availableUntil}"></p>
+              </div>
+            </div>
 
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/edit'}">Edit boat</a>
+            </br></br>
+            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/defineAvailability'}">Define availability</a>
             </br></br>
             <a th:href="@{'/boatReservations/allDiscounts/__${boat.id}__'}">View discounts</a>
             </br></br>

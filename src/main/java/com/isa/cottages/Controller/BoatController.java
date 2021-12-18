@@ -307,5 +307,32 @@ public class BoatController {
         return new ModelAndView("redirect:/boats/allMyBoats/{id}" );
     }
 
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/defineAvailability")
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        Boat boat = this.boatService.findById(id);
+        model.addAttribute("boat", boat);
+
+        return new ModelAndView("boat/defineAvailability");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/defineAvailability/submit")
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id, @ModelAttribute Boat boat) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        Collection<Boat> boats = this.boatService.findByBoatOwner(id);
+        model.addAttribute("boats", boats);
+        model.addAttribute("boat", boat);
+
+        boat.setBoatOwner((BoatOwner) this.userService.getUserFromPrincipal());
+        this.boatService.defineAvailability(boat);
+
+        return new ModelAndView("redirect:/boats/{id}/");
+    }
 
 }

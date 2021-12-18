@@ -2,6 +2,7 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
+import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,8 @@ public class BoatServiceImpl implements BoatService {
         b.setRules(boat.getRules());
         b.setDescription(boat.getDescription());
         b.setBoatOwner(boat.getBoatOwner());
+        b.setAvailableFrom(boat.getAvailableFrom());
+        b.setAvailableUntil(boat.getAvailableUntil());
 
         this.boatRepository.save(b);
         return b;
@@ -124,6 +127,17 @@ public class BoatServiceImpl implements BoatService {
             }
         }
         return myBoats;
+    }
+
+    @Override
+    public Boat defineAvailability(Boat boat) throws Exception {
+        Boat forUpdate = findById(boat.getId());
+
+        forUpdate.setAvailableFrom(boat.getAvailableFrom());
+        forUpdate.setAvailableUntil(boat.getAvailableUntil());
+
+        this.boatRepository.save(forUpdate);
+        return forUpdate;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package com.isa.cottages.Model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -58,6 +60,14 @@ public class Boat implements Serializable {
 
     @Column
     private Boolean reserved = false;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableUntil;
 
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;

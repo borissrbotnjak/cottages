@@ -90,6 +90,12 @@
             <br><label for="description">Description:</label>
             <input id="description" type="text" th:field="*{boat.description}"/>
 
+            <br><label for="availableFrom">Available From:</label>
+            <input id="availableFrom" type="datetime-local" th:field="*{boat.availableFrom}"/>
+
+            <br><label for="availableUntil">Available Until:</label>
+            <input id="availableUntil" type="datetime-local" th:field="*{boat.availableUntil}"/>
+
             <div class="form-group">
                 <label for="customFile">Image</label>
                 </br><input type="file" name="image" id="customFile"/>
