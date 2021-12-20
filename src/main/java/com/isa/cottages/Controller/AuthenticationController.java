@@ -204,6 +204,8 @@ public class AuthenticationController {
 
         if(user.getUserRole() == UserRole.COTTAGE_OWNER) {
             return new ModelAndView("redirect:/cottageOwner/profile/" + user.getId());
+        } else if(user.getUserRole() == UserRole.BOAT_OWNER) {
+            return new ModelAndView("redirect:/boatOwner/profile/" + user.getId());
         }
         else if(user.getUserRole() == UserRole.CLIENT) {
             return new ModelAndView("redirect:/client/profile/" + user.getId());

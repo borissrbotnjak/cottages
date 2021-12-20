@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -19,11 +18,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Home</title>
+    <title>Update profile</title>
 </head>
 <body>
 
-<!--<h3 class="container center-align" >Cottage Home</h3>-->
 
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -31,23 +29,22 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${user.id}__'}> Upcoming reservations</a>-->
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${user.id}__'}>Reservation history</a>-->
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${user.id}__'}">Calendar</a>-->
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/boats/allMyBoats/__${user.id}__'}">My Boats</a>
+                    <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/boatOwner/profile/__${user.id}__'}">Profile</a>
+                    <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
@@ -56,6 +53,31 @@
         </div>
     </nav>
 </div>
+
+
+    <div class="container">
+        <div class="center-align blue lighten-5">
+        <h1>Edit profile</h1>
+        <form th:action="@{'/boatOwner/profile/__${principal.id}__/editProfile/submit'}" th:object="${principal}" method="post">
+            <br><label for="firstName">FirstName:</label>
+            <input id="firstName" type="text" th:field="*{firstName}"/>
+            <br><label for="lastName">LastName:</label>
+            <input id="lastName" type="text" th:field="*{lastName}"/>
+            <br><label for="residence">Residence:</label>
+            <input id="residence" type="text" th:field="*{residence}"/>
+            <br><label for="city">City:</label>
+            <input id="city" type="text" th:field="*{city}"/>
+            <br><label for="state">State:</label>
+            <input id="state" type="text" th:field="*{state}"/>
+            <br><label for="phoneNumber">Phone Number:</label>
+            <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
+            </div>
+
+        </form>
+        </div>
+    </div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

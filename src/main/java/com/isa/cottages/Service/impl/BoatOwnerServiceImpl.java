@@ -33,4 +33,19 @@ public class BoatOwnerServiceImpl implements BoatOwnerService {
         this.boatOwnerRepository.save(forUpdate);
         return forUpdate;
     }
+
+    @Override
+    public BoatOwner updateProfile(BoatOwner boatOwner) throws Exception {
+        BoatOwner forUpdate = this.findById(boatOwner.getId());
+
+        forUpdate.setFirstName(boatOwner.getFirstName());
+        forUpdate.setLastName(boatOwner.getLastName());
+        forUpdate.setPhoneNumber(boatOwner.getPhoneNumber());
+        forUpdate.setResidence(boatOwner.getResidence());
+        forUpdate.setCity(boatOwner.getCity());
+        forUpdate.setState(boatOwner.getState());
+
+        this.boatOwnerRepository.save(forUpdate);
+        return forUpdate;
+    }
 }
