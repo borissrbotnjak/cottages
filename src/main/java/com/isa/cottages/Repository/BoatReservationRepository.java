@@ -15,6 +15,10 @@ import java.util.List;
 public interface BoatReservationRepository extends JpaRepository<BoatReservation, Long> {
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
+            "and res.boat_owner_id = ?1", nativeQuery = true)
+    List<BoatReservation> getAllReservedByOwner(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.boat_id is not null", nativeQuery = true)
     List<BoatReservation> getAllReservations();
 
@@ -35,4 +39,15 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     @Query(value = "SELECT * FROM reservation b WHERE b.boat_id = ?1 and " +
             "b.discount = true", nativeQuery = true)
     List<BoatReservation> findDiscountsByBoat(@Param("id") Long id);
+
+    //    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%')) " +
+//            "and reservation_type like 'cottage_reservation'",
+            @Query(value = "SELECT * FROM users u WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))",
+                    nativeQuery = true)
+//    @Query(value = "select u.* from reservation res left outer join users u" +
+//            "on res.client_id = u.id" +
+//            "group by u.id " +
+//            "WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))", nativeQuery = true)
+                    List<BoatReservation> findClient(@Param("keyword") String keyword);
 }
+

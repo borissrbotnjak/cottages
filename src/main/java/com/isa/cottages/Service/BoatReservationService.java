@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface BoatReservationService {
 
+    List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception;
+    List<BoatReservation> getOwnersPastReservations(Long id) throws Exception;
     List<BoatReservation> getPastReservations() throws Exception;
     List<BoatReservation> getUpcomingReservations() throws Exception;
     List<BoatReservation> findAllByClient(Client client);
+    List<BoatReservation> findClient(String keyword) throws Exception;
 
     BoatReservation saveDiscount(BoatReservation boatReservation);
     List<BoatReservation> findDiscountsByBoat(Long id) throws Exception;

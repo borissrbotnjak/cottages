@@ -82,6 +82,35 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     public List<BoatReservation> findAllByClient(Client client) { return this.reservationRepository.findAllByClient(client.getId()); }
 
     @Override
+    public List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception {
+       BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.getAllReservedByOwner(id);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res: all) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public List<BoatReservation> getOwnersPastReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+//        List<Boat> boat = this.boatService.findByCottageOwner(id);
+        List<BoatReservation> all = this.reservationRepository.getAllReservedByOwner(id);
+        List<BoatReservation> pastOnes = new ArrayList<>();
+
+        for (BoatReservation res:all) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+                pastOnes.add(res);
+            }
+        }
+        return pastOnes;
+    }
+
+    @Override
     public List<BoatReservation> getPastReservations() throws Exception {
         Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
         List<BoatReservation> all = this.reservationRepository.getAllReservations();
@@ -144,4 +173,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         }
         return br;
     }
+
+    @Override
+    public List<BoatReservation> findClient(String keyword) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.findClient(keyword);
+    }
 }
+
+

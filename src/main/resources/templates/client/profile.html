@@ -42,6 +42,11 @@
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${user.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${user.id}__'}">Calendar</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
+
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${user.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${user.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${user.id}__'}">Calendar</a>
+<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
                     </div>
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottages/allMyCottages/__${user.id}__'}">My Cottages</a>
@@ -49,7 +54,12 @@
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="${'/cottageOwner/profile/__${user.id}__'}">Profile</a>
                 </li>
-                        <!--         -->
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('BOAT_OWNER')" th:href="${'/boats/allMyBoats/__${user.id}__'}">My Boats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('BOAT_OWNER')" th:href="${'/boatOwner/profile/__${user.id}__'}">Profile</a>
+                </li>
 
                 </li>
                 <li class="nav-item">

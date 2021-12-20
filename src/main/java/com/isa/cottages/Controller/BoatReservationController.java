@@ -160,4 +160,31 @@ public class BoatReservationController {
         this.reservationService.saveDiscount(boatReservation);
         return new ModelAndView("redirect:/boatReservations/allDiscounts/{id}/");
     }
+
+    @GetMapping("/upcomingOwnersReservations/{id}")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    public ModelAndView showUpcomingReservations(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        model.addAttribute("boatReservations", this.reservationService.getOwnersUpcomingReservations(id));
+
+        return new ModelAndView("boat/upcomingReservations");
+    }
+
+    @GetMapping("/pastOwnersReservations/{id}")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    public ModelAndView showReservationHistory(Model model, String keyword, @PathVariable("id") Long id, String email) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+//        Client client = this.clientService.findByEmail(email);
+//        model.addAttribute("client", client);
+
+        if (keyword != null) {
+            model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(id));
+        }
+        return new ModelAndView("boat/reservationHistory");
+    }
 }

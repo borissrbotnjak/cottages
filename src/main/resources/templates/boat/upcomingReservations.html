@@ -44,20 +44,30 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
+                        <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
                     </div>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('BOAT_OWNER')" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('BOAT_OWNER')" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/client/home'}">Home</a>
@@ -66,23 +76,22 @@
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
             </ul>
-
         </div>
     </nav>
 </div>
 
 <div class="container">
-    <div id="cottages" class="table">
+    <div id="boats" class="table">
         </br>
         <h3>Upcoming Boat Reservations</h3>
         </br>
-        <form th:action="@{'/reservations/reservationHistory/boats'}" method="get">
+        <form sec:authorize="hasRole('CLIENT')" th:action="@{'/reservations/reservationHistory/boats'}" method="get">
             <input type="text" placeholder="Search..." name="keyword"/>
             <button type="submit" class="btn btn-dark mt-2">Search</button>
             </br>
         </form>
         </br></br></br>
-        <table width="90%">
+        <table sec:authorize="hasRole('CLIENT')" width="90%">
             <tr>
                 <th>Boat name:</th>
                 <th>Reservation start:</th>
@@ -92,6 +101,20 @@
                 <td th:text="${reservation.boat.getBoatName()}"></td>
                 <td th:text="${reservation.startTime}"></td>
                 <td th:text="${reservation.endTime}"></td>
+            </tr>
+        </table>
+        <table sec:authorize="hasRole('BOAT_OWNER')" width="90%">
+            <tr>
+                <th>Boat name:</th>
+                <th>Reservation start:</th>
+                <th>Client name:</th>
+                <th></th>
+            </tr>
+            <tr th:each="boatReservation:${boatReservations}">
+                <td th:text="${boatReservation.boat.getBoatName()}"></td>
+                <td th:text="${boatReservation.startTime}"></td>
+                <td th:text="${boatReservation.client.getFullName()}"></td>
+                <td><a th:href="@{/client/profile/__${boatReservation.client.getId()}__}">View profile</a></td>
             </tr>
         </table>
     </div>
