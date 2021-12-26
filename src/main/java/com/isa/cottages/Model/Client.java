@@ -27,12 +27,15 @@ public class Client extends User {
     @OneToMany(mappedBy = "client", targetEntity = Reservation.class)
     private Set<Reservation> Reservations = new HashSet<>();
 
-    @OneToMany(mappedBy = "subscriber", targetEntity = Boat.class)
+    @ManyToMany
+    @JoinTable(name = "boat_subscribers", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "boat_id"))
     private Set<Boat> boatSubscriptions = new HashSet<>();
 
-    @OneToMany(mappedBy = "subscriber", targetEntity = Cottage.class)
+    @ManyToMany
+    @JoinTable(name = "cottage_subscribers", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "cottage_id"))
     private Set<Cottage> cottageSubscriptions = new HashSet<>();
 
-    @OneToMany(mappedBy = "subscriber", targetEntity = FishingInstructorAdventure.class)
+    @ManyToMany
+    @JoinTable(name = "instructor_subscribers", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "instructor_id"))
     private Set<FishingInstructorAdventure> instructorSubscriptions = new HashSet<>();
 }

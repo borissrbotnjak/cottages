@@ -103,7 +103,7 @@
                 <td th:text="${subsrciption.name}"></td>
                 <td th:text="${subsrciption.getCottageOwner().getFullName()}"></td>
                 <td th:text="${subsrciption.averageRating}"></td>
-                <td><a href="#"}>Unsubscribe</a></td>
+                <td><a sec:authorize="hasRole('CLIENT')" th:href="${'/subscriptions/cottage/unsubscribe/__${subsrciption.id}__'}">Unsubscribe</a></td>
             </tr>
         </table>
     </div>

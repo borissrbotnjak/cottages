@@ -2,7 +2,6 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.Boat;
-import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

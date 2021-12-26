@@ -30,7 +30,8 @@ public class UserController {
     public ModelAndView indexPage(Authentication auth) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
         if (u.getEnabled() == false) {
-            throw new Exception("Your account is not activated, please check your email.");
+            // throw new Exception("Your account is not activated, please check your email.");
+            return new ModelAndView("confirmEmail");
         }
         // TODO: add separate page redirection for each user role
         /*if (u instanceof Client) {

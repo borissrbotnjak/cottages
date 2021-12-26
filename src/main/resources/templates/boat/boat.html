@@ -119,6 +119,8 @@
             </div>
             </br></br></br>
             <a th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
+            </br></br>
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/subscriptions/boat/new/__${boat.id}__'}">Subscribe</a>
           </div>
         </div>
       </div>

@@ -36,6 +36,12 @@ public class Reservation implements Serializable {
     @Column
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endTime;
+    @Column
+
+    private LocalDate startDate;
+
+    @Column
+    private LocalDate endDate;
 
     @Column
     private Boolean discount = false;

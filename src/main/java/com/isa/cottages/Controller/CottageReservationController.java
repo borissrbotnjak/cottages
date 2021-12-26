@@ -1,7 +1,10 @@
 package com.isa.cottages.Controller;
 
 import com.isa.cottages.Model.*;
-import com.isa.cottages.Service.impl.*;
+import com.isa.cottages.Service.impl.CottageReservationServiceImpl;
+import com.isa.cottages.Service.impl.CottageServiceImpl;
+import com.isa.cottages.Service.impl.ReportServiceImpl;
+import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;

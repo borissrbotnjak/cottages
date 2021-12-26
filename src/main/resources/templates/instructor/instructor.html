@@ -48,7 +48,7 @@
           <a class="nav-link"th:href="${'/boats/allBoats'}">All boats</a>
         </li>
         <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
-          <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+          <a class="nav-link" href="#">All fishing instructors</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="${'/auth/login'}">Log in</a>
@@ -130,6 +130,8 @@
             </div>
             </br></br></br>
             <a th:href="@{'/adventures/__${instructor.id}__/timeSlots'}">Reservation time slots</a>
+            </br></br>
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/subscriptions/instructor/new/__${instructor.id}__'}">Subscribe</a>
           </div>
         </div>
       </div>

@@ -48,7 +48,6 @@ public class FishingInstructorAdventure implements Serializable {
     @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")
     private Instructor instructor;
 
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
-    private Client subscriber;
+    @ManyToMany(mappedBy = "instructorSubscriptions")
+    private Set<Client> subscribers;
 }

@@ -9,4 +9,5 @@ public interface ClientService {
 
     Client updateProfile(Client client) throws Exception;
     Client updateBasicInfo(Client client, Client forUpdate);
+    Client update(Client client) throws Exception;
 }

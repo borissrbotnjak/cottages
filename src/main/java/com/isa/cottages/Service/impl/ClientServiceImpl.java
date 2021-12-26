@@ -58,5 +58,26 @@ public class ClientServiceImpl implements ClientService {
         return this.clientRepository.save(forUpdate);
     }
 
+    public Client update(Client client) throws Exception {
+        Client forUpdate = this.findById(client.getId());
 
+        forUpdate.setCity(client.getCity());
+        forUpdate.setState(client.getState());
+        forUpdate.setResidence(client.getResidence());
+        forUpdate.setFirstName(client.getFirstName());
+        forUpdate.setLastName(client.getLastName());
+        forUpdate.setPhoneNumber(client.getPhoneNumber());
+        forUpdate.setLoyaltyProgram(client.getLoyaltyProgram());
+        forUpdate.setBoatSubscriptions(client.getBoatSubscriptions());
+        forUpdate.setCottageSubscriptions(client.getCottageSubscriptions());
+        forUpdate.setInstructorSubscriptions(client.getInstructorSubscriptions());
+        forUpdate.setReservations(client.getReservations());
+        forUpdate.setUserRole(client.getUserRole());
+        forUpdate.setPassword(client.getPassword());
+        forUpdate.setEmail(client.getEmail());
+        forUpdate.setEnabled(client.getEnabled());
+
+        this.clientRepository.save(forUpdate);
+        return forUpdate;
+    }
 }

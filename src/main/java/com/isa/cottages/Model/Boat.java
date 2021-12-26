@@ -32,6 +32,9 @@ public class Boat implements Serializable {
     @Column
     private String description;
 
+    @Column
+    private Double price = 0.0;
+
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;
 
@@ -41,7 +44,6 @@ public class Boat implements Serializable {
     @ElementCollection
     private Set<Integer> ratings;
 
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
-    private Client subscriber;
+    @ManyToMany(mappedBy = "boatSubscriptions")
+    private Set<Client> subscribers;
 }
