@@ -20,6 +20,9 @@ public class Client extends User {
     @Column
     private Integer discount;
 
+    @ElementCollection
+    private Set<Integer> penals;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
     private LoyaltyProgram  loyaltyProgram;
@@ -35,4 +38,7 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "subscriber", targetEntity = FishingInstructorAdventure.class)
     private Set<FishingInstructorAdventure> instructorSubscriptions = new HashSet<>();
+
+    @OneToMany(mappedBy = "client", targetEntity = Report.class)
+    private Set<Report> reports = new HashSet<>();
 }

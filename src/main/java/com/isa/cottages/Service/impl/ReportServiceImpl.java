@@ -31,6 +31,9 @@ public class ReportServiceImpl implements ReportService {
         r.setText(report.getText());
         r.setPenal(report.getPenal());
         r.setDidAppear(report.getDidAppear());
+        r.setBoatOwner(report.getBoatOwner());
+        r.setAdmin(report.getAdmin());
+        r.setClient(report.getClient());
 
         return this.reportRepository.save(r);
     }

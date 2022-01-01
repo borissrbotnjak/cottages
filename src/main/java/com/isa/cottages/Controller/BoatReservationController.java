@@ -2,10 +2,12 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatReservationServiceImpl;
+import com.isa.cottages.Service.impl.ReportServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +22,16 @@ public class BoatReservationController {
     private UserServiceImpl userService;
     private BoatReservationServiceImpl reservationService;
     private BoatServiceImpl boatService;
+    private ReportServiceImpl reportService;
 
     @Autowired
     public BoatReservationController(UserServiceImpl userService, BoatReservationServiceImpl reservationService,
-                                     BoatServiceImpl boatService) {
+                                     BoatServiceImpl boatService, ReportServiceImpl reportService) {
         this.userService = userService;
         this.reservationService = reservationService;
         this.boatService = boatService;
+        this.reservationService = reservationService;
+        this.reportService = reportService;
     }
 
     @GetMapping("/history")
@@ -187,4 +192,48 @@ public class BoatReservationController {
         }
         return new ModelAndView("boat/reservationHistory");
     }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/writeReport/{oid}/{cid}")
+    public ModelAndView reportForm(Model model, @PathVariable Long cid,
+                                   @PathVariable Long oid) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        Report report = new Report();
+        model.addAttribute("report", report);
+
+//        SystemAdministrator admin = (SystemAdministrator) this.userService.findById(aid);
+        Client client = (Client) this.userService.findById(cid);
+
+        model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(oid));
+
+        return new ModelAndView("boat/report");
+    }
+
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/writeReport/{oid}/submit")
+    public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,
+                                         @PathVariable Long oid, Client client, Authentication auth,
+                                         Integer penal, SystemAdministrator admin) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+//        SystemAdministrator admin = (SystemAdministrator) this.userService.findByEmail(auth.getName());
+
+        model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(oid));
+        model.addAttribute("report", report);
+
+        report.setBoatOwner(boatOwner);
+        report.setPenal(report.getPenal());
+        if(report.getPenal() == report.getPenal().TRUE) {
+            admin.getReports().add(report);
+        }
+        if (report.getDidAppear() == report.getDidAppear().FALSE) {
+            client.getPenals().add(penal);
+        }
+
+        reportService.save(report);
+        return new ModelAndView("redirect:/boatReservations/pastOwnersReservations/{oid}/");
+    }
+
 }

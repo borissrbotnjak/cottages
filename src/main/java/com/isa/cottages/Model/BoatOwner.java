@@ -25,4 +25,7 @@ public class BoatOwner extends User {
 
     @OneToMany(mappedBy = "boatOwner", cascade = CascadeType.ALL)
     private Set<Boat> boats = new HashSet<>();
+
+    @OneToMany(mappedBy = "boatOwner", targetEntity = Report.class)
+    private Set<Report> reports = new HashSet<>();
 }

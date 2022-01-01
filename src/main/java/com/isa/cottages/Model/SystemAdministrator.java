@@ -19,4 +19,7 @@ public class SystemAdministrator extends User{
     @Column
     private Boolean isFirstLogin = false;
 
+    @OneToMany(mappedBy = "admin", targetEntity = Report.class)
+    private Set<Report> reports = new HashSet<>();
+
 }
