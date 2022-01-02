@@ -38,6 +38,7 @@ public class BoatServiceImpl implements BoatService {
     public Boat saveBoat(Boat boat) {
         Boat b = new Boat();
         b.setBoatName(boat.getBoatName());
+        b.setEngineType(boat.getEngineType());
         b.setLength(boat.getLength());
         b.setEngineNumber(boat.getEngineNumber());
         b.setEnginePower(boat.getEnginePower());

@@ -151,12 +151,12 @@ public class CottageReservationController {
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/makeCottageReservationWithClient")
+    @GetMapping("/makeReservationWithClient")
     public ModelAndView makeReservationWithClient(Model model) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
-        return new ModelAndView("cottage/makeCottageReservationWithClient");
+        return new ModelAndView("cottage/makeReservationWithClient");
     }
 
         @GetMapping("/history")

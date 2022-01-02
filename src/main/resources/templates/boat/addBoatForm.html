@@ -38,8 +38,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -63,6 +63,17 @@
 
         <br><label for="name">Name:</label>
         <input id="name" type="text" th:field="*{boat.boatName}"/>
+
+        <br>
+        <div class="form-group">
+            <label for="engineType">Engie type:</label>
+            <select class="form-control" id="engineType" th:field="*{boat.engineType}">
+                <option name="engineType" value="">Select engine type</option>
+                <option name="engineType" th:each="engineTypeOpt : ${T(com.isa.cottages.Model.EngineType).values()}"
+                        th:value="${engineTypeOpt}"
+                        th:text="${engineTypeOpt.getDisplayName()}"></option>
+            </select>
+        </div>
 
         <br><label for="length">Length:</label>
         <input id="length" type="number" th:field="*{boat.length}"/>

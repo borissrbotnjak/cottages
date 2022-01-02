@@ -31,6 +31,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> getAllOwnersReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.getAllReservedByOwner(id);
+    }
+
+    @Override
     public List<BoatReservation> findByOrderByStartTimeAsc() throws Exception {
         List<BoatReservation> pastOnes = getPastReservations();
         pastOnes.sort(Comparator.comparing(BoatReservation::getStartTime));
@@ -111,6 +118,14 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> getOwnersFreeReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.getAllFreeReservationsByOwner(id);
+
+        return all;
+    }
+
+    @Override
     public List<BoatReservation> getPastReservations() throws Exception {
         Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
         List<BoatReservation> all = this.reservationRepository.getAllReservations();
@@ -152,6 +167,24 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setBoatOwner(boatReservation.getBoatOwner());
         br.setBoat(boatReservation.getBoat());
         br.setDiscount(true);
+        br.setDeleted(false);
+        br.setReserved(false);
+        br.setClient(boatReservation.getClient());
+        this.reservationRepository.save(br);
+
+        return br;
+    }
+
+    @Override
+    public BoatReservation saveReservation(BoatReservation boatReservation) {
+        BoatReservation br = new BoatReservation();
+
+        br.setNumPersons(boatReservation.getNumPersons());
+        br.setPrice(boatReservation.getPrice());
+        br.setAdditionalServices(boatReservation.getAdditionalServices());
+        br.setBoatOwner(boatReservation.getBoatOwner());
+        br.setBoat(boatReservation.getBoat());
+        br.setDiscount(false);
         br.setDeleted(false);
         br.setReserved(false);
         br.setClient(boatReservation.getClient());

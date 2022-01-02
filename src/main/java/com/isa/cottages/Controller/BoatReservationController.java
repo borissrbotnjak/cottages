@@ -236,4 +236,60 @@ public class BoatReservationController {
         return new ModelAndView("redirect:/boatReservations/pastOwnersReservations/{oid}/");
     }
 
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/makeReservationWithClient/{bid}/{cid}")
+    public ModelAndView makeReservation(@PathVariable Long id, @PathVariable Long bid, @PathVariable Long cid,
+                                        Model model, Authentication auth) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        Client client = (Client) this.userService.findById(cid);
+        model.addAttribute("client", client);
+        model.addAttribute("boat", this.boatService.findById(bid));
+        model.addAttribute("client", this.userService.findByEmail(auth.getName()));
+
+        Reservation reservation = new Reservation();
+        model.addAttribute("reservation", reservation);
+
+        Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(bid);
+        model.addAttribute("boatReservations", boatReservations);
+
+        return new ModelAndView("boat/makeReservationWithClient");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/makeReservationWithClient/submit")
+    public ModelAndView makeReservation(@PathVariable Long id, @ModelAttribute BoatReservation boatReservation,
+                                        Model model, Client client) throws Exception {
+//        if (this.boatService.findById(boat.getId()) != null) {
+//            throw new ResourceConflictException(boat.getId(), "Boat with this id already exist.");
+//        }
+        Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(id);
+        model.addAttribute("boatReservations", boatReservations);
+
+        User user = this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", user);
+
+        model.addAttribute("freeReservations", this.reservationService.getOwnersFreeReservations(id));
+
+        boatReservation.setBoatOwner((BoatOwner) this.userService.getUserFromPrincipal());
+        boatReservation.setBoat(this.boatService.findById(id));
+        boatReservation.setDiscount(false);
+        boatReservation.setClient(client);
+        this.reservationService.saveReservation(boatReservation);
+        return new ModelAndView("redirect:/boatReservations/upcomingOwnersReservations/{oid}/");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/viewCalendar/{id}")
+    public ModelAndView viewCalendar (Model model, @PathVariable Long id, String keyword) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        if (keyword != null) {
+            model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("boatReservations", this.reservationService.getAllOwnersReservations(id));
+        }
+        return new ModelAndView("boat/calendar");
+    }
 }

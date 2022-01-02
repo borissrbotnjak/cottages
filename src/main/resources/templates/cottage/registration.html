@@ -10,7 +10,7 @@
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Compiled and minified CSS -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
 
     <!-- Compiled and minified JavaScript -->
@@ -88,14 +88,14 @@
             <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
 
             <br>
-            <div class="input-field">
-                <label for="registrationType">Choose registration type:</label>
-                <select id="registrationType" th:field="*{registrationType}">
-                    <option value="">Select a type</option>
-                    <option th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
+            <div class="form-group">
+                <label for="registrationType">Registration type:</label>
+                <select class="form-control" id="registrationType" th:field="*{registrationType}">
+                    <option name="registrationType" value="">Select registration type</option>
+                    <option name="registrationType" th:each="registrationTypeOpt : ${T(com.isa.cottages.Model.RegistrationType).values()}"
                             th:value="${registrationTypeOpt}"
                             th:text="${registrationTypeOpt.getDisplayName()}"></option>
-                    </select>
+                </select>
             </div>
 
             <label for="explanationOfRegistration">Explanation Of Registration:</label>

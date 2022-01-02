@@ -23,6 +23,9 @@ public class Boat implements Serializable {
     private String boatName;
 
     @Column
+    private EngineType engineType;
+
+    @Column
     private Long length;
 
     @Column
