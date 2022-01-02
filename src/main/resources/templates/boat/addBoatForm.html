@@ -66,9 +66,8 @@
 
         <br>
         <div class="form-group">
-            <label for="engineType">Engie type:</label>
+            <label for="engineType">Choose engine type:</label>
             <select class="form-control" id="engineType" th:field="*{boat.engineType}">
-                <option name="engineType" value="">Select engine type</option>
                 <option name="engineType" th:each="engineTypeOpt : ${T(com.isa.cottages.Model.EngineType).values()}"
                         th:value="${engineTypeOpt}"
                         th:text="${engineTypeOpt.getDisplayName()}"></option>
@@ -110,6 +109,16 @@
 
         <br><label for="availableUntil">Available Until:</label>
         <input id="availableUntil" type="datetime-local" th:field="*{boat.availableUntil}"/>
+
+        <br>
+        <div class="form-group">
+            <label for="cancellationCondition">Choose cancellation condition:</label>
+            <select class="form-control" id="cancellationCondition" th:field="*{boat.cancellationCondition}">
+                <option name="cancellationCondition" th:each="cancellationConditionOpt : ${T(com.isa.cottages.Model.CancellationCondition).values()}"
+                        th:value="${cancellationConditionOpt}"
+                        th:text="${cancellationConditionOpt.getDisplayName()}"></option>
+            </select>
+        </div>
 
         <div class="form-group">
             <label for="customFile">Image</label>

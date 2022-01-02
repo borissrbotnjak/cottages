@@ -59,6 +59,9 @@ public class Boat implements Serializable {
     private String description;
 
     @Column
+    private CancellationCondition cancellationCondition;
+
+    @Column
     private Boolean deleted = false;
 
     @Column
