@@ -1,6 +1,8 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.DTO.*;
+import com.isa.cottages.DTO.ChangePasswordAfterFirstLoginDTO;
+import com.isa.cottages.DTO.ChangePasswordDTO;
+import com.isa.cottages.DTO.UserDTO;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.RequestServiceImpl;
@@ -22,7 +24,7 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     private final UserServiceImpl userService;
-    private RequestServiceImpl requestService;
+    private final RequestServiceImpl requestService;
 
     @Autowired
     public AuthenticationController(UserServiceImpl userService, RequestServiceImpl requestService) {
@@ -51,7 +53,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/signup")
-    public ModelAndView registrationForm(Model model){
+    public ModelAndView registrationForm(Model model) {
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
         return new ModelAndView("client/registration");
@@ -64,7 +66,7 @@ public class AuthenticationController {
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Email already exists");
         }
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             return new ModelAndView("redirect:/auth/signup");
         }
         this.userService.saveClient(userRequest);
@@ -74,7 +76,7 @@ public class AuthenticationController {
 
 
     @GetMapping("/signupAdvertiser")
-    public ModelAndView registrationAdvertiserForm(Model model){
+    public ModelAndView registrationAdvertiserForm(Model model) {
         UserRequest userRequest = new UserRequest();
         model.addAttribute(userRequest);
         return new ModelAndView("cottage/registration");
@@ -82,7 +84,7 @@ public class AuthenticationController {
 
     @PostMapping("/signupAdvertiser/submit")
     public ModelAndView addAdvertiser(@ModelAttribute("userRequest") @Valid UserRequest userRequest,
-                                 BindingResult result, @ModelAttribute User user) {
+                                      BindingResult result, @ModelAttribute User user) {
         User existUser = this.userService.findByEmail(userRequest.getEmail());
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Email already exists.");
@@ -100,28 +102,11 @@ public class AuthenticationController {
             userService.saveBoatOwner(userRequest);
             user.setUserRole(UserRole.BOAT_OWNER);
             user.setRegistrationType(RegistrationType.BOAT_ADVERTISER);
+        } else if (userRequest.getRegistrationType() == RegistrationType.INSTRUCTOR) {
+            userService.saveInstructor(userRequest);
+            user.setUserRole(UserRole.INSTRUCTOR);
+            user.setRegistrationType(RegistrationType.INSTRUCTOR);
         }
-        return new ModelAndView("redirect:/auth/home");
-    }
-
-    @GetMapping("/signupInstructor")
-    public ModelAndView registrationInstructorForm(Model model) {
-        UserRequest userRequest = new UserRequest();
-        model.addAttribute(userRequest);
-        return new ModelAndView("cottage/registration");
-    }
-
-    @PostMapping("/signupInstructor/submit")
-    public ModelAndView addInstructor(@ModelAttribute("userRequest") @Valid UserRequest userRequest, BindingResult result) {
-        User existUser = this.userService.findByEmail(userRequest.getEmail());
-        if (existUser != null) {
-            throw new ResourceConflictException(userRequest.getId(), "Email already exists.");
-        }
-        if (result.hasErrors()) {
-            return new ModelAndView("redirect:/auth/signupInstructor");
-        }
-        this.userService.saveInstructor(userRequest);
-        userRequest.setRegistrationType(userRequest.getRegistrationType());
         return new ModelAndView("redirect:/auth/home");
     }
 
@@ -134,14 +119,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/change-password-first/submit")
-    public ModelAndView cps(@ModelAttribute("changePasswordAfterFirstLoginDTO")@Valid ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO, Authentication auth, BindingResult bindingResult){
+    public ModelAndView cps(@ModelAttribute("changePasswordAfterFirstLoginDTO") @Valid ChangePasswordAfterFirstLoginDTO changePasswordAfterFirstLoginDTO, Authentication auth, BindingResult bindingResult) {
 
         User user = this.userService.findByEmail(auth.getName());
-        this.userService.changePasswordAfterFirstLogin(user,changePasswordAfterFirstLoginDTO);
-        if (bindingResult.hasErrors()){
+        this.userService.changePasswordAfterFirstLogin(user, changePasswordAfterFirstLoginDTO);
+        if (bindingResult.hasErrors()) {
             return new ModelAndView("redirect:/auth/change-password-first");
         }
-        if(user instanceof SystemAdministrator){
+        if (user instanceof SystemAdministrator) {
             return new ModelAndView("redirect:/user/sys-admin/home");
         } else {
             return new ModelAndView("redirect:/auth/home");
@@ -150,40 +135,41 @@ public class AuthenticationController {
 
     //Promena lozinke za ostale korisnike
     @GetMapping("/change-password")
-    public ModelAndView changePasswordForm2(Model model){
+    public ModelAndView changePasswordForm2(Model model) {
         ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO();
         model.addAttribute(changePasswordDTO);
         return new ModelAndView("change-password");
     }
 
     @PostMapping("/change-password/submit")
-    public ModelAndView cps2(@ModelAttribute("changePasswordDTO")@Valid ChangePasswordDTO changePasswordDTO, Authentication auth, BindingResult bindingResult){
+    public ModelAndView cps2(@ModelAttribute("changePasswordDTO") @Valid ChangePasswordDTO changePasswordDTO, Authentication auth, BindingResult bindingResult) {
 
         User user = this.userService.findByEmail(auth.getName());
-        this.userService.changePassword(user,changePasswordDTO);
-        if (bindingResult.hasErrors()){
+        this.userService.changePassword(user, changePasswordDTO);
+        if (bindingResult.hasErrors()) {
             return new ModelAndView("redirect:/auth/change-password");
         }
-        if(user instanceof SystemAdministrator){
+        if (user instanceof SystemAdministrator) {
             return new ModelAndView("redirect:/user/sys-admin/home");
-        } else if (user instanceof CottageOwner){
+        } else if (user instanceof CottageOwner) {
             return new ModelAndView("redirect:/user/cottage-owner/home");
         } else if (user instanceof BoatOwner) {
             return new ModelAndView("redirect:/user/boat-owner/home");
-        } else if(user instanceof Client){
+        } else if (user instanceof Client) {
             return new ModelAndView("redirect:/user/client/home");
-        }
-        else {
+        } else if (user instanceof Instructor) {
+            return new ModelAndView("redirect:/user/instructor/home");
+        } else {
             return new ModelAndView("redirect:/auth/home");
         }
     }
 
     @GetMapping("confirm")
-    public String confirm(@RequestParam("token") String token){
+    public String confirm(@RequestParam("token") String token) {
         return userService.confirmToken(token);
     }
 
-    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER')")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER, INSTRUCTOR')")
     @GetMapping("/deleteAccount")
     public ModelAndView deleteAccount(Model model) throws Exception {
         User user = this.userService.getUserFromPrincipal();
@@ -195,20 +181,22 @@ public class AuthenticationController {
         return new ModelAndView("deleteAccount");
     }
 
-    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER')")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER, INSTRUCTOR')")
     @PostMapping("/deleteAccount/submit")
     public ModelAndView deleteAccountSubmit(Model model, @ModelAttribute Request request) throws Exception {
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
         requestService.save(request);
 
-        if(user.getUserRole() == UserRole.COTTAGE_OWNER) {
+        if (user.getUserRole() == UserRole.COTTAGE_OWNER) {
             return new ModelAndView("redirect:/cottageOwner/profile/" + user.getId());
         } else if(user.getUserRole() == UserRole.BOAT_OWNER) {
             return new ModelAndView("redirect:/boatOwner/profile/" + user.getId());
         }
         else if(user.getUserRole() == UserRole.CLIENT) {
             return new ModelAndView("redirect:/client/profile/" + user.getId());
+        } else if (user.getUserRole() == UserRole.INSTRUCTOR) {
+            return new ModelAndView("redirect:/instructor/profile/" + user.getId());
         }
         return new ModelAndView("home");
     }

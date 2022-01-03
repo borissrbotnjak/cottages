@@ -2,22 +2,23 @@ package com.isa.cottages.Security;
 
 import com.isa.cottages.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.GrantedAuthority;
-import static com.isa.cottages.Model.UserRole.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.isa.cottages.Model.UserRole.*;
+
 @Service
 public class UserAuthenticationService implements AuthenticationProvider {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserAuthenticationService(UserRepository userRepository) {
@@ -44,9 +45,14 @@ public class UserAuthenticationService implements AuthenticationProvider {
             retVal = new UsernamePasswordAuthenticationToken(
                     email, "", grantedAuths
             );
-        }
-        else if (userRepository.findByEmail(email).getUserRole() == COTTAGE_OWNER) {
+        } else if (userRepository.findByEmail(email).getUserRole() == COTTAGE_OWNER) {
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_COTTAGE_OWNER"));
+
+            retVal = new UsernamePasswordAuthenticationToken(
+                    email, "", grantedAuths
+            );
+        } else if (userRepository.findByEmail(email).getUserRole() == INSTRUCTOR) {
+            grantedAuths.add(new SimpleGrantedAuthority("ROLE_INSTRUCTOR"));
 
             retVal = new UsernamePasswordAuthenticationToken(
                     email, "", grantedAuths
