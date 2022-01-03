@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/boatReservations")
@@ -179,7 +180,8 @@ public class BoatReservationController {
 
     @GetMapping("/pastOwnersReservations/{id}")
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView showReservationHistory(Model model, String keyword, @PathVariable("id") Long id, String email) throws Exception {
+    public ModelAndView showReservationHistory(Model model, String keyword,
+                                               @PathVariable("id") Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
 //        Client client = this.clientService.findByEmail(email);
@@ -194,46 +196,62 @@ public class BoatReservationController {
     }
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    @GetMapping("/writeReport/{oid}/{cid}")
-    public ModelAndView reportForm(Model model, @PathVariable Long cid,
-                                   @PathVariable Long oid) throws Exception {
+    @GetMapping("/writeReport/{oid}/{id}/{aid}")
+    public ModelAndView reportForm(Model model, @PathVariable Long id,
+                                   @PathVariable Long aid, @PathVariable Long oid) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
+        model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(oid));
         Report report = new Report();
         model.addAttribute("report", report);
-
-//        SystemAdministrator admin = (SystemAdministrator) this.userService.findById(aid);
-        Client client = (Client) this.userService.findById(cid);
-
-        model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(oid));
+        report.setClient((Client) this.userService.findById(id));
+        report.setAdmin((SystemAdministrator) this.userService.findById(aid));
+        model.addAttribute("id", id);
+        model.addAttribute("aid", aid);
+        model.addAttribute("oid", oid);
 
         return new ModelAndView("boat/report");
     }
 
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    @PostMapping("/writeReport/{oid}/submit")
+    @PostMapping("/writeReport/{oid}/{id}/{aid}/submit")
     public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,
-                                         @PathVariable Long oid, Client client, Authentication auth,
-                                         Integer penal, SystemAdministrator admin) throws Exception {
+                                         @PathVariable Long id, @PathVariable Long aid,
+                                         @PathVariable Long oid,
+                                         Client client) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
-//        SystemAdministrator admin = (SystemAdministrator) this.userService.findByEmail(auth.getName());
-
         model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(oid));
+
         model.addAttribute("report", report);
+        List<Report> reports = reportService.findBoatOwnersReports(boatOwner.getId());
+        model.addAttribute("reports", reports);
+        SystemAdministrator admin = (SystemAdministrator) this.userService.findById(aid);
+        model.addAttribute("id", id);
+        model.addAttribute("aid", aid);
+        model.addAttribute("oid", oid);
 
         report.setBoatOwner(boatOwner);
-        report.setPenal(report.getPenal());
+        report.setClient((Client) this.userService.findById(id));
+        report.setAdmin(admin);
+        int penalties = 0;
+        report.getClient().setPenalties(penalties);
+
         if(report.getPenal() == report.getPenal().TRUE) {
             admin.getReports().add(report);
+            report.setApproved(true);
+            penalties += 1;
+            report.getClient().setPenalties(penalties);
         }
         if (report.getDidAppear() == report.getDidAppear().FALSE) {
-            client.getPenals().add(penal);
+            client.getPenalties();
+            penalties += 1;
+            report.getClient().setPenalties(penalties);
         }
 
         reportService.save(report);
-        return new ModelAndView("redirect:/boatReservations/pastOwnersReservations/{oid}/");
+        return new ModelAndView("redirect:/boatReservations/pastOwnersReservations/{oid}");
     }
 
     @PreAuthorize("hasRole('BOAT_OWNER')")

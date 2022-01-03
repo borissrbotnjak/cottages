@@ -43,6 +43,13 @@
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/boats/allMyBoats/__${user.id}__'}">My Boats</a>
                 </li>

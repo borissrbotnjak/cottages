@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cottageReservations")
@@ -111,30 +112,62 @@ public class CottageReservationController {
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/writeReport/{id}")
-    public ModelAndView reportForm(Model model, @PathVariable Long id) throws Exception {
+    @GetMapping("/writeReport/{oid}/{id}/{aid}")
+    public ModelAndView reportForm(Model model, @PathVariable Long id,
+                                   @PathVariable Long aid, @PathVariable Long oid) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
-
+        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(oid));
         Report report = new Report();
         model.addAttribute("report", report);
+        report.setClient((Client) this.userService.findById(id));
+        report.setAdmin((SystemAdministrator) this.userService.findById(aid));
+        model.addAttribute("id", id);
+        model.addAttribute("aid", aid);
+        model.addAttribute("oid", oid);
 
         return new ModelAndView("cottage/report");
     }
 
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @PostMapping("/writeReport/{id}/submit")
+    @PostMapping("/writeReport/{oid}/{id}/{aid}/submit")
     public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,
-                                         @PathVariable Long id) throws Exception {
+                                         @PathVariable Long id, @PathVariable Long aid,
+                                         @PathVariable Long oid,
+                                         Client client) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
+        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(oid));
+
+        model.addAttribute("report", report);
+        List<Report> reports = reportService.findCottageOwnersReports(cottageOwner.getId());
+        model.addAttribute("reports", reports);
+        SystemAdministrator admin = (SystemAdministrator) this.userService.findById(aid);
+        model.addAttribute("id", id);
+        model.addAttribute("aid", aid);
+        model.addAttribute("oid", oid);
 
         report.setCottageOwner(cottageOwner);
+        report.setClient((Client) this.userService.findById(id));
+        report.setAdmin(admin);
+        int penalties = 0;
+        report.getClient().setPenalties(penalties);
+
+        if(report.getPenal() == report.getPenal().TRUE) {
+            admin.getReports().add(report);
+            report.setApproved(true);
+            penalties += 1;
+            report.getClient().setPenalties(penalties);
+        }
+        if (report.getDidAppear() == report.getDidAppear().FALSE) {
+            client.getPenalties();
+            penalties += 1;
+            report.getClient().setPenalties(penalties);
+        }
+
         reportService.save(report);
-        return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{id}/");
+        return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{oid}");
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")

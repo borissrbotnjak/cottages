@@ -33,17 +33,17 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
+                    <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
+                    <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
@@ -57,7 +57,7 @@
 <div class="container">
     <div class="center-align">
     <h1>Write report</h1>
-    <form th:action="@{/cottageReservations/writeReport/__${id}__/submit}" th:object="${report}" method="post">
+    <form th:action="@{/cottageReservations/writeReport/__${oid}__/__${id}__/__${aid}__/submit}" th:object="${report}" method="post">
         <br><label for="text">Comment</label>
         <input id="text" type="text" th:field="*{text}"/>
 

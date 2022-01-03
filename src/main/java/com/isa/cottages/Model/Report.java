@@ -25,6 +25,9 @@ public class Report implements Serializable {
     @Column
     private Boolean didAppear = true;
 
+    @Column
+    private Boolean approved = false;
+
     @ManyToOne(targetEntity = CottageOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "cottage_owner_id")
     private CottageOwner cottageOwner;
@@ -37,7 +40,7 @@ public class Report implements Serializable {
     @JoinColumn(name = "admin_id")
     private SystemAdministrator admin;
 
-    @ManyToOne(targetEntity = SystemAdministrator.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
-    private SystemAdministrator client;
+    private Client client;
 }
