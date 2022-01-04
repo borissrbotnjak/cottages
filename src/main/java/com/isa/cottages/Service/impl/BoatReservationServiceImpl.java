@@ -34,7 +34,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     public List<BoatReservation> getAllOwnersReservations(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
 
-        return this.reservationRepository.getAllReservedByOwner(id);
+        return this.reservationRepository.getAllOwnersReservations(id);
     }
 
     @Override

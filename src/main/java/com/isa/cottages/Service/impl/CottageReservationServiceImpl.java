@@ -32,7 +32,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     public List<CottageReservation> getAllOwnersReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
-        return this.reservationRepository.getAllReservedByOwner(id);
+        return this.reservationRepository.getAllOwnersReservations(id);
     }
 
     @Override

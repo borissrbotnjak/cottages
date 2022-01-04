@@ -69,12 +69,16 @@
                 <tr>
                     <th>Cottage</th>
                     <th>Reservation start</th>
-                    <th>Client name</th>
+<!--                    <th>Client name</th>-->
+                    <th>Reserved?</th>
+                    <th>Discount?</th>
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="*{cottageReservation.cottage.getName()}"></td>
                     <td th:text="*{cottageReservation.startTime}"></td>
-                    <td th:text="*{cottageReservation.client.getFullName()}"></td>
+<!--                    <td th:text="*{cottageReservation.client.getFullName()}"></td>-->
+                    <td th:text="${cottageReservation.reserved}"></td>
+                    <td th:text="${cottageReservation.discount}"></td>
                 </tr>
             </table>
         </div>

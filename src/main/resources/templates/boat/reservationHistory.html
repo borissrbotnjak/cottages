@@ -142,7 +142,7 @@
                 <td th:text="${boatReservation.startTime}"></td>
                 <td th:text="${boatReservation.client.getFullName()}"></td>
                 <td><a th:href="@{/client/profile/__${boatReservation.client.getId()}__}">View profile</a></td>
-                <td><a th:href="@{/boatReservations/writeReport/__${boatReservation.boatOwner.getId()}__/__${boatReservation.client.getId()}__/__${boatReservation.admin.getId()}__}">Write report</a></td>
+                <td><a th:href="@{/boatReservations/writeReport/__${id}__/__${boatReservation.client.getId()}__/__${boatReservation.admin.getId()}__}">Write report</a></td>
             </tr>
         </table>
     </div>
