@@ -335,4 +335,14 @@ public class BoatController {
         return new ModelAndView("redirect:/boats/{id}/");
     }
 
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/averageRating")
+    public ModelAndView reportOfAverageRating (Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boats", boatService.findByBoatOwner(id));
+
+        return new ModelAndView("boat/reports/averageRating");
+    }
+
 }

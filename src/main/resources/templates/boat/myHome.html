@@ -48,6 +48,7 @@
                         Reports
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${user.id}__/averageRating'}> Average rating</a>
                     </div>
                 </li>
                 <li class="nav-item">

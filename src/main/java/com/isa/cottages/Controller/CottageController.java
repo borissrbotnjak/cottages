@@ -330,4 +330,14 @@ public class CottageController {
             return new ModelAndView("home");
         }
     }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{id}/averageRating")
+    public ModelAndView reportOfAverageRating (Model model, @PathVariable Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        model.addAttribute("cottages", cottageService.findByCottageOwner(id));
+
+        return new ModelAndView("cottage/reports/averageRating");
+    }
 }
