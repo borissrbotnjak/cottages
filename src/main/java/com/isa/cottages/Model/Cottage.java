@@ -82,7 +82,7 @@ public class Cottage implements Serializable {
     private Client subscriber;
 
     @OneToMany(mappedBy = "cottage", targetEntity = AdditionalService.class)
-    private List<AdditionalService> additionalServices = new ArrayList<>();
+    private Set<AdditionalService> additionalServices = new HashSet<>();
 
     public Cottage(String imageUrl) {
         this.imageUrl = imageUrl;

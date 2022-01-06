@@ -231,7 +231,38 @@
                 <p th:text="${boat.cancellationCondition}"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Price:</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.price}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <form th:object="${additionalService}" method="get">
+                <table>
+                  <thead>
+                  <tr>
+                    <th> Additional service </th>
+                    <th> Price </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:if="${boat.additionalServices.empty}">
+                    <td colspan="2"> No Additional services </td>
+                  </tr>
+                  <tr th:each="additionalService : ${boat.additionalServices}">
+                    <td><span th:text="${additionalService.name}"> Additional service </span></td>
+                    <td><span th:text="${additionalService.price}"> Price </span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
 
+            </br></br>
+            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/addAdditionalService'}">Add additional services</a>
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/edit'}">Edit boat</a>
             </br></br>

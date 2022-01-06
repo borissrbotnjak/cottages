@@ -179,6 +179,7 @@
             </div>
 
             <div class="row">
+              <form th:object="${additionalService}" method="get">
               <table>
                 <thead>
                 <tr>
@@ -187,15 +188,16 @@
                 </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:if="${cottage.additionalServices.empty}">-->
-<!--                  <td colspan="2"> No Additional services </td>-->
-<!--                </tr>-->
+                <tr th:if="${cottage.additionalServices.empty}">
+                  <td colspan="2"> No Additional services </td>
+                </tr>
                 <tr th:each="additionalService : ${cottage.additionalServices}">
                   <td><span th:text="${additionalService.name}"> Additional service </span></td>
                   <td><span th:text="${additionalService.price}"> Price </span></td>
                 </tr>
                 </tbody>
               </table>
+              </form>
             </div>
             <div class="row">
               <div class="col-md-6">
@@ -222,6 +224,8 @@
               </div>
             </div>
 
+            </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/addAdditionalService'}">Add additional services</a>
             </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
             </br></br>

@@ -6,6 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -56,6 +59,9 @@ public class Boat implements Serializable {
     private String rules;
 
     @Column
+    private Double price;
+
+    @Column
     private String description;
 
     @Column
@@ -87,4 +93,7 @@ public class Boat implements Serializable {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
     private Client subscriber;
+
+    @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
+    private Set<AdditionalService> additionalServices = new HashSet<>();
 }

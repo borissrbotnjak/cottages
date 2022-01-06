@@ -58,6 +58,13 @@ VALUES('usluga1', 300, 3);
 INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, COTTAGE_ID)
 VALUES('usluga1', 300, 4);
 
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, BOAT_ID)
+VALUES('usluga1', 300, 3);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, BOAT_ID)
+VALUES('usluga1', 1000, 2);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, BOAT_ID)
+VALUES('usluga2', 500, 3);
+
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
                                          instructor_info, average_rating, subscriber_id)

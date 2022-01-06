@@ -3,6 +3,7 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Service.impl.AdditionalServiceServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,14 @@ public class CottageController {
 
     private CottageServiceImpl cottageService;
     private UserServiceImpl userService;
+    private AdditionalServiceServiceImpl additionalServiceService;
 
     @Autowired
-    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService) {
+    public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService,
+                             AdditionalServiceServiceImpl additionalServiceService) {
         this.cottageService = cottageService;
         this.userService = userService;
+        this.additionalServiceService = additionalServiceService;
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -38,11 +42,11 @@ public class CottageController {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
 
-        for(int i=1; i<=3; i++) {
-            cottage.addAdditionalService(new AdditionalService());
-        }
-        List<AdditionalService> additionalService = new ArrayList<>();
-        model.addAttribute("additionalService", additionalService);
+//        List<AdditionalService> additionalService = new ArrayList<>();
+//        model.addAttribute("additionalService", additionalService);
+//        for(int i=1; i<=3; i++) {
+//            cottage.addAdditionalService(new AdditionalService());
+//        }
 
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
@@ -53,7 +57,7 @@ public class CottageController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/addCottage/{id}/submit")
     public ModelAndView addCottage(@PathVariable Long id, @ModelAttribute Cottage cottage,
-                                   @ModelAttribute AdditionalService additionalService,
+//                                   @ModelAttribute AdditionalService additionalService,
                                    @RequestParam("image") MultipartFile image,
                                    Model model) throws Exception {
 //        if (this.cottageService.findById(cottage.getId()) != null) {
@@ -74,21 +78,57 @@ public class CottageController {
 
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
-
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
 
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-        cottage.setAdditionalServices(cottage.getAdditionalServices());
-        additionalService.setCottage(additionalService.getCottage());
+//        for(int i=1; i<=3; i++) {
+//            cottage.setAdditionalServices(cottage.getAdditionalServices());
+//            additionalService.setCottage(additionalService.getCottage());
+//            additionalService.setCottage(cottage);
+//            this.additionalServiceService.save(additionalService);
+//        }
 
-        model.addAttribute("additionalService", additionalService);
-        model.addAttribute("additionalServices", cottage.getAdditionalServices());
+//        model.addAttribute("additionalService", additionalService);
+//        model.addAttribute("additionalServices", cottage.getAdditionalServices());
 
         this.cottageService.saveCottage(cottage);
-        this.cottageService.saveAdditionalService(additionalService);
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}/");
     }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{id}/addAdditionalService")
+    public ModelAndView addAdditionalService(Model model, @PathVariable Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        AdditionalService additionalService = new AdditionalService();
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByCottage(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        Cottage cottage = cottageService.findById(id);
+        model.addAttribute("cottage", cottage);
+
+        return new ModelAndView("cottage/addAdditionalService");
+
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @PostMapping("/{id}/addAdditionalService/submit")
+    public ModelAndView addAdditionalServiceSubmit(Model model, @PathVariable Long id,
+                                                   @ModelAttribute AdditionalService additionalService) throws Exception {
+        Cottage cottage = cottageService.findById(id);
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        model.addAttribute("cottage", cottage);
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByCottage(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        additionalService.setCottage(cottage);
+        additionalServiceService.save(additionalService);
+
+        return new ModelAndView("redirect:/cottages/{id}/");
+    }
+
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/allMyCottages/{id}")

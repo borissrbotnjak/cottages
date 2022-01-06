@@ -26,7 +26,11 @@ public class AdditionalService implements Serializable {
     @Column
     private Double price;
 
-    @ManyToOne(targetEntity = Cottage.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Cottage.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="cottage_id", nullable=true, referencedColumnName = "id")
     private Cottage cottage;
+
+    @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="boat_id", nullable=true, referencedColumnName = "id")
+    private Boat boat;
 }

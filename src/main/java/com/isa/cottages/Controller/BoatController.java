@@ -1,7 +1,7 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
+import com.isa.cottages.Service.impl.AdditionalServiceServiceImpl;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,14 @@ public class BoatController {
 
     private BoatServiceImpl boatService;
     private UserServiceImpl userService;
+    private AdditionalServiceServiceImpl additionalServiceService;
 
     @Autowired
-    public BoatController(BoatServiceImpl boatService, UserServiceImpl userService){
+    public BoatController(BoatServiceImpl boatService, UserServiceImpl userService,
+                          AdditionalServiceServiceImpl additionalServiceService){
         this.boatService = boatService;
         this.userService = userService;
+        this.additionalServiceService = additionalServiceService;
     }
 
     @GetMapping("/allBoats")
@@ -73,25 +76,6 @@ public class BoatController {
         model.addAttribute("boat", this.boatService.findById(id));
         return new ModelAndView("boat/boat");
     }
-
-    @GetMapping(value = "/addBoat")
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView addBoatForm(Model model){
-        Boat boat = new Boat();
-        model.addAttribute("boat", boat);
-        return new ModelAndView("addBoatForm");
-    }
-
-    @PostMapping(value = "/addBoat/submit")
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView addBoat(@ModelAttribute Boat boat) throws Exception {
-        if(this.boatService.findById(boat.getId()) != null) {
-            throw new ResourceConflictException(boat.getId(), "Boat with this id already exist");
-        }
-        this.boatService.saveBoat(boat);
-        return new ModelAndView("redirect:/boats/");
-    }
-
 
     @GetMapping("/allBoats/sortByNameDesc")
     public ModelAndView sortByNameDesc(Model model) {
@@ -217,6 +201,41 @@ public class BoatController {
         this.boatService.saveBoat(boat);
         return new ModelAndView("redirect:/boats/allMyBoats/{id}/");
     }
+
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/addAdditionalService")
+    public ModelAndView addAdditionalService(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        AdditionalService additionalService = new AdditionalService();
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByBoat(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        Boat boat = boatService.findById(id);
+        model.addAttribute("boat", boat);
+
+        return new ModelAndView("boat/addAdditionalService");
+
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/addAdditionalService/submit")
+    public ModelAndView addAdditionalServiceSubmit(Model model, @PathVariable Long id,
+                                                   @ModelAttribute AdditionalService additionalService) throws Exception {
+        Boat boat = boatService.findById(id);
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boat", boat);
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByBoat(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        additionalService.setBoat(boat);
+        additionalServiceService.save(additionalService);
+
+        return new ModelAndView("redirect:/boats/{id}/");
+    }
+
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/{id}/edit")
