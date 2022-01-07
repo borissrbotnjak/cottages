@@ -76,6 +76,14 @@ VALUES('VHF radio', 2);
 INSERT INTO NAVIGATION_EQUIPMENT(NAME, BOAT_ID)
 VALUES('fidhfinder', 3);
 
+/* FISHING EQUIPMENTS */
+INSERT INTO FISHING_EQUIPMENT(NAME, BOAT_ID)
+VALUES('fishing rods', 1);
+INSERT INTO FISHING_EQUIPMENT(NAME, BOAT_ID)
+VALUES('fishing chair', 1);
+INSERT INTO FISHING_EQUIPMENT(NAME, BOAT_ID)
+VALUES('fishing rods', 2);
+
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
                                          instructor_info, average_rating, subscriber_id)

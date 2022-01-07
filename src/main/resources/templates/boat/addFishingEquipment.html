@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Add navigation equipments</title>
+    <title>Add fishing equipments</title>
 </head>
 <body>
 
@@ -66,11 +66,11 @@
 
 
 <div class="container center-align lighten-5">
-    <h1>Add navigation equipments</h1>
-    <form th:action="@{/boats/__${boat.id}__/addNavigationEquipment/submit}" method="post">
+    <h1>Add fishing equipments</h1>
+    <form th:action="@{/boats/__${boat.id}__/addFishingEquipment/submit}" method="post">
 
         <br><label for="name">Name:</label>
-        <input id="name" type="text" th:field="*{navigationEquipment.name}"/>
+        <input id="name" type="text" th:field="*{fishingEquipment.name}"/>
 
         </br>
         <div class="form-group">
