@@ -96,4 +96,7 @@ public class Boat implements Serializable {
 
     @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();
+
+    @OneToMany(mappedBy = "boat", targetEntity = NavigationEquipment.class)
+    private Set<NavigationEquipment> navigationEquipments = new HashSet<>();
 }

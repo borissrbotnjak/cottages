@@ -261,8 +261,30 @@
               </form>
             </div>
 
+            <div class="row">
+              <form th:object="${navigationEquipment}" method="get">
+                <table>
+                  <thead>
+                  <tr>
+                    <th> Navigation Equipment </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:if="${boat.navigationEquipments.empty}">
+                    <td colspan="2"> No Navigation equipments</td>
+                  </tr>
+                  <tr th:each="navigationEquipment : ${boat.navigationEquipments}">
+                    <td><span th:text="${navigationEquipment.name}"> Navigation equipment </span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/addAdditionalService'}">Add additional services</a>
+            </br></br>
+            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/addNavigationEquipment'}">Add navigation equipments</a>
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/edit'}">Edit boat</a>
             </br></br>

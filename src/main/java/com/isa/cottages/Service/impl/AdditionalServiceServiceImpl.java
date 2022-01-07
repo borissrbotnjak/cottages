@@ -28,6 +28,12 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         this.boatService = boatService;
     }
 
+
+    @Override
+    public AdditionalService findOne(Long id) {
+        return additionalServiceRepository.getOne(id);
+    }
+
     @Override
     public AdditionalService save(AdditionalService additionalService) throws Exception {
         AdditionalService as = new AdditionalService();

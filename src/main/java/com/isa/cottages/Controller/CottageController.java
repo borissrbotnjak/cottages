@@ -3,7 +3,9 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Model.CottageReservation;
 import com.isa.cottages.Service.impl.AdditionalServiceServiceImpl;
+import com.isa.cottages.Service.impl.CottageReservationServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,17 @@ public class CottageController {
     private CottageServiceImpl cottageService;
     private UserServiceImpl userService;
     private AdditionalServiceServiceImpl additionalServiceService;
+    private CottageReservationServiceImpl reservationService;
 
     @Autowired
     public CottageController(CottageServiceImpl cottageService, UserServiceImpl userService,
-                             AdditionalServiceServiceImpl additionalServiceService) {
+                             AdditionalServiceServiceImpl additionalServiceService,
+                             CottageReservationServiceImpl reservationService
+    ) {
         this.cottageService = cottageService;
         this.userService = userService;
         this.additionalServiceService = additionalServiceService;
+        this.reservationService = reservationService;
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
@@ -149,7 +155,21 @@ public class CottageController {
     @GetMapping("/{id}")
     public ModelAndView showCottage(@PathVariable("id") Long id, Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        Cottage cottage = this.cottageService.findById(id);
         model.addAttribute("cottage", this.cottageService.findById(id));
+//        AdditionalService additionalService = additionalServiceService.findOne(aid);
+//        Collection<AdditionalService> additionalServices = additionalServiceService.findByCottage(id);
+//        model.addAttribute("additionalService", additionalService);
+//        model.addAttribute("additionalServices", additionalServices);
+//        model.addAttribute("aid", aid);
+//
+//        Double totalPrice = cottage.getTotalPrice();
+//        Double additionalServicePrice = 0.0;
+//        for(int i=0; i<3; i++) {
+//            additionalServicePrice += additionalService.getPrice();
+//        }
+//        totalPrice = cottage.getPrice() + additionalServicePrice;
+
         return new ModelAndView("cottage/cottage");
     }
 
@@ -379,5 +399,31 @@ public class CottageController {
         model.addAttribute("cottages", cottageService.findByCottageOwner(id));
 
         return new ModelAndView("cottage/reports/averageRating");
+    }
+
+
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{oid}/{rid}/incomes")
+    public ModelAndView reportOfIncomes (Model model, @PathVariable Long oid,
+                                         @PathVariable Long rid) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+        model.addAttribute("cottages", cottageService.findByCottageOwner(oid));
+//        Cottage cottage = cottageService.findById(cid);
+//        model.addAttribute("cottage", cottage);
+
+        List<CottageReservation> cottageReservations = reservationService.getOwnersPastReservations(oid);
+        CottageReservation cottageReservation = reservationService.findOne(rid);
+        Double price = cottageReservation.getPrice();
+        Integer numberOfReservations = cottageReservations.size();
+        model.addAttribute("numberOfReservations", numberOfReservations);
+
+        Double IncomePerDay;
+        Double IncomePerWeek;
+        Double IncomePerMonth;
+        Double IncomePerYear;
+
+        return new ModelAndView("cottage/reports/incomes");
     }
 }

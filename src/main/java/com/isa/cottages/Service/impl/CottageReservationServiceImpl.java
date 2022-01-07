@@ -29,6 +29,11 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public CottageReservation findOne(Long id) {
+        return reservationRepository.getOne(id);
+    }
+
+    @Override
     public List<CottageReservation> getAllOwnersReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
