@@ -10,6 +10,7 @@ public interface BoatReservationService {
 
     List<BoatReservation> getAllOwnersReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception;
+    List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersPastReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersFreeReservations(Long id) throws Exception;
     List<BoatReservation> getPastReservations() throws Exception;

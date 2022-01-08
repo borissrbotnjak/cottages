@@ -303,11 +303,17 @@
             </div>
 
             </br></br>
-            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/addAdditionalService'}">Add additional services</a>
-            </br></br>
-            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/addNavigationEquipment'}">Add navigation equipments</a>
-            </br></br>
-            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/addFishingEquipment'}">Add fishing equipments</a>
+            <div class="nav-item dropdown">
+              <a href="#" id="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add
+              </a>
+              <div sec:authorize="hasRole('BOAT_OWNER')" class="dropdown-menu" aria-labelledby="dropdown">
+                <a th:href="@{'/boats/__${boat.id}__/addAdditionalService'}">Add additional services</a><br/>
+                <a th:href="@{'/boats/__${boat.id}__/addNavigationEquipment'}">Add navigation equipments</a><br/>
+                <a th:href="@{'/boats/__${boat.id}__/addFishingEquipment'}">Add fishing equipments</a><br/>
+              </div>
+            </div>
+
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/edit'}">Edit boat</a>
             </br></br>

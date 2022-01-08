@@ -8,7 +8,7 @@ public interface CottageOwnerService {
 
     CottageOwner updateProfile(CottageOwner cottageOwner) throws Exception;
 
-    CottageOwner updateBasicInfo(CottageOwner cottageOwner, CottageOwner forUpdate);
-
     CottageOwner updateCottages(CottageOwner cottageOwner) throws Exception;
+
+    CottageOwner defineUnavailability(CottageOwner cottageOwner) throws Exception;
 }

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -17,19 +18,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Calendar</title>
+    <title>Report</title>
 </head>
 <body>
 
-
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
+        <a class="navbar-brand" href="#">Apoteka Jankovic</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
@@ -48,73 +47,72 @@
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
                     <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
                     <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
                 </li>
             </ul>
         </div>
     </nav>
-</div>
+</div> </br></br>
 
-    <div class="container">
-        </br>
-        <h2>My occupancy calendar</h2>
-        <div class="table">
-            </br>
-            <form th:action="@{'/boatReservations/viewCalendar/__${principal.id}__'}" method="get">
-                <input type="text" placeholder="Search client..." name="keyword"/>
-                <button type="submit" class="btn btn-dark mt-2">Search</button>
-                </br>
-            </form>
+<div class="container">
+    <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="week-tab-md" data-toggle="tab" href="#week-md" role="tab" aria-controls="week-md"
+               aria-selected="false">Per Week</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="month-tab-md" data-toggle="tab" href="#month-md" role="tab" aria-controls="month-md"
+               aria-selected="false">Per Month</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="year-tab-md" data-toggle="tab" href="#year-md" role="tab" aria-controls="year-md"
+               aria-selected="false">Per Year</a>
+        </li>
+    </ul>
+    <div class="tab-content card pt-5" id="myTabContentMD">
+        <div class="tab-pane fade" id="week-md" role="tabpanel" aria-labelledby="week-tab-md">
+        <div class="tab-pane fade" id="month-md" role="tabpanel" aria-labelledby="month-tab-md">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose month
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">January</a></li>
+                    <li><a href="#">February</a></li>
+                    <li><a href="#">March</a></li>
+                    <li><a href="#">April</a></li>
+                    <li><a href="#">May</a></li>
+                    <li><a href="#">Jun</a></li>
+                    <li><a href="#">July</a></li>
+                    <li><a href="#">August</a></li>
+                    <li><a href="#">September</a></li>
+                    <li><a href="#">October</a></li>
+                    <li><a href="#">November</a></li>
+                    <li><a href="#">December</a></li>
+                </ul>
+            </div>
             </br></br>
-            <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatOwner/__${principal.id}__/defineUnavailability'}">Define Unavailability</a>
+        </div>
+        <div class="tab-pane fade" id="year-md" role="tabpanel" aria-labelledby="year-tab-md">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose year
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">2021</a></li>
+                    <li><a href="#">2022</a></li>
+                </ul>
+            </div>
             </br></br>
-            <table width="90%">
-                <tr>
-                    <th>Boat</th>
-                    <th>Reservation start</th>
-                    <th>Client name</th>
-                    <th>Reserved?</th>
-                    <th>Discount?</th>
-                    <th></th>
-                </tr>
-                <tr th:each="boatReservation:${boatReservations}">
-                    <td th:text="*{boatReservation.boat.getBoatName()}"></td>
-                    <td th:text="*{boatReservation.startTime}"></td>
-                    <td th:text="*{boatReservation.client.getFullName()}"></td>
-                    <td th:text="${boatReservation.reserved}"></td>
-                    <td th:text="${boatReservation.discount}"></td>
-                    <td><a th:href="@{/client/profile/__${boatReservation.client.getId()}__}">View profile</a></td>
-                </tr>
-            </table>
-
-<!--            <table width="90%">-->
-<!--                <tr>-->
-<!--                    <th>Monday</th>-->
-<!--                    <th>Tuesday</th>-->
-<!--                    <th>Wednesday</th>-->
-<!--                    <th>Thursday</th>-->
-<!--                    <th>Friday</th>-->
-<!--                    <th>Saturday</th>-->
-<!--                    <th>Sunday</th>-->
-<!--                </tr>-->
-<!--                <tr th:each="boatReservation:${boatReservations}">-->
-<!--                    <td>-->
-<!--                        <span><p th:text="*{boatReservation.boat.getBoatName()}"></p></span>-->
-<!--                        <span><p th:text="*{boatReservation.startTime}"></p></span>-->
-<!--                        <span><p th:text="*{boatReservation.client.getFullName()}"></p></span>-->
-<!--                    </td>-->
-
-<!--                </tr>-->
-<!--            </table>-->
         </div>
     </div>
+</div>
+
 
 
 <!-- Optional JavaScript -->

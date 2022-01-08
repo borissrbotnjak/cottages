@@ -389,8 +389,18 @@ public class BoatReservationController {
         if (keyword != null) {
             model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("boatReservations", this.reservationService.getAllOwnersReservations(id));
+            model.addAttribute("boatReservations", this.reservationService.getAllOwnersUpcomingReservations(id));
         }
         return new ModelAndView("boat/calendar");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/attendance")
+    public ModelAndView reportOfAttendance (Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boats", boatService.findByBoatOwner(id));
+
+        return new ModelAndView("boat/reports/attendance");
     }
 }

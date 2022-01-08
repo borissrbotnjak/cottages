@@ -74,6 +74,9 @@ public class Boat implements Serializable {
     private Boolean reserved = false;
 
     @Column
+    private Boolean available = true;
+
+    @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime availableFrom;
 

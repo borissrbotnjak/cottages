@@ -1,5 +1,6 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.CottageOwnerRepository;
 import com.isa.cottages.Service.CottageOwnerService;
@@ -39,18 +40,6 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
         return forUpdate;
     }
 
-
-    @Override
-    public CottageOwner updateBasicInfo(CottageOwner cottageOwner, CottageOwner forUpdate) {
-        forUpdate.setCity(cottageOwner.getCity());
-        forUpdate.setState(cottageOwner.getState());
-        forUpdate.setResidence(cottageOwner.getResidence());
-        forUpdate.setFirstName(cottageOwner.getFirstName());
-        forUpdate.setLastName(cottageOwner.getLastName());
-
-        return this.cottageOwnerRepository.save(forUpdate);
-    }
-
     @Override
     public CottageOwner updateCottages(CottageOwner cottageOwner) throws Exception {
     CottageOwner forUpdate = this.findById(cottageOwner.getId());
@@ -59,5 +48,16 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
     forUpdate.setCottages(cottageOwner.getCottages());
     this.cottageOwnerRepository.save(forUpdate);
     return forUpdate;
+    }
+
+    @Override
+    public CottageOwner defineUnavailability(CottageOwner cottageOwner) throws Exception {
+        CottageOwner forUpdate = findById(cottageOwner.getId());
+
+        forUpdate.setUnavailableFrom(cottageOwner.getUnavailableFrom());
+        forUpdate.setUnavailableUntil(cottageOwner.getUnavailableUntil());
+
+        this.cottageOwnerRepository.save(forUpdate);
+        return forUpdate;
     }
 }

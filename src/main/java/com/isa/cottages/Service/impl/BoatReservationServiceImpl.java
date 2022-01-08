@@ -103,6 +103,20 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.getAllOwnersReservations(id);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res: all) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
     public List<BoatReservation> getOwnersPastReservations(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
 //        List<Boat> boat = this.boatService.findByCottageOwner(id);

@@ -1,5 +1,6 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Repository.BoatOwnerRepository;
 import com.isa.cottages.Service.BoatOwnerService;
@@ -44,6 +45,17 @@ public class BoatOwnerServiceImpl implements BoatOwnerService {
         forUpdate.setResidence(boatOwner.getResidence());
         forUpdate.setCity(boatOwner.getCity());
         forUpdate.setState(boatOwner.getState());
+
+        this.boatOwnerRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public BoatOwner defineUnavailability(BoatOwner boatOwner) throws Exception {
+        BoatOwner forUpdate = findById(boatOwner.getId());
+
+        forUpdate.setUnavailableFrom(boatOwner.getUnavailableFrom());
+        forUpdate.setUnavailableUntil(boatOwner.getUnavailableUntil());
 
         this.boatOwnerRepository.save(forUpdate);
         return forUpdate;

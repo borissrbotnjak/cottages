@@ -73,20 +73,26 @@
                 </br>
             </form>
             </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageOwner/__${principal.id}__/defineUnavailability'}">Define Unavailability</a>
+            </br></br>
             <table width="90%">
                 <tr>
                     <th>Cottage</th>
                     <th>Reservation start</th>
-<!--                    <th>Client name</th>-->
+                    <th>Reservation end</th>
+                    <th>Client name</th>
                     <th>Reserved?</th>
                     <th>Discount?</th>
+                    <th></th>
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="*{cottageReservation.cottage.getName()}"></td>
                     <td th:text="*{cottageReservation.startTime}"></td>
-<!--                    <td th:text="*{cottageReservation.client.getFullName()}"></td>-->
+                    <td th:text="*{cottageReservation.endTime}"></td>
+                    <td th:text="*{cottageReservation.client.getFullName()}"></td>
                     <td th:text="${cottageReservation.reserved}"></td>
                     <td th:text="${cottageReservation.discount}"></td>
+                    <td><a th:href="@{/client/profile/__${cottageReservation.client.getId()}__}">View profile</a></td>
                 </tr>
             </table>
         </div>

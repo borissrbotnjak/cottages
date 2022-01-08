@@ -257,7 +257,7 @@ public class CottageReservationController {
         if (keyword != null) {
             model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("cottageReservations", this.reservationService.getAllOwnersReservations(id));
+            model.addAttribute("cottageReservations", this.reservationService.getAllOwnersUpcomingReservations(id));
         }
         return new ModelAndView("cottage/calendar");
     }
