@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -38,6 +39,12 @@ public class FishingInstructorAdventure implements Serializable {
     @Column
     private Double averageRating = 0.0;
 
+    @Column
+    private Double price = 0.0;
+
+    @Column
+    private Integer numPersons;
+
     @ElementCollection
     private Set<Integer> ratings;
 
@@ -50,4 +57,7 @@ public class FishingInstructorAdventure implements Serializable {
 
     @ManyToMany(mappedBy = "instructorSubscriptions")
     private Set<Client> subscribers;
+
+    @OneToMany(targetEntity = AdditionalService.class, mappedBy = "adventure")
+    private Set<AdditionalService> additionalServices = new HashSet<>();
 }

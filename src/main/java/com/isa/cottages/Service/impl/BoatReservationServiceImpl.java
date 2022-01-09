@@ -1,5 +1,8 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Email.EmailSender;
+import com.isa.cottages.Email.EmailService;
+import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Repository.BoatReservationRepository;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,12 +25,15 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     private ClientServiceImpl clientService;
     private UserServiceImpl userService;
     private BoatReservationRepository reservationRepository;
+    private EmailService emailService;
 
     @Autowired
-    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService, BoatReservationRepository boatReservationRepository) {
+    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
+                                      BoatReservationRepository boatReservationRepository, EmailService emailService) {
         this.clientService = clientService;
         this.userService = userService;
         this.reservationRepository = boatReservationRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -88,35 +95,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     public List<BoatReservation> getAllUpcoming() {
         List<BoatReservation> all = this.reservationRepository.getAllReservations();
         List<BoatReservation> upcoming = new ArrayList<>();
-
+        // TODO: Check for availability period
         for (BoatReservation res : all) {
             if ((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
                 upcoming.add(res);
             }
         }
         return upcoming;
-    }
-
-    @Override
-    public List<BoatReservation> findAvailable_2(LocalDate startTime, LocalDate endTime) throws Exception {
-        List<BoatReservation> all = getAllUpcoming();
-        List<BoatReservation> available = new ArrayList<>();
-
-        /*for (BoatReservation res : all) {
-            if ((res.getStartTime().isAfter(ChronoLocalDateTime.from(startTime)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(endTime))) ||
-                    (res.getStartTime() == null && res.getEndTime() == null) ||
-                    (res.getStartTime().isBefore(ChronoLocalDateTime.from(startTime)) && res.getEndTime().isBefore(ChronoLocalDateTime.from(endTime)))) {
-                available.add(res);
-            }
-        }*/
-        for (BoatReservation res : all) {
-            if ((res.getStartDate().isAfter(startTime) && res.getEndDate().isAfter(endTime)) ||
-                    (res.getStartDate() == null && res.getEndDate() == null) ||
-                    (res.getStartDate().isBefore(startTime) && res.getEndDate().isBefore(endTime))) {
-                available.add(res);
-            }
-        }
-        return available;
     }
 
     @Override
@@ -130,6 +115,56 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Override
     public List<BoatReservation> findAllByClient(Client client) {
         return this.reservationRepository.findAllByClient(client.getId());
+    }
+
+    @Override
+    public BoatReservation save(BoatReservation reservation) {
+        return this.reservationRepository.save(reservation);
+    }
+
+    @Override
+    public void setDate(BoatReservation reservation) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(reservation.getStartDateString(), formatter);
+        LocalDate ed = LocalDate.parse(reservation.getEndDateString(), formatter);
+
+        reservation.setStartDate(sd);
+        reservation.setEndDate(ed);
+        reservation.setStartTime(sd.atStartOfDay());
+        reservation.setEndTime(ed.atStartOfDay());
+    }
+
+    @Override
+    public BoatReservation makeReservation(BoatReservation reservation, Boat boat) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+
+        reservation.setBoat(boat);
+        reservation.setBoatOwner(boat.getBoatOwner());
+        reservation.setClient(client);
+        reservation.setPrice(boat.getPrice());
+        reservation.CalculatePrice();
+        reservation.setReserved(true);
+        this.setDate(reservation);
+        this.save(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }
+
+    @Override
+    public void sendReservationMail(BoatReservation reservation) {
+        String to = reservation.getClient().getEmail();
+        String topic = "Boat Reservation";
+        String body = "You successfully made boat reservation. \n\n\n" +
+                "Boat:\t" + reservation.getBoat().getBoatName() + "\n" +
+                "Boat Owner:\t" + reservation.getBoatOwner().getFullName() + "\n" +
+                "Start date\t" + reservation.getStartDate().toString() + "\n" +
+                "End date\t" + reservation.getEndDate().toString() + "\n" +
+                "Price:\t" + reservation.getPrice().toString() + "\n";
+
+        this.emailService.sendEmail(to, body, topic);
     }
 
     @Override
@@ -161,4 +196,5 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         }
         return upcoming;
     }
+
 }

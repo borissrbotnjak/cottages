@@ -39,6 +39,9 @@ public class Cottage implements Serializable {
     private String image;
 
     @Column
+    private Integer numPersons;
+
+    @Column
     private Long numberOfRooms;
 
     @Column
@@ -46,10 +49,10 @@ public class Cottage implements Serializable {
 
     @Column
     private String rules;
-
+/*
     @Column
     private String additionalServices;
-
+*/
     @Column
     private Boolean reserved;
 
@@ -79,4 +82,8 @@ public class Cottage implements Serializable {
 
     @ManyToMany(mappedBy = "cottageSubscriptions")
     private Set<Client> subscribers;
+
+    @OneToMany(mappedBy = "cottage", targetEntity = AdditionalService.class)
+    private Set<AdditionalService> additionalServices = new HashSet<>();
+
 }

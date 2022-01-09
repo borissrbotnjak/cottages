@@ -3,8 +3,10 @@ package com.isa.cottages.Service;
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.Cottage;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface BoatService {
 
@@ -20,4 +22,8 @@ public interface BoatService {
     List<Boat> orderByRatingDesc();
     List<Boat> orderByAddressDesc();
     List<Boat> orderByAddressAsc();
+
+    Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons);
+
+    Set<Boat> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
 }

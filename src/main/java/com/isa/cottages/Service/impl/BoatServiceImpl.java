@@ -1,27 +1,27 @@
 package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Boat;
+import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Service.BoatService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class BoatServiceImpl implements BoatService {
 
     private BoatRepository boatRepository;
 
-    @Autowired
-    public BoatServiceImpl(BoatRepository boatRepository){
-        this.boatRepository = boatRepository;
-    }
+    private BoatReservationServiceImpl reservationService;
+
 
     @Override
     public Boat findById(Long id) throws Exception {
-        if (!this.boatRepository.findById(id).isPresent()) {
+        if (this.boatRepository.findById(id).isEmpty()) {
             throw new Exception("No such value(boat service)");
         }
         return this.boatRepository.findById(id).get();
@@ -62,4 +62,50 @@ public class BoatServiceImpl implements BoatService {
 
     @Override
     public List<Boat> orderByAddressAsc() { return this.boatRepository.findByOrderByResidenceAscCityAscStateAsc(); }
+
+    @Override
+    public Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons) {
+        if (boat.getNumPersons() >= numPersons) {
+            if (boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) {
+                if ((boat.getAvailableFrom().toLocalDate().isAfter(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate))
+                        || (boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isBefore(endDate))) {
+                    return true;
+                }
+            } else { return true; }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Set<Boat> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
+
+        Set<Boat> available = new HashSet<>();
+        Set<Boat> withReservation = new HashSet<>();
+        List<BoatReservation> reservations = this.reservationService.getAllUpcoming();
+
+        for (BoatReservation res : reservations) {
+            withReservation.add(res.getBoat());
+            if (this.boatAvailable(startDate, endDate, res.getBoat(), numOfPersons)) {
+                if ((res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
+                        (res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
+                        (res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
+                    available.add(res.getBoat());
+                }
+            }
+        }
+
+        // ako ne postoji rezervacija i dobar je kapacitet, dodaj
+        List<Boat> all = this.boatRepository.findAll();
+
+        HashSet<Boat> allSet = new HashSet<>(all);
+
+        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+
+        for (Boat b : woReservation) {
+            if (b.getNumPersons() >= numOfPersons) { available.add(b); }
+        }
+
+        return available;
+    }
 }

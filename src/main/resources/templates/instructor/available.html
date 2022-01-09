@@ -75,18 +75,32 @@
     <div id="cottages" class="table">
         </br>
         <h3>Upcoming Boat Reservations</h3>
-        </br>
+        </br><!--
+    <form th:action="@{'/boatReservations/chooseTime'}" method="get">
+      <input type="date" placeholder="Start Date" name="startTime" id="startTime"/>
+      <input type="date" placeholder="End Date" name="endTime" id="endTime"/>
+      <button type="submit" class="btn btn-dark mt-2">Search</button>
+      </br>
+    </form>-->
         </br></br></br>
         <table width="90%">
             <tr>
-                <th>Boat name:</th>
-                <th>Reservation start:</th>
-                <th>Reservation end:</th>
+                <th>Adventure name:</th>
+                <th>Instructor name:</th>
+                <th>Rating:</th>
+                <th>Price:</th>
+                <th>Address:</th>
+                <th></th>
+                <th></th>
             </tr>
-            <tr th:each="reservation:${reservations}">
-                <td th:text="${reservation.boat.getBoatName()}"></td>
-                <td th:text="${reservation.startTime}"></td>
-                <td th:text="${reservation.endTime}"></td>
+            <tr th:each="adventure:${adventures}">
+                <td th:text="${adventure.getAdventureName()}"></td>
+                <td th:text="${adventure.getInstructorInfo()}"></td>
+                <td th:text="${adventure.getAverageRating}"></td>
+                <td th:text="${adventure.getPrice()}"></td>
+                <td th:text="${adventure.getInstructor().getResidence()}"></td>
+                <td th:text="${adventure.getInstructor().getCity()}"></td>
+                <td th:text="${adventure.getInstructor().getState()}"></td>
             </tr>
         </table>
     </div>

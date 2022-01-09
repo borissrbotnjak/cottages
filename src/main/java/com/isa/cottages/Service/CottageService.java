@@ -2,8 +2,10 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Cottage;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface CottageService {
 
@@ -14,6 +16,7 @@ public interface CottageService {
 
     List<Cottage> findByKeyword(String keyword);
     List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception;
+    Set<Cottage> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
 
     Cottage defineAvailability(Cottage cottage) throws Exception;
 

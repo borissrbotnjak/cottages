@@ -1,9 +1,12 @@
 package com.isa.cottages.Model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -33,7 +36,18 @@ public class Boat implements Serializable {
     private String description;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableUntil;
+
+    @Column
     private Double price = 0.0;
+
+    @Column
+    private Integer numPersons;
 
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;
@@ -46,4 +60,7 @@ public class Boat implements Serializable {
 
     @ManyToMany(mappedBy = "boatSubscriptions")
     private Set<Client> subscribers;
+
+    @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
+    private Set<AdditionalService> additionalServices = new HashSet<>();
 }

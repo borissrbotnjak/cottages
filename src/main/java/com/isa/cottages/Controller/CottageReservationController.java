@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 @RestController
@@ -124,6 +126,51 @@ public class CottageReservationController {
         return new ModelAndView("cottage/report");
     }
 
+    @GetMapping("/chooseTime")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView chooseDate(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        model.addAttribute("startDate", LocalDate.now());
+        model.addAttribute("endDate", LocalDate.now());
+        model.addAttribute("numPersons", 0);
+
+        return new ModelAndView("reservationTime");
+    }
+
+    @PostMapping("/chooseTime")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView chooseTime(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                   @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("redirect:/cottageReservations/available");
+    }
+
+    @GetMapping("/available")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailable(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                      @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("boats", this.cottageService.findAllAvailable(sd, ed, numPersons));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        return new ModelAndView("cottage/available");
+    }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/writeReport/{id}/submit")
@@ -160,7 +207,7 @@ public class CottageReservationController {
         return new ModelAndView("cottage/makeCottageReservationWithClient");
     }
 
-        @GetMapping("/history")
+    @GetMapping("/history")
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());

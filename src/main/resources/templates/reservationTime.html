@@ -17,7 +17,7 @@
   <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
   <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
 
-  <title>Appointment</title>
+  <title>Reservation</title>
 </head>
 <body>
 
@@ -70,7 +70,7 @@
 
 <div class="container mySpace">
   <div class="center-align blue lighten-5">
-    <h1>Choose appointment time</h1> </br></br>
+    <h1>Choose reservation parameters</h1> </br></br>
     <form th:action="@{'/boatReservations/chooseTime'}" method="post">
       <div class="row">
         <div class="col-md-8">
@@ -78,7 +78,7 @@
             <div>
               <div>
                 <div class="form-group">
-                  <label for="date">Preferred start date</br></label>
+                  <label for="date">Start date</br></label>
                   <div class="input-group date" id="date1" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="startDate"
                            th:value="${startDate}" id="date" placeholder="format example: 12/12/2021"/>
@@ -88,13 +88,19 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="date2">Preferred end date</br></label>
+                  <label for="date2">End date</br></label>
                   <div class="input-group date" id="date2" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="endDate"
                            th:value="${endDate}" id="date_2" placeholder="format example: 12/12/2021"/>
                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                       <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
                     </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="date2">Number of persons</br></label>
+                  <div class="input-group" id="numberPersons">
+                    <input type="text" name="numPersons" th:value="${numPersons}" id="number" placeholder="4"/>
                   </div>
                 </div>
                 </br></br>

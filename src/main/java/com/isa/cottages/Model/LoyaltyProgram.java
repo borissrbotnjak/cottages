@@ -17,10 +17,7 @@ public class LoyaltyProgram implements Serializable {
     private Long id;
 
     @Column
-    private Double consultationPoints = 0.0;
-
-    @Column
-    private Double appointmentPoints = 0.0;
+    private Double reservationPoints = 0.0;
 
     @Column
     private Double regularPoints = 0.0;

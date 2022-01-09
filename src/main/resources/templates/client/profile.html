@@ -67,7 +67,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    <img src="https://kctherapy.com/wp-content/uploads/2019/09/default-user-avatar-300x293.png" alt=""/>
+                    <img src="https://cdn-icons-png.flaticon.com/128/1946/1946429.png" alt=""/>
                     <!--<div class="file btn btn-lg btn-primary">
                         Change Photo
                         <input type="file" name="file"/>
@@ -172,18 +172,10 @@
                     <div class="tab-pane fade" id="loyalty" role="tabpanel" aria-labelledby="loyalty-tab">
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Appointment points</label>
+                                <label>Reservation points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${user.getLoyaltyProgram().getAppointmentPoints()}"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Consultation points</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p th:text="${user.getLoyaltyProgram().getConsultationPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getReservationPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -234,6 +226,14 @@
                                 <p th:text="${user.getLoyaltyProgram().getDiscountGold()}"></p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Penalties</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${user.getLoyaltyProgram().getPenalties()}"></p>
+                            </div>
+                        </div>
                         </br>
                         </br>
                         <div class="row">
@@ -244,15 +244,6 @@
                             </h4>
                         </div>
                         </br>
-                        </br>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Penalties</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p th:text="${user.getLoyaltyProgram().getPenalties()}"></p>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
