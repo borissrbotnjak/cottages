@@ -20,6 +20,8 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
+VALUES ('Instruktor', 'Instruktorovic', 'instruktor@gmail.com', 'in', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Instructor', TRUE, 4);
 
 /* BOATS */
 INSERT INTO BOAT(boat_name, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, image_url, deleted, reserved, available_from, available_until)
@@ -65,12 +67,12 @@ INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, ad
 VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9, 5);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, instructor_id, IMAGE_URL)
-VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 6,
+VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 7,
         'https://www.slo-fishing.si/images/Fishing-for-beginners/River-fishing-best-world-locations.jpg');
 
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, instructor_id, IMAGE_URL)
-VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 6,
+VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 7,
         'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
 
 /* COTTAGE_RESERVATIONS-DISCOUNTS */

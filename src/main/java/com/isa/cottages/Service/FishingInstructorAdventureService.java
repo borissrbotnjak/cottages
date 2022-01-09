@@ -18,9 +18,11 @@ public interface FishingInstructorAdventureService {
 
     AdditionalService saveService(AdditionalService additionalService);
 
-    FishingInstructorAdventure updateAdventure(FishingInstructorAdventure adventure) throws Exception;
+    void updateAdventure(FishingInstructorAdventure adventure) throws Exception;
 
-    FishingInstructorAdventure saveAdventure(FishingInstructorAdventure FishingInstructorAdventure);
+    void removeAdventure(FishingInstructorAdventure adventure)throws Exception;
+
+    void saveAdventure(FishingInstructorAdventure FishingInstructorAdventure);
 
     List<FishingInstructorAdventure> sortByInstructorInfo(Boolean asc);
     List<FishingInstructorAdventure> findByOrderByAdventureNameAsc();
@@ -29,4 +31,6 @@ public interface FishingInstructorAdventureService {
     List<FishingInstructorAdventure> findByOrderByRatingDesc();
     List<FishingInstructorAdventure> findByOrderByAddressAsc();
     List<FishingInstructorAdventure> findByOrderByAddressDesc();
+
+    List<FishingInstructorAdventure> findByInstructor(Long id) throws Exception;
 }

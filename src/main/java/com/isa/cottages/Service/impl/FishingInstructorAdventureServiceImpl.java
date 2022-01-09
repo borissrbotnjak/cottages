@@ -12,18 +12,21 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class FishingInstructorAdventureServiceImpl implements FishingInstructorAdventureService {
 
     private final FishingInstructorAdventureRepository adventureRepository;
     private final AdditionalServiceRepository serviceRepository;
+    private final InstructorServiceImpl instructorService;
     private final UserServiceImpl userService;
 
     @Autowired
-    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, AdditionalServiceRepository serviceRepository, UserServiceImpl userService) {
+    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, AdditionalServiceRepository serviceRepository, InstructorServiceImpl instructorService, UserServiceImpl userService) {
         this.adventureRepository = adventureRepository;
         this.userService = userService;
+        this.instructorService=instructorService;
         this.serviceRepository = serviceRepository;
     }
 
@@ -45,7 +48,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         boolean updateOrDelete = true;
         FishingInstructorAdventure adventure = findById(id);
 
-        if (adventure.getReserved() != null) {
+        if (!adventure.getReserved()) {
             updateOrDelete = false;
         }
         return updateOrDelete;
@@ -67,7 +70,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     }
 
     @Override
-    public FishingInstructorAdventure updateAdventure(FishingInstructorAdventure adventure) throws Exception {
+    public void updateAdventure(FishingInstructorAdventure adventure) throws Exception {
         FishingInstructorAdventure forUpdate = findById(adventure.getId());
 
         forUpdate.setAdventureName(adventure.getAdventureName());
@@ -91,12 +94,22 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         forUpdate.setAvailableUntil(adventure.getAvailableUntil());
 
         this.adventureRepository.save(forUpdate);
-        return forUpdate;
     }
 
+    @Override
+    public void removeAdventure(FishingInstructorAdventure adventure)throws Exception{
+
+        Instructor instructor = adventure.getInstructor();
+        Set<FishingInstructorAdventure> adventures = instructor.getAdventures();
+        adventures.remove(adventure);
+        instructor.setAdventures(adventures);
+        adventure.setDeleted(true);
+        adventure.setInstructor(null);
+        this.instructorService.updateAdventures(instructor);
+    }
 
     @Override
-    public FishingInstructorAdventure saveAdventure(FishingInstructorAdventure fishingInstructorAdventure) {
+    public void saveAdventure(FishingInstructorAdventure fishingInstructorAdventure) {
         FishingInstructorAdventure fia = new FishingInstructorAdventure();
 
         fia.setAdventureName(fishingInstructorAdventure.getAdventureName());
@@ -115,7 +128,6 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         fia.setAverageRating(fishingInstructorAdventure.getAverageRating());
 
         this.adventureRepository.save(fia);
-        return fia;
     }
 
     @Override

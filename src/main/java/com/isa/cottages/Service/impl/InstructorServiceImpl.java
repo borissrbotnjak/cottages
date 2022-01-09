@@ -16,6 +16,13 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
+    public Instructor updateAdventures(Instructor instructor) throws Exception {
+        Instructor forUpdate = this.findById(instructor.getId());
+        forUpdate.setAdventures(instructor.getAdventures());
+        return this.instructorRepository.save(forUpdate);
+    }
+
+    @Override
     public Instructor findById(Long id) throws Exception {
         if (this.instructorRepository.findById(id).isEmpty()) {
             throw new Exception("No such value(Instructor service)");

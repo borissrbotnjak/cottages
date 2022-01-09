@@ -24,22 +24,18 @@ public class FishingInstructorAdventure implements Serializable {
     private String adventureName;
 
     @Column
-    @NonNull
     private String adventureResidence;
 
     @Column
-    @NonNull
     private String adventureCity;
 
     @Column
-    @NonNull
     private String adventureState;
 
     @Column
     private String adventureDescription;
 
     @Column
-    @NonNull
     private String maxClients;
 
     @Column
@@ -64,12 +60,10 @@ public class FishingInstructorAdventure implements Serializable {
     private Boolean deleted = false;
 
     @Column
-    @NonNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime availableFrom;
 
     @Column
-    @NonNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime availableUntil;
 
@@ -77,7 +71,6 @@ public class FishingInstructorAdventure implements Serializable {
     private String gearIncluded;
 
     @Column
-    @NonNull
     private Double price;
 
     @Column
@@ -97,10 +90,9 @@ public class FishingInstructorAdventure implements Serializable {
     private Set<AdventureReservation> adventureReservations = new HashSet<>();
 
     @OneToMany(mappedBy = "adventure", targetEntity = AdditionalService.class)
-    @NonNull
     private Set<AdditionalService> additionalServices = new HashSet<>();
 
     public FishingInstructorAdventure(String images) {
-        this.imageUrl = imageUrl;
+        this.imageUrl = images;
     }
 }
