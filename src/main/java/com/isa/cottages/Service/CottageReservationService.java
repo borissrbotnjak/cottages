@@ -2,14 +2,14 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.CottageReservation;
-import com.isa.cottages.Model.InstructorReservation;
 
 import java.util.List;
 
 public interface CottageReservationService {
 
+    CottageReservation findOne(Long id);
     List<CottageReservation> getAllOwnersReservations(Long id) throws Exception;
-
+    List<CottageReservation> getAllOwnersUpcomingReservations(Long id) throws Exception;
     List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception;
     List<CottageReservation> getOwnersPastReservations(Long id) throws Exception;
     List<CottageReservation> getUpcomingReservations() throws Exception;

@@ -29,10 +29,15 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public CottageReservation findOne(Long id) {
+        return reservationRepository.getOne(id);
+    }
+
+    @Override
     public List<CottageReservation> getAllOwnersReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
-        return this.reservationRepository.getAllReservedByOwner(id);
+        return this.reservationRepository.getAllOwnersReservations(id);
     }
 
     @Override
@@ -110,6 +115,20 @@ public class CottageReservationServiceImpl implements CottageReservationService 
             }
         }
         return pastOnes;
+    }
+
+    @Override
+    public List<CottageReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        List<CottageReservation> all = this.reservationRepository.getAllOwnersReservations(id);
+        List<CottageReservation> upcoming = new ArrayList<>();
+
+        for (CottageReservation res: all) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
     }
 
     @Override

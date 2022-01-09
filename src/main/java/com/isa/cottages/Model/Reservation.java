@@ -69,4 +69,10 @@ public class Reservation implements Serializable {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", nullable = true, referencedColumnName = "id")
     private Client client;
+
+    @ManyToOne(targetEntity = SystemAdministrator.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "admin_id", nullable = true, referencedColumnName = "id")
+    private SystemAdministrator admin;
+
+
 }

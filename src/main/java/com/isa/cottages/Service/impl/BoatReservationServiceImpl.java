@@ -31,6 +31,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> getAllOwnersReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.getAllOwnersReservations(id);
+    }
+
+    @Override
     public List<BoatReservation> findByOrderByStartTimeAsc() throws Exception {
         List<BoatReservation> pastOnes = getPastReservations();
         pastOnes.sort(Comparator.comparing(BoatReservation::getStartTime));
@@ -96,6 +103,20 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.getAllOwnersReservations(id);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res: all) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
     public List<BoatReservation> getOwnersPastReservations(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
 //        List<Boat> boat = this.boatService.findByCottageOwner(id);
@@ -108,6 +129,14 @@ public class BoatReservationServiceImpl implements BoatReservationService {
             }
         }
         return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> getOwnersFreeReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.getAllFreeReservationsByOwner(id);
+
+        return all;
     }
 
     @Override
@@ -152,6 +181,24 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setBoatOwner(boatReservation.getBoatOwner());
         br.setBoat(boatReservation.getBoat());
         br.setDiscount(true);
+        br.setDeleted(false);
+        br.setReserved(false);
+        br.setClient(boatReservation.getClient());
+        this.reservationRepository.save(br);
+
+        return br;
+    }
+
+    @Override
+    public BoatReservation saveReservation(BoatReservation boatReservation) {
+        BoatReservation br = new BoatReservation();
+
+        br.setNumPersons(boatReservation.getNumPersons());
+        br.setPrice(boatReservation.getPrice());
+        br.setAdditionalServices(boatReservation.getAdditionalServices());
+        br.setBoatOwner(boatReservation.getBoatOwner());
+        br.setBoat(boatReservation.getBoat());
+        br.setDiscount(false);
         br.setDeleted(false);
         br.setReserved(false);
         br.setClient(boatReservation.getClient());

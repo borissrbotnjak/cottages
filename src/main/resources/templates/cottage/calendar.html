@@ -40,6 +40,14 @@
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
@@ -54,7 +62,7 @@
     </nav>
 </div>
 
-    <div class="container center-aling">
+    <div class="container">
         </br>
         <h2>My occupancy calendar</h2>
         <div class="table">
@@ -65,16 +73,26 @@
                 </br>
             </form>
             </br></br>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageOwner/__${principal.id}__/defineUnavailability'}">Define Unavailability</a>
+            </br></br>
             <table width="90%">
                 <tr>
                     <th>Cottage</th>
                     <th>Reservation start</th>
+                    <th>Reservation end</th>
                     <th>Client name</th>
+                    <th>Reserved?</th>
+                    <th>Discount?</th>
+                    <th></th>
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="*{cottageReservation.cottage.getName()}"></td>
                     <td th:text="*{cottageReservation.startTime}"></td>
+                    <td th:text="*{cottageReservation.endTime}"></td>
                     <td th:text="*{cottageReservation.client.getFullName()}"></td>
+                    <td th:text="${cottageReservation.reserved}"></td>
+                    <td th:text="${cottageReservation.discount}"></td>
+                    <td><a th:href="@{/client/profile/__${cottageReservation.client.getId()}__}">View profile</a></td>
                 </tr>
             </table>
         </div>

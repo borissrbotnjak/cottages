@@ -2,7 +2,6 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
-import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,7 @@ public class BoatServiceImpl implements BoatService {
     public Boat saveBoat(Boat boat) {
         Boat b = new Boat();
         b.setBoatName(boat.getBoatName());
+        b.setEngineType(boat.getEngineType());
         b.setLength(boat.getLength());
         b.setEngineNumber(boat.getEngineNumber());
         b.setEnginePower(boat.getEnginePower());

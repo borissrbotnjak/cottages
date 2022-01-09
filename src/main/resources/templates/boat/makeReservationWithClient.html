@@ -31,10 +31,18 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/makeCottageReservationWithClient'}">Make reservation with client</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -53,6 +61,24 @@
 
 <div class="container center-align lighten-5">
     <h2>Make cottage reservation with client</h2>
+
+    <form th:action="@{/boatReservations/makeReservationWithClient}" method="post">
+
+        <br><label for="startTime">Start time:</label>
+        <input id="startTime" type="datetime-local" th:field="*{boatReservation.startTime}"/>
+
+        <br><label for="endTime">End Time:</label>
+        <input id="endTime" type="datetime-local" th:field="*{boatReservation.endTime}"/>
+
+        <br><label for="numPersons">Number Persons:</label>
+        <input id="numPersons" type="datetime-local" th:field="*{boatReservation.numPersons}"/>
+
+        <td>Free reservations</td>
+        <td><select name="freeReservation">
+            <option th:each="freeReservation :${freeReservations}"
+                    th:text="${freeRreservation}">
+        </select></td>
+    </form>
 </div>
 
 <!-- Optional JavaScript -->

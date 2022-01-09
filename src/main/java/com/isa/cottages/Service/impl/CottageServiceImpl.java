@@ -62,18 +62,6 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public AdditionalService saveAdditionalService(AdditionalService additionalService) throws Exception {
-        AdditionalService as = new AdditionalService();
-        as.setName(additionalService.getName());
-        as.setPrice(additionalService.getPrice());
-        as.setCottage(additionalService.getCottage());
-
-        this.additionalServiceRepository.save(as);
-
-        return as;
-    }
-
-    @Override
     public Collection<Cottage> findAll() {
         return this.cottageRepository.findAll();
     }

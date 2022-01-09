@@ -50,6 +50,14 @@
                     <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
                 </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
+                    </div>
+                </li>
                 <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allCottages'}">All Cottages</a>
                 </li>
@@ -113,7 +121,7 @@
             <td th:text="${cottageReservation.startTime}"></td>
             <td th:text="${cottageReservation.client.getFullName()}"></td>
             <td><a th:href="@{/client/profile/__${cottageReservation.client.getId()}__}">View profile</a></td>
-            <td><a th:href="@{/cottageReservations/writeReport/__${id}__}">Write report</a></td>
+            <td><a th:href="@{/cottageReservations/writeReport/__${cottageReservation.cottageOwner.getId()}__/__${cottageReservation.client.getId()}__/__${cottageReservation.admin.getId()}__}">Write report</a></td>
         </tr>
     </table>
     <table sec:authorize="hasRole('CLIENT')" width="90%">

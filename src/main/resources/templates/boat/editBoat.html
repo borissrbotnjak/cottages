@@ -35,8 +35,16 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-                            <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
-                            <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -59,6 +67,16 @@
 
             <br><label for="name">Name:</label>
             <input id="name" type="text" th:field="*{boat.boatName}"/>
+
+            <br>
+            <div class="form-group">
+                <label for="engineType">Choose engine type:</label>
+                <select class="form-control" id="engineType" th:field="*{boat.engineType}">
+                    <option name="engineType" th:each="engineTypeOpt : ${T(com.isa.cottages.Model.EngineType).values()}"
+                            th:value="${engineTypeOpt}"
+                            th:text="${engineTypeOpt.getDisplayName()}"></option>
+                </select>
+            </div>
 
             <br><label for="length">Length:</label>
             <input id="length" type="number" th:field="*{boat.length}"/>
@@ -95,6 +113,16 @@
 
             <br><label for="availableUntil">Available Until:</label>
             <input id="availableUntil" type="datetime-local" th:field="*{boat.availableUntil}"/>
+
+            <br>
+            <div class="form-group">
+                <label for="cancellationCondition">Choose cancellation condition:</label>
+                <select class="form-control" id="cancellationCondition" th:field="*{boat.cancellationCondition}">
+                    <option name="cancellationCondition" th:each="cancellationConditionOpt : ${T(com.isa.cottages.Model.CancellationCondition).values()}"
+                            th:value="${cancellationConditionOpt}"
+                            th:text="${cancellationConditionOpt.getDisplayName()}"></option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="customFile">Image</label>
