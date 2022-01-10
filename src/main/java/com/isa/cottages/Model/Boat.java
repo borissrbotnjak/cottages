@@ -6,9 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -59,7 +57,10 @@ public class Boat implements Serializable {
     private String rules;
 
     @Column
-    private Double price;
+    private Double price = 0.0;
+
+    @Column
+    private Integer numPersons;
 
     @Column
     private String description;

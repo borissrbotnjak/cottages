@@ -49,7 +49,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${user.id}__/averageRating'}> Average rating</a>
-<!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${user.id}__/incomes'}> Incomes</a>-->
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${user.id}__/chooseDate'}> Incomes</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${user.id}__/attendance'}> Attendance</a>
 
                     </div>

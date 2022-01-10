@@ -39,6 +39,9 @@ public class Cottage implements Serializable {
     private String imageUrl;
 
     @Column
+    private Integer numPersons;
+
+    @Column
     private Long numberOfRooms;
 
     @Column

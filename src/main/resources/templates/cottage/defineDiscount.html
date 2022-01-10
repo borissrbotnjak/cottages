@@ -45,6 +45,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -76,11 +77,8 @@
             <br><label for="numPersons">Max number of persons:</label>
             <input id="numPersons" type="number" th:field="*{numPersons}"/>
 
-            <br><label for="additionalServices">Additional services:</label>
-            <input id="additionalServices" type="text" th:field="*{additionalServices}"/>
-
-            <br><label for="price">Price:</label>
-            <input type="number" id="price" th:field="*{price}"/>
+            <br><label for="discountPrice">Price:</label>
+            <input type="number" id="discountPrice" th:field="*{discountPrice}"/>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>

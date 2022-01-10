@@ -1,6 +1,5 @@
 package com.isa.cottages.Service;
 
-import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Cottage;
 
 import java.util.Collection;

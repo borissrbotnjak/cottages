@@ -6,6 +6,7 @@ import com.isa.cottages.Service.CottageReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -138,7 +139,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
         cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
         cr.setNumPersons(cottageReservation.getNumPersons());
-        cr.setPrice(cottageReservation.getPrice());
+        cr.setDiscountPrice(cottageReservation.getDiscountPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
         cr.setCottageOwner(cottageReservation.getCottageOwner());
         cr.setCottage(cottageReservation.getCottage());
@@ -210,4 +211,16 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 //    public List<CottageReservation> findPastOwnersReservationsByClient(Long id, String keyword) throws Exception {
 //
 //    }
+@Override
+public Set<CottageReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+    List<CottageReservation> reservations = this.getOwnersPastReservations(id);
+    Set<CottageReservation> filtered = new HashSet<>();
+
+    for(CottageReservation res: reservations){
+        if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+            filtered.add(res);
+        }
+    }
+    return filtered;
+}
 }

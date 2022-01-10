@@ -46,6 +46,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -79,6 +80,7 @@
                 <tr>
                     <th>Boat</th>
                     <th>Reservation start</th>
+                    <th>Reservation end</th>
                     <th>Client name</th>
                     <th>Reserved?</th>
                     <th>Discount?</th>
@@ -87,32 +89,13 @@
                 <tr th:each="boatReservation:${boatReservations}">
                     <td th:text="*{boatReservation.boat.getBoatName()}"></td>
                     <td th:text="*{boatReservation.startTime}"></td>
+                    <td th:text="*{boatReservation.endTime}"></td>
                     <td th:text="*{boatReservation.client.getFullName()}"></td>
                     <td th:text="${boatReservation.reserved}"></td>
                     <td th:text="${boatReservation.discount}"></td>
                     <td><a th:href="@{/client/profile/__${boatReservation.client.getId()}__}">View profile</a></td>
                 </tr>
             </table>
-
-<!--            <table width="90%">-->
-<!--                <tr>-->
-<!--                    <th>Monday</th>-->
-<!--                    <th>Tuesday</th>-->
-<!--                    <th>Wednesday</th>-->
-<!--                    <th>Thursday</th>-->
-<!--                    <th>Friday</th>-->
-<!--                    <th>Saturday</th>-->
-<!--                    <th>Sunday</th>-->
-<!--                </tr>-->
-<!--                <tr th:each="boatReservation:${boatReservations}">-->
-<!--                    <td>-->
-<!--                        <span><p th:text="*{boatReservation.boat.getBoatName()}"></p></span>-->
-<!--                        <span><p th:text="*{boatReservation.startTime}"></p></span>-->
-<!--                        <span><p th:text="*{boatReservation.client.getFullName()}"></p></span>-->
-<!--                    </td>-->
-
-<!--                </tr>-->
-<!--            </table>-->
         </div>
     </div>
 
