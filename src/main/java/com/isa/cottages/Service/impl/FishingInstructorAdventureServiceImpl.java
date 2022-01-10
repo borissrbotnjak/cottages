@@ -48,7 +48,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         boolean updateOrDelete = true;
         FishingInstructorAdventure adventure = findById(id);
 
-        if (!adventure.getReserved()) {
+        if (adventure.getReserved()) {
             updateOrDelete = false;
         }
         return updateOrDelete;

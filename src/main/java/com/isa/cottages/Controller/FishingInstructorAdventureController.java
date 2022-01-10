@@ -119,9 +119,9 @@ public class FishingInstructorAdventureController {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Remove adventure get/post">
+    //<editor-fold desc="Remove adventure get">
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @GetMapping(value = "/allMyAdventures/{id}/remove/{cid}")
+    @GetMapping(value = "/allMyAdventures/{id}/remove/{aid}")
     public ModelAndView removeAdventure(@PathVariable Long aid,
                                       @PathVariable Long id,
                                       Model model) throws Exception {
@@ -131,7 +131,7 @@ public class FishingInstructorAdventureController {
         FishingInstructorAdventure adventure = this.adventureService.findById(aid);
 
         if (!this.adventureService.canUpdateOrDelete(aid)) {
-            return new ModelAndView("adventure/errors/errorDeleteAdventure");
+            return new ModelAndView("instructor/errors/errorDeleteAdventure");
         } else {
             this.adventureService.removeAdventure(adventure);
             adventure.setDeleted(true);
@@ -140,7 +140,44 @@ public class FishingInstructorAdventureController {
         Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(aid);
         model.addAttribute("adventures", adventures);
 
-        return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
+        return new ModelAndView("redirect:/adventures/allMyAdventures/{id}" );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Update adventure post">
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping("{id}/edit/submit")
+    public ModelAndView edit(@PathVariable Long id, Model model, FishingInstructorAdventure adventure,
+                             @RequestParam("image") MultipartFile image) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+
+        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
+        model.addAttribute("adventures", adventures);
+
+        adventure.setInstructor((Instructor) this.userService.getUserFromPrincipal());
+
+        Path path = Paths.get("C:\\Users\\User\\IdeaProjects\\cottages\\uploads");
+        try {
+            InputStream inputStream = image.getInputStream();
+            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
+                    StandardCopyOption.REPLACE_EXISTING);
+            adventure.setImageUrl(image.getOriginalFilename().toLowerCase());
+            model.addAttribute("adventure", adventure);
+            model.addAttribute("imageUrl", adventure.getImageUrl());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boolean update = this.adventureService.canUpdateOrDelete(id);
+        if (!update) {
+            return new ModelAndView("instructor/errors/errorDeleteAdventure");
+        } else {
+            this.adventureService.updateAdventure(adventure);
+        }
+
+        return new ModelAndView("redirect:/adventures/{id}/");
     }
     //</editor-fold>
 
@@ -194,29 +231,6 @@ public class FishingInstructorAdventureController {
         model.addAttribute("principal", instructor);
         return new ModelAndView("redirect:/adventures/allMyAdventures/{id}/");
     }
-
-
-    @PreAuthorize("hasRole('INSTRUCTOR')")
-    @PostMapping("/{id}/edit/submit")
-    public ModelAndView edit(@PathVariable Long id, Model model, FishingInstructorAdventure adventure) throws Exception {
-        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", instructor);
-
-        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
-        model.addAttribute("adventures", adventures);
-
-        adventure.setInstructor((Instructor) this.userService.getUserFromPrincipal());
-
-        boolean update = this.adventureService.canUpdateOrDelete(id);
-        if (!update) {
-            return new ModelAndView("instructor/errors/errorUpdateAdventure");
-        } else {
-            this.adventureService.updateAdventure(adventure);
-        }
-
-        return new ModelAndView("redirect:/adventures/{id}/");
-    }
-
 
     @GetMapping("/allAdventures/sortByInstructorNameDesc")
     public ModelAndView sortByInstructorNameDesc(Model model) {

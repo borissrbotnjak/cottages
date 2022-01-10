@@ -66,13 +66,18 @@ INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, ad
                                          adventure_description, instructor_info, average_rating, subscriber_id)
 VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9, 5);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, IMAGE_URL)
-VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 7,
+                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved, IMAGE_URL)
+VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 7, false,
         'https://www.slo-fishing.si/images/Fishing-for-beginners/River-fishing-best-world-locations.jpg');
 
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, IMAGE_URL)
-VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 7,
+                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL)
+VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 7, false,
+        'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
+
+INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
+                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL)
+VALUES ('debil', 'Pecanje na Juznoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.5, 7, true,
         'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
 
 /* COTTAGE_RESERVATIONS-DISCOUNTS */
