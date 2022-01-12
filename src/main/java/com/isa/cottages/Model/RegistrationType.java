@@ -3,7 +3,7 @@ package com.isa.cottages.Model;
 public enum RegistrationType {
     COTTAGE_ADVERTISER("Cottage Advertiser"),
     BOAT_ADVERTISER("Boat Advertiser"),
-    INSTRUCTOR("Instructor");
+    ADVENTURE_ADVERTISER("Adventure Advertiser");
 
     private final String displayName;
 

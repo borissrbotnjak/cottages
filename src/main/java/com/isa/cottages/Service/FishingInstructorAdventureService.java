@@ -12,6 +12,8 @@ public interface FishingInstructorAdventureService {
 
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
+    FishingInstructorAdventure defineAvailability(FishingInstructorAdventure adventure) throws Exception;
+
     List<FishingInstructorAdventure> findByKeyword(String keyword);
 
     List<AdditionalService> findServicesByAdventure(FishingInstructorAdventure adventure);

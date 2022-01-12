@@ -50,7 +50,7 @@ public class FishingInstructorAdventureController {
     @GetMapping("/{id}")
     public ModelAndView showAdventure(@PathVariable("id") Long id, Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
-        model.addAttribute("instructor", this.adventureService.findById(id));
+        model.addAttribute("adventure", this.adventureService.findById(id));
         return new ModelAndView("instructor/instructor");
     }
 
@@ -123,8 +123,8 @@ public class FishingInstructorAdventureController {
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping(value = "/allMyAdventures/{id}/remove/{aid}")
     public ModelAndView removeAdventure(@PathVariable Long aid,
-                                      @PathVariable Long id,
-                                      Model model) throws Exception {
+                                        @PathVariable Long id,
+                                        Model model) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
 
@@ -140,15 +140,15 @@ public class FishingInstructorAdventureController {
         Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(aid);
         model.addAttribute("adventures", adventures);
 
-        return new ModelAndView("redirect:/adventures/allMyAdventures/{id}" );
+        return new ModelAndView("redirect:/adventures/allMyAdventures/{id}");
     }
     //</editor-fold>
 
-    //<editor-fold desc="Update adventure post">
+    //<editor-fold desc="Update adventure post/get">
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping("{id}/edit/submit")
-    public ModelAndView edit(@PathVariable Long id, Model model, FishingInstructorAdventure adventure,
-                             @RequestParam("image") MultipartFile image) throws Exception {
+    public ModelAndView updateAdventure(@PathVariable Long id, Model model, FishingInstructorAdventure adventure,
+                                        @RequestParam("image") MultipartFile image) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
 
@@ -165,21 +165,17 @@ public class FishingInstructorAdventureController {
             adventure.setImageUrl(image.getOriginalFilename().toLowerCase());
             model.addAttribute("adventure", adventure);
             model.addAttribute("imageUrl", adventure.getImageUrl());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         boolean update = this.adventureService.canUpdateOrDelete(id);
         if (!update) {
             return new ModelAndView("instructor/errors/errorDeleteAdventure");
         } else {
             this.adventureService.updateAdventure(adventure);
         }
-
         return new ModelAndView("redirect:/adventures/{id}/");
     }
-    //</editor-fold>
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping("/allMyAdventures/{id}/editAdventure/{aid}")
@@ -195,6 +191,40 @@ public class FishingInstructorAdventureController {
         model.addAttribute("adventures", adventures);
         return new ModelAndView("instructor/editAdventure");
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Define availability get/post">
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @GetMapping("/{id}/defineAvailability")
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+
+        FishingInstructorAdventure adventure = this.adventureService.findById(id);
+        model.addAttribute("adventure", adventure);
+
+        return new ModelAndView("instructor/defineAvailability");
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping("/{id}/defineAvailability/submit")
+    public ModelAndView defineAvailability(Model model, @PathVariable Long id, @ModelAttribute FishingInstructorAdventure adventure) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+
+        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
+        model.addAttribute("adventures", adventures);
+        model.addAttribute("adventure", adventure);
+
+        adventure.setInstructor((Instructor) this.userService.getUserFromPrincipal());
+        this.adventureService.defineAvailability(adventure);
+
+        return new ModelAndView("redirect:/adventures/{id}/");
+    }
+    //</editor-fold>
+
+
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping("/allMyAdventures/{id}/additionalServices/{aid}")
@@ -283,6 +313,7 @@ public class FishingInstructorAdventureController {
             return new ModelAndView("home");
         }
     }
+
     @GetMapping("/allAdventures/sortByRatingDesc")
     public ModelAndView sortByRatingDesc(Model model) {
         List<FishingInstructorAdventure> sorted = this.adventureService.findByOrderByRatingDesc();

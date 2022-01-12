@@ -102,10 +102,10 @@ public class AuthenticationController {
             userService.saveBoatOwner(userRequest);
             user.setUserRole(UserRole.BOAT_OWNER);
             user.setRegistrationType(RegistrationType.BOAT_ADVERTISER);
-        } else if (userRequest.getRegistrationType() == RegistrationType.INSTRUCTOR) {
+        } else if (userRequest.getRegistrationType() == RegistrationType.ADVENTURE_ADVERTISER) {
             userService.saveInstructor(userRequest);
             user.setUserRole(UserRole.INSTRUCTOR);
-            user.setRegistrationType(RegistrationType.INSTRUCTOR);
+            user.setRegistrationType(RegistrationType.ADVENTURE_ADVERTISER);
         }
         return new ModelAndView("redirect:/auth/home");
     }

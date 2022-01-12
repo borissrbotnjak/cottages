@@ -28,4 +28,8 @@ public class Report implements Serializable {
     @ManyToOne(targetEntity = CottageOwner.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "cottage_owner_id")
     private CottageOwner cottageOwner;
+
+    @ManyToOne(targetEntity = Instructor.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "instructor_id")
+    private Instructor instructor;
 }

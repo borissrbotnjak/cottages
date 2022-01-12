@@ -45,13 +45,21 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
 
     @Override
     public Boolean canUpdateOrDelete(Long id) throws Exception {
-        boolean updateOrDelete = true;
         FishingInstructorAdventure adventure = findById(id);
 
-        if (adventure.getReserved()) {
-            updateOrDelete = false;
-        }
-        return updateOrDelete;
+        return !adventure.getReserved();
+    }
+
+    @Override
+    public FishingInstructorAdventure defineAvailability(FishingInstructorAdventure adventure) throws Exception
+    {
+        FishingInstructorAdventure forUpdate = findById(adventure.getId());
+
+        forUpdate.setAvailableFrom(adventure.getAvailableFrom());
+        forUpdate.setAvailableUntil(adventure.getAvailableUntil());
+
+        this.adventureRepository.save(forUpdate);
+        return forUpdate;
     }
 
     @Override
