@@ -134,6 +134,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setEndTime(ed.atStartOfDay());
     }
 
+    public double getDiscountPrice(Double price) throws Exception {
+        return (1 - this.clientService.getDiscount()) * price;
+    }
+
     @Override
     public BoatReservation makeReservation(BoatReservation reservation, Boat boat) throws Exception {
         Client client = (Client) this.userService.getUserFromPrincipal();
@@ -157,11 +161,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         String to = reservation.getClient().getEmail();
         String topic = "Boat Reservation";
         String body = "You successfully made boat reservation. \n\n\n" +
-                "Boat:\t" + reservation.getBoat().getBoatName() + "\n" +
-                "Boat Owner:\t" + reservation.getBoatOwner().getFullName() + "\n" +
-                "Start date\t" + reservation.getStartDate().toString() + "\n" +
-                "End date\t" + reservation.getEndDate().toString() + "\n" +
-                "Price:\t" + reservation.getPrice().toString() + "\n";
+                "\tBoat:\t" + reservation.getBoat().getBoatName() + "\n" +
+                "\tBoat Owner:\t" + reservation.getBoatOwner().getFullName() + "\n\n" +
+                "\tStart date\t" + reservation.getStartDate().atStartOfDay().toLocalDate().toString() + "\n" +
+                "\tEnd date\t" + reservation.getEndDate().atStartOfDay().toLocalDate().toString() + "\n\n" +
+                "\tAddress:\t" + reservation.getBoatOwner().getResidence() + ", " +
+                reservation.getBoatOwner().getState() + "\n" +
+                "\tPrice:\t" + reservation.getPrice().toString() + "0  RSD\n";
 
         this.emailService.sendEmail(to, body, topic);
     }

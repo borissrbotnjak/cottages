@@ -10,10 +10,24 @@ import org.springframework.stereotype.Service;
 public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
+    private UserServiceImpl userService;
+    private LoyaltyProgramServiceImpl loyaltyService;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, UserServiceImpl userService) {
+        this.userService = userService;
         this.clientRepository = clientRepository;
+    }
+
+    @Override
+    public Client getCurrentClient() throws Exception {
+        return this.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+    }
+
+    @Override
+    public Double getDiscount() throws Exception {
+        Client client = this.getCurrentClient();
+        return this.loyaltyService.calculateClientDiscount(client);
     }
 
     @Override

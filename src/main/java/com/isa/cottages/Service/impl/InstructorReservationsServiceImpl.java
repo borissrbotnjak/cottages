@@ -154,12 +154,13 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
         String to = reservation.getClient().getEmail();
         String topic = "Fishing instructor Reservation";
         String body = "You successfully made Fishing instructor reservation. \n\n\n" +
-                "Instructor:\t" + reservation.getFishingInstructorAdventure().getInstructor().getFullName() + "\n" +
-                "Instructor:\t" + reservation.getFishingInstructorAdventure().getInstructorInfo() + "\n" +
-                "Adventure:\t" + reservation.getFishingInstructorAdventure().getAdventureName() + "\n" +
-                "Start date\t" + reservation.getStartDate().toString() + "\n" +
-                "End date\t" + reservation.getEndDate().toString() + "\n" +
-                "Price:\t" + reservation.getPrice().toString() + "\n";
+                "\tInstructor:\t" + reservation.getFishingInstructorAdventure().getInstructor().getFullName() + "\n" +
+                "\tAdventure:\t" + reservation.getFishingInstructorAdventure().getAdventureName() + "\n\n" +
+                "\tStart date\t" + reservation.getStartDate().atStartOfDay().toLocalDate().toString() + "\n" +
+                "\tEnd date\t" + reservation.getEndDate().atStartOfDay().toLocalDate().toString() + "\n\n" +
+                "\tAddress:\t" + reservation.getFishingInstructorAdventure().getInstructor().getResidence() + ", " +
+                reservation.getFishingInstructorAdventure().getInstructor().getState() + "\n" +
+                "\tPrice:\t" + reservation.getPrice().toString() + "0  RSD\n";
 
         this.emailService.sendEmail(to, body, topic);
     }

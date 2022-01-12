@@ -130,11 +130,13 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         String to = reservation.getClient().getEmail();
         String topic = "Cottage Reservation";
         String body = "You successfully made cottage reservation. \n\n\n" +
-                "Cottage:\t" + reservation.getCottage().getName() + "\n" +
-                "Cottage Owner:\t" + reservation.getCottageOwner().getFullName() + "\n" +
-                "Start date\t" + reservation.getStartDate().toString() + "\n" +
-                "End date\t" + reservation.getEndDate().toString() + "\n" +
-                "Price:\t" + reservation.getPrice().toString() + "\n";
+                "\tCottage:\t" + reservation.getCottage().getName() + "\n" +
+                "\tCottage Owner:\t" + reservation.getCottageOwner().getFullName() + "\n\n" +
+                "\tStart date\t" + reservation.getStartDate().atStartOfDay().toLocalDate().toString() + "\n" +
+                "\tEnd date\t" + reservation.getEndDate().atStartOfDay().toLocalDate().toString() + "\n\n" +
+                "\tAddress:\t" + reservation.getCottageOwner().getResidence() + ", " +
+                reservation.getCottageOwner().getState() + "\n" +
+                "\tPrice:\t" + reservation.getPrice().toString() + "0  RSD\n";
 
         this.emailService.sendEmail(to, body, topic);
     }

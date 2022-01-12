@@ -29,8 +29,6 @@ VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija
 
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id)
 VALUES ('Klijent', 'Klijent', 'borissrbotnjak@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 2);
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id)
-VALUES ('Kiki', 'Car', 'kristinagolubov@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 3);
 
 INSERT INTO USERS(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Instruktor', 'Otasevic', 'instruktor@gmail.com', 'in', 'Nova Varos', 'Nova Varos', 'Srbija', '0641234567', 'Instructor', TRUE, 4);
@@ -66,16 +64,16 @@ VALUES('Vikendica 4', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE, 7
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
                                          instructor_info, average_rating, available_from, available_until, num_persons, instructor_id, price)
-VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2, '04/11/2021 12:00', '05/11/2021 12:00', 9, 9, 7800);
+VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2, '04/11/2021 12:00', '05/11/2021 12:00', 9, 8, 7800);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
                                          instructor_info, average_rating, num_persons, instructor_id, price)
-VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9, 6, 10, 6000);
+VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9, 6, 9, 6000);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, available_from, available_until, num_persons, instructor_id, price)
-VALUES ('Predrag Maric', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, '04/11/2021 12:00', '05/11/2021 12:00', 9, 11, 7550);
+VALUES ('Predrag Maric', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, '04/11/2021 12:00', '05/11/2021 12:00', 9, 10, 7550);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, num_persons, instructor_id, price)
-VALUES ('Maja Simovic', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 4, 12, 12000);
+VALUES ('Maja Simovic', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 4, 11, 12000);
 
 
 /* ADDITIONAL SERVICES */
