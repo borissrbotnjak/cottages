@@ -1,6 +1,5 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Repository.BoatOwnerRepository;
 import com.isa.cottages.Service.BoatOwnerService;

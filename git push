@@ -1,0 +1,73 @@
+Owners can view report of incomes. Changes in sql file. Minor fixes.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch owner
+# Your branch is up to date with 'origin/owner'.
+#
+# Changes to be committed:
+#	modified:   src/main/java/com/isa/cottages/Controller/BoatController.java
+#	modified:   src/main/java/com/isa/cottages/Controller/BoatReservationController.java
+#	modified:   src/main/java/com/isa/cottages/Controller/CottageReservationController.java
+#	modified:   src/main/java/com/isa/cottages/Model/AdditionalService.java
+#	modified:   src/main/java/com/isa/cottages/Model/Boat.java
+#	modified:   src/main/java/com/isa/cottages/Model/BoatReservation.java
+#	modified:   src/main/java/com/isa/cottages/Model/Cottage.java
+#	modified:   src/main/java/com/isa/cottages/Model/Reservation.java
+#	modified:   src/main/java/com/isa/cottages/Repository/BoatReservationRepository.java
+#	modified:   src/main/java/com/isa/cottages/Service/BoatReservationService.java
+#	modified:   src/main/java/com/isa/cottages/Service/BoatService.java
+#	modified:   src/main/java/com/isa/cottages/Service/CottageReservationService.java
+#	modified:   src/main/java/com/isa/cottages/Service/CottageService.java
+#	modified:   src/main/java/com/isa/cottages/Service/impl/BoatOwnerServiceImpl.java
+#	modified:   src/main/java/com/isa/cottages/Service/impl/BoatReservationServiceImpl.java
+#	modified:   src/main/java/com/isa/cottages/Service/impl/CottageReservationServiceImpl.java
+#	modified:   src/main/resources/data-postgres.sql
+#	modified:   src/main/resources/templates/boat/addAdditionalService.html
+#	modified:   src/main/resources/templates/boat/addBoatForm.html
+#	modified:   src/main/resources/templates/boat/addFishingEquipment.html
+#	modified:   src/main/resources/templates/boat/addNavigationEquipment.html
+#	modified:   src/main/resources/templates/boat/allDiscounts.html
+#	modified:   src/main/resources/templates/boat/allMyBoats.html
+#	modified:   src/main/resources/templates/boat/boat.html
+#	modified:   src/main/resources/templates/boat/calendar.html
+#	modified:   src/main/resources/templates/boat/defineAvailability.html
+#	modified:   src/main/resources/templates/boat/defineDiscount.html
+#	modified:   src/main/resources/templates/boat/defineUnavailability.html
+#	modified:   src/main/resources/templates/boat/editBoat.html
+#	modified:   src/main/resources/templates/boat/editProfile.html
+#	modified:   src/main/resources/templates/boat/errors/errorDeleteBoat.html
+#	modified:   src/main/resources/templates/boat/errors/errorUpdateBoat.html
+#	deleted:    src/main/resources/templates/boat/makeReservationWithClient.html
+#	modified:   src/main/resources/templates/boat/myHome.html
+#	modified:   src/main/resources/templates/boat/profile.html
+#	modified:   src/main/resources/templates/boat/report.html
+#	modified:   src/main/resources/templates/boat/reports/attendance.html
+#	modified:   src/main/resources/templates/boat/reports/averageRating.html
+#	new file:   src/main/resources/templates/boat/reports/chooseDate.html
+#	modified:   src/main/resources/templates/boat/reports/incomes.html
+#	modified:   src/main/resources/templates/boat/reservationHistory.html
+#	modified:   src/main/resources/templates/boat/upcomingReservations.html
+#	modified:   src/main/resources/templates/cottage/addAdditionalService.html
+#	modified:   src/main/resources/templates/cottage/addCottageForm.html
+#	modified:   src/main/resources/templates/cottage/allDiscounts.html
+#	modified:   src/main/resources/templates/cottage/allMyCottages.html
+#	modified:   src/main/resources/templates/cottage/calendar.html
+#	modified:   src/main/resources/templates/cottage/cottage.html
+#	modified:   src/main/resources/templates/cottage/defineAvailability.html
+#	modified:   src/main/resources/templates/cottage/defineDiscount.html
+#	modified:   src/main/resources/templates/cottage/defineUnavailability.html
+#	modified:   src/main/resources/templates/cottage/editCottage.html
+#	modified:   src/main/resources/templates/cottage/editProfile.html
+#	modified:   src/main/resources/templates/cottage/errors/errorDeleteCottage.html
+#	modified:   src/main/resources/templates/cottage/errors/errorUpdateCottage.html
+#	modified:   src/main/resources/templates/cottage/myHome.html
+#	modified:   src/main/resources/templates/cottage/pastReservations.html
+#	modified:   src/main/resources/templates/cottage/profile.html
+#	modified:   src/main/resources/templates/cottage/report.html
+#	modified:   src/main/resources/templates/cottage/reports/averageRating.html
+#	renamed:    src/main/resources/templates/cottage/makeReservationWithClient.html -> src/main/resources/templates/cottage/reports/chooseDate.html
+#	modified:   src/main/resources/templates/cottage/reports/incomes.html
+#	modified:   src/main/resources/templates/cottage/upcomingReservations.html
+#

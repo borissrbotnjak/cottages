@@ -9,8 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/cottageReservations")
@@ -114,8 +117,8 @@ public class CottageReservationController {
         this.reservationService.saveDiscount(cottageReservation);
 
         Cottage cottage = cottageService.findById(id);
-        Client client = (Client) userService.findByEmail(email);
-        if (cottage.getSubscriber() != null && client.getBoatSubscriptions() != null) {
+        Client client = cottage.getSubscriber();
+        if (cottage.getSubscriber() != null && client.getCottageSubscriptions() != null) {
             emailSender.send(client.getEmail(), email(client.getFirstName(), "New discount for cottage ", cottage.getName(), " published."));
         }
         return new ModelAndView("redirect:/cottageReservations/allDiscounts/{id}/");
@@ -353,5 +356,59 @@ public class CottageReservationController {
         model.addAttribute("cottageReservations", this.reservationService.findByOrderByPriceDesc());
 
         return new ModelAndView("cottage/pastReservations");
+    }
+
+    @GetMapping("/{id}/chooseDate")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView chooseDate(Model model, @PathVariable Long id) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        model.addAttribute("startDate", LocalDate.now());
+        model.addAttribute("endDate", LocalDate.now());
+
+        return new ModelAndView("cottage/reports/chooseDate");
+    }
+
+    @PostMapping("/{id}/chooseDate2")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView chooseDate2(Model model, @PathVariable Long id,
+                                    @RequestParam("startDate") String startDate,
+                                    @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        return new ModelAndView("redirect:/cottageReservations/{id}/incomes");
+    }
+
+    @GetMapping("/{id}/incomes")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView incomes (Model model, @RequestParam("startDate") String startDate,
+                                 @RequestParam("endDate") String endDate, @PathVariable Long id) throws Exception{
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        Set<CottageReservation> reservations = this.reservationService.findByInterval(ld1, ld2, id);
+        model.addAttribute("reservations", reservations);
+
+        Double income = 0.0;
+        for(CottageReservation cr: reservations) {
+            income += cr.getPrice();
+        }
+        model.addAttribute("income", income);
+
+        return new ModelAndView("cottage/reports/incomes");
+
     }
 }

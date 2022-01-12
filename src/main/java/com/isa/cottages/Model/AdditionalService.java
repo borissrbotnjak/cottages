@@ -37,4 +37,8 @@ public class AdditionalService implements Serializable {
     @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="boat_id", nullable=true, referencedColumnName = "id")
     private Boat boat;
+
+    @ManyToOne(targetEntity = Reservation.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reservation_id", nullable = true, referencedColumnName = "id")
+    private Reservation reservation;
 }

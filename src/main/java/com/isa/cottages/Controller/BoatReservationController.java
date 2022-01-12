@@ -14,8 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/boatReservations")
@@ -402,5 +406,59 @@ public class BoatReservationController {
         model.addAttribute("boats", boatService.findByBoatOwner(id));
 
         return new ModelAndView("boat/reports/attendance");
+    }
+
+    @GetMapping("/{id}/chooseDate")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    public ModelAndView chooseDate(Model model, @PathVariable Long id) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        model.addAttribute("startDate", LocalDate.now());
+        model.addAttribute("endDate", LocalDate.now());
+
+        return new ModelAndView("boat/reports/chooseDate");
+    }
+
+    @PostMapping("/{id}/chooseDate2")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    public ModelAndView chooseDate2(Model model, @PathVariable Long id,
+                                    @RequestParam("startDate") String startDate,
+                                    @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        return new ModelAndView("redirect:/boatReservations/{id}/incomes");
+    }
+
+    @GetMapping("/{id}/incomes")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    public ModelAndView incomes (Model model, @RequestParam("startDate") String startDate,
+                                 @RequestParam("endDate") String endDate, @PathVariable Long id) throws Exception{
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        Set<BoatReservation> reservations = this.reservationService.findByInterval(ld1, ld2, id);
+        model.addAttribute("reservations", reservations);
+
+        Double income = 0.0;
+        for(BoatReservation br: reservations) {
+            income += br.getPrice();
+        }
+        model.addAttribute("income", income);
+
+        return new ModelAndView("boat/reports/incomes");
+
     }
 }

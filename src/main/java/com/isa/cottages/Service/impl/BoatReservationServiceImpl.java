@@ -6,11 +6,9 @@ import com.isa.cottages.Service.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class BoatReservationServiceImpl implements BoatReservationService {
@@ -28,6 +26,14 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         this.userService = userService;
         this.reservationRepository = boatReservationRepository;
         this.boatService = boatService;
+    }
+
+    @Override
+    public BoatReservation findById(Long id) throws Exception{
+        if (this.reservationRepository.findById(id).isEmpty()) {
+            throw new Exception("No such value(BoatReservation service)");
+        }
+        return this.reservationRepository.findById(id).get();
     }
 
     @Override
@@ -109,7 +115,8 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         List<BoatReservation> upcoming = new ArrayList<>();
 
         for (BoatReservation res: all) {
-            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+            if((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
+            && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
                 upcoming.add(res);
             }
         }
@@ -124,7 +131,8 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         List<BoatReservation> pastOnes = new ArrayList<>();
 
         for (BoatReservation res:all) {
-            if((res.getStartTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now()))
+            && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
                 pastOnes.add(res);
             }
         }
@@ -176,7 +184,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setDiscountAvailableFrom(boatReservation.getDiscountAvailableFrom());
         br.setDiscountAvailableUntil(boatReservation.getDiscountAvailableUntil());
         br.setNumPersons(boatReservation.getNumPersons());
-        br.setPrice(boatReservation.getPrice());
+        br.setDiscountPrice(boatReservation.getDiscountPrice());
         br.setAdditionalServices(boatReservation.getAdditionalServices());
         br.setBoatOwner(boatReservation.getBoatOwner());
         br.setBoat(boatReservation.getBoat());
@@ -226,6 +234,21 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
 
         return this.reservationRepository.findClient(keyword);
+    }
+
+    @Override
+    public Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+        List<BoatReservation> reservations = this.getOwnersPastReservations(id);
+        Set<BoatReservation> filtered = new HashSet<>();
+        Double income = 0.0;
+
+        for(BoatReservation res: reservations){
+            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+              filtered.add(res);
+            }
+        }
+
+        return filtered;
     }
 }
 

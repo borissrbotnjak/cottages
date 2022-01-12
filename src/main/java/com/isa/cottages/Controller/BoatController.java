@@ -432,5 +432,4 @@ public class BoatController {
 
         return new ModelAndView("boat/reports/averageRating");
     }
-
 }

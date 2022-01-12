@@ -1,9 +1,12 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.CottageReservation;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public interface CottageReservationService {
 
@@ -20,6 +23,7 @@ public interface CottageReservationService {
 
     List<CottageReservation> findAllByClient(Client client);
     List<CottageReservation> findClient(String keyword) throws Exception;
+    Set<CottageReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 
     List<CottageReservation> findByOrderByStartTimeAsc() throws Exception;
     List<CottageReservation> findByOrderByStartTimeDesc() throws Exception;
