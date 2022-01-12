@@ -17,6 +17,7 @@ public interface CottageService {
     List<Cottage> findByKeyword(String keyword);
     List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception;
     Set<Cottage> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
+    List<Cottage> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
     Cottage defineAvailability(Cottage cottage) throws Exception;
 
@@ -25,6 +26,7 @@ public interface CottageService {
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 
     Boolean canUpdateOrDelete(Long id) throws Exception;
+    Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons);
 
     List<Cottage> orderByNameDesc();
     List<Cottage> orderByNameAsc();

@@ -1,6 +1,8 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Model.*;
+import com.isa.cottages.Model.Boat;
+import com.isa.cottages.Model.BoatReservation;
+import com.isa.cottages.Model.Client;
 import com.isa.cottages.Service.impl.AdditionalServiceServiceImpl;
 import com.isa.cottages.Service.impl.BoatReservationServiceImpl;
 import com.isa.cottages.Service.impl.BoatServiceImpl;
@@ -11,15 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/boatReservations")
@@ -61,8 +56,9 @@ public class BoatReservationController {
         model.addAttribute("startDate", LocalDate.now());
         model.addAttribute("endDate", LocalDate.now());
         model.addAttribute("numPersons", 1);
+        model.addAttribute("res_type", "boat");
 
-        return new ModelAndView("reservationTime");
+        return new ModelAndView("reservation/chooseTime");
     }
 
     @PostMapping("/chooseTime")
@@ -104,6 +100,82 @@ public class BoatReservationController {
         return new ModelAndView("boat/available");
     }
 
+    @GetMapping("/available/byPriceAsc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByPriceAsc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                      @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("boats", this.boatService.findAllAvailableSorted(sd, ed, numPersons, true, true, false));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("boat/available");
+    }
+
+    @GetMapping("/available/byPriceDesc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByPriceDesc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                      @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("boats", this.boatService.findAllAvailableSorted(sd, ed, numPersons, false, true, false));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("boat/available");
+    }
+
+    @GetMapping("/available/byRatingAsc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByRatingAsc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                      @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("boats", this.boatService.findAllAvailableSorted(sd, ed, numPersons, true, false, true));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("boat/available");
+    }
+
+    @GetMapping("/available/byRatingDesc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByRatingDesc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("boats", this.boatService.findAllAvailableSorted(sd, ed, numPersons, false, false, true));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("boat/available");
+    }
+
     @GetMapping("/select/{id}")
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView selectEntity(@PathVariable Long id, Model model, @RequestParam("startDate") String startDate,
@@ -113,15 +185,17 @@ public class BoatReservationController {
 
         model.addAttribute("principal", client);
         model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
-        model.addAttribute("boat_id", id);
+        model.addAttribute("entity_id", id);
         model.addAttribute("startDateString", startDate);
         model.addAttribute("endDateString", endDate);
         model.addAttribute("numPersons", numPersons);
 
         BoatReservation reservation = new BoatReservation();
         model.addAttribute("reservation", reservation);
+        model.addAttribute("res_type", "boat");
+        model.addAttribute("sLength", this.boatService.findById(id).getAdditionalServices().size());
 
-        return new ModelAndView("boat/additionalServices");
+        return new ModelAndView("additionalServices");
     }
 
     @PostMapping("/done/{boatId}")
@@ -141,7 +215,7 @@ public class BoatReservationController {
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView reservationConfirmation(Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
-        return new ModelAndView("reservationSuccess");
+        return new ModelAndView("reservation/success");
     }
 
     @GetMapping("/history")

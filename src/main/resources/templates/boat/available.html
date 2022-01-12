@@ -86,12 +86,44 @@
     <table width="90%">
       <tr>
         <th>Boat name:</th>
-        <th>Rating:</th>
-        <th>Price:</th>
+        <th>
+          Rating
+        </th>
+        <th>
+          Price
+        </th>
         <th>Address:</th>
         <th></th>
         <th></th>
         <th></th>
+        <th>
+          <form th:action="${'/boatReservations/available/byPriceAsc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Price Ascending</button>
+          </form>
+          <form th:action="${'/boatReservations/available/byPriceDesc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Price Descending</button>
+          </form>
+        </th>
+        <th>
+          <form th:action="${'/boatReservations/available/byRatingAsc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+          </form>
+          <form th:action="${'/boatReservations/available/byRatingDesc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Rating Descending</button>
+          </form>
+        </th>
       </tr>
       <tr th:each="boat:${boats}">
         <td th:text="${boat.getBoatName()}"></td>
@@ -100,7 +132,7 @@
         <td th:text="${boat.getBoatOwner().getResidence()}"></td>
         <td th:text="${boat.getBoatOwner().getCity()}"></td>
         <td th:text="${boat.getBoatOwner().getState()}"></td>
-        <td th:text="${boat.getBoatOwner().getState()}"></td>
+        <td></td>
         <td>
           <form th:action="@{'/boatReservations/select/__${boat.id}__'}">
             <input type="text" name="endDate" th:value="${endDate}" hidden/>
@@ -109,6 +141,7 @@
             <button type="submit" class="btn btn">Select</button>
           </form>
         </td>
+        <td></td>
         <!-- <td><a th:href="${'/boatReservations/select/' + boat.getId()}">Select</a></td> -->
       </tr>
     </table>

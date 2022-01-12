@@ -74,7 +74,7 @@
 <div class="container">
   <div id="cottages" class="table">
     </br>
-    <h3>Upcoming Boat Reservations</h3>
+    <h3></h3>
     </br><!--
     <form th:action="@{'/boatReservations/chooseTime'}" method="get">
       <input type="date" placeholder="Start Date" name="startTime" id="startTime"/>
@@ -85,22 +85,68 @@
     </br></br></br>
     <table width="90%">
       <tr>
-        <th>Cottage name:</th>
-        <th>Rating:</th>
-        <th>Price:</th>
+        <th>Boat name:</th>
+        <th>
+          Rating
+        </th>
+        <th>
+          Price
+        </th>
         <th>Address:</th>
         <th></th>
         <th></th>
+        <th></th>
+        <th>
+          <form th:action="${'/cottageReservations/available/byPriceAsc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Price Ascending</button>
+          </form>
+          <form th:action="${'/cottageReservations/available/byPriceDesc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Price Descending</button>
+          </form>
+        </th>
+        <th>
+          <form th:action="${'/cottageReservations/available/byRatingAsc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+          </form>
+          <form th:action="${'/cottageReservations/available/byRatingDesc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Rating Descending</button>
+          </form>
+        </th>
       </tr>
       <tr th:each="cottage:${cottages}">
         <td th:text="${cottage.getName()}"></td>
         <td th:text="${cottage.getAverageRating}"></td>
         <td th:text="${cottage.getPrice()}"></td>
-        <td th:text="${cottage.getOwner().getResidence()}"></td>
-        <td th:text="${cottage.getOwner().getCity()}"></td>
-        <td th:text="${cottage.getOwner().getState()}"></td>
+        <td th:text="${cottage.getCottageOwner().getResidence()}"></td>
+        <td th:text="${cottage.getCottageOwner().getCity()}"></td>
+        <td th:text="${cottage.getCottageOwner().getState()}"></td>
+        <td></td>
+        <td>
+          <form th:action="@{'/cottageReservations/select/__${cottage.id}__'}">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Select</button>
+          </form>
+        </td>
+        <td></td>
+        <!-- <td><a th:href="${'/boatReservations/select/' + boat.getId()}">Select</a></td> -->
       </tr>
     </table>
+
+
   </div>
 </div>
 

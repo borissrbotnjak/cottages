@@ -19,10 +19,11 @@ public class CottageServiceImpl implements CottageService {
 
     @Autowired
     public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
-                              CottageOwnerServiceImpl cottageOwnerService){
+                              CottageOwnerServiceImpl cottageOwnerService, CottageReservationServiceImpl reservationService){
         this.cottageRepository = cottageRepository;
         this.userService = userService;
         this.cottageOwnerService = cottageOwnerService;
+        this.reservationService = reservationService;
     }
 
     @Override
@@ -183,18 +184,34 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
+    public Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons) {
+        if (cottage.getNumPersons() >= numPersons) {
+            if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
+                if ((cottage.getAvailableFrom().toLocalDate().isAfter(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))
+                        || (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isBefore(endDate))) {
+                    return true;
+                }
+            } else { return true; }
+        }
+
+        return false;
+    }
+
+    @Override
     public Set<Cottage> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
-        // List<Boat> available = new ArrayList<>();
+
         Set<Cottage> available = new HashSet<>();
         Set<Cottage> withReservation = new HashSet<>();
-        List<CottageReservation> reservations = this.reservationService.getUpcomingReservations();
+        List<CottageReservation> reservations = this.reservationService.getAllUpcoming();
 
         for (CottageReservation res : reservations) {
             withReservation.add(res.getCottage());
-            if ((res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
-                    (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
-                    (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
-                available.add(res.getCottage());
+            if (this.cottageAvailable(startDate, endDate, res.getCottage(), numOfPersons)) {
+                if ((res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
+                        (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
+                        (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
+                    available.add(res.getCottage());
+                }
             }
         }
 
@@ -206,6 +223,27 @@ public class CottageServiceImpl implements CottageService {
 
         for (Cottage b : woReservation) {
             if (b.getNumPersons() >= numOfPersons) { available.add(b); }
+        }
+
+        return available;
+    }
+
+    @Override
+    public List<Cottage> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception {
+        Set<Cottage> set = this.findAllAvailable(startDate, endDate, numOfPersons);
+        List<Cottage> available = new ArrayList<>(set);
+
+        if (asc && price && !rating) {
+            available.sort(Comparator.comparing(Cottage::getPrice));
+        }
+        else if (asc && !price && rating) {
+            available.sort(Comparator.comparing(Cottage::getAverageRating));
+        }
+        else if (!asc && price && !rating) {
+            available.sort(Comparator.comparing(Cottage::getPrice).reversed());
+        }
+        else if (!asc && !price && rating) {
+            available.sort(Comparator.comparing(Cottage::getAverageRating).reversed());
         }
 
         return available;

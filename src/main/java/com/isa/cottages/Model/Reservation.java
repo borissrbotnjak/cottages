@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,7 +71,7 @@ public class Reservation implements Serializable {
     private Double discountPrice = 0.0;
 
     @Column
-    private Double duration;
+    private Integer duration = 1;
 
     @Column
     private Boolean reserved = false;
@@ -95,8 +96,14 @@ public class Reservation implements Serializable {
         for (AdditionalService s : this.additionalServices) {
             sum += s.getPrice();
         }
-
+        // this.calculateDuration();
         this.price = sum;
     }
 
+    // TODO:
+/*
+    public void calculateDuration() {
+        this.duration = ChronoUnit.DAYS.between( this.startDate , this.endDate ).intValue();
+    }
+*/
 }

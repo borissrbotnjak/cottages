@@ -70,6 +70,9 @@ public class Cottage implements Serializable {
     @Column
     private Double averageRating = 0.0;
 
+    @Column
+    private Double price = 0.0;
+
     @ElementCollection
     private Set<Integer> ratings;
 

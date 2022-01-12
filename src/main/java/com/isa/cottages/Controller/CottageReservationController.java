@@ -19,7 +19,7 @@ import java.util.Collection;
 @RequestMapping("/cottageReservations")
 public class CottageReservationController {
 
-    private CottageReservationServiceImpl reservationService;
+    private final CottageReservationServiceImpl reservationService;
     private UserServiceImpl userService;
     private CottageServiceImpl cottageService;
     private ReportServiceImpl reportService;
@@ -133,9 +133,10 @@ public class CottageReservationController {
 
         model.addAttribute("startDate", LocalDate.now());
         model.addAttribute("endDate", LocalDate.now());
-        model.addAttribute("numPersons", 0);
+        model.addAttribute("numPersons", 1);
+        model.addAttribute("res_type", "cottage");
 
-        return new ModelAndView("reservationTime");
+        return new ModelAndView("reservation/chooseTime");
     }
 
     @PostMapping("/chooseTime")
@@ -167,8 +168,130 @@ public class CottageReservationController {
         LocalDate sd = LocalDate.parse(startDate, formatter);
         LocalDate ed = LocalDate.parse(endDate, formatter);
 
-        model.addAttribute("boats", this.cottageService.findAllAvailable(sd, ed, numPersons));
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("cottages", this.cottageService.findAllAvailable(sd, ed, numPersons));
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        return new ModelAndView("cottage/available");
+    }
+
+    @GetMapping("/select/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView selectEntity(@PathVariable Long id, Model model, @RequestParam("startDate") String startDate,
+                                     @RequestParam("endDate") String endDate, @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        Client client = (Client) this.userService.getUserFromPrincipal();
+
+        model.addAttribute("principal", client);
+        model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
+        model.addAttribute("entity_id", id);
+        model.addAttribute("startDateString", startDate);
+        model.addAttribute("endDateString", endDate);
+        model.addAttribute("numPersons", numPersons);
+
+        CottageReservation reservation = new CottageReservation();
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("res_type", "cottage");
+        model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
+
+        return new ModelAndView("additionalServices");
+    }
+
+    @PostMapping("/done/{cottageId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView makeReservation(@PathVariable("cottageId") Long cottageId, Model model, @ModelAttribute("reservation") CottageReservation reservation) throws Exception {
+
+        Cottage cottage = this.cottageService.findById(cottageId);
+        CottageReservation res = this.reservationService.makeReservation(reservation, cottage);
+
+        model.addAttribute("reservation", res);
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("redirect:/cottageReservations/success");
+    }
+
+    @GetMapping("/success")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView reservationConfirmation(Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        return new ModelAndView("reservation/success");
+    }
+
+    @GetMapping("/available/byPriceAsc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByPriceAsc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                      @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("cottages", this.cottageService.findAllAvailableSorted(sd, ed, numPersons, true, true, false));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("cottage/available");
+    }
+
+    @GetMapping("/available/byPriceDesc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByPriceDesc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("cottages", this.cottageService.findAllAvailableSorted(sd, ed, numPersons, false, true, false));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("cottage/available");
+    }
+
+    @GetMapping("/available/byRatingAsc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByRatingAsc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("cottages", this.cottageService.findAllAvailableSorted(sd, ed, numPersons, true, false, true));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("cottage/available");
+    }
+
+    @GetMapping("/available/byRatingDesc")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showAvailableSortedByRatingDesc(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                                                        @RequestParam("numPersons") Integer numPersons) throws Exception {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("cottages", this.cottageService.findAllAvailableSorted(sd, ed, numPersons, false, false, true));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
         return new ModelAndView("cottage/available");
     }
 

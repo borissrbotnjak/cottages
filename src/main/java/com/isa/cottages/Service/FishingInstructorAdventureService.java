@@ -1,6 +1,5 @@
 package com.isa.cottages.Service;
 
-import com.isa.cottages.Model.Cottage;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 
 import java.time.LocalDate;
@@ -12,7 +11,10 @@ public interface FishingInstructorAdventureService {
     List<FishingInstructorAdventure> findAll();
     List<FishingInstructorAdventure> findByKeyword(String keyword);
 
-    List<FishingInstructorAdventure> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, String by) throws Exception;
+    Set<FishingInstructorAdventure> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
+    List<FishingInstructorAdventure> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
+
+    Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor, int numPersons);
 
     FishingInstructorAdventure saveAdventure(FishingInstructorAdventure FishingInstructorAdventure);
 

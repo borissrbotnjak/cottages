@@ -1,6 +1,5 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Email.EmailSender;
 import com.isa.cottages.Email.EmailService;
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatReservation;

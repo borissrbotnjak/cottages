@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -104,6 +105,27 @@ public class BoatServiceImpl implements BoatService {
 
         for (Boat b : woReservation) {
             if (b.getNumPersons() >= numOfPersons) { available.add(b); }
+        }
+
+        return available;
+    }
+
+    @Override
+    public List<Boat> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception {
+        Set<Boat> set = this.findAllAvailable(startDate, endDate, numOfPersons);
+        List<Boat> available = new ArrayList<>(set);
+
+        if (asc && price && !rating) {
+            available.sort(Comparator.comparing(Boat::getPrice));
+        }
+        else if (asc && !price && rating) {
+            available.sort(Comparator.comparing(Boat::getAverageRating));
+        }
+        else if (!asc && price && !rating) {
+            available.sort(Comparator.comparing(Boat::getPrice).reversed());
+        }
+        else if (!asc && !price && rating) {
+            available.sort(Comparator.comparing(Boat::getAverageRating).reversed());
         }
 
         return available;
