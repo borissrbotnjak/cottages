@@ -16,8 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/user")
 public class UserController {
 
-    private UserServiceImpl userService;
-    private BoatOwnerServiceImpl boatOwnerService;
+    private final UserServiceImpl userService;
+    private final BoatOwnerServiceImpl boatOwnerService;
 
     @Autowired
     public UserController(UserServiceImpl userService, BoatOwnerServiceImpl boatOwnerService) {
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("/index")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT', 'INSTRUCTOR')")
     public ModelAndView indexPage(Authentication auth) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
         if (u.getEnabled() == false) {
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT', 'INTRUCTOR')")
     public User loadById(@PathVariable Long userId) {
         return this.userService.findById(userId);
     }
@@ -69,12 +69,19 @@ public class UserController {
 
     @GetMapping("/client/home")
     @PreAuthorize("hasRole('CLIENT')")
-    public ModelAndView clientHome(Model model, Authentication auth){
+    public ModelAndView clientHome(Model model, Authentication auth) {
         Client client = (Client) userService.findByEmail(auth.getName());
         model.addAttribute("user", client);
         return new ModelAndView("client/home");
     }
 
+    @GetMapping("/instructor/home")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ModelAndView instructorHome(Model model, Authentication auth) {
+        Instructor instructor = (Instructor) userService.findByEmail(auth.getName());
+        model.addAttribute("user", instructor);
+        return new ModelAndView("instructor/instructorHome");//todo napravi ovu stranicu
+    }
 
     @GetMapping("/registerSystemAdmin")
     @PreAuthorize("hasRole('SYS_ADMIN')")
