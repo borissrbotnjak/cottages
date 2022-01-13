@@ -1,33 +1,39 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.AdditionalService;
-import com.isa.cottages.Model.Cottage;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Repository.AdditionalServiceRepository;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.CottageRepository;
 import com.isa.cottages.Service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
 public class CottageServiceImpl implements CottageService {
 
+    @Autowired
     private CottageRepository cottageRepository;
-    private UserServiceImpl userService;
-    private CottageOwnerServiceImpl cottageOwnerService;
-    private AdditionalServiceRepository additionalServiceRepository;
 
     @Autowired
-    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
-                              CottageOwnerServiceImpl cottageOwnerService,
-                              AdditionalServiceRepository additionalServiceRepository){
-        this.cottageRepository = cottageRepository;
-        this.userService = userService;
-        this.cottageOwnerService = cottageOwnerService;
-        this.additionalServiceRepository = additionalServiceRepository;
-    }
+    private UserServiceImpl userService;
+
+    @Autowired
+    private CottageOwnerServiceImpl cottageOwnerService;
+
+    @Autowired
+    private CottageReservationServiceImpl reservationService;
+
+//    @Autowired
+//    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
+//                              CottageOwnerServiceImpl cottageOwnerService,
+//                              CottageReservationServiceImpl reservationService){
+//        this.cottageRepository = cottageRepository;
+//        this.userService = userService;
+//        this.cottageOwnerService = cottageOwnerService;
+//        this.reservationService = reservationService;
+//
+//    }
 
     @Override
     public Cottage findById(Long id) throws Exception {
@@ -48,6 +54,7 @@ public class CottageServiceImpl implements CottageService {
         c.setNumberOfBeds(cottage.getNumberOfBeds());
         c.setRules(cottage.getRules());
         c.setPromotionalDescription(cottage.getPromotionalDescription());
+        c.setPrice(cottage.getPrice());
         c.setAdditionalServices(cottage.getAdditionalServices());
         c.setCottageOwner(cottage.getCottageOwner());
         c.setAvailableFrom(cottage.getAvailableFrom());
@@ -110,6 +117,7 @@ public class CottageServiceImpl implements CottageService {
         forUpdate.setNumberOfBeds(cottage.getNumberOfBeds());
         forUpdate.setRules(cottage.getRules());
         forUpdate.setPromotionalDescription(cottage.getPromotionalDescription());
+        forUpdate.setPrice(cottage.getPrice());
         forUpdate.setAdditionalServices(cottage.getAdditionalServices());
         forUpdate.setCottageOwner(cottage.getCottageOwner());
         forUpdate.setAvailableFrom(cottage.getAvailableFrom());
@@ -186,6 +194,52 @@ public class CottageServiceImpl implements CottageService {
     @Override
     public List<Cottage> orderByAddressAsc() {
         return this.cottageRepository.findByOrderByResidenceAscCityAscStateAsc();
+    }
+
+    @Override
+    public Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons) {
+        if (cottage.getNumPersons() >= numPersons) {
+            if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
+                if ((cottage.getAvailableFrom().toLocalDate().isAfter(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))
+                        || (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isBefore(endDate))) {
+                    return true;
+                }
+            } else { return true; }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Set<Cottage> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception {
+
+        Set<Cottage> available = new HashSet<>();
+        Set<Cottage> withReservation = new HashSet<>();
+        List<CottageReservation> reservations = this.reservationService.getOwnersUpcomingReservations(id);
+
+        for (CottageReservation res : reservations) {
+            withReservation.add(res.getCottage());
+            if (this.myCottageAvailable(startDate, endDate, res.getCottage(), numOfPersons)) {
+                if ((res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
+                        (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
+                        (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
+                    available.add(res.getCottage());
+                }
+            }
+        }
+
+        // ako ne postoji rezervacija i dobar je kapacitet, dodaj
+//        List<Cottage> all = this.cottageRepository.findAll();
+//
+//        HashSet<Cottage> allSet = new HashSet<>(all);
+//
+//        HashSet<Cottage> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+//
+//        for (Cottage c : woReservation) {
+//            if (c.getNumPersons() >= numOfPersons) { available.add(c); }
+//        }
+
+        return available;
     }
 
 }

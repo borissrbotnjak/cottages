@@ -1,5 +1,6 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Email.EmailService;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.BoatReservationRepository;
 import com.isa.cottages.Service.BoatReservationService;
@@ -8,25 +9,37 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class BoatReservationServiceImpl implements BoatReservationService {
 
+    @Autowired
     private ClientServiceImpl clientService;
+
+    @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
     private BoatReservationRepository reservationRepository;
+
+    @Autowired
     private BoatServiceImpl boatService;
 
     @Autowired
-    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
-                                      BoatReservationRepository boatReservationRepository,
-                                      BoatServiceImpl boatService) {
-        this.clientService = clientService;
-        this.userService = userService;
-        this.reservationRepository = boatReservationRepository;
-        this.boatService = boatService;
-    }
+    private EmailService emailService;
+
+//    @Autowired
+//    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
+//                                      BoatReservationRepository boatReservationRepository,
+//                                      BoatServiceImpl boatService) {
+//        this.clientService = clientService;
+//        this.userService = userService;
+//        this.reservationRepository = boatReservationRepository;
+//        this.boatService = boatService;
+////        this.emailService = emailService;
+//    }
 
     @Override
     public BoatReservation findById(Long id) throws Exception{
@@ -41,6 +54,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
 
         return this.reservationRepository.getAllOwnersReservations(id);
+    }
+
+    @Override
+    public List<BoatReservation> getAllOwnersReservedReservations(Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.getAllOwnersReservedReservations(id);
     }
 
     @Override
@@ -114,9 +134,9 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         List<BoatReservation> all = this.reservationRepository.getAllOwnersReservations(id);
         List<BoatReservation> upcoming = new ArrayList<>();
 
-        for (BoatReservation res: all) {
-            if((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
-            && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+        for (BoatReservation res : all) {
+            if ((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
+                    && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
                 upcoming.add(res);
             }
         }
@@ -250,6 +270,42 @@ public class BoatReservationServiceImpl implements BoatReservationService {
 
         return filtered;
     }
+
+    @Override
+    public void setDate(BoatReservation reservation) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(reservation.getStartDateString(), formatter);
+        LocalDate ed = LocalDate.parse(reservation.getEndDateString(), formatter);
+
+        reservation.setStartDate(sd);
+        reservation.setEndDate(ed);
+        reservation.setStartTime(sd.atStartOfDay());
+        reservation.setEndTime(ed.atStartOfDay());
+    }
+
+    @Override
+    public BoatReservation save(BoatReservation reservation) {
+        return this.reservationRepository.save(reservation);
+    }
+
+    @Override
+    public BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        Client client = (Client) userService.findById(clid);
+
+        reservation.setBoat(boat);
+        reservation.setBoatOwner(boat.getBoatOwner());
+        reservation.setClient(client);
+        reservation.setPrice(boat.getPrice());
+        reservation.CalculatePrice();
+        reservation.setReserved(true);
+        this.setDate(reservation);
+        this.save(reservation);
+
+        return reservation;
+    }
+
 }
 
 

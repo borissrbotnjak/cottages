@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -13,30 +14,31 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Define unavailability</title>
+    <title>Make reservation with client</title>
 </head>
 <body>
 
-
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
+        <a class="navbar-brand" href="#">Apoteka Jankovic</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a></div>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -44,41 +46,54 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
-                    </div>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a></div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
                     <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
                     <a class="nav-link" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
                 </li>
             </ul>
         </div>
     </nav>
-</div>
+</div> </br></br>
+
 
 <div class="container">
+    <h3>Available boats</h3>
     </br>
-    <div class="center-align lighten-5">
-        <form th:action="@{'/boatOwner/__${principal.id}__/defineUnavailability/submit'}" th:object="${principal}" method="post">
-            <br><label for="unavailableFrom">Unavailable From:</label>
-            <input id="unavailableFrom" type="datetime-local" th:field="*{unavailableFrom}"/>
+    </br></br></br>
+    <table width="90%">
+        <tr>
+            <th>Boat name:</th>
+            <th>Rating:</th>
+            <th>Price:</th>
+            <th>Address:</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr th:each="boat:${boats}">
+            <td th:text="${boat.getBoatName()}"></td>
+            <td th:text="${boat.getAverageRating}"></td>
+            <td th:text="${boat.getPrice()}"></td>
+            <td th:text="${boat.getBoatOwner().getCity()}"></td>
+            <td th:text="${boat.getBoatOwner().getState()}"></td>
+            <td>
+                <form th:action="@{'/boatReservations/__${principal.id}__/selectBoat/__${client.id}__/__${boat.id}__'}">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Select</button>
+                </form>
+            </td>
+        </tr>
+    </table>
 
-            <br><label for="unavailableUntil">Unavailable Until:</label>
-            <input id="unavailableUntil" type="datetime-local" th:field="*{unavailableUntil}"/>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
-            </div>
-        </form>
-    </div>
 </div>
-
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

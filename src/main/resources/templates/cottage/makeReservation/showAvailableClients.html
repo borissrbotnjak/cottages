@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -14,21 +14,22 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Error</title>
+    <title>Make reservation with client</title>
 </head>
 <body>
+
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
+        <a class="navbar-brand" href="#">Apoteka Jankovic</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Reservations
                     </a>
@@ -45,26 +46,41 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a>
-                    </div>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a></div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottageOwner/profile/__${principal.id}__'}">Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
                 </li>
             </ul>
         </div>
     </nav>
-</div>
+</div> </br></br>
 
-</br>
-<div class="container center-align" style="color:red">
-    <h4>You can not delete this cottage because it is reserved.</h4>
+
+<div class="container">
+    <h3>Available client</h3>
+    </br>
+    </br></br></br>
+    <table width="90%">
+        <tr>
+            <th>Client name:</th>
+        </tr>
+        <tr th:each="client:${clients}">
+            <td th:text="${client.id}"></td>
+            <td>
+                <form th:action="@{'/cottageReservations/__${principal.id}__/__${client.id}__/selectClient'}">
+                    <button type="submit" class="btn btn">Select</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
 </div>
 
 <!-- Optional JavaScript -->

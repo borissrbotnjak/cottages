@@ -1,20 +1,41 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.Client;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.ClientRepository;
 import com.isa.cottages.Service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class ClientServiceImpl implements ClientService {
 
+    @Autowired
+    private UserServiceImpl userService;
+
+    @Autowired
     private ClientRepository clientRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+    private BoatReservationServiceImpl boatReservationService;
+
+    @Autowired
+    private CottageReservationServiceImpl cottageReservationService;
+
+//    @Autowired
+//    public ClientServiceImpl(UserServiceImpl userService, ClientRepository clientRepository,
+//                             BoatReservationServiceImpl boatReservationService,
+//                             CottageReservationServiceImpl cottageReservationService) {
+//       this.userService = userService;
+//       this.clientRepository = clientRepository;
+//       this.boatReservationService = boatReservationService;
+//       this.cottageReservationService = cottageReservationService;
+//    }
 
     @Override
     public Client findById(Long id) throws Exception {
@@ -58,5 +79,34 @@ public class ClientServiceImpl implements ClientService {
         return this.clientRepository.save(forUpdate);
     }
 
+    @Override
+    public Set<Client> findAllAvailable_Boat(LocalDateTime time, Long oid) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+        Set<Client> available = new HashSet<>();
+        List<BoatReservation> reservations = this.boatReservationService.getAllOwnersReservations(oid);
+
+
+        for(BoatReservation res: reservations) {
+            if(res.getStartTime().isBefore(ChronoLocalDateTime.from(time)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(time))); {
+                available.add(res.getClient());
+            }
+        }
+        return available;
+    }
+
+    @Override
+    public Set<Client> findAllAvailable_Cottage(LocalDateTime time, Long oid) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
+        Set<Client> available = new HashSet<>();
+        List<CottageReservation> reservations = this.cottageReservationService.getAllOwnersReservations(oid);
+
+
+        for(CottageReservation res: reservations) {
+            if(res.getStartTime().isBefore(ChronoLocalDateTime.from(time)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(time))); {
+                available.add(res.getClient());
+            }
+        }
+        return available;
+    }
 
 }

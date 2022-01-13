@@ -8,26 +8,34 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class CottageReservationServiceImpl implements CottageReservationService {
 
+    @Autowired
     private CottageReservationRepository reservationRepository;
-    private UserServiceImpl userService;
-    private CottageServiceImpl cottageService;
-    private ClientServiceImpl clientService;
 
     @Autowired
-    public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
-                                         UserServiceImpl userService,
-                                         CottageServiceImpl cottageService,
-                                         ClientServiceImpl clientService) {
-        this.reservationRepository = reservationRepository;
-        this.userService = userService;
-        this.cottageService = cottageService;
-        this.clientService = clientService;
-    }
+    private UserServiceImpl userService;
+
+    @Autowired
+    private CottageServiceImpl cottageService;
+
+    @Autowired
+    private ClientServiceImpl clientService;
+
+//    @Autowired
+//    public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
+//                                         UserServiceImpl userService,
+//                                         CottageServiceImpl cottageService,
+//                                         ClientServiceImpl clientService) {
+//        this.reservationRepository = reservationRepository;
+//        this.userService = userService;
+//        this.cottageService = cottageService;
+//        this.clientService = clientService;
+//    }
 
     @Override
     public CottageReservation findOne(Long id) {
@@ -39,6 +47,13 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
         return this.reservationRepository.getAllOwnersReservations(id);
+    }
+
+    @Override
+    public List<CottageReservation> getAllOwnersReservedReservations(Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.getAllOwnersReservedReservations(id);
     }
 
     @Override
@@ -211,16 +226,52 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 //    public List<CottageReservation> findPastOwnersReservationsByClient(Long id, String keyword) throws Exception {
 //
 //    }
-@Override
-public Set<CottageReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
-    List<CottageReservation> reservations = this.getOwnersPastReservations(id);
-    Set<CottageReservation> filtered = new HashSet<>();
 
-    for(CottageReservation res: reservations){
-        if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
-            filtered.add(res);
+    @Override
+    public Set<CottageReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+        List<CottageReservation> reservations = this.getOwnersPastReservations(id);
+        Set<CottageReservation> filtered = new HashSet<>();
+
+        for(CottageReservation res: reservations){
+            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+                filtered.add(res);
+            }
         }
+        return filtered;
     }
-    return filtered;
-}
+
+    @Override
+    public void setDate(CottageReservation reservation) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(reservation.getStartDateString(), formatter);
+        LocalDate ed = LocalDate.parse(reservation.getEndDateString(), formatter);
+
+        reservation.setStartDate(sd);
+        reservation.setEndDate(ed);
+        reservation.setStartTime(sd.atStartOfDay());
+        reservation.setEndTime(ed.atStartOfDay());
+    }
+
+    @Override
+    public CottageReservation save(CottageReservation reservation) {
+        return this.reservationRepository.save(reservation);
+    }
+
+    @Override
+    public CottageReservation makeReservationWithClient(CottageReservation reservation, Cottage cottage, Long clid) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        Client client = (Client) userService.findById(clid);
+
+        reservation.setCottage(cottage);
+        reservation.setCottageOwner(cottage.getCottageOwner());
+        reservation.setClient(client);
+        reservation.setPrice(cottage.getPrice());
+        reservation.CalculatePrice();
+        reservation.setReserved(true);
+        this.setDate(reservation);
+        this.save(reservation);
+
+        return reservation;
+    }
 }
