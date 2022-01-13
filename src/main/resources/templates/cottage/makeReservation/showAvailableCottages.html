@@ -75,6 +75,34 @@
             <th>Address:</th>
             <th></th>
             <th></th>
+            <th>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byPriceAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Ascending</button>
+                </form>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byPriceDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Descending</button>
+                </form>
+            </th>
+            <th>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byRatingAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+                </form>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byRatingDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Descending</button>
+                </form>
+            </th>
         </tr>
         <tr th:each="cottage:${cottages}">
             <td th:text="${cottage.getName()}"></td>

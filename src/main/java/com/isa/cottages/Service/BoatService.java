@@ -22,6 +22,7 @@ public interface BoatService {
     Boat defineAvailability(Boat boat) throws Exception;
     Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons);
     Set<Boat> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
+    List<Boat> findAllMyAvailableSorted(Long id, LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
     List<Boat> orderByNameDesc();
     List<Boat> orderByNameAsc();

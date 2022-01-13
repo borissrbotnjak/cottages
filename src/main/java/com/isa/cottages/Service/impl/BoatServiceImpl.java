@@ -176,13 +176,11 @@ public class BoatServiceImpl implements BoatService {
     public Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons) {
         if (boat.getNumPersons() >= numPersons) {
             if (boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) {
-                if ((boat.getAvailableFrom().toLocalDate().isAfter(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate))
-                        || (boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isBefore(endDate))) {
+                if ((boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate))) {
                     return true;
                 }
             } else { return true; }
         }
-
         return false;
     }
 
@@ -206,14 +204,36 @@ public class BoatServiceImpl implements BoatService {
 
         // ako ne postoji rezervacija i dobar je kapacitet, dodaj
 //        List<Boat> all = this.boatRepository.findAll();
-//
+
 //        HashSet<Boat> allSet = new HashSet<>(all);
-//
+
 //        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
-//
+
 //        for (Boat b : woReservation) {
 //            if (b.getNumPersons() >= numOfPersons) { available.add(b); }
 //        }
+        return available;
+    }
+
+    @Override
+    public List<Boat> findAllMyAvailableSorted(Long oid, LocalDate startDate, LocalDate endDate, int numOfPersons,
+                                               Boolean asc, Boolean price, Boolean rating) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+        Set<Boat> set = this.findAllMyAvailable(startDate, endDate, numOfPersons, oid);
+        List<Boat> available = new ArrayList<>(set);
+
+        if (asc && price && !rating) {
+            available.sort(Comparator.comparing(Boat::getPrice));
+        }
+        else if (asc && !price && rating) {
+            available.sort(Comparator.comparing(Boat::getAverageRating));
+        }
+        else if (!asc && price && !rating) {
+            available.sort(Comparator.comparing(Boat::getPrice).reversed());
+        }
+        else if (!asc && !price && rating) {
+            available.sort(Comparator.comparing(Boat::getAverageRating).reversed());
+        }
 
         return available;
     }

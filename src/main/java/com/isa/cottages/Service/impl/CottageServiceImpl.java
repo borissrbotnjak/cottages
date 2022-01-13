@@ -200,8 +200,7 @@ public class CottageServiceImpl implements CottageService {
     public Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons) {
         if (cottage.getNumPersons() >= numPersons) {
             if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
-                if ((cottage.getAvailableFrom().toLocalDate().isAfter(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))
-                        || (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isBefore(endDate))) {
+                if ((cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))) {
                     return true;
                 }
             } else { return true; }
@@ -238,9 +237,30 @@ public class CottageServiceImpl implements CottageService {
 //        for (Cottage c : woReservation) {
 //            if (c.getNumPersons() >= numOfPersons) { available.add(c); }
 //        }
-
         return available;
     }
 
+    @Override
+    public List<Cottage> findAllMyAvailableSorted(Long oid, LocalDate startDate, LocalDate endDate, int numOfPersons,
+                                               Boolean asc, Boolean price, Boolean rating) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
+        Set<Cottage> set = this.findAllMyAvailable(startDate, endDate, numOfPersons, oid);
+        List<Cottage> available = new ArrayList<>(set);
+
+        if (asc && price && !rating) {
+            available.sort(Comparator.comparing(Cottage::getPrice));
+        }
+        else if (asc && !price && rating) {
+            available.sort(Comparator.comparing(Cottage::getAverageRating));
+        }
+        else if (!asc && price && !rating) {
+            available.sort(Comparator.comparing(Cottage::getPrice).reversed());
+        }
+        else if (!asc && !price && rating) {
+            available.sort(Comparator.comparing(Cottage::getAverageRating).reversed());
+        }
+
+        return available;
+    }
 }
 

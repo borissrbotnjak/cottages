@@ -87,6 +87,8 @@
                                     </div>
                                 </div>
                                 <input type="text" name="selectedServices" th:value="${services}" hidden/>
+                                </br>
+                                <p th:if="${sLength == 0}">There are no additional services</p>
                                 </br></br>
                                 <input class="btn grey lighten-4 black-text" type="submit" value="Proceed">
                             </div>
