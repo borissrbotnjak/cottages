@@ -29,4 +29,6 @@ public interface FishingInstructorAdventureService {
     List<FishingInstructorAdventure> findByOrderByRatingDesc();
     List<FishingInstructorAdventure> findByOrderByAddressAsc();
     List<FishingInstructorAdventure> findByOrderByAddressDesc();
+
+    List<FishingInstructorAdventure> findByInstructor(Long id) throws Exception;
 }
