@@ -2,23 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Report</title>
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  -->
+    <link rel="stylesheet" href="../../static/css/profileCSS.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
+
+    <title>Make reservation with client</title>
 </head>
 <body>
 
@@ -36,7 +35,7 @@
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -61,23 +60,42 @@
     </nav>
 </div> </br></br>
 
-
-<div class="container">
-    <h2>Average rating of boats</h2>
-    </br></br></br>
-    <div class="row">
-            <div class="table">
-                <table id="boats" width="90%">
-                    <tr>
-                        <th>Boat name</th>
-                        <th>Average rating</th>
-                    </tr>
-                    <tr th:each="boat:${boats}">
-                        <td th:text="${boat.boatName}"></td>
-                        <td th:text="${boat.averageRating}"></td>
-                    </tr>
-                </table>
-            </div>
+<div class="container mySpace">
+    <div class="center-align blue lighten-5">
+        <h1>Choose reservation parameters</h1> </br></br>
+        <form th:action="@{'/boatReservations/__${principal.id}__/reserve/__${boat_id}__/__${client.id}__'}" method="post" th:object="${reservation}">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div>
+                            <div>
+                                <input type="text" name="endDateString" th:value="${endDateString}" hidden/>
+                                <input type="text" name="startDateString" th:value="${startDateString}" hidden/>
+                                <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                                <input type="text" name="services" th:value="${services}" hidden/>
+                                <div class="form-group">
+                                    <label for="services">Services</br></label>
+                                    <div class="input-group" id="services" data-target-input="nearest">
+                                        <label for="services">
+                                            <select class="form-control" multiple="multiple" name="additionalServices">
+                                                <option th:each="service : ${services}"
+                                                        th:value="${service.id}"
+                                                        th:text="${service.name} + ' ' + ${service.price}">Additional services:
+                                                </option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                <input type="text" name="selectedServices" th:value="${services}" hidden/>
+                                </br>
+                                <p th:if="${sLength == 0}">There are no additional services</p>
+                                </br></br>
+                                <input class="btn grey lighten-4 black-text" type="submit" value="Proceed">
+                            </div>
+                        </div>
+                    </div>
+                </div></div>
+        </form>
     </div>
 </div>
 

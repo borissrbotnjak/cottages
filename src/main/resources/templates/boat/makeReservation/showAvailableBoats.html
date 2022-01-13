@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -14,11 +14,12 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Report</title>
+    <title>Make reservation with client</title>
 </head>
 <body>
 
@@ -36,7 +37,7 @@
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -63,22 +64,63 @@
 
 
 <div class="container">
-    <h2>Average rating of boats</h2>
+    <h3>Available boats</h3>
+    </br>
     </br></br></br>
-    <div class="row">
-            <div class="table">
-                <table id="boats" width="90%">
-                    <tr>
-                        <th>Boat name</th>
-                        <th>Average rating</th>
-                    </tr>
-                    <tr th:each="boat:${boats}">
-                        <td th:text="${boat.boatName}"></td>
-                        <td th:text="${boat.averageRating}"></td>
-                    </tr>
-                </table>
-            </div>
-    </div>
+    <table width="90%">
+        <tr>
+            <th>Boat name:</th>
+            <th>Rating:</th>
+            <th>Price:</th>
+            <th>Address:</th>
+            <th></th>
+            <th></th>
+            <th>
+                <form th:action="${'/boatReservations/__${principal.id}__/__${client.id}__/showAvailableBoats/byPriceAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Ascending</button>
+                </form>
+                <form th:action="${'/boatReservations/__${principal.id}__/__${client.id}__/showAvailableBoats/byPriceDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Descending</button>
+                </form>
+            </th>
+            <th>
+                <form th:action="${'/boatReservations/__${principal.id}__/__${client.id}__/showAvailableBoats/byRatingAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+                </form>
+                <form th:action="${'/boatReservations/__${principal.id}__/__${client.id}__/showAvailableBoats/byRatingDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Descending</button>
+                </form>
+            </th>
+        </tr>
+        <tr th:each="boat:${boats}">
+            <td th:text="${boat.getBoatName()}"></td>
+            <td th:text="${boat.getAverageRating}"></td>
+            <td th:text="${boat.getPrice()}"></td>
+            <td th:text="${boat.getBoatOwner().getCity()}"></td>
+            <td th:text="${boat.getBoatOwner().getState()}"></td>
+            <td>
+                <form th:action="@{'/boatReservations/__${principal.id}__/selectBoat/__${client.id}__/__${boat.id}__'}">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Select</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
 </div>
 
 <!-- Optional JavaScript -->

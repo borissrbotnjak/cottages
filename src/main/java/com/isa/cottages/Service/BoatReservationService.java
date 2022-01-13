@@ -1,5 +1,6 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 
@@ -11,6 +12,7 @@ public interface BoatReservationService {
 
     BoatReservation findById(Long id) throws Exception;
     List<BoatReservation> getAllOwnersReservations(Long id) throws Exception;
+    List<BoatReservation> getAllOwnersReservedReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception;
     List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersPastReservations(Long id) throws Exception;
@@ -31,4 +33,10 @@ public interface BoatReservationService {
     List<BoatReservation> findByOrderByDurationDesc() throws Exception;
     List<BoatReservation> findByOrderByPriceAsc() throws Exception;
     List<BoatReservation> findByOrderByPriceDesc() throws Exception;
+
+    void setDate(BoatReservation boatReservation);
+    BoatReservation save(BoatReservation reservation);
+
+    BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;
+
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"><!--Import Google Icon Font-->
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -14,11 +14,12 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Report</title>
+    <title>Make reservation with client</title>
 </head>
 <body>
 
@@ -45,8 +46,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a>
-                    </div>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a></div>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
@@ -64,25 +64,62 @@
 
 
 <div class="container">
-    <h2>Average rating of cottages</h2>
+    <h3>Available cottages</h3>
+    </br>
     </br></br></br>
-    <div class="table">
-        <form th:object="${cottage}" method="get">
-            <div class="table">
-                <table id="cottages" width="90%">
-                    <tr>
-                        <th>Cottage name</th>
-                        <th>Average rating</th>
-                    </tr>
-                    <tr th:each="cottage:${cottages}">
-                        <td th:text="${cottage.name}"></td>
-                        <td th:text="${cottage.averageRating}"></td>
-                    </tr>
-                </table>
-            </div>
-        </form>
-
-    </div>
+    <table width="90%">
+        <tr>
+            <th>Cottage name:</th>
+            <th>Rating:</th>
+            <th>Price:</th>
+            <th>Address:</th>
+            <th></th>
+            <th></th>
+            <th>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byPriceAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Ascending</button>
+                </form>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byPriceDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Descending</button>
+                </form>
+            </th>
+            <th>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byRatingAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+                </form>
+                <form th:action="${'/cottageReservations/__${principal.id}__/__${client.id}__/showAvailableCottages/byRatingDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Descending</button>
+                </form>
+            </th>
+        </tr>
+        <tr th:each="cottage:${cottages}">
+            <td th:text="${cottage.getName()}"></td>
+            <td th:text="${cottage.getAverageRating}"></td>
+            <td th:text="${cottage.getPrice()}"></td>
+            <td th:text="${cottage.getCottageOwner().getCity()}"></td>
+            <td th:text="${cottage.getCottageOwner().getState()}"></td>
+            <td>
+                <form th:action="@{'/cottageReservations/__${principal.id}__/selectCottage/__${client.id}__/__${cottage.id}__'}">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Select</button>
+                </form>
+            </td>
+        </tr>
+    </table>
 
 </div>
 

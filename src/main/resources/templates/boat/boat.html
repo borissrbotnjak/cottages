@@ -48,7 +48,7 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
             <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
-            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
           </div>
         </li>
                     <li class="nav-item" sec:authorize="!hasAnyRole('COTTAGE_OWNER', 'BOAT_OWNER')">
@@ -324,7 +324,7 @@
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${boat.id}__/defineDiscount'}">Define discount</a>
             </br></br>
-            <a th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
           </div>
         </div>
       </div>

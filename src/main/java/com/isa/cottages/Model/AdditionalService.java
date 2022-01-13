@@ -24,6 +24,9 @@ public class AdditionalService implements Serializable {
     private String name;
 
     @Column
+    private String description;
+
+    @Column
     private Double price;
 
     @ManyToOne(targetEntity = Cottage.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

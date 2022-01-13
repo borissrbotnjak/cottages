@@ -28,6 +28,9 @@ public class Reservation implements Serializable {
     private Long id;
 
     @Column
+    private LocalDateTime time = LocalDateTime.now();
+
+    @Column
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startTime;
 
@@ -48,6 +51,12 @@ public class Reservation implements Serializable {
 
     @Column
     private String endDateString;
+
+    @Column
+    private String startTimeString;
+
+    @Column
+    private String endTimeString;
 
     @Column
     private Boolean discount = false;

@@ -1,8 +1,6 @@
 package com.isa.cottages.Service;
 
-import com.isa.cottages.Model.BoatReservation;
-import com.isa.cottages.Model.Client;
-import com.isa.cottages.Model.CottageReservation;
+import com.isa.cottages.Model.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +10,7 @@ public interface CottageReservationService {
 
     CottageReservation findOne(Long id);
     List<CottageReservation> getAllOwnersReservations(Long id) throws Exception;
+    List<CottageReservation> getAllOwnersReservedReservations(Long id) throws Exception;
     List<CottageReservation> getAllOwnersUpcomingReservations(Long id) throws Exception;
     List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception;
     List<CottageReservation> getOwnersPastReservations(Long id) throws Exception;
@@ -31,4 +30,9 @@ public interface CottageReservationService {
     List<CottageReservation> findByOrderByDurationDesc() throws Exception;
     List<CottageReservation> findByOrderByPriceAsc() throws Exception;
     List<CottageReservation> findByOrderByPriceDesc() throws Exception;
+
+    void setDate(CottageReservation cottageReservation);
+    CottageReservation save(CottageReservation reservation);
+
+    CottageReservation makeReservationWithClient(CottageReservation reservation, Cottage cottage, Long clid) throws Exception;
 }
