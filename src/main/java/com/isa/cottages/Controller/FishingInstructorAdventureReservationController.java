@@ -43,4 +43,21 @@ public class FishingInstructorAdventureReservationController {
         return new ModelAndView("instructor/upcomingReservations");
     }
     //</editor-fold>
+
+
+    //<editor-fold desc="Get reservation history">
+    @GetMapping("/pastInstructorsReservations/{id}")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ModelAndView showReservationHistory(Model model, String keyword, @PathVariable("id") Long id, String email) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
+        if (keyword != null) {
+            model.addAttribute("adventureReservations", this.reservationService.findClient(keyword));
+        } else {
+            model.addAttribute("adventureReservations", this.reservationService.getInstructorsPastReservations(id));
+        }
+        return new ModelAndView("instructor/pastReservations");
+    }
+    //</editor-fold>
+
 }

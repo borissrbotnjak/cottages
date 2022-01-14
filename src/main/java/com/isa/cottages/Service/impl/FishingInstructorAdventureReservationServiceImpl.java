@@ -26,12 +26,33 @@ public class FishingInstructorAdventureReservationServiceImpl implements Fishing
     @Override
     public List<AdventureReservation> getInstructorsUpcomingReservations(Long id) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
-        List<AdventureReservation> all = this.reservationRepository.getAllReservedByOwner(id);
+        List<AdventureReservation> all = this.reservationRepository.getAllReservedByInstructor(id);
         List<AdventureReservation> upcoming = new ArrayList<>();
 
         for (AdventureReservation res : all)
             if ((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getInstructor().getId(), instructor.getId())))
                 upcoming.add(res);
         return upcoming;
+    }
+
+    @Override
+    public List<AdventureReservation> findClient(String keyword) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.findClient(keyword);
+    }
+
+    @Override
+    public List<AdventureReservation> getInstructorsPastReservations(Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        List<AdventureReservation> all = this.reservationRepository.getAllReservedByInstructor(id);
+        List<AdventureReservation> pastOnes = new ArrayList<>();
+
+        for (AdventureReservation res:all) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (Objects.equals(res.getInstructor().getId(), instructor.getId()))) {
+                pastOnes.add(res);
+            }
+        }
+        return pastOnes;
     }
 }

@@ -86,6 +86,7 @@ public class FishingInstructorAdventure implements Serializable {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
     private Client subscriber;
+
     @OneToMany(mappedBy = "adventure", targetEntity = AdventureReservation.class)
     private Set<AdventureReservation> adventureReservations = new HashSet<>();
 

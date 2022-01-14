@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class AdventureReservation extends Reservation {
     @ManyToOne(targetEntity = Instructor.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "adventure_instructor_id", nullable = true, referencedColumnName = "id")
+    @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")
     private Instructor instructor;
 
     @ManyToOne(targetEntity = FishingInstructorAdventure.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)

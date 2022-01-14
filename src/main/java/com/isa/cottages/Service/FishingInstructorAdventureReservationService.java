@@ -8,4 +8,8 @@ public interface FishingInstructorAdventureReservationService {
 
 
     List<AdventureReservation> getInstructorsUpcomingReservations(Long id) throws Exception;
+
+    List<AdventureReservation> findClient(String keyword) throws Exception;
+
+    List<AdventureReservation> getInstructorsPastReservations(Long id) throws Exception;
 }

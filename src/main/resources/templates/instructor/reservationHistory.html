@@ -107,13 +107,13 @@
         <th sec:authorize="hasRole('CLIENT')"></th>
       </tr>
       <tr th:each="reservation:${reservations}">
-        <td th:text="${reservation.fishingInstructorAdventure.instructorInfo}"></td>
-        <td th:text="${reservation.fishingInstructorAdventure.adventureName}"></td>
+        <td th:text="${reservation.getAdventure.instructorInfo}"></td>
+        <td th:text="${reservation.getAdventure.adventureName}"></td>
         <td th:text="${reservation.startTime}"></td>
         <td th:text="${reservation.duration}"></td>
         <td th:text="${reservation.price}"></td>
         <td><a sec:authorize="hasRole('CLIENT')"
-               th:href="${'/complaints/instructor/new/' + reservation.getFishingInstructorAdventure().getId() }">Make Complaint</a></td>
+               th:href="${'/complaints/instructor/new/' + reservation.getAdventure().getId() }">Make Complaint</a></td>
       </tr>
     </table>
   </div>

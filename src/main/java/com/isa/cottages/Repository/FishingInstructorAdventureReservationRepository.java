@@ -12,11 +12,11 @@ import java.util.List;
 public interface FishingInstructorAdventureReservationRepository extends JpaRepository<AdventureReservation, Long> {
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.instructor_id = ?1", nativeQuery = true)
-    List<AdventureReservation> getAllReservedByOwner(@Param("id") Long id);
+    List<AdventureReservation> getAllReservedByInstructor(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false " +
             "and res.instructor_id = ?1", nativeQuery = true)
-    List<AdventureReservation> getAllOwnersReservations(@Param("id") Long id);
+    List<AdventureReservation> getAllInstructorsReservations(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM RESERVATION RES WHERE RES.DELETED=FALSE AND RES.RESERVED=TRUE" +
             "AND RES.instructor_id IS NOT NULL AND RES.CLIENT_ID=?1", nativeQuery = true)
@@ -25,4 +25,8 @@ public interface FishingInstructorAdventureReservationRepository extends JpaRepo
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.instructor_id is not null", nativeQuery = true)
     List<AdventureReservation> getAllReserved();
+
+    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%')) " +
+            "and reservation_type like 'adventure_reservation' and res.reserved=true and res.deleted = false", nativeQuery = true)
+    List<AdventureReservation> findClient(@Param("keyword") String keyword);
 }

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Adventure reservation History</title>
+</head>
+</head>
+<body>
+
+<div class="container-fluid bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Avanture Instruktorovic</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reservations
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" sec:authorize="hasRole('INSTRUCTOR')" th:href="@{'/advenutreReservations/upcomingInstrucorsReservations/__${principal.id}__'}"> Upcoming reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('INSTRUCTOR')" th:href="@{'/adventureReservations/pastOwnersReservations/__${principal.id}__'}">Reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('INSTRUCTOR')" th:href="@{'/adventureReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('INSTRUCTOR')" th:href="@{'/adventureReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming boat reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Boat reservation history</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/upcoming'}"> Upcoming instructor reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/history'}">Instructor reservation history</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" sec:authorize="hasRole('INSTRUCTOR')" th:href=@{'/adventures/__${principal.id}__/averageRating'}> Average rating</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('INSTRUCTOR')" th:href=@{'/adventureReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+                    </div>
+                </li>
+                <li class="nav-item" sec:authorize="!hasRole('INSTRUCTOR')">
+                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All Adventures</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/boats/allBoats'}">All boats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/adventures/allAdventures'}">All instructors</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('INSTRUCTOR')">
+                    <a class="nav-link" th:href="${'/instructor/allMyAdventures/__${principal.id}__'}">My Adventures</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('INSTRUCTOR')" th:href="${'/instructor/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="${'/auth/home'}">Home</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+                    <a class="nav-link" th:href="${'/client/home'}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</div>
+<div class="container">
+    <div id="adventures" class="table">
+        </br>
+        <h3>Adventure reservation history</h3>
+        </br>
+        <form sec:authorize="hasRole('INSTRUCTOR')" th:action="@{'/adventureReservations/pastInstructorsReservations/__${principal.id}__'}" method="get">
+            <input type="text" placeholder="Search client" name="keyword"/>
+            <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </br>
+        </form>
+        <form sec:authorize="hasRole('CLIENT')" th:action="@{'/adventureReservations/history/'}" method="get">
+            <input type="text" placeholder="Search adventure..." name="keyword"/>
+            <button type="submit" class="btn btn-dark mt-2">Search</button>
+            </br>
+        </form>
+        </br></br></br>
+        <table sec:authorize="hasRole('INSTRUCTOR')" >
+            <tr>
+                <th>Adventure name:</th>
+                <th>Reservation start:</th>
+                <th>Client name:</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr th:each="adventureReservation:${adventureReservations}">
+                <td th:text="${adventureReservation.adventure.getAdventureName()}"></td>
+                <td th:text="${adventureReservation.startTime}"></td>
+                <td th:text="${adventureReservation.client.getFullName()}"></td>
+                <td><a th:href="@{/client/profile/__${adventureReservation.client.getId()}__}">View profile</a></td>
+                <td><a th:href="@{/adventureReservations/writeReport/__${adventureReservation.instructor.getId()}__/__${adventureReservation.client.getId()}__/__${adventureReservation.admin.getId()}__}">Write report</a></td>
+            </tr>
+        </table>
+        <table sec:authorize="hasRole('CLIENT')">
+            <tr>
+                <th>Adventure name:</th>
+                <th>
+                    Reservation start
+                    <a th:href="${'/adventureReservations/history/sortByDateDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/adventureReservations/history/sortByDateAsc'}"><font color="black">▲</font></a>
+                </th>
+                <th>
+                    Duration
+                    <a th:href="${'/adventureReservations/history/sortByDurationDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/adventureReservations/history/sortByDurationAsc'}"><font color="black">▲</font></a>
+                </th>
+                <th>
+                    Price
+                    <a th:href="${'/adventureReservations/history/sortByPriceDesc'}"><font color="black">▼</font></a>
+                    <a th:href="${'/adventureReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
+                </th>
+                <th></th>
+            </tr>
+            <tr th:each="adventureReservation:${adventureReservations}">
+                <td th:text="${adventureReservation.adventure.getAdventureName()}"></td>
+                <td th:text="${adventureReservation.startTime}"></td>
+                <td th:text="${adventureReservation.duration}"></td>
+                <td th:text="${adventureReservation.price}"></td>
+                <td><a th:href="${'/complaints/adventure/new/' + adventureReservation.getAdventure().getId() }">Make Complaint</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
