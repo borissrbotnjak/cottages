@@ -1,9 +1,9 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.CottageOwner;
 import com.isa.cottages.Repository.CottageOwnerRepository;
 import com.isa.cottages.Service.CottageOwnerService;
+import com.isa.cottages.authFasace.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 public class CottageOwnerServiceImpl implements CottageOwnerService {
 
     private CottageOwnerRepository cottageOwnerRepository;
+    private AuthenticationFacade facade;
 
     @Autowired
-    public CottageOwnerServiceImpl(CottageOwnerRepository cottageOwnerRepository) {
+    public CottageOwnerServiceImpl(CottageOwnerRepository cottageOwnerRepository, AuthenticationFacade facade) {
         this.cottageOwnerRepository = cottageOwnerRepository;
+        this.facade = facade;
     }
 
     @Override
@@ -59,5 +61,21 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
 
         this.cottageOwnerRepository.save(forUpdate);
         return forUpdate;
+    }
+
+    @Override
+    public CottageOwner findCottageOwnerByEmail(String email) throws Exception {
+        CottageOwner cottageOwner = this.cottageOwnerRepository.findByEmail(email);
+        if (cottageOwner == null) {
+            throw new Exception("CottageOwner with this email does not exist");
+        }
+        return cottageOwner;
+    }
+
+    @Override
+    public CottageOwner getCottageOwnerFromPrincipal() throws Exception {
+        String principal = this.facade.getPrincipalEmail();
+
+        return findCottageOwnerByEmail(principal);
     }
 }

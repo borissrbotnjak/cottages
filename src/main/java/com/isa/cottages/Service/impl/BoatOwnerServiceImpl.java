@@ -3,6 +3,7 @@ package com.isa.cottages.Service.impl;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Repository.BoatOwnerRepository;
 import com.isa.cottages.Service.BoatOwnerService;
+import com.isa.cottages.authFasace.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Service;
 public class BoatOwnerServiceImpl implements BoatOwnerService {
 
     private BoatOwnerRepository boatOwnerRepository;
+    private AuthenticationFacade facade;
 
     @Autowired
-    public BoatOwnerServiceImpl (BoatOwnerRepository boatOwnerRepository) {
+    public BoatOwnerServiceImpl (BoatOwnerRepository boatOwnerRepository, AuthenticationFacade facade) {
         this.boatOwnerRepository = boatOwnerRepository;
+        this.facade = facade;
     }
 
     @Override
@@ -58,5 +61,21 @@ public class BoatOwnerServiceImpl implements BoatOwnerService {
 
         this.boatOwnerRepository.save(forUpdate);
         return forUpdate;
+    }
+
+    @Override
+    public BoatOwner findBoatOwnerByEmail(String email) throws Exception {
+        BoatOwner boatOwner = this.boatOwnerRepository.findByEmail(email);
+        if (boatOwner == null) {
+            throw new Exception("BoatOwner with this email does not exist");
+        }
+        return boatOwner;
+    }
+
+    @Override
+    public BoatOwner getBoatOwnerFromPrincipal() throws Exception {
+        String principal = this.facade.getPrincipalEmail();
+
+        return findBoatOwnerByEmail(principal);
     }
 }

@@ -31,6 +31,8 @@ public interface UserService {
     String confirmToken(String token);
 
     User getUserFromPrincipal() throws Exception;
+
+    User findByEmailAndPassword(String email, String password);
 }
 
 

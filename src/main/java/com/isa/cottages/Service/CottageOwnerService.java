@@ -11,4 +11,7 @@ public interface CottageOwnerService {
     CottageOwner updateCottages(CottageOwner cottageOwner) throws Exception;
 
     CottageOwner defineUnavailability(CottageOwner cottageOwner) throws Exception;
+
+    CottageOwner getCottageOwnerFromPrincipal() throws Exception;
+    CottageOwner findCottageOwnerByEmail(String email) throws Exception;
 }

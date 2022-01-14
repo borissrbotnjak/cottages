@@ -258,4 +258,11 @@ public class UserServiceImpl implements UserService {
         String principal = this.facade.getPrincipalEmail();
         return this.findByEmail(principal);
     }
+
+    @Override
+    public User findByEmailAndPassword(String email, String password){
+        User user = this.userRepository.findByEmailAndPassword(email,password);
+
+        return user;
+    }
 }
