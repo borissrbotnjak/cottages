@@ -1,10 +1,11 @@
 package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Boat;
-import com.isa.cottages.Model.Cottage;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface BoatService {
 
@@ -19,6 +20,9 @@ public interface BoatService {
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
     Boat defineAvailability(Boat boat) throws Exception;
+    Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons);
+    Set<Boat> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
+    List<Boat> findAllMyAvailableSorted(Long id, LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
     List<Boat> orderByNameDesc();
     List<Boat> orderByNameAsc();

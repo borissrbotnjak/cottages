@@ -1,7 +1,9 @@
 package com.isa.cottages.Controller;
 
+import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
+import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,15 +11,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collection;
+
 @Controller
 @RequestMapping(value = "/boatOwner")
 public class BoatOwnerController {
 
     private BoatOwnerServiceImpl boatOwnerService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public BoatOwnerController(BoatOwnerServiceImpl boatOwnerService) {
+    public BoatOwnerController(BoatOwnerServiceImpl boatOwnerService, UserServiceImpl userService) {
         this.boatOwnerService = boatOwnerService;
+        this.userService = userService;
     }
 
 
@@ -47,6 +53,27 @@ public class BoatOwnerController {
         } catch (Exception e) {
             return new ModelAndView("home");
         }
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/defineUnavailability")
+    public ModelAndView defineUnavailability(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = boatOwnerService.findById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("principal", boatOwner);
+
+        return new ModelAndView("boat/defineUnavailability");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/defineUnavailability/submit")
+    public ModelAndView defineUnavailability(Model model, @PathVariable Long id, @ModelAttribute BoatOwner boatOwner) throws Exception {
+        model.addAttribute("id", id);
+        model.addAttribute("principal", boatOwner);
+
+        this.boatOwnerService.defineUnavailability(boatOwner);
+
+        return new ModelAndView("redirect:/boatReservations/viewCalendar/{id}/");
     }
 
 }

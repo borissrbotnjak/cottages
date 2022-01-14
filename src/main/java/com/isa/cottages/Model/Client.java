@@ -3,6 +3,7 @@ package com.isa.cottages.Model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,9 @@ public class Client extends User {
     @Column
     private Integer discount;
 
+    @Column
+    private Integer penalties = 0;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
     private LoyaltyProgram  loyaltyProgram;
@@ -35,4 +39,7 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "subscriber", targetEntity = FishingInstructorAdventure.class)
     private Set<FishingInstructorAdventure> instructorSubscriptions = new HashSet<>();
+
+    @OneToMany(mappedBy = "client", targetEntity = Report.class)
+    private Set<Report> reports = new HashSet<>();
 }

@@ -1,8 +1,10 @@
 package com.isa.cottages.Model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +21,14 @@ public class CottageOwner extends User {
 
     @Column
     private UserRole userRole = UserRole.COTTAGE_OWNER;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime unavailableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime unavailableUntil;
 
     @Column
     private RegistrationType registrationType = RegistrationType.COTTAGE_ADVERTISER;

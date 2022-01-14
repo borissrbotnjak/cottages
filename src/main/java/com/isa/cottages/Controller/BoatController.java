@@ -1,9 +1,7 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
-import com.isa.cottages.Service.impl.BoatServiceImpl;
-import com.isa.cottages.Service.impl.UserServiceImpl;
+import com.isa.cottages.Service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,11 +24,20 @@ public class BoatController {
 
     private BoatServiceImpl boatService;
     private UserServiceImpl userService;
+    private AdditionalServiceServiceImpl additionalServiceService;
+    private NavigationEquipmentServiceImpl navigationEquipmentService;
+    private FishingEquipmentServiceImpl fishingEquipmentService;
 
     @Autowired
-    public BoatController(BoatServiceImpl boatService, UserServiceImpl userService){
+    public BoatController(BoatServiceImpl boatService, UserServiceImpl userService,
+                          AdditionalServiceServiceImpl additionalServiceService,
+                          NavigationEquipmentServiceImpl navigationEquipmentService,
+                          FishingEquipmentServiceImpl fishingEquipmentService){
         this.boatService = boatService;
         this.userService = userService;
+        this.additionalServiceService = additionalServiceService;
+        this.navigationEquipmentService = navigationEquipmentService;
+        this.fishingEquipmentService = fishingEquipmentService;
     }
 
     @GetMapping("/allBoats")
@@ -73,25 +80,6 @@ public class BoatController {
         model.addAttribute("boat", this.boatService.findById(id));
         return new ModelAndView("boat/boat");
     }
-
-    @GetMapping(value = "/addBoat")
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView addBoatForm(Model model){
-        Boat boat = new Boat();
-        model.addAttribute("boat", boat);
-        return new ModelAndView("addBoatForm");
-    }
-
-    @PostMapping(value = "/addBoat/submit")
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView addBoat(@ModelAttribute Boat boat) throws Exception {
-        if(this.boatService.findById(boat.getId()) != null) {
-            throw new ResourceConflictException(boat.getId(), "Boat with this id already exist");
-        }
-        this.boatService.saveBoat(boat);
-        return new ModelAndView("redirect:/boats/");
-    }
-
 
     @GetMapping("/allBoats/sortByNameDesc")
     public ModelAndView sortByNameDesc(Model model) {
@@ -218,6 +206,106 @@ public class BoatController {
         return new ModelAndView("redirect:/boats/allMyBoats/{id}/");
     }
 
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/addAdditionalService")
+    public ModelAndView addAdditionalService(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        AdditionalService additionalService = new AdditionalService();
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByBoat(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        Boat boat = boatService.findById(id);
+        model.addAttribute("boat", boat);
+
+        return new ModelAndView("boat/addAdditionalService");
+
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/addAdditionalService/submit")
+    public ModelAndView addAdditionalServiceSubmit(Model model, @PathVariable Long id,
+                                                   @ModelAttribute AdditionalService additionalService) throws Exception {
+        Boat boat = boatService.findById(id);
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boat", boat);
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByBoat(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        additionalService.setBoat(boat);
+        additionalServiceService.save(additionalService);
+
+        return new ModelAndView("redirect:/boats/{id}/");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/addNavigationEquipment")
+    public ModelAndView addNavigationEquipment(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        NavigationEquipment navigationEquipment = new NavigationEquipment();
+        Collection<NavigationEquipment> navigationEquipments = navigationEquipmentService.findByBoat(id);
+        model.addAttribute("navigationEquipments", navigationEquipments);
+        model.addAttribute("navigationEquipment", navigationEquipment);
+        Boat boat = boatService.findById(id);
+        model.addAttribute("boat", boat);
+
+        return new ModelAndView("boat/addNavigationEquipment");
+
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/addNavigationEquipment/submit")
+    public ModelAndView addNavigationEquipmentSubmit(Model model, @PathVariable Long id,
+                                                   @ModelAttribute NavigationEquipment navigationEquipment) throws Exception {
+        Boat boat = boatService.findById(id);
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boat", boat);
+        Collection<NavigationEquipment> navigationEquipments = navigationEquipmentService.findByBoat(id);
+        model.addAttribute("navigationEquipment", navigationEquipments);
+        model.addAttribute("navigationEquipment", navigationEquipment);
+        navigationEquipment.setBoat(boat);
+        navigationEquipmentService.save(navigationEquipment);
+
+        return new ModelAndView("redirect:/boats/{id}/");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/addFishingEquipment")
+    public ModelAndView addFishingEquipment(Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        FishingEquipment fishingEquipment = new FishingEquipment();
+        Collection<FishingEquipment> fishingEquipments = fishingEquipmentService.findByBoat(id);
+        model.addAttribute("fishingEquipments", fishingEquipments);
+        model.addAttribute("fishingEquipment", fishingEquipment);
+        Boat boat = boatService.findById(id);
+        model.addAttribute("boat", boat);
+
+        return new ModelAndView("boat/addFishingEquipment");
+
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/addFishingEquipment/submit")
+    public ModelAndView addFishingEquipmentSubmit(Model model, @PathVariable Long id,
+                                                   @ModelAttribute FishingEquipment fishingEquipment) throws Exception {
+        Boat boat = boatService.findById(id);
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boat", boat);
+        Collection<FishingEquipment> fishingEquipments = fishingEquipmentService.findByBoat(id);
+        model.addAttribute("fishingEquipments", fishingEquipments);
+        model.addAttribute("fishingEquipment", fishingEquipment);
+        fishingEquipment.setBoat(boat);
+        fishingEquipmentService.save(fishingEquipment);
+
+        return new ModelAndView("redirect:/boats/{id}/");
+    }
+
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/{id}/edit")
     public ModelAndView edit(Model model, @PathVariable Long id) throws Exception {
@@ -335,4 +423,13 @@ public class BoatController {
         return new ModelAndView("redirect:/boats/{id}/");
     }
 
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping("/{id}/averageRating")
+    public ModelAndView reportOfAverageRating (Model model, @PathVariable Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+        model.addAttribute("boats", boatService.findByBoatOwner(id));
+
+        return new ModelAndView("boat/reports/averageRating");
+    }
 }

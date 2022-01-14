@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -21,6 +22,9 @@ public class Boat implements Serializable {
 
     @Column
     private String boatName;
+
+    @Column
+    private EngineType engineType;
 
     @Column
     private Long length;
@@ -53,13 +57,25 @@ public class Boat implements Serializable {
     private String rules;
 
     @Column
+    private Double price = 0.0;
+
+    @Column
+    private Integer numPersons;
+
+    @Column
     private String description;
+
+    @Column
+    private CancellationCondition cancellationCondition;
 
     @Column
     private Boolean deleted = false;
 
     @Column
     private Boolean reserved = false;
+
+    @Column
+    private Boolean available = true;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -81,4 +97,13 @@ public class Boat implements Serializable {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
     private Client subscriber;
+
+    @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
+    private Set<AdditionalService> additionalServices = new HashSet<>();
+
+    @OneToMany(mappedBy = "boat", targetEntity = NavigationEquipment.class)
+    private Set<NavigationEquipment> navigationEquipments = new HashSet<>();
+
+    @OneToMany(mappedBy = "boat", targetEntity = FishingEquipment.class)
+    private Set<FishingEquipment> fishingEquipments = new HashSet<>();
 }

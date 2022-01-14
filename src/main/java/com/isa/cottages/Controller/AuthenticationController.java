@@ -33,8 +33,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/login")
-    public ModelAndView loginForm(Model model, String email) {
-        User user1 = userService.findByEmail(email);
+    public ModelAndView loginForm(Model model) {
         UserDTO user = new UserDTO();
         model.addAttribute("user", user);
         return new ModelAndView("login");

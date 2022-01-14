@@ -48,4 +48,15 @@ public class BoatOwnerServiceImpl implements BoatOwnerService {
         this.boatOwnerRepository.save(forUpdate);
         return forUpdate;
     }
+
+    @Override
+    public BoatOwner defineUnavailability(BoatOwner boatOwner) throws Exception {
+        BoatOwner forUpdate = findById(boatOwner.getId());
+
+        forUpdate.setUnavailableFrom(boatOwner.getUnavailableFrom());
+        forUpdate.setUnavailableUntil(boatOwner.getUnavailableUntil());
+
+        this.boatOwnerRepository.save(forUpdate);
+        return forUpdate;
+    }
 }

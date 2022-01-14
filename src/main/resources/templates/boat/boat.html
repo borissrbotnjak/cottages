@@ -36,12 +36,20 @@
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Reservation history</a>
             <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-              <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>-->
-              <!--                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeBoatReservationWithClient'}">Make reservation with client</a>-->
+            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
+            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                       </div>
                     </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Reports
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
+            <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
+          </div>
+        </li>
                     <li class="nav-item" sec:authorize="!hasAnyRole('COTTAGE_OWNER', 'BOAT_OWNER')">
                       <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
                     </li>
@@ -101,6 +109,16 @@
                 <p th:text="${boat.boatName}"></p>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label>Engine type</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.engineType.getDisplayName()}"></p>
+              </div>
+            </div>
+
             <div class="row">
               <div class="col-md-6">
                 <label>Length (in meters)</label>
@@ -205,6 +223,96 @@
                 <p th:text="${boat.availableUntil}"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Cancellation Condition</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.cancellationCondition}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label>Price:</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${boat.price}"></p>
+              </div>
+            </div>
+            <div class="row">
+              <form th:object="${additionalService}" method="get">
+                <table>
+                  <thead>
+                  <tr>
+                    <th> Additional service </th>
+                    <th> Price </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:if="${boat.additionalServices.empty}">
+                    <td colspan="2"> No Additional services </td>
+                  </tr>
+                  <tr th:each="additionalService : ${boat.additionalServices}">
+                    <td><span th:text="${additionalService.name}"> Additional service </span></td>
+                    <td><span th:text="${additionalService.price}"> Price </span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+
+            <div class="row">
+              <form th:object="${navigationEquipment}" method="get">
+                <table>
+                  <thead>
+                  <tr>
+                    <th> Navigation Equipment </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:if="${boat.navigationEquipments.empty}">
+                    <td colspan="2"> No Navigation equipments</td>
+                  </tr>
+                  <tr th:each="navigationEquipment : ${boat.navigationEquipments}">
+                    <td><span th:text="${navigationEquipment.name}"> Navigation equipment </span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+
+
+            <div class="row">
+              <form th:object="${fishingEquipment}" method="get">
+                <table>
+                  <thead>
+                  <tr>
+                    <th> Fishing Equipment </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:if="${boat.fishingEquipments.empty}">
+                    <td colspan="2"> No Fishing equipments</td>
+                  </tr>
+                  <tr th:each="fishingEquipment : ${boat.fishingEquipments}">
+                    <td><span th:text="${fishingEquipment.name}"> Fishing equipment </span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+
+            </br></br>
+            <div class="nav-item dropdown">
+              <a href="#" id="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add
+              </a>
+              <div sec:authorize="hasRole('BOAT_OWNER')" class="dropdown-menu" aria-labelledby="dropdown">
+                <a th:href="@{'/boats/__${boat.id}__/addAdditionalService'}">Add additional services</a><br/>
+                <a th:href="@{'/boats/__${boat.id}__/addNavigationEquipment'}">Add navigation equipments</a><br/>
+                <a th:href="@{'/boats/__${boat.id}__/addFishingEquipment'}">Add fishing equipments</a><br/>
+              </div>
+            </div>
 
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boats/__${boat.id}__/edit'}">Edit boat</a>
@@ -215,7 +323,7 @@
             </br></br>
             <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${boat.id}__/defineDiscount'}">Define discount</a>
             </br></br>
-            <a th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/reservations/__${boat.id}__/timeSlots'}">Reservation time slots</a>
           </div>
         </div>
       </div>

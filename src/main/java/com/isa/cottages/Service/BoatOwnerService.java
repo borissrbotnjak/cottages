@@ -9,5 +9,7 @@ public interface BoatOwnerService {
     BoatOwner updateBoats(BoatOwner boatOwner) throws Exception;
     BoatOwner updateProfile(BoatOwner boatOwner) throws Exception;
 
+    BoatOwner defineUnavailability(BoatOwner boatOwner) throws Exception;
+
 
 }
