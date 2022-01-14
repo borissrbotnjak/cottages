@@ -3,6 +3,7 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
+import com.isa.cottages.Service.impl.CottageOwnerServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,17 +13,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.nio.file.AccessDeniedException;
+
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
 
     private UserServiceImpl userService;
     private BoatOwnerServiceImpl boatOwnerService;
+    private CottageOwnerServiceImpl cottageOwnerService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, BoatOwnerServiceImpl boatOwnerService) {
+    public UserController(UserServiceImpl userService, BoatOwnerServiceImpl boatOwnerService,
+                          CottageOwnerServiceImpl cottageOwnerService) {
         this.userService = userService;
         this.boatOwnerService = boatOwnerService;
+        this.cottageOwnerService = cottageOwnerService;
     }
 
     @GetMapping("/index")
@@ -32,10 +38,10 @@ public class UserController {
         if (u.getEnabled() == false) {
             throw new Exception("Your account is not activated, please check your email.");
         }
-        // TODO: add separate page redirection for each user role
-        /*if (u instanceof Client) {
-            return new ModelAndView("client-home");
-        }*/
+//        if(AccessDeniedException.class.equals(true)) {
+//        if(auth == null) {
+//            return new ModelAndView("loginError");
+//        }
         return new ModelAndView("indexPage");
     }
 
@@ -47,9 +53,8 @@ public class UserController {
 
     @GetMapping("cottage-owner/home")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView cottageOwnerHome(Model model, Authentication auth) {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.findByEmail(auth.getName());
-        model.addAttribute("user", cottageOwner);
+    public ModelAndView cottageOwnerHome(Model model) throws Exception {
+        model.addAttribute("user", this.cottageOwnerService.getCottageOwnerFromPrincipal());
         return new ModelAndView("cottage/myHome");
     }
 
@@ -61,9 +66,8 @@ public class UserController {
 
     @GetMapping("/boat-owner/home")
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView boatOwnerHome(Model model, Authentication auth) {
-        BoatOwner boatOwner = (BoatOwner) userService.findByEmail(auth.getName());
-        model.addAttribute("user", boatOwner);
+    public ModelAndView boatOwnerHome(Model model) throws Exception {
+        model.addAttribute("user", this.boatOwnerService.getBoatOwnerFromPrincipal());
         return new ModelAndView("boat/myHome");
     }
 
