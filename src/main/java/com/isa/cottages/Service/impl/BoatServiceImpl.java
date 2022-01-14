@@ -68,10 +68,7 @@ public class BoatServiceImpl implements BoatService {
     public Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons) {
         if (boat.getNumPersons() >= numPersons) {
             if (boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) {
-                if ((boat.getAvailableFrom().toLocalDate().isAfter(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate))
-                        || (boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isBefore(endDate))) {
-                    return true;
-                }
+                if (boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
             } else { return true; }
         }
 

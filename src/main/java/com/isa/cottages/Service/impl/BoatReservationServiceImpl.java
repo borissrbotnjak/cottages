@@ -91,6 +91,48 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> getAllWithDiscount(Long boatId) {
+        List<BoatReservation> all = this.reservationRepository.findAllWithDiscount(boatId);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res : all) {
+            if (res.getStartTime().isAfter(LocalDateTime.now()) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public BoatReservation getOne(Long id) {
+        return this.reservationRepository.getById(id);
+    }
+
+    @Override
+    public BoatReservation update(BoatReservation reservation) {
+        BoatReservation toUpdate = this.reservationRepository.getById(reservation.getId());
+
+        toUpdate.setPrice(reservation.getPrice());
+        toUpdate.setBoat(reservation.getBoat());
+        toUpdate.setBoatOwner(reservation.getBoatOwner());
+        toUpdate.setReserved(reservation.getReserved());
+        toUpdate.setStartTime(reservation.getStartTime());
+        toUpdate.setEndTime(reservation.getEndTime());
+        toUpdate.setClient(reservation.getClient());
+        toUpdate.setNumPersons(reservation.getNumPersons());
+        toUpdate.setStartDate(reservation.getStartDate());
+        toUpdate.setEndDate(reservation.getEndDate());
+        toUpdate.setDuration(reservation.getDuration());
+        toUpdate.setAdditionalServices(reservation.getAdditionalServices());
+        toUpdate.setDiscountPrice(reservation.getDiscountPrice());
+        toUpdate.setDiscountAvailableFrom(reservation.getDiscountAvailableFrom());
+        toUpdate.setDiscountAvailableUntil(reservation.getDiscountAvailableUntil());
+
+        this.reservationRepository.save(toUpdate);
+        return toUpdate;
+    }
+
+    @Override
     public List<BoatReservation> getAllUpcoming() {
         List<BoatReservation> all = this.reservationRepository.getAllReservations();
         List<BoatReservation> upcoming = new ArrayList<>();
@@ -150,6 +192,22 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setReserved(true);
         this.setDate(reservation);
         this.save(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }
+
+    @Override
+    public BoatReservation makeReservationOnDiscount(Long reservationId) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        BoatReservation reservation = this.getOne(reservationId);
+
+        reservation.setClient(client);
+        reservation.setReserved(true);
+        reservation.setBoatOwner(reservation.getBoatOwner());
+        reservation.CalculatePrice();
+        this.update(reservation);
 
         this.sendReservationMail(reservation);
 

@@ -187,10 +187,7 @@ public class CottageServiceImpl implements CottageService {
     public Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons) {
         if (cottage.getNumPersons() >= numPersons) {
             if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
-                if ((cottage.getAvailableFrom().toLocalDate().isAfter(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))
-                        || (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isBefore(endDate))) {
-                    return true;
-                }
+                if (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
             } else { return true; }
         }
 
@@ -222,7 +219,7 @@ public class CottageServiceImpl implements CottageService {
         HashSet<Cottage> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
 
         for (Cottage b : woReservation) {
-            if (b.getNumPersons() >= numOfPersons) { available.add(b); }
+            if (b.getNumPersons() >= numOfPersons && this.cottageAvailable(startDate, endDate, b, numOfPersons)) { available.add(b); }
         }
 
         return available;

@@ -43,10 +43,7 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     public Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor, int numPersons) {
         if (instructor.getNumPersons() >= numPersons) {
             if (instructor.getAvailableFrom() != null && instructor.getAvailableUntil() != null) {
-                if ((instructor.getAvailableFrom().toLocalDate().isAfter(startDate) && instructor.getAvailableUntil().toLocalDate().isAfter(endDate))
-                        || (instructor.getAvailableFrom().toLocalDate().isBefore(startDate) && instructor.getAvailableUntil().toLocalDate().isBefore(endDate))) {
-                    return true;
-                }
+                if (instructor.getAvailableFrom().toLocalDate().isBefore(startDate) && instructor.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
             } else { return true; }
         }
 

@@ -188,6 +188,8 @@
             </br></br>
             <a th:href="@{'/cottageReservations/allDiscounts/__${cottage.id}__'}">View discounts</a>
             </br></br>
+            <a th:href="@{'/cottageReservations/onDiscount/__${cottage.id}__'}">View special offers</a>
+            </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define discount</a>
             </br></br>
             <a th:href="@{'/reservations/__${cottage.id}__/timeSlots'}">Reservation time slots</a>
