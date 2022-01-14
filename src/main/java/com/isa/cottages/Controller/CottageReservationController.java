@@ -295,6 +295,24 @@ public class CottageReservationController {
         return new ModelAndView("cottage/available");
     }
 
+    @GetMapping("/onDiscount/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showOffersOnDiscount(@PathVariable("id") Long id, Model model) throws Exception {
+        model.addAttribute("reservations", this.reservationService.getAllWithDiscount(id));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        return new ModelAndView("cottage/resOnDiscount");
+    }
+
+    @PostMapping("/onDiscount/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView selectOffersOnDiscount(@PathVariable("id") Long id, Model model) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        CottageReservation reservation = this.reservationService.makeReservationOnDiscount(id);
+
+        model.addAttribute("principal", client);
+        return new ModelAndView("redirect:/cottageReservations/success");
+    }
+
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/writeReport/{id}/submit")
     public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,

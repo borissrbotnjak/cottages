@@ -142,6 +142,64 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public List<CottageReservation> getAllWithDiscount(Long CottageId) {
+        List<CottageReservation> all = this.reservationRepository.findAllWithDiscount(CottageId);
+        List<CottageReservation> upcoming = new ArrayList<>();
+
+        for (CottageReservation res : all) {
+            if (res.getStartTime().isAfter(LocalDateTime.now()) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public CottageReservation update(CottageReservation reservation) {
+        CottageReservation toUpdate = this.reservationRepository.getById(reservation.getId());
+
+        toUpdate.setPrice(reservation.getPrice());
+        toUpdate.setCottage(reservation.getCottage());
+        toUpdate.setCottageOwner(reservation.getCottageOwner());
+        toUpdate.setReserved(reservation.getReserved());
+        toUpdate.setStartTime(reservation.getStartTime());
+        toUpdate.setEndTime(reservation.getEndTime());
+        toUpdate.setClient(reservation.getClient());
+        toUpdate.setNumPersons(reservation.getNumPersons());
+        toUpdate.setStartDate(reservation.getStartDate());
+        toUpdate.setEndDate(reservation.getEndDate());
+        toUpdate.setDuration(reservation.getDuration());
+        toUpdate.setAdditionalServices(reservation.getAdditionalServices());
+        toUpdate.setDiscountPrice(reservation.getDiscountPrice());
+        toUpdate.setDiscountAvailableFrom(reservation.getDiscountAvailableFrom());
+        toUpdate.setDiscountAvailableUntil(reservation.getDiscountAvailableUntil());
+
+        this.reservationRepository.save(toUpdate);
+        return toUpdate;
+    }
+
+    @Override
+    public CottageReservation getOne(Long id) {
+        return this.reservationRepository.getById(id);
+    }
+
+    @Override
+    public CottageReservation makeReservationOnDiscount(Long reservationId) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        CottageReservation reservation = this.getOne(reservationId);
+
+        reservation.setClient(client);
+        reservation.setReserved(true);
+        reservation.setCottageOwner(reservation.getCottage().getCottageOwner());
+        reservation.CalculatePrice();
+        this.update(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }
+
+    @Override
     public List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllReservedByOwner(id);
@@ -188,7 +246,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
-    public List<CottageReservation> findDiscountsByCottage(Long id) throws Exception{
+    public List<CottageReservation> findDiscountsByCottage(Long id) {
         Cottage cottage = cottageRepository.findById(id).get();
         List<CottageReservation> all = this.reservationRepository.findDiscountsByCottage(id);
         List<CottageReservation> cr = new ArrayList<>();

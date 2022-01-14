@@ -17,6 +17,10 @@ public interface InstructorReservationsService {
     List<InstructorReservation> findByOrderByDurationDesc() throws Exception;
     List<InstructorReservation> findByOrderByPriceAsc() throws Exception;
 
+    InstructorReservation update(InstructorReservation reservation);
+
+    InstructorReservation getOne(Long id);
+
     InstructorReservation save(InstructorReservation instructorReservation);
 
     void sendReservationMail(InstructorReservation reservation);
@@ -26,4 +30,8 @@ public interface InstructorReservationsService {
     void setDate(Reservation reservation);
 
     InstructorReservation makeReservation(InstructorReservation reservation, FishingInstructorAdventure instructor) throws Exception;
+
+    List<InstructorReservation> getAllWithDiscount(Long instructorId);
+
+    InstructorReservation makeReservationOnDiscount(Long id) throws Exception;
 }

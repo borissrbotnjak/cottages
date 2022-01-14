@@ -36,6 +36,10 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
 //            "group by u.id " +
 //            "WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))", nativeQuery = true)
     List<CottageReservation> findClient(@Param("keyword") String keyword);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
+            "and res.cottage_id=?1 and res.discount = true", nativeQuery = true)
+    List<CottageReservation> findAllWithDiscount(Long cottageId);
 /*
     List<CottageReservation> findByOrderByStartTimeAsc();
     List<CottageReservation> findByOrderByStartTimeDesc();

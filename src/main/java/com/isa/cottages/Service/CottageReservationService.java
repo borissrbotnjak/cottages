@@ -32,4 +32,12 @@ public interface CottageReservationService {
 
     void setDate(Reservation reservation);
     void sendReservationMail(CottageReservation reservation);
+
+    List<CottageReservation> getAllWithDiscount(Long CottageId);
+
+    CottageReservation update(CottageReservation reservation);
+
+    CottageReservation makeReservationOnDiscount(Long reservationId) throws Exception;
+
+    CottageReservation getOne(Long id);
 }

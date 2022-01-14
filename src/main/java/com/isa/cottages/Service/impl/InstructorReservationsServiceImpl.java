@@ -147,6 +147,63 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
     }
 
     @Override
+    public List<InstructorReservation> getAllWithDiscount(Long instructorId) {
+        List<InstructorReservation> all = this.reservationRepository.findAllWithDiscount(instructorId);
+        List<InstructorReservation> upcoming = new ArrayList<>();
+
+        for (InstructorReservation res : all) {
+            if (res.getStartTime().isAfter(LocalDateTime.now()) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public InstructorReservation makeReservationOnDiscount(Long id) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        InstructorReservation reservation = this.getOne(id);
+
+        reservation.setClient(client);
+        reservation.setReserved(true);
+        reservation.setFishingInstructorAdventure(reservation.getFishingInstructorAdventure());
+        reservation.CalculatePrice();
+        this.update(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }
+
+    @Override
+    public InstructorReservation update(InstructorReservation reservation) {
+        InstructorReservation toUpdate = this.reservationRepository.getById(reservation.getId());
+
+        toUpdate.setPrice(reservation.getPrice());
+        toUpdate.setFishingInstructorAdventure(reservation.getFishingInstructorAdventure());
+        toUpdate.setReserved(reservation.getReserved());
+        toUpdate.setStartTime(reservation.getStartTime());
+        toUpdate.setEndTime(reservation.getEndTime());
+        toUpdate.setClient(reservation.getClient());
+        toUpdate.setNumPersons(reservation.getNumPersons());
+        toUpdate.setStartDate(reservation.getStartDate());
+        toUpdate.setEndDate(reservation.getEndDate());
+        toUpdate.setDuration(reservation.getDuration());
+        toUpdate.setAdditionalServices(reservation.getAdditionalServices());
+        toUpdate.setDiscountPrice(reservation.getDiscountPrice());
+        toUpdate.setDiscountAvailableFrom(reservation.getDiscountAvailableFrom());
+        toUpdate.setDiscountAvailableUntil(reservation.getDiscountAvailableUntil());
+
+        this.reservationRepository.save(toUpdate);
+        return toUpdate;
+    }
+
+    @Override
+    public InstructorReservation getOne(Long id) {
+        return this.reservationRepository.getById(id);
+    }
+
+    @Override
     public InstructorReservation save(InstructorReservation instructorReservation) { return this.reservationRepository.save(instructorReservation); }
 
     @Override

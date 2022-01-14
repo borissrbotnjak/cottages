@@ -201,6 +201,24 @@ public class InstructorReservationController {
         return new ModelAndView("reservation/success");
     }
 
+    @GetMapping("/onDiscount/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView showOffersOnDiscount(@PathVariable("id") Long id, Model model) throws Exception {
+        model.addAttribute("reservations", this.reservationService.getAllWithDiscount(id));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        return new ModelAndView("instructor/resOnDiscount");
+    }
+
+    @PostMapping("/onDiscount/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView selectOffersOnDiscount(@PathVariable("id") Long id, Model model) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        InstructorReservation reservation = this.reservationService.makeReservationOnDiscount(id);
+
+        model.addAttribute("principal", client);
+        return new ModelAndView("redirect:/instructorReservations/success");
+    }
+
     @GetMapping("/history")
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {
