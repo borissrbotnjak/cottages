@@ -16,11 +16,13 @@ public interface BoatReservationService {
 
     BoatReservation save(BoatReservation reservation);
     BoatReservation makeReservation(BoatReservation reservation, Boat boat) throws Exception;
-
-    void setDate(BoatReservation boatReservation);
-
     BoatReservation makeReservationOnDiscount(Long reservationId) throws Exception;
 
+    Boolean canCancel(Long id);
+
+    void cancel(Long id);
+    void deleteById(Long id);
+    void setDate(BoatReservation boatReservation);
     void sendReservationMail(BoatReservation reservation);
 
     List<BoatReservation> findByOrderByStartTimeAsc() throws Exception;
@@ -34,6 +36,5 @@ public interface BoatReservationService {
     List<BoatReservation> getAllWithDiscount(Long boatId);
 
     BoatReservation update(BoatReservation reservation);
-
     BoatReservation getOne(Long id);
 }

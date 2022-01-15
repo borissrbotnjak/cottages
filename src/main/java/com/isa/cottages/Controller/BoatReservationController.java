@@ -244,6 +244,19 @@ public class BoatReservationController {
         return new ModelAndView("reservation/success");
     }
 
+    @RequestMapping("/cancel/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView cancelReservation(@PathVariable Long id, Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        if (this.reservationService.canCancel(id)) {
+            this.reservationService.cancel(id);
+            return new ModelAndView("redirect:/boatReservations/upcoming");
+        }
+
+        return new ModelAndView("reservation/cancellationError");
+    }
+
     @GetMapping("/history")
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView showReservationHistory(Model model, String keyword) throws Exception {

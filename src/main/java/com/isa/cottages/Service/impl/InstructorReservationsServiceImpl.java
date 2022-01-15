@@ -176,6 +176,29 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
     }
 
     @Override
+    public Boolean canCancel(Long id) {
+        if (this.getOne(id).getStartTime().isAfter(LocalDateTime.now().plusDays(3))) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void cancel(Long id) {
+        InstructorReservation reservation = this.getOne(id);
+
+        if(reservation.getDiscount()) {
+            reservation.setClient(null);
+            reservation.setReserved(false);
+            this.update(reservation);
+        }
+        else {
+            reservation.setDeleted(true);
+            this.update(reservation);
+        }
+    }
+
+    @Override
     public InstructorReservation update(InstructorReservation reservation) {
         InstructorReservation toUpdate = this.reservationRepository.getById(reservation.getId());
 

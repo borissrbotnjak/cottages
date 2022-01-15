@@ -8,6 +8,10 @@ public interface CottageReservationService {
 
     List<CottageReservation> getAllOwnersReservations(Long id) throws Exception;
 
+    Boolean canCancel(Long id);
+
+    void cancel(Long id);
+
     List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception;
     List<CottageReservation> getOwnersPastReservations(Long id) throws Exception;
     List<CottageReservation> getUpcomingReservations() throws Exception;

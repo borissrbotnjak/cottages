@@ -85,11 +85,17 @@
                 <th>Boat name:</th>
                 <th>Reservation start:</th>
                 <th>Reservation end:</th>
+                <th></th>
             </tr>
             <tr th:each="reservation:${reservations}">
                 <td th:text="${reservation.boat.getBoatName()}"></td>
                 <td th:text="${reservation.startTime}"></td>
                 <td th:text="${reservation.endTime}"></td>
+                <td>
+                    <form th:action="@{'/boatReservations/cancel/__${reservation.id}__'}"  method="post">
+                        <button type="submit" class="btn btn">Cancel</button>
+                    </form>
+                </td>
             </tr>
         </table>
     </div>

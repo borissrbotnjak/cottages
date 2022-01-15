@@ -313,6 +313,19 @@ public class CottageReservationController {
         return new ModelAndView("redirect:/cottageReservations/success");
     }
 
+    @RequestMapping("/cancel/{id}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ModelAndView cancelReservation(@PathVariable Long id, Model model) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        if (this.reservationService.canCancel(id)) {
+            this.reservationService.cancel(id);
+            return new ModelAndView("redirect:/cottageReservations/upcoming");
+        }
+
+        return new ModelAndView("reservation/cancellationError");
+    }
+
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/writeReport/{id}/submit")
     public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,

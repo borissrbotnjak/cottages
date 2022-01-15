@@ -215,6 +215,34 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public Boolean canCancel(Long id) {
+        if (this.getOne(id).getStartTime().isAfter(LocalDateTime.now().plusDays(3))) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void cancel(Long id) {
+        BoatReservation reservation = this.getOne(id);
+
+        if(reservation.getDiscount()) {
+            reservation.setClient(null);
+            reservation.setReserved(false);
+            this.update(reservation);
+        }
+        else {
+            reservation.setDeleted(true);
+            this.update(reservation);
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.deleteById(id);
+    }
+
+    @Override
     public void sendReservationMail(BoatReservation reservation) {
         String to = reservation.getClient().getEmail();
         String topic = "Boat Reservation";

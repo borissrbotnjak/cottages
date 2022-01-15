@@ -17,6 +17,10 @@ public interface InstructorReservationsService {
     List<InstructorReservation> findByOrderByDurationDesc() throws Exception;
     List<InstructorReservation> findByOrderByPriceAsc() throws Exception;
 
+    Boolean canCancel(Long id);
+
+    void cancel(Long id);
+
     InstructorReservation update(InstructorReservation reservation);
 
     InstructorReservation getOne(Long id);

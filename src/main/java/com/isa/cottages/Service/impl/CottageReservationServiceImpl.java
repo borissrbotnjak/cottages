@@ -200,6 +200,29 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public Boolean canCancel(Long id) {
+        if (this.getOne(id).getStartTime().isAfter(LocalDateTime.now().plusDays(3))) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void cancel(Long id) {
+        CottageReservation reservation = this.getOne(id);
+
+        if(reservation.getDiscount()) {
+            reservation.setClient(null);
+            reservation.setReserved(false);
+            this.update(reservation);
+        }
+        else {
+            reservation.setDeleted(true);
+            this.update(reservation);
+        }
+    }
+
+    @Override
     public List<CottageReservation> getOwnersUpcomingReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllReservedByOwner(id);
@@ -267,7 +290,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         for (CottageReservation res: all) {
             if((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
-                    && (Objects.equals(res.getCottageOwner().getId(), cl.getId()))) {
+                    && (Objects.equals(res.getClient().getId(), cl.getId()))) {
                 upcoming.add(res);
             }
         }
