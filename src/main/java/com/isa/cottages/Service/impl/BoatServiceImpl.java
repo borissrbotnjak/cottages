@@ -7,11 +7,14 @@ import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class BoatServiceImpl implements BoatService {
 
     @Autowired
@@ -173,6 +176,17 @@ public class BoatServiceImpl implements BoatService {
     public List<Boat> orderByAddressAsc() { return this.boatRepository.findByOrderByResidenceAscCityAscStateAsc(); }
 
     @Override
+    public Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons) {
+        if (boat.getNumPersons() >= numPersons) {
+            if (boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) {
+                if (boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
+            } else { return true; }
+        }
+
+        return false;
+    }
+
+    @Override
     public Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons) {
         if (boat.getNumPersons() >= numPersons) {
             if (boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) {
@@ -180,20 +194,20 @@ public class BoatServiceImpl implements BoatService {
                     return true;
                 }
             } else { return true; }
-        }
+        }   // TODO: OBRISI
         return false;
     }
 
     @Override
-    public Set<Boat> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception {
+    public Set<Boat> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
 
         Set<Boat> available = new HashSet<>();
         Set<Boat> withReservation = new HashSet<>();
-        List<BoatReservation> reservations = this.reservationService.getOwnersUpcomingReservations(id);
+        List<BoatReservation> reservations = this.reservationService.getAllUpcoming();
 
         for (BoatReservation res : reservations) {
             withReservation.add(res.getBoat());
-            if (this.myBoatAvailable(startDate, endDate, res.getBoat(), numOfPersons)) {
+            if (this.boatAvailable(startDate, endDate, res.getBoat(), numOfPersons)) {
                 if ((res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
                         (res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
                         (res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
@@ -203,23 +217,22 @@ public class BoatServiceImpl implements BoatService {
         }
 
         // ako ne postoji rezervacija i dobar je kapacitet, dodaj
-//        List<Boat> all = this.boatRepository.findAll();
+        List<Boat> all = this.boatRepository.findAll();
 
-//        HashSet<Boat> allSet = new HashSet<>(all);
+        HashSet<Boat> allSet = new HashSet<>(all);
 
-//        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
 
-//        for (Boat b : woReservation) {
-//            if (b.getNumPersons() >= numOfPersons) { available.add(b); }
-//        }
+        for (Boat b : woReservation) {
+            if (b.getNumPersons() >= numOfPersons) { available.add(b); }
+        }
+
         return available;
     }
 
     @Override
-    public List<Boat> findAllMyAvailableSorted(Long oid, LocalDate startDate, LocalDate endDate, int numOfPersons,
-                                               Boolean asc, Boolean price, Boolean rating) throws Exception {
-        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
-        Set<Boat> set = this.findAllMyAvailable(startDate, endDate, numOfPersons, oid);
+    public List<Boat> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception {
+        Set<Boat> set = this.findAllAvailable(startDate, endDate, numOfPersons);
         List<Boat> available = new ArrayList<>(set);
 
         if (asc && price && !rating) {

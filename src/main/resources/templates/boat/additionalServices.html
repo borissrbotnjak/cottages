@@ -37,15 +37,10 @@
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/chooseTime'}">Make cottage reservation</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item"sec:authorize="!hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
-                </li>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
                     <a class="nav-link" th:href="${'/cottages/allMyCottages'}">My Cottages</a>
@@ -83,54 +78,44 @@
 </div>
 
 </br>
-<div class="container">
-    <form th:action="@{'/boats/allBoats'}" method="get">
-        <input type="text" placeholder="Name, address..." name="keyword"/>
-        <button type="submit" class="btn btn-dark mt-2">Search</button>
-        </br>
-    </form>
 
-    </br>
-
-    <div>
-        <table id="boats" width="90%">
-            <tr>
-                <th>
-                    Boat name
-                    <a th:href="${'/boats/allBoats/sortByNameDesc'}"><font color="black">▼</font></a>
-                    <a th:href="${'/boats/allBoats/sortByNameAsc'}"><font color="black">▲</font></a>
-                </th>
-                <th>
-                    Address
-                    <a th:href="${'/boats/allBoats/SortByAddressDesc'}"><font color="black">▼</font></a>
-                    <a th:href="${'/boats/allBoats/SortByAddressAsc'}"><font color="black">▲</font></a>
-                </th>
-                <th></th>
-                <th></th>
-                <th>
-                    Rating
-                    <a th:href="${'/boats/allBoats/sortByRatingDesc'}"><font color="black">▼</font></a>
-                    <a th:href="${'/boats/allBoats/sortByRatingAsc'}"><font color="black">▲</font></a>
-                </th>
-                <th></th>
-            </tr>
-            <tr th:each="boat:${boats}">
-                <td th:text="${boat.boatName}"></td>
-                <td th:text="${boat.boatOwner.getState()}"></td>
-                <td th:text="${boat.boatOwner.getCity()}"></td>
-                <td th:text="${boat.boatOwner.getResidence()}"></td>
-                <td th:text="${boat.getAverageRating()}"></td>
-                <td><a th:href="${'/boats/' + boat.getId()}">View boat</a></td>
-            </tr>
-        </table>
-    </div>
-
-    </br>
-    </br>
-    <div class="row" sec:authorize="hasRole('BOAT_OWNER')">
-        <a th:href="${'/boat/addBoat'}">Add new boat</a>
+<div class="container mySpace">
+    <div class="center-align blue lighten-5">
+        <h1>Choose reservation parameters</h1> </br></br>
+        <form th:action="@{'/boatReservations/done/__${boat_id}__'}" method="post" th:object="${reservation}">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div>
+                            <div>
+                                <input type="text" name="endDateString" th:value="${endDateString}" hidden/>
+                                <input type="text" name="startDateString" th:value="${startDateString}" hidden/>
+                                <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                                <input type="text" name="services" th:value="${services}" hidden/>
+                                <div class="form-group">
+                                    <label for="services">Services</br></label>
+                                    <div class="input-group" id="services" data-target-input="nearest">
+                                        <label for="services">
+                                            <select class="form-control" multiple="multiple" name="additionalServices">
+                                                <option th:each="service : ${services}"
+                                                        th:value="${service.id}"
+                                                        th:text="${service.name} + ' ' + ${service.description} + ' ' + ${service.price}">Additional services:
+                                                </option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                <input type="text" name="selectedServices" th:value="${services}" hidden/>
+                                </br></br>
+                                <input class="btn grey lighten-4 black-text" type="submit" value="Proceed">
+                            </div>
+                        </div>
+                    </div>
+                </div></div>
+        </form>
     </div>
 </div>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

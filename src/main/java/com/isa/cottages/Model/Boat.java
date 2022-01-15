@@ -66,6 +66,14 @@ public class Boat implements Serializable {
     private String description;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime availableUntil;
+
+    @Column
     private CancellationCondition cancellationCondition;
 
     @Column
@@ -78,12 +86,10 @@ public class Boat implements Serializable {
     private Boolean available = true;
 
     @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime availableFrom;
+    private Double price = 0.0;
 
     @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime availableUntil;
+    private Integer numPersons;
 
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;
@@ -93,10 +99,16 @@ public class Boat implements Serializable {
 
     @ElementCollection
     private Set<Integer> ratings;
-
+/*
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
     private Client subscriber;
+ */
+    @ManyToMany(mappedBy = "boatSubscriptions")
+    private Set<Client> subscribers;
+
+    @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
+    private Set<AdditionalService> additionalServices = new HashSet<>();
 
     @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();

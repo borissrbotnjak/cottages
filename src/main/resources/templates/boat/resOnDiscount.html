@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+  <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -19,18 +15,22 @@
 
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
-  <title>Upade profile</title>
+  <title>Reservations on discount</title>
 </head>
 <body>
 
+
 <div class="container-fluid bg-light">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Vikendice Memedovic</a>
+    <a class="navbar-brand" href="#">Vikendice Pavlovic</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Reservations
@@ -49,6 +49,7 @@
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/chooseTime'}">Make cottage reservation</a>
           </div>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
         </li>
@@ -56,45 +57,61 @@
           <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/instructors/allInstructors'}">All fishing instructors</a>
+          <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="${'/client/profile/__${user.id}__'}">Profile</a>
+          <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="hasRole('CLIENT')">
           <a class="nav-link" th:href="${'/client/home'}">Home</a>
-        <li class="nav-item">
-          <a class="nav-link" th:href="${'/auth/logout'}">Log out</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
         </li>
       </ul>
+
     </div>
   </nav>
 </div>
 
-<div class="container mySpace">
-  <div class="center-align blue lighten-5">
-    <h1>Edit profile</h1>
-    <form th:action="@{/client/profile/__${user.id}__/editProfile}" th:object="${user}" method="post">
-      <br><label for="firstName">FirstName:</label>
-      <input id="firstName" type="text" th:field="*{firstName}"/>
-      <br><label for="lastName">LastName:</label>
-      <input id="lastName" type="text" th:field="*{lastName}"/>
-      <br><label for="residence">Residence:</label>
-      <input id="residence" type="text" th:field="*{residence}"/>
-      <br><label for="city">City:</label>
-      <input id="city" type="text" th:field="*{city}"/>
-      <br><label for="state">State:</label>
-      <input id="state" type="text" th:field="*{state}"/>
-      <br><label for="phoneNumber">Phone Number:</label>
-      <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
-      <div class="form-group">
-        <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
-      </div>
-    </form>
+<div class="container">
+  <div id="cottages" class="table">
+    </br>
+    <h3>Reservations on discount</h3>
+    </br>
+    </br></br></br>
+    <table width="90%">
+      <tr>
+        <th>Boat name:</th>
+        <th>Address:</th>
+        <th></th>
+        <th>Reservation start:</th>
+        <th>Reservation end:</th>
+        <th>Discount available from:</th>
+        <th>Discount available until:</th>
+        <th>Original price:</th>
+        <th>Price with discount:</th>
+        <th></th>
+      </tr>
+      <tr th:each="reservation:${reservations}">
+        <td th:text="${reservation.boat.getBoatName()}"></td>
+        <td th:text="${reservation.boat.getBoatOwner().getCity()}"></td>
+        <td th:text="${reservation.boat.getBoatOwner().getState()}"></td>
+        <td th:text="${reservation.startDate}"></td>
+        <td th:text="${reservation.endDate}"></td>
+        <td th:text="${reservation.discountAvailableFrom}"></td>
+        <td th:text="${reservation.discountAvailableUntil}"></td>
+        <td th:text="${reservation.getPrice()}"></td>
+        <td th:text="${reservation.getDiscountPrice()}"></td>
+        <td>
+          <form th:action="@{'/boatReservations/onDiscount/__${reservation.id}__'}"  method="post">
+            <button type="submit" class="btn btn">Select</button>
+          </form>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

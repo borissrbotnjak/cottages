@@ -19,7 +19,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Boat reservation History</title>
+    <title>Reservation</title>
 </head>
 <body>
 
@@ -47,38 +47,20 @@
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/chooseTime'}">Make cottage reservation</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a> </div>
                     </div>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Reports
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
-                    </div>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="!hasRole('COTTAGE_OWNER')" th:href="${'/cottages/allCottages'}">All cottages</a>
+                    <a class="nav-link" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="!hasRole('COTTAGE_OWNER')" th:href="${'/boats/allBoats'}">All boats</a>
+                    <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="!hasRole('COTTAGE_OWNER')" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('BOAT_OWNER')" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('BOAT_OWNER')" th:href="${'/boatOwner/profile/__${principal.id}__'}">Profile</a>
+                    <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" th:href="${'/client/home'}">Home</a>
@@ -87,48 +69,89 @@
                     <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
                 </li>
             </ul>
+
         </div>
     </nav>
 </div>
 
 <div class="container">
-    <div id="boats" class="table">
+    <div id="cottages" class="table">
         </br>
-        <h3>Upcoming Boat Reservations</h3>
-        </br>
+        <h3></h3>
+        </br><!--
+    <form th:action="@{'/boatReservations/chooseTime'}" method="get">
+      <input type="date" placeholder="Start Date" name="startTime" id="startTime"/>
+      <input type="date" placeholder="End Date" name="endTime" id="endTime"/>
+      <button type="submit" class="btn btn-dark mt-2">Search</button>
+      </br>
+    </form>-->
         </br></br></br>
-        <table sec:authorize="hasRole('CLIENT')" width="90%">
+        <table width="90%">
             <tr>
-                <th>Boat name:</th>
-                <th>Reservation start:</th>
-                <th>Reservation end:</th>
+                <th>Instructor:</th>
+                <th>Adventure:</th>
+                <th>
+                    Rating
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>Address:</th>
                 <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                    <form th:action="${'/instructorReservations/available/byPriceAsc'}" method="get">
+                        <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                        <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                        <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                        <button type="submit" class="btn btn" style="font-size : 15px; width: 100%; height: 50px;">Sort by Price Ascending</button>
+                    </form>
+                    <form th:action="${'/instructorReservations/available/byPriceDesc'}" method="get">
+                        <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                        <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                        <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                        <button type="submit" class="btn btn" style="font-size : 15px; width: 100%; height: 50px;">Sort by Price Descending</button>
+                    </form>
+                </th>
+                <th>
+                    <form th:action="${'/instructorReservations/available/byRatingAsc'}" method="get">
+                        <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                        <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                        <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                        <button type="submit" class="btn btn" style="font-size : 15px; width: 100%; height: 50px;">Sort by Rating Ascending</button>
+                    </form>
+                    <form th:action="${'/instructorReservations/available/byRatingDesc'}" method="get">
+                        <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                        <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                        <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                        <button type="submit" class="btn btn" style="font-size : 15px; width: 100%; height: 50px;">Sort by Rating Descending</button>
+                    </form>
+                </th>
             </tr>
-            <tr th:each="reservation:${reservations}">
-                <td th:text="${reservation.boat.getBoatName()}"></td>
-                <td th:text="${reservation.startTime}"></td>
-                <td th:text="${reservation.endTime}"></td>
+            <tr th:each="adventure:${adventures}">
+                <td th:text="${adventure.getInstructor().getFullName()}"></td>
+                <td th:text="${adventure.getAdventureName()}"></td>
+                <td th:text="${adventure.getAverageRating}"></td>
+                <td th:text="${adventure.getPrice()}"></td>
+                <td th:text="${adventure.getInstructor().getResidence()}"></td>
+                <td th:text="${adventure.getInstructor().getCity()}"></td>
+                <td th:text="${adventure.getInstructor().getState()}"></td>
+                <td></td>
                 <td>
-                    <form th:action="@{'/boatReservations/cancel/__${reservation.id}__'}"  method="post">
-                        <button type="submit" class="btn btn">Cancel</button>
+                    <form th:action="@{'/instructorReservations/select/__${adventure.id}__'}">
+                        <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                        <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                        <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                        <button type="submit" class="btn btn">Select</button>
                     </form>
                 </td>
+                <td></td>
+                <!-- <td><a th:href="${'/adventureReservations/select/' + adventure.getId()}">Select</a></td> -->
             </tr>
         </table>
-        <table sec:authorize="hasRole('BOAT_OWNER')" width="90%">
-            <tr>
-                <th>Boat name:</th>
-                <th>Reservation start:</th>
-                <th>Client name:</th>
-                <th></th>
-            </tr>
-            <tr th:each="boatReservation:${boatReservations}">
-                <td th:text="${boatReservation.boat.getBoatName()}"></td>
-                <td th:text="${boatReservation.startTime}"></td>
-                <td th:text="${boatReservation.client.getFullName()}"></td>
-                <td><a th:href="@{/client/profile/__${boatReservation.client.getId()}__}">View profile</a></td>
-            </tr>
-        </table>
+
+
     </div>
 </div>
 

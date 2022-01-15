@@ -11,4 +11,8 @@ public interface AdditionalServiceService {
 
     List<AdditionalService> findByCottage(Long id) throws Exception;
     List<AdditionalService> findByBoat(Long id) throws Exception;
+
+    Set<Long> getIds(Set<AdditionalService> services);
+
+
 }

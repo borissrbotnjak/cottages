@@ -75,5 +75,11 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
             }
         }
         return myAdditionalServices;
+
+    @Override
+    public Set<Long> getIds(Set<AdditionalService> services) {
+        Set<Long> ids = new HashSet<>();
+        for (AdditionalService s : services) { ids.add(s.getId()); }
+        return ids;
     }
 }

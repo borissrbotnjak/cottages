@@ -30,4 +30,9 @@ public interface BoatService {
     List<Boat> orderByRatingDesc();
     List<Boat> orderByAddressDesc();
     List<Boat> orderByAddressAsc();
+
+    Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons);
+
+    Set<Boat> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
+    List<Boat> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 }

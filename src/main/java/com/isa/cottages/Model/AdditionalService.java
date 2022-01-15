@@ -13,12 +13,16 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("additional_service")
+// @DiscriminatorValue("additional_service")
 public class AdditionalService implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
     private String name;
@@ -27,19 +31,19 @@ public class AdditionalService implements Serializable {
     private String description;
 
     @Column
-    private Double price;
-
-    @ManyToOne(targetEntity = Cottage.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="cottage_id", nullable=true, referencedColumnName = "id")
-    private Cottage cottage;
-
-    @ManyToOne(targetEntity = Cottage.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "adventure_id", nullable = true, referencedColumnName = "id")
-    private FishingInstructorAdventure adventure;
+    private Double price = 0.0;
 
     @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="boat_id", nullable=true, referencedColumnName = "id")
+    @JoinColumn(name = "boat_id", nullable = true, referencedColumnName = "id")
     private Boat boat;
+
+    @ManyToOne(targetEntity = Cottage.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cottage_id", nullable = true, referencedColumnName = "id")
+    private Cottage cottage;
+
+    @ManyToOne(targetEntity = FishingInstructorAdventure.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "adventure_id", nullable = true, referencedColumnName = "id")
+    private FishingInstructorAdventure adventure;
 
     @ManyToOne(targetEntity = Reservation.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "reservation_id", nullable = true, referencedColumnName = "id")

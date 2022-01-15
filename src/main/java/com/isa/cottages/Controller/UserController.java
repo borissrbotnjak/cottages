@@ -34,7 +34,8 @@ public class UserController {
     public ModelAndView indexPage(Authentication auth) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
         if (u.getEnabled() == false) {
-            throw new Exception("Your account is not activated, please check your email.");
+            // throw new Exception("Your account is not activated, please check your email.");
+            return new ModelAndView("confirmEmail");
         }
 //        if(AccessDeniedException.class.equals(true)) {
 //        if(auth == null) {

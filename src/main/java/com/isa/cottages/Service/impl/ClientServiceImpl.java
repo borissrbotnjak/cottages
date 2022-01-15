@@ -15,27 +15,35 @@ import java.util.Set;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
     private UserServiceImpl userService;
-
-    @Autowired
     private ClientRepository clientRepository;
-
-    @Autowired
+    private UserServiceImpl userService;
+    private LoyaltyProgramServiceImpl loyaltyService;
     private BoatReservationServiceImpl boatReservationService;
-
-    @Autowired
     private CottageReservationServiceImpl cottageReservationService;
 
-//    @Autowired
-//    public ClientServiceImpl(UserServiceImpl userService, ClientRepository clientRepository,
-//                             BoatReservationServiceImpl boatReservationService,
-//                             CottageReservationServiceImpl cottageReservationService) {
-//       this.userService = userService;
-//       this.clientRepository = clientRepository;
-//       this.boatReservationService = boatReservationService;
-//       this.cottageReservationService = cottageReservationService;
-//    }
+
+
+    @Autowired
+    public ClientServiceImpl(UserServiceImpl userService, ClientRepository clientRepository,
+                             BoatReservationServiceImpl boatReservationService,
+                             CottageReservationServiceImpl cottageReservationService) {
+       this.userService = userService;
+       this.clientRepository = clientRepository;
+       this.boatReservationService = boatReservationService;
+       this.cottageReservationService = cottageReservationService;
+    }
+
+    @Override
+    public Client getCurrentClient() throws Exception {
+        return this.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+    }
+
+    @Override
+    public Double getDiscount() throws Exception {
+        Client client = this.getCurrentClient();
+        return this.loyaltyService.calculateClientDiscount(client);
+    }
 
     @Override
     public Client findById(Long id) throws Exception {
@@ -77,6 +85,29 @@ public class ClientServiceImpl implements ClientService {
         forUpdate.setLastName(client.getLastName());
 
         return this.clientRepository.save(forUpdate);
+    }
+
+    public Client update(Client client) throws Exception {
+        Client forUpdate = this.findById(client.getId());
+
+        forUpdate.setCity(client.getCity());
+        forUpdate.setState(client.getState());
+        forUpdate.setResidence(client.getResidence());
+        forUpdate.setFirstName(client.getFirstName());
+        forUpdate.setLastName(client.getLastName());
+        forUpdate.setPhoneNumber(client.getPhoneNumber());
+        forUpdate.setLoyaltyProgram(client.getLoyaltyProgram());
+        forUpdate.setBoatSubscriptions(client.getBoatSubscriptions());
+        forUpdate.setCottageSubscriptions(client.getCottageSubscriptions());
+        forUpdate.setInstructorSubscriptions(client.getInstructorSubscriptions());
+        forUpdate.setReservations(client.getReservations());
+        forUpdate.setUserRole(client.getUserRole());
+        forUpdate.setPassword(client.getPassword());
+        forUpdate.setEmail(client.getEmail());
+        forUpdate.setEnabled(client.getEnabled());
+
+        this.clientRepository.save(forUpdate);
+        return forUpdate;
     }
 
     @Override

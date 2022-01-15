@@ -9,37 +9,34 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class BoatReservationServiceImpl implements BoatReservationService {
 
-    @Autowired
     private ClientServiceImpl clientService;
-
-    @Autowired
     private UserServiceImpl userService;
-
-    @Autowired
     private BoatReservationRepository reservationRepository;
-
-    @Autowired
-    private BoatServiceImpl boatService;
-
-    @Autowired
     private EmailService emailService;
 
-//    @Autowired
-//    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
-//                                      BoatReservationRepository boatReservationRepository,
-//                                      BoatServiceImpl boatService) {
-//        this.clientService = clientService;
-//        this.userService = userService;
-//        this.reservationRepository = boatReservationRepository;
-//        this.boatService = boatService;
-////        this.emailService = emailService;
-//    }
+    //@Autowired
+    private BoatServiceImpl boatService;
+
+    //@Autowired
+    private EmailService emailService;
+
+    @Autowired
+    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
+                                      BoatReservationRepository boatReservationRepository,
+                                      BoatServiceImpl boatService) {
+        this.clientService = clientService;
+        this.userService = userService;
+        this.reservationRepository = boatReservationRepository;
+        this.boatService = boatService;
+        this.emailService = emailService;
+    }
 
     @Override
     public BoatReservation findById(Long id) throws Exception{
@@ -104,6 +101,76 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> findAllAvailable(LocalDate startTime, LocalDate endTime) {
+        List<BoatReservation> all = this.reservationRepository.getAllReservations();
+        List<BoatReservation> available = new ArrayList<>();
+
+        for (BoatReservation res : all) {
+            if ((res.getStartTime().isAfter(ChronoLocalDateTime.from(startTime)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(endTime))) ||
+                            (res.getStartTime() == null && res.getEndTime() == null) ||
+                            (res.getStartTime().isBefore(ChronoLocalDateTime.from(startTime)) && res.getEndTime().isBefore(ChronoLocalDateTime.from(endTime)))) {
+                available.add(res);
+            }
+        }
+        return available;
+    }
+
+    @Override
+    public List<BoatReservation> getAllWithDiscount(Long boatId) {
+        List<BoatReservation> all = this.reservationRepository.findAllWithDiscount(boatId);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res : all) {
+            if (res.getStartTime().isAfter(LocalDateTime.now()) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public BoatReservation getOne(Long id) {
+        return this.reservationRepository.getById(id);
+    }
+
+    @Override
+    public BoatReservation update(BoatReservation reservation) {
+        BoatReservation toUpdate = this.reservationRepository.getById(reservation.getId());
+
+        toUpdate.setPrice(reservation.getPrice());
+        toUpdate.setBoat(reservation.getBoat());
+        toUpdate.setBoatOwner(reservation.getBoatOwner());
+        toUpdate.setReserved(reservation.getReserved());
+        toUpdate.setStartTime(reservation.getStartTime());
+        toUpdate.setEndTime(reservation.getEndTime());
+        toUpdate.setClient(reservation.getClient());
+        toUpdate.setNumPersons(reservation.getNumPersons());
+        toUpdate.setStartDate(reservation.getStartDate());
+        toUpdate.setEndDate(reservation.getEndDate());
+        toUpdate.setDuration(reservation.getDuration());
+        toUpdate.setAdditionalServices(reservation.getAdditionalServices());
+        toUpdate.setDiscountPrice(reservation.getDiscountPrice());
+        toUpdate.setDiscountAvailableFrom(reservation.getDiscountAvailableFrom());
+        toUpdate.setDiscountAvailableUntil(reservation.getDiscountAvailableUntil());
+
+        this.reservationRepository.save(toUpdate);
+        return toUpdate;
+    }
+
+    @Override
+    public List<BoatReservation> getAllUpcoming() {
+        List<BoatReservation> all = this.reservationRepository.getAllReservations();
+        List<BoatReservation> upcoming = new ArrayList<>();
+        // TODO: Check for availability period
+        for (BoatReservation res : all) {
+            if ((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
     public List<BoatReservation> findByOrderByPriceDesc() throws Exception {
         List<BoatReservation> pastOnes = getPastReservations();
         pastOnes.sort(Comparator.comparing(BoatReservation::getPrice).reversed());
@@ -112,7 +179,109 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public List<BoatReservation> findAllByClient(Client client) { return this.reservationRepository.findAllByClient(client.getId()); }
+    public List<BoatReservation> findAllByClient(Client client) {
+        return this.reservationRepository.findAllByClient(client.getId());
+    }
+
+    @Override
+    public BoatReservation save(BoatReservation reservation) {
+        return this.reservationRepository.save(reservation);
+    }
+
+    @Override
+    public void setDate(BoatReservation reservation) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(reservation.getStartDateString(), formatter);
+        LocalDate ed = LocalDate.parse(reservation.getEndDateString(), formatter);
+
+        reservation.setStartDate(sd);
+        reservation.setEndDate(ed);
+        reservation.setStartTime(sd.atStartOfDay());
+        reservation.setEndTime(ed.atStartOfDay());
+    }
+
+    public double getDiscountPrice(Double price) throws Exception {
+        return (1 - this.clientService.getDiscount()) * price;
+    }
+
+    @Override
+    public BoatReservation makeReservation(BoatReservation reservation, Boat boat) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+
+        reservation.setBoat(boat);
+        reservation.setBoatOwner(boat.getBoatOwner());
+        reservation.setClient(client);
+        reservation.setPrice(boat.getPrice());
+        reservation.CalculatePrice();
+        reservation.setReserved(true);
+        this.setDate(reservation);
+        this.save(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }
+
+    @Override
+    public BoatReservation makeReservationOnDiscount(Long reservationId) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        BoatReservation reservation = this.getOne(reservationId);
+
+        reservation.setClient(client);
+        reservation.setReserved(true);
+        reservation.setBoatOwner(reservation.getBoatOwner());
+        reservation.CalculatePrice();
+        this.update(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }
+
+    @Override
+    public Boolean canCancel(Long id) {
+        if (this.getOne(id).getStartTime().isAfter(LocalDateTime.now().plusDays(3))) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void cancel(Long id) {
+        BoatReservation reservation = this.getOne(id);
+
+        if(reservation.getDiscount()) {
+            reservation.setClient(null);
+            reservation.setReserved(false);
+            this.update(reservation);
+        }
+        else {
+            reservation.setDeleted(true);
+            this.update(reservation);
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.deleteById(id);
+    }
+
+    @Override
+    public void sendReservationMail(BoatReservation reservation) {
+        String to = reservation.getClient().getEmail();
+        String topic = "Boat Reservation";
+        String body = "You successfully made boat reservation. \n\n\n" +
+                "\tBoat:\t" + reservation.getBoat().getBoatName() + "\n" +
+                "\tBoat Owner:\t" + reservation.getBoatOwner().getFullName() + "\n\n" +
+                "\tStart date\t" + reservation.getStartDate().atStartOfDay().toLocalDate().toString() + "\n" +
+                "\tEnd date\t" + reservation.getEndDate().atStartOfDay().toLocalDate().toString() + "\n\n" +
+                "\tAddress:\t" + reservation.getBoatOwner().getResidence() + ", " +
+                reservation.getBoatOwner().getState() + "\n" +
+                "\tPrice:\t" + reservation.getPrice().toString() + "0  RSD\n";
+
+        this.emailService.sendEmail(to, body, topic);
+    }
 
     @Override
     public List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception {

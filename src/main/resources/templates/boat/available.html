@@ -19,7 +19,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <title>Upcoming instructor reservations</title>
+  <title>Boat reservation History</title>
 </head>
 <body>
 
@@ -62,6 +62,9 @@
         <li class="nav-item">
           <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
         </li>
+        <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+          <a class="nav-link" th:href="${'/client/home'}">Home</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" th:href="${'/auth/logout'}">Logout</a>
         </li>
@@ -74,29 +77,79 @@
 <div class="container">
   <div id="cottages" class="table">
     </br>
-    <h3>Upcoming instructor reservations </h3>
-    </br>
-    </br>
+    <h3></h3>
+    </br><!--
+    <form th:action="@{'/boatReservations/chooseTime'}" method="get">
+      <input type="date" placeholder="Start Date" name="startTime" id="startTime"/>
+      <input type="date" placeholder="End Date" name="endTime" id="endTime"/>
+      <button type="submit" class="btn btn-dark mt-2">Search</button>
+      </br>
+    </form>-->
+    </br></br></br>
     <table width="90%">
       <tr>
-        <th>Instructor name:</th>
-        <th>Adventure name:</th>
-        <th>Reservation start:</th>
-        <th>Reservation end:</th>
+        <th>Boat name:</th>
+        <th>
+          Rating
+        </th>
+        <th>
+          Price
+        </th>
+        <th>Address:</th>
         <th></th>
+        <th></th>
+        <th></th>
+        <th>
+          <form th:action="${'/boatReservations/available/byPriceAsc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Price Ascending</button>
+          </form>
+          <form th:action="${'/boatReservations/available/byPriceDesc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Price Descending</button>
+          </form>
+        </th>
+        <th>
+          <form th:action="${'/boatReservations/available/byRatingAsc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+          </form>
+          <form th:action="${'/boatReservations/available/byRatingDesc'}" method="get">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Sort by Rating Descending</button>
+          </form>
+        </th>
       </tr>
-      <tr th:each="reservation:${reservations}">
-        <td th:text="${reservation.fishingInstructorAdventure.instructorInfo}"></td>
-        <td th:text="${reservation.fishingInstructorAdventure.adventureName}"></td>
-        <td th:text="${reservation.startTime}"></td>
-        <td th:text="${reservation.endTime}"></td>
+      <tr th:each="boat:${boats}">
+        <td th:text="${boat.getBoatName()}"></td>
+        <td th:text="${boat.getAverageRating}"></td>
+        <td th:text="${boat.getPrice()}"></td>
+        <td th:text="${boat.getBoatOwner().getResidence()}"></td>
+        <td th:text="${boat.getBoatOwner().getCity()}"></td>
+        <td th:text="${boat.getBoatOwner().getState()}"></td>
+        <td></td>
         <td>
-          <form th:action="@{'/instructorReservations/cancel/__${reservation.id}__'}"  method="post">
-            <button type="submit" class="btn btn">Cancel</button>
+          <form th:action="@{'/boatReservations/select/__${boat.id}__'}">
+            <input type="text" name="endDate" th:value="${endDate}" hidden/>
+            <input type="text" name="startDate" th:value="${startDate}" hidden/>
+            <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+            <button type="submit" class="btn btn">Select</button>
           </form>
         </td>
+        <td></td>
+        <!-- <td><a th:href="${'/boatReservations/select/' + boat.getId()}">Select</a></td> -->
       </tr>
     </table>
+
+
   </div>
 </div>
 
