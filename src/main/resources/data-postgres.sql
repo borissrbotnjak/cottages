@@ -10,12 +10,12 @@ VALUES(1,1);
 /* USERS */
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Goca', 'Petrusic', 'goca@gmail.com', 'goca', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'System_administrator', TRUE, 0);
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, unavailable_from, unavailable_until)
-VALUES ('Vikendica', 'Petrusic', 'v@gmail.com', 'v', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Cottage_owner', TRUE, 1, '01-01-2022', '10-01-2022');
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
+VALUES ('Vikendica', 'Petrusic', 'v@gmail.com', 'v', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Cottage_owner', TRUE, 1);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Vikendica2', 'Petrusic2', 'v2@gmail.com', 'v2', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Cottage_owner', TRUE, 1);
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, unavailable_from, unavailable_until)
-VALUES ('Brod', 'Petrusic', 'b@gmail.com', 'b', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2, '01-01-2022', '10-01-2022');
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
+VALUES ('Brod', 'Petrusic', 'b@gmail.com', 'b', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id)
 VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
@@ -36,14 +36,11 @@ INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, ma
 VALUES('Kristina', 3, 7, 2, 200, 40, 8, '', '', 6, 4.6, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 'https://i.pinimg.com/564x/e1/5b/4a/e15b4ad8938cf85f98b45e0b83dd701b.jpg', 1000, 2);
 
 /* COTTAGES */
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM,
-                    AVAILABLE_UNTIL, IMAGE_URL, SUBSCRIBER_ID, PRICE, NUM_PERSONS)
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, SUBSCRIBER_ID, PRICE, NUM_PERSONS)
 VALUES('Vikendica 1', 'Srbija', 'Novi Sad', 'Ledinci', 3, 5, 4.1, '', 2, TRUE, '01/01/2021 12:00', '12/12/2022 12:00', 'https://i.pinimg.com/564x/0e/08/ab/0e08ab8052d8176950710801b798cce1.jpg', 5, 2000, 6);
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, IMAGE_URL
-, SUBSCRIBER_ID, PRICE, NUM_PERSONS)
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, IMAGE_URL, SUBSCRIBER_ID, PRICE, NUM_PERSONS)
 VALUES('Vikendica 2', 'Srbija', 'Novi Sad', 'Veternik', 1, 3, 3.4, '', 2, FALSE, 'https://tinyhousetalk.com/wp-content/uploads/Pendleton-Cottage-001.jpg', 5, 2000, 6);
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM,
-                    AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
 VALUES('Vikendica 3', 'Srbija', 'Palic', 'Palic', 3, 2, 4.0, '', 3, TRUE, '01/01/2021 12:00', '12/12/2022 12:00', '', 2000, 6);
 INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, IMAGE_URL, PRICE, NUM_PERSONS)
 VALUES('Vikendica 4', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg', 2000, 5);
@@ -102,38 +99,38 @@ VALUES ('Maja Simovic', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'S
 /* COTTAGE_RESERVATIONS-DISCOUNTS */
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, CLIENT_ID, COTTAGE_OWNER_ID, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL,
                         DISCOUNT, NUM_PERSONS, DISCOUNT_PRICE, RESERVATION_TYPE, START_TIME, END_TIME)
-VALUES (1, 1, 5, 2, '01/01/2021 10:00', '12/12/2021 10:00', TRUE, 4, 1000, 'cottage_reservation', '04/11/2021 12:00', '08/11/2021 12:00');
+VALUES (1, 1, 5, 2, '01/10/2021 10:00', '12/12/2021 10:00', TRUE, 4, 1000, 'cottage_reservation', '04/12/2021 12:00', '08/11/2021 12:00');
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, CLIENT_ID, COTTAGE_OWNER_ID, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL,
                         DISCOUNT, NUM_PERSONS, DISCOUNT_PRICE, RESERVATION_TYPE, START_TIME, END_TIME)
-VALUES (1, 1, 6, 2, '01/01/2021 10:00', '12/12/2021 10:00', TRUE, 4, 1000, 'cottage_reservation', '09/11/2021 12:00', '12/11/2021 12:00');
+VALUES (1, 1, 6, 2, '01/11/2021 10:00', '12/12/2021 10:00', TRUE, 4, 1000, 'cottage_reservation', '09/12/2021 12:00', '11/12/2021 12:00');
 
 /* COTTAGE_RESERVATIONS-FREE */
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DISCOUNT, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL, DISCOUNT_PRICE, NUM_PERSONS)
-VALUES (1, 1, 2, 5, FALSE, FALSE, '01/01/2022 12:00', '12/12/2022 12:00', '06/12/2022', '12/12/2022', 'cottage_reservation', TRUE, '05/01/2022', '10/02/2022', 3000, 3);
+VALUES (1, 1, 2, 5, FALSE, FALSE, '05/01/2022 12:00', '10/01/2022 12:00', '05/01/2022', '10/01/2022', 'cottage_reservation', TRUE, '05/01/2022', '10/02/2022', 3000, 3);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DISCOUNT, NUM_PERSONS, PRICE)
-VALUES (1, 1, 2, 5, FALSE, FALSE, '01/01/2022 12:00', '12/12/2022 12:00', '01/12/2022', '12/12/2022', 'cottage_reservation', FALSE, 4, 4000);
+VALUES (1, 2, 2, 5, FALSE, FALSE, '01/05/2022 12:00', '10/05/2022 12:00', '01/05/2022', '10/05/2022', 'cottage_reservation', FALSE, 4, 4000);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DISCOUNT, NUM_PERSONS, PRICE)
-VALUES (1, 1, 2, 5, FALSE, FALSE, '01/01/2022 12:00', '12/12/2022 12:00', '10/11/2022', '12/11/2022', 'cottage_reservation', FALSE, 6, 6000);
+VALUES (1, 1, 2, 5, FALSE, FALSE, '01/04/2022 12:00', '12/04/2022 12:00', '01/04/2022', '12/04/2022', 'cottage_reservation', FALSE, 6, 6000);
 
 /* COTTAGE_RESERVATIONS-PAST */
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DURATION, PRICE)
-VALUES (1, 1, 2, 5, FALSE, TRUE, '04/04/2021 12:00', '09/04/2021 12:00', '04/04/2021', '09/04/2021', 'cottage_reservation', 1, 3000);
+VALUES (1, 1, 2, 5, FALSE, TRUE, '04/12/2021 12:00', '09/12/2021 12:00', '04/12/2021', '09/12/2021', 'cottage_reservation', 1, 3000);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DURATION, PRICE)
-VALUES (1, 3, 3, 5, FALSE, TRUE, '04/05/2021 12:00', '09/05/2021 12:00', '04/05/2021', '09/05/2021', 'cottage_reservation', 3, 2400);
+VALUES (1, 2, 2, 5, FALSE, TRUE, '04/05/2021 12:00', '09/05/2021 12:00', '04/05/2021', '09/05/2021', 'cottage_reservation', 3, 2400);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DURATION, PRICE)
-VALUES (1, 3, 3, 6, FALSE, TRUE, '04/06/2021 12:00', '09/06/2021 12:00',  '04/06/2021', '09/06/2021', 'cottage_reservation', 3, 2400);
+VALUES (1, 2, 2, 6, FALSE, TRUE, '04/06/2021 12:00', '09/06/2021 12:00',  '04/06/2021', '09/06/2021', 'cottage_reservation', 3, 2400);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DURATION, PRICE)
-VALUES (1, 3, 3, 6, FALSE, TRUE, '04/06/2020 12:00', '09/06/2020 12:00', '04/06/2020', '09/06/2020', 'cottage_reservation', 3, 2400);
+VALUES (1, 2, 2, 6, FALSE, TRUE, '04/06/2020 12:00', '09/06/2020 12:00', '04/06/2020', '09/06/2020', 'cottage_reservation', 3, 2400);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DURATION, PRICE)
-VALUES (1, 3, 3, 6, FALSE, TRUE, '04/04/2020 12:00', '09/04/2020 12:00', '04/04/2020', '09/04/2020', 'cottage_reservation', 3, 2400);
+VALUES (1, 2, 2, 6, FALSE, TRUE, '04/04/2020 12:00', '09/04/2020 12:00', '04/04/2020', '09/04/2020', 'cottage_reservation', 3, 2400);
 
 /* COTTAGE_RESERVATIONS-UPCOMING */
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
@@ -141,7 +138,7 @@ INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELET
 VALUES (1, 1, 2, 6, FALSE, TRUE, '05/11/2022 12:00', '06/11/2022 12:00', '05/11/2022', '06/11/2022', 'cottage_reservation', FALSE);
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, COTTAGE_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE,
                         RESERVATION_TYPE, DISCOUNT)
-VALUES (1, 2, 2, 6, FALSE, TRUE, '11/11/2022 10:00', '12/11/2022 12:00', '11/11/2022', '12/11/2022', 'cottage_reservation', FALSE);
+VALUES (1, 4, 2, 6, FALSE, TRUE, '08/12/2022 10:00', '11/12/2022 12:00', '08/11/2022', '11/11/2022', 'cottage_reservation', FALSE);
 
 /* BOAT RESERVATIONS */
 INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE, DURATION, PRICE, START_DATE, END_DATE)

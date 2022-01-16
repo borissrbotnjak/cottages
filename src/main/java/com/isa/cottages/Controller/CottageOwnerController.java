@@ -52,25 +52,25 @@ public class CottageOwnerController {
         }
     }
 
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/{id}/defineUnavailability")
-    public ModelAndView defineUnavailability(Model model, @PathVariable Long id) throws Exception {
-        CottageOwner cottageOwner = cottageOwnerService.findById(id);
-        model.addAttribute("id", id);
-        model.addAttribute("principal", cottageOwner);
-
-        return new ModelAndView("cottage/defineUnavailability");
-    }
-
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @PostMapping("/{id}/defineUnavailability/submit")
-    public ModelAndView defineUnavailability(Model model, @PathVariable Long id, @ModelAttribute CottageOwner cottageOwner) throws Exception {
-        model.addAttribute("id", id);
-        model.addAttribute("principal", cottageOwner);
-
-        this.cottageOwnerService.defineUnavailability(cottageOwner);
-
-        return new ModelAndView("redirect:/cottageReservations/viewCalendar/{id}/");
-    }
+//    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+//    @GetMapping("/{id}/defineUnavailability")
+//    public ModelAndView defineUnavailability(Model model, @PathVariable Long id) throws Exception {
+//        CottageOwner cottageOwner = cottageOwnerService.findById(id);
+//        model.addAttribute("id", id);
+//        model.addAttribute("principal", cottageOwner);
+//
+//        return new ModelAndView("cottage/defineUnavailability");
+//    }
+//
+//    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+//    @PostMapping("/{id}/defineUnavailability/submit")
+//    public ModelAndView defineUnavailability(Model model, @PathVariable Long id, @ModelAttribute CottageOwner cottageOwner) throws Exception {
+//        model.addAttribute("id", id);
+//        model.addAttribute("principal", cottageOwner);
+//
+//        this.cottageOwnerService.defineUnavailability(cottageOwner);
+//
+//        return new ModelAndView("redirect:/cottageReservations/viewCalendar/{id}/");
+//    }
 
 }

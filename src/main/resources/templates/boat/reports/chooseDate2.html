@@ -17,7 +17,7 @@
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
 
-    <title>Make reservation with client</title>
+    <title>Report</title>
 </head>
 <body>
 
@@ -35,7 +35,7 @@
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/upcomingOwnersReservations/__${principal.id}__'}> Upcoming reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/pastOwnersReservations/__${principal.id}__'}>Reservation history</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/makeReservationWithClient'}">Make reservation with client</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href="@{'/boatReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -62,42 +62,39 @@
     </nav>
 </div> </br></br>
 
-<div class="container mySpace">
-    <div class="center-align blue lighten-5">
-        <h1>Choose reservation parameters</h1> </br></br>
-        <form th:action="@{'/boatReservations/__${principal.id}__/reserve/__${boat_id}__/__${client.id}__'}" method="post" th:object="${reservation}">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="tab-content profile-tab" id="myTabContent">
-                        <div>
-                            <div>
-                                <input type="text" name="endDateString" th:value="${endDateString}" hidden/>
-                                <input type="text" name="startDateString" th:value="${startDateString}" hidden/>
-                                <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
-                                <input type="text" name="services" th:value="${services}" hidden/>
-                                <div class="form-group">
-                                    <label for="services">Services</br></label>
-                                    <div class="input-group" id="services" data-target-input="nearest">
-                                        <label for="services">
-                                            <select class="form-control" multiple="multiple" name="additionalServices">
-                                                <option th:each="service : ${services}"
-                                                        th:value="${service.id}"
-                                                        th:text="${service.name} + ' ' + ${service.price}">Additional services:
-                                                </option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-                                <input type="text" name="selectedServices" th:value="${services}" hidden/>
-                                </br>
-                                <p th:if="${sLength == 0}">There are no additional services</p>
-                                </br></br>
-                                <input class="btn grey lighten-4 black-text" type="submit" value="Proceed">
+
+<div class="container">
+    <h2>Choose interval</h2>
+    </br>
+    <div class="row">
+                </br>
+                <form th:action="@{'/boatReservations/__${principal.id}__/chooseDate2'}" method="post">
+                    <div class="form-group">
+                        <label for="date">Start date</br></label>
+                        <div class="input-group date" id="date1" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="startDate"
+                                   th:value="${startDate}" id="date" placeholder="format example: 01/01/2022"/>
+                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
                             </div>
                         </div>
                     </div>
-                </div></div>
-        </form>
+
+                    <div class="form-group">
+                        <label for="date2">End date</br></label>
+                        <div class="input-group date" id="date2" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="endDate"
+                                   th:value="${endDate}" id="date_2" placeholder="format example: 02/01/2022"/>
+                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-dark mt-2">Submit</button>
+                    </br>
+                </form>
     </div>
 </div>
 

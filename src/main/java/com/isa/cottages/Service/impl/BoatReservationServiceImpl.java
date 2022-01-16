@@ -272,6 +272,21 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public Set<BoatReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+        List<BoatReservation> reservations = this.getOwnersPastReservations(id);
+        Set<BoatReservation> filtered = new HashSet<>();
+        Double attendance = 0.0;
+
+        for(BoatReservation res: reservations){
+            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+                filtered.add(res);
+            }
+        }
+
+        return filtered;
+    }
+
+    @Override
     public void setDate(BoatReservation reservation) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

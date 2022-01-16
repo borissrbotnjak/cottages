@@ -370,7 +370,7 @@ public class CottageReservationController {
         model.addAttribute("startDate", LocalDate.now());
         model.addAttribute("endDate", LocalDate.now());
 
-        return new ModelAndView("cottage/reports/chooseDate");
+        return new ModelAndView("cottage/reports/chooseDate2");
     }
 
     @PostMapping("/{id}/chooseDate2")
@@ -413,6 +413,58 @@ public class CottageReservationController {
         model.addAttribute("income", income);
 
         return new ModelAndView("cottage/reports/incomes");
+    }
+
+    @GetMapping("/{id}/chooseDate3")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView chooseDate3(Model model, @PathVariable Long id) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        model.addAttribute("startDate", LocalDate.now());
+        model.addAttribute("endDate", LocalDate.now());
+
+        return new ModelAndView("cottage/reports/chooseDate3");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @PostMapping("/{id}/chooseDate4")
+    public ModelAndView chooseDate4(Model model, @PathVariable Long id,
+                                    @RequestParam("startDate") String startDate,
+                                    @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        return new ModelAndView("redirect:/cottageReservations/{id}/attendance");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{id}/attendance")
+    public ModelAndView reportOfAttendance(Model model, @PathVariable Long id,
+                                           @RequestParam("startDate") String startDate,
+                                           @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        Set<CottageReservation> reservations = this.reservationService.findByInterval2(ld1, ld2, id);
+        model.addAttribute("reservations", reservations);
+        Integer attendance = reservations.size();
+
+        model.addAttribute("attendance", attendance);
+
+
+        return new ModelAndView("cottage/reports/attendance");
     }
 
     @GetMapping("/{oid}/makeReservationWithClient")

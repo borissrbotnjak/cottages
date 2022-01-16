@@ -22,6 +22,7 @@ public interface BoatReservationService {
     List<BoatReservation> findAllByClient(Client client);
     List<BoatReservation> findClient(String keyword) throws Exception;
     Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
+    Set<BoatReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 
     BoatReservation saveDiscount(BoatReservation boatReservation);
     BoatReservation saveReservation(BoatReservation boatReservation);

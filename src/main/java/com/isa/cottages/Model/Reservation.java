@@ -79,6 +79,9 @@ public class Reservation implements Serializable {
     private Double income;
 
     @Column
+    private Integer attendance;
+
+    @Column
     private Double discountPrice = 0.0;
 
     @Column

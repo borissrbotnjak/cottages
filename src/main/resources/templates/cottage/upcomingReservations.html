@@ -56,6 +56,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate3'}> Attendance</a>
+
                     </div>
                 </li>
                 <li class="nav-item">

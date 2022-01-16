@@ -55,25 +55,25 @@ public class BoatOwnerController {
         }
     }
 
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    @GetMapping("/{id}/defineUnavailability")
-    public ModelAndView defineUnavailability(Model model, @PathVariable Long id) throws Exception {
-        BoatOwner boatOwner = boatOwnerService.findById(id);
-        model.addAttribute("id", id);
-        model.addAttribute("principal", boatOwner);
-
-        return new ModelAndView("boat/defineUnavailability");
-    }
-
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    @PostMapping("/{id}/defineUnavailability/submit")
-    public ModelAndView defineUnavailability(Model model, @PathVariable Long id, @ModelAttribute BoatOwner boatOwner) throws Exception {
-        model.addAttribute("id", id);
-        model.addAttribute("principal", boatOwner);
-
-        this.boatOwnerService.defineUnavailability(boatOwner);
-
-        return new ModelAndView("redirect:/boatReservations/viewCalendar/{id}/");
-    }
+//    @PreAuthorize("hasRole('BOAT_OWNER')")
+//    @GetMapping("/{id}/defineUnavailability")
+//    public ModelAndView defineUnavailability(Model model, @PathVariable Long id) throws Exception {
+//        BoatOwner boatOwner = boatOwnerService.findById(id);
+//        model.addAttribute("id", id);
+//        model.addAttribute("principal", boatOwner);
+//
+//        return new ModelAndView("boat/defineUnavailability");
+//    }
+//
+//    @PreAuthorize("hasRole('BOAT_OWNER')")
+//    @PostMapping("/{id}/defineUnavailability/submit")
+//    public ModelAndView defineUnavailability(Model model, @PathVariable Long id, @ModelAttribute BoatOwner boatOwner) throws Exception {
+//        model.addAttribute("id", id);
+//        model.addAttribute("principal", boatOwner);
+//
+//        this.boatOwnerService.defineUnavailability(boatOwner);
+//
+//        return new ModelAndView("redirect:/boatReservations/viewCalendar/{id}/");
+//    }
 
 }

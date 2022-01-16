@@ -241,6 +241,21 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public Set<CottageReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+        List<CottageReservation> reservations = this.getOwnersPastReservations(id);
+        Set<CottageReservation> filtered = new HashSet<>();
+        Double attendance = 0.0;
+
+        for(CottageReservation res: reservations){
+            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+                filtered.add(res);
+            }
+        }
+
+        return filtered;
+    }
+
+    @Override
     public void setDate(CottageReservation reservation) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

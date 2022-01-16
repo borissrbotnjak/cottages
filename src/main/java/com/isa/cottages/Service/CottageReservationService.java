@@ -23,6 +23,7 @@ public interface CottageReservationService {
     List<CottageReservation> findAllByClient(Client client);
     List<CottageReservation> findClient(String keyword) throws Exception;
     Set<CottageReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
+    Set<CottageReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 
     List<CottageReservation> findByOrderByStartTimeAsc() throws Exception;
     List<CottageReservation> findByOrderByStartTimeDesc() throws Exception;
