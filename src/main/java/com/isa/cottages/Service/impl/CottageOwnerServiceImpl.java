@@ -52,16 +52,16 @@ public class CottageOwnerServiceImpl implements CottageOwnerService {
     return forUpdate;
     }
 
-    @Override
-    public CottageOwner defineUnavailability(CottageOwner cottageOwner) throws Exception {
-        CottageOwner forUpdate = findById(cottageOwner.getId());
-
-        forUpdate.setUnavailableFrom(cottageOwner.getUnavailableFrom());
-        forUpdate.setUnavailableUntil(cottageOwner.getUnavailableUntil());
-
-        this.cottageOwnerRepository.save(forUpdate);
-        return forUpdate;
-    }
+//    @Override
+//    public CottageOwner defineUnavailability(CottageOwner cottageOwner) throws Exception {
+//        CottageOwner forUpdate = findById(cottageOwner.getId());
+//
+//        forUpdate.setUnavailableFrom(cottageOwner.getUnavailableFrom());
+//        forUpdate.setUnavailableUntil(cottageOwner.getUnavailableUntil());
+//
+//        this.cottageOwnerRepository.save(forUpdate);
+//        return forUpdate;
+//    }
 
     @Override
     public CottageOwner findCottageOwnerByEmail(String email) throws Exception {

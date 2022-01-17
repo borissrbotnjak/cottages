@@ -29,20 +29,17 @@ public class BoatReservationController {
     private ReportServiceImpl reportService;
     private EmailSender emailSender;
     private ClientServiceImpl clientService;
-    private AdditionalServiceServiceImpl serviceService;
 
     @Autowired
     public BoatReservationController(UserServiceImpl userService, BoatReservationServiceImpl reservationService,
                                      BoatServiceImpl boatService, ReportServiceImpl reportService,
-                                     EmailSender emailSender, ClientServiceImpl clientService,
-                                     AdditionalServiceServiceImpl serviceService) {
+                                     EmailSender emailSender, ClientServiceImpl clientService) {
         this.userService = userService;
         this.reservationService = reservationService;
         this.boatService = boatService;
         this.reportService = reportService;
         this.emailSender = emailSender;
         this.clientService = clientService;
-        this.serviceService = serviceService;
     }
 
     @GetMapping("/chooseTime")
@@ -360,13 +357,15 @@ public class BoatReservationController {
         BoatReservation boatReservation = new BoatReservation();
 
         model.addAttribute("boatReservation", boatReservation);
+        model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.boatService.findById(id).getAdditionalServices().size());
 
         Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(id);
         model.addAttribute("boatReservations", boatReservations);
 
         return new ModelAndView("boat/defineDiscount");
     }
-/*
+
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @PostMapping("/{id}/defineDiscount/submit")
     public ModelAndView defineDiscount(@PathVariable Long id,
@@ -377,6 +376,8 @@ public class BoatReservationController {
 //        }
         Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(id);
         model.addAttribute("boatReservations", boatReservations);
+        model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.boatService.findById(id).getAdditionalServices().size());
 
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
@@ -387,14 +388,15 @@ public class BoatReservationController {
         this.reservationService.saveDiscount(boatReservation);
 
         Boat boat = boatService.findById(id);
-        Client client = boat.getSubscriber();
-//        Client client = (Client) userService.findByEmail(email);
-        if (boat.getSubscriber() != null && client.getBoatSubscriptions() != null) {
-            emailSender.send(client.getEmail(), email(client.getFirstName(), "New discount for boat ", boat.getBoatName(), " published."));
+        Set<Client> clients = boat.getSubscribers();
+        for (Client c:clients) {
+            if (boat.getSubscribers() != null && c.getBoatSubscriptions() != null) {
+                emailSender.send(c.getEmail(), email(c.getFirstName(), "New discount for cottage ", boat.getBoatName(), " published."));
+            }
         }
         return new ModelAndView("redirect:/boatReservations/allDiscounts/{id}/");
     }
-*/
+
     public String email(String name, String text1, String boatName, String text2) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
@@ -561,7 +563,7 @@ public class BoatReservationController {
         if (keyword != null) {
             model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("boatReservations", this.reservationService.getAllOwnersUpcomingReservations(id));
+            model.addAttribute("boatReservations", this.reservationService.getAllOwnersNowAndUpcomingReservations(id));
         }
         return new ModelAndView("boat/calendar");
     }
@@ -574,7 +576,7 @@ public class BoatReservationController {
         model.addAttribute("startDate", LocalDate.now());
         model.addAttribute("endDate", LocalDate.now());
 
-        return new ModelAndView("boat/reports/chooseDate");
+        return new ModelAndView("boat/reports/chooseDate2");
     }
 
     @PostMapping("/{id}/chooseDate2")
@@ -620,12 +622,54 @@ public class BoatReservationController {
 
     }
 
+    @GetMapping("/{id}/chooseDate3")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    public ModelAndView chooseDate3(Model model, @PathVariable Long id) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        model.addAttribute("startDate", LocalDate.now());
+        model.addAttribute("endDate", LocalDate.now());
+
+        return new ModelAndView("boat/reports/chooseDate3");
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @PostMapping("/{id}/chooseDate4")
+    public ModelAndView chooseDate4(Model model, @PathVariable Long id,
+                                            @RequestParam("startDate") String startDate,
+                                            @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        return new ModelAndView("redirect:/boatReservations/{id}/attendance");
+    }
+
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/{id}/attendance")
-    public ModelAndView reportOfAttendance (Model model, @PathVariable Long id) throws Exception {
-        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
-        model.addAttribute("principal", boatOwner);
-        model.addAttribute("boats", boatService.findByBoatOwner(id));
+    public ModelAndView reportOfAttendance(Model model, @PathVariable Long id,
+                                           @RequestParam("startDate") String startDate,
+                                           @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        Set<BoatReservation> reservations = this.reservationService.findByInterval2(ld1, ld2, id);
+        model.addAttribute("reservations", reservations);
+        Integer attendance = reservations.size();
+
+        model.addAttribute("attendance", attendance);
+
 
         return new ModelAndView("boat/reports/attendance");
     }
@@ -636,10 +680,7 @@ public class BoatReservationController {
         BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
 
-        LocalDateTime time = LocalDateTime.now();
-        model.addAttribute("time", time);
-
-        model.addAttribute("clients", this.clientService.findAllAvailable_Boat(time, oid));
+        model.addAttribute("clients", this.clientService.findAllAvailable_Boat(oid));
 
         return new ModelAndView("boat/makeReservation/showAvailableClients");
     }
@@ -895,16 +936,16 @@ public class BoatReservationController {
 
         return new ModelAndView("redirect:/boatReservations/end");
     }
-/*
+
     @GetMapping("/end")
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView reservationConfirmation(Model model) throws Exception {
+    public ModelAndView confirmReservation(Model model) throws Exception {
         BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
 
         return new ModelAndView("boat/makeReservation/success");
     }
-*/
+
     public String emailSuccess(String name, String text1, String text2, String boatName, String text3, String boatOwnerName,
                                String text4, LocalDate startDate, String text5, LocalDate endDate,
                                String text6, Integer numPersons, String text7, Double price) {

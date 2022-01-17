@@ -99,7 +99,7 @@ public class CottageReservationController {
 
         return new ModelAndView("cottage/defineDiscount");
     }
-/*
+
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/defineDiscount/submit")
     public ModelAndView defineDiscount(@PathVariable Long id, @ModelAttribute CottageReservation cottageReservation,
@@ -119,13 +119,15 @@ public class CottageReservationController {
         this.reservationService.saveDiscount(cottageReservation);
 
         Cottage cottage = cottageService.findById(id);
-        Client client = cottage.getSubscriber();
-        if (cottage.getSubscriber() != null && client.getCottageSubscriptions() != null) {
-            emailSender.send(client.getEmail(), email(client.getFirstName(), "New discount for cottage ", cottage.getName(), " published."));
+        Set<Client> clients = cottage.getSubscribers();
+        for (Client c:clients) {
+            if (cottage.getSubscribers() != null && c.getBoatSubscriptions() != null) {
+                emailSender.send(c.getEmail(), email(c.getFirstName(), "New discount for cottage ", cottage.getName(), " published."));
+            }
         }
         return new ModelAndView("redirect:/cottageReservations/allDiscounts/{id}/");
     }
-*/
+
     public String email(String name, String text1, String cottageName, String text2) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
@@ -252,25 +254,6 @@ public class CottageReservationController {
         reportService.save(report);
         return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{oid}");
     }
-/*
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @GetMapping("/writeReport/{id}")
-    public ModelAndView reportForm(Model model, @PathVariable Long id) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
-        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
-
-        Report report = new Report();
-        model.addAttribute("report", report);
-        report.setClient((Client) this.userService.findById(id));
-        report.setAdmin((SystemAdministrator) this.userService.findById(aid));
-        model.addAttribute("id", id);
-        model.addAttribute("aid", aid);
-        model.addAttribute("oid", oid);
-
-        return new ModelAndView("cottage/report");
-    }
-*/
 
     @GetMapping("/chooseTime")
     @PreAuthorize("hasRole('CLIENT')")
@@ -473,19 +456,6 @@ public class CottageReservationController {
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    @PostMapping("/writeReport/{id}/submit")
-    public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,
-                                         @PathVariable Long id) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
-        model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
-
-        report.setCottageOwner(cottageOwner);
-        reportService.save(report);
-        return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{id}/");
-    }
-
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/viewCalendar/{id}")
     public ModelAndView viewCalendar (Model model, @PathVariable Long id, String keyword) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
@@ -493,7 +463,7 @@ public class CottageReservationController {
         if (keyword != null) {
             model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("cottageReservations", this.reservationService.getAllOwnersUpcomingReservations(id));
+            model.addAttribute("cottageReservations", this.reservationService.getAllOwnersNowAndUpcomingReservations(id));
         }
         return new ModelAndView("cottage/calendar");
     }
@@ -599,7 +569,7 @@ public class CottageReservationController {
         model.addAttribute("startDate", LocalDate.now());
         model.addAttribute("endDate", LocalDate.now());
 
-        return new ModelAndView("cottage/reports/chooseDate");
+        return new ModelAndView("cottage/reports/chooseDate2");
     }
 
     @PostMapping("/{id}/chooseDate2")
@@ -644,13 +614,63 @@ public class CottageReservationController {
         return new ModelAndView("cottage/reports/incomes");
     }
 
+    @GetMapping("/{id}/chooseDate3")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    public ModelAndView chooseDate3(Model model, @PathVariable Long id) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        model.addAttribute("startDate", LocalDate.now());
+        model.addAttribute("endDate", LocalDate.now());
+
+        return new ModelAndView("cottage/reports/chooseDate3");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @PostMapping("/{id}/chooseDate4")
+    public ModelAndView chooseDate4(Model model, @PathVariable Long id,
+                                    @RequestParam("startDate") String startDate,
+                                    @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        return new ModelAndView("redirect:/cottageReservations/{id}/attendance");
+    }
+
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping("/{id}/attendance")
+    public ModelAndView reportOfAttendance(Model model, @PathVariable Long id,
+                                           @RequestParam("startDate") String startDate,
+                                           @RequestParam("endDate") String endDate) throws Exception {
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld1 = LocalDate.parse(startDate, formatter);
+        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        model.addAttribute("startDate", ld1);
+        model.addAttribute("endDate", ld2);
+
+        Set<CottageReservation> reservations = this.reservationService.findByInterval2(ld1, ld2, id);
+        model.addAttribute("reservations", reservations);
+        Integer attendance = reservations.size();
+
+        model.addAttribute("attendance", attendance);
+
+
+        return new ModelAndView("cottage/reports/attendance");
+    }
+
     @GetMapping("/{oid}/makeReservationWithClient")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView showAvailableClients(Model model, @PathVariable Long oid) throws Exception {
-        LocalDateTime time = LocalDateTime.now();
-        model.addAttribute("time", time);
 
-        model.addAttribute("clients", this.clientService.findAllAvailable_Cottage(time, oid));
+        model.addAttribute("clients", this.clientService.findAllAvailable_Cottage(oid));
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         return new ModelAndView("cottage/makeReservation/showAvailableClients");
@@ -893,15 +913,15 @@ public class CottageReservationController {
 
         return new ModelAndView("redirect:/cottageReservations/end");
     }
-/*
+
     @GetMapping("/end")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
-    public ModelAndView reservationConfirmation(Model model) throws Exception {
+    public ModelAndView confirmReservation(Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         return new ModelAndView("cottage/makeReservation/success");
     }
-*/
+
     public String emailSuccess(String name, String text1, String text2, String cottageName, String text3,
                                String cottageOwnerName,
                                String text4, LocalDate startDate, String text5, LocalDate endDate,

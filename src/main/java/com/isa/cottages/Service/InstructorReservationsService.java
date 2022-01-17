@@ -1,6 +1,8 @@
 package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.*;
+import com.isa.cottages.Model.Client;
+import com.isa.cottages.Model.InstructorReservation;
 
 import java.util.List;
 

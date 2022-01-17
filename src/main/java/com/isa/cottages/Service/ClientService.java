@@ -2,7 +2,6 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Client;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public interface ClientService {
@@ -16,6 +15,6 @@ public interface ClientService {
     Client update(Client client) throws Exception;
 
     Double getDiscount() throws Exception;
-    Set<Client> findAllAvailable_Boat (LocalDateTime time, Long oid) throws Exception;
-    Set<Client> findAllAvailable_Cottage (LocalDateTime time, Long oid) throws Exception;
+    Set<Client> findAllAvailable_Boat (Long oid) throws Exception;
+    Set<Client> findAllAvailable_Cottage (Long oid) throws Exception;
 }

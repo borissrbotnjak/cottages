@@ -410,19 +410,12 @@ public class CottageController {
         CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
         model.addAttribute("cottages", cottageService.findByCottageOwner(oid));
-//        Cottage cottage = cottageService.findById(cid);
-//        model.addAttribute("cottage", cottage);
 
         List<CottageReservation> cottageReservations = reservationService.getOwnersPastReservations(oid);
         CottageReservation cottageReservation = reservationService.findOne(rid);
         Double price = cottageReservation.getPrice();
         Integer numberOfReservations = cottageReservations.size();
         model.addAttribute("numberOfReservations", numberOfReservations);
-
-        Double IncomePerDay;
-        Double IncomePerWeek;
-        Double IncomePerMonth;
-        Double IncomePerYear;
 
         return new ModelAndView("cottage/reports/incomes");
     }

@@ -12,19 +12,17 @@ import java.util.*;
 @Service
 public class CottageServiceImpl implements CottageService {
 
+    @Autowired
     private CottageRepository cottageRepository;
-    private UserServiceImpl userService;
-    private CottageOwnerServiceImpl cottageOwnerService;
-    private CottageReservationServiceImpl reservationService;
 
     @Autowired
-    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
-                              CottageOwnerServiceImpl cottageOwnerService, CottageReservationServiceImpl reservationService){
-        this.cottageRepository = cottageRepository;
-        this.userService = userService;
-        this.cottageOwnerService = cottageOwnerService;
-        this.reservationService = reservationService;
-    }
+    private UserServiceImpl userService;
+
+    @Autowired
+    private CottageOwnerServiceImpl cottageOwnerService;
+
+    @Autowired
+    private CottageReservationServiceImpl reservationService;
 
     @Override
     public Cottage findById(Long id) throws Exception {
@@ -142,9 +140,11 @@ public class CottageServiceImpl implements CottageService {
     public Boolean canUpdateOrDelete(Long id) throws Exception {
         boolean updateOrDelete = true;
         Cottage cottage = findById(id);
-
-        if (cottage.getReserved() == true) {
-            updateOrDelete = false;
+        List<CottageReservation> reservations = this.reservationService.findByCottage(id);
+        for(CottageReservation cr:reservations) {
+            if (cr.getReserved() == true || cottage.getReserved() == true) {
+                updateOrDelete = false;
+            }
         }
             return updateOrDelete;
     }
@@ -201,15 +201,16 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons) {
-        if (cottage.getNumPersons() >= numPersons) {
+    public Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons, Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        if (cottage.getNumPersons() >= numPersons && cottage.getDeleted() == false) {
             if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
-                if ((cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))) {
+                if ((cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate))
+                        && Objects.equals(cottage.getCottageOwner().getId(), cottageOwner.getId())) {
                     return true;
                 }
             } else { return true; }
         }
-        // TODO: OBRISI
         return false;
     }
 
@@ -279,7 +280,7 @@ public class CottageServiceImpl implements CottageService {
 
         for (CottageReservation res : reservations) {
             withReservation.add(res.getCottage());
-            if (this.myCottageAvailable(startDate, endDate, res.getCottage(), numOfPersons)) {
+            if (this.myCottageAvailable(startDate, endDate, res.getCottage(), numOfPersons, id) == true) {
                 if ((res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
                         (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
                         (res.getCottage().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
@@ -289,15 +290,15 @@ public class CottageServiceImpl implements CottageService {
         }
 
         // ako ne postoji rezervacija i dobar je kapacitet, dodaj
-//        List<Cottage> all = this.cottageRepository.findAll();
-//
-//        HashSet<Cottage> allSet = new HashSet<>(all);
-//
-//        HashSet<Cottage> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
-//
-//        for (Cottage c : woReservation) {
-//            if (c.getNumPersons() >= numOfPersons) { available.add(c); }
-//        }
+        List<Cottage> all = this.cottageRepository.findAll();
+
+        HashSet<Cottage> allSet = new HashSet<>(all);
+
+        HashSet<Cottage> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+
+        for (Cottage c : woReservation) {
+            if (c.getNumPersons() >= numOfPersons && this.myCottageAvailable(startDate, endDate, c, numOfPersons, id)) { available.add(c); }
+        }
         return available;
     }
 

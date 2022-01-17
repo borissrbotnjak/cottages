@@ -45,6 +45,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate3'}> Attendance</a>
+
                     </div>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
@@ -62,11 +64,26 @@
 </div> </br></br>
 
 <div class="container">
-    <h2>Choose interval</h2>
-    </br>
-    <div class="row">
+    <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="week-tab-md" data-toggle="tab" href="#week-md" role="tab" aria-controls="week-md"
+               aria-selected="false">Per Week</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="month-tab-md" data-toggle="tab" href="#month-md" role="tab" aria-controls="month-md"
+               aria-selected="false">Per Month</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="year-tab-md" data-toggle="tab" href="#year-md" role="tab" aria-controls="year-md"
+               aria-selected="false">Per Year</a>
+        </li>
+    </ul>
+    <div class="tab-content card pt-5" id="myTabContentMD">
+        <div class="tab-pane fade" id="week-md" role="tabpanel" aria-labelledby="week-tab-md">
+
+            <div class="row">
                 </br>
-                <form th:action="@{'/cottageReservations/__${principal.id}__/chooseDate2'}" method="post">
+                <form th:action="@{'/cottageReservations/__${principal.id}__/chooseDate4'}" method="post">
                     <div class="form-group">
                         <label for="date">Start date</br></label>
                         <div class="input-group date" id="date1" data-target-input="nearest">
@@ -93,8 +110,81 @@
                     <button type="submit" class="btn btn-dark mt-2">Submit</button>
                     </br>
                 </form>
+            </div>
+
+
+        </div>
+        <div class="tab-pane fade" id="month-md" role="tabpanel" aria-labelledby="month-tab-md">
+            <div class="row">
+                </br>
+                <form th:action="@{'/cottageReservations/__${principal.id}__/chooseDate4'}" method="post">
+                    <div class="form-group">
+                        <label for="date">Start date</br></label>
+                        <div class="input-group date" id="date3" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="startDate"
+                                   th:value="${startDate}" id="date_3" placeholder="format example: 01/01/2022"/>
+                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date2">End date</br></label>
+                        <div class="input-group date" id="date4" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="endDate"
+                                   th:value="${endDate}" id="date_4" placeholder="format example: 02/01/2022"/>
+                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-dark mt-2">Submit</button>
+                    </br>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="year-md" role="tabpanel" aria-labelledby="year-tab-md">
+            <div class="dropdown">
+                <div class="row">
+                    </br>
+                    <form th:action="@{'/cottageReservations/__${principal.id}__/chooseDate4'}" method="post">
+                        <div class="form-group">
+                            <label for="date">Start date</br></label>
+                            <div class="input-group date" id="date5" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="startDate"
+                                       th:value="${startDate}" id="date_5" placeholder="format example: 01/01/2022"/>
+                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date2">End date</br></label>
+                            <div class="input-group date" id="date6" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="endDate"
+                                       th:value="${endDate}" id="date_6" placeholder="format example: 02/01/2022"/>
+                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-dark mt-2">Submit</button>
+                        </br>
+                    </form>
+                </div>
+            </div>
+            </br></br>
+        </div>
     </div>
 </div>
+
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

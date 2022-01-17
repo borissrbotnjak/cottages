@@ -46,7 +46,10 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a></div>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate3'}> Attendance</a>
+                    </div>
+
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
                     <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
@@ -64,7 +67,7 @@
 
 
 <div class="container">
-    <h3>Available client</h3>
+    <h3>Available clients:</h3>
     </br>
     </br></br></br>
     <table width="90%">
@@ -72,9 +75,9 @@
             <th>Client name:</th>
         </tr>
         <tr th:each="client:${clients}">
-            <td th:text="${client.id}"></td>
+            <td th:text="${client?.id}"></td>
             <td>
-                <form th:action="@{'/boatReservations/__${principal.id}__/__${client.id}__/selectClient'}">
+                <form th:action="@{'/boatReservations/__${principal.id}__/__${client?.id}__/selectClient'}">
                     <button type="submit" class="btn btn">Select</button>
                 </form>
             </td>

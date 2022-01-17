@@ -81,25 +81,6 @@ public class BoatController {
         model.addAttribute("boat", this.boatService.findById(id));
         return new ModelAndView("boat/boat");
     }
-/*
-    @GetMapping(value = "/addBoat")
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView addBoatForm(Model model){
-        Boat boat = new Boat();
-        model.addAttribute("boat", boat);
-        return new ModelAndView("addBoatForm");
-    }
-
-    @PostMapping(value = "/addBoat/submit")
-    @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView addBoat(@ModelAttribute Boat boat) throws Exception {
-        if(this.boatService.findById(boat.getId()) != null) {
-            throw new ResourceConflictException(boat.getId(), "Boat with this id already exist");
-        }
-        this.boatService.saveBoat(boat);
-        return new ModelAndView("redirect:/boats/");
-    }
-*/
 
     @GetMapping("/allBoats/sortByNameDesc")
     public ModelAndView sortByNameDesc(Model model) {
