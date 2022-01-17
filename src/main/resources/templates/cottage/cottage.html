@@ -16,8 +16,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
+  <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+-->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+<!--
+  <link rel="stylesheet" href="../../static/css/profileCSS.css">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+-->
   <title>Cottage</title>
 </head>
 <body>
@@ -35,19 +42,22 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming boat reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Boat reservation history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/chooseTime'}">Make boat reservation</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/upcoming'}"> Upcoming instructor reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/history'}">Instructor reservation history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/chooseTime'}">Make instructor reservation</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
+            <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/chooseTime'}">Make cottage reservation</a>
             <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/upcomingOwnersReservations/__${principal.id}__'}"> Upcoming reservations</a>
             <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/pastOwnersReservations/__${principal.id}__'}">Reservation history</a>
             <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/viewCalendar/__${principal.id}__'}">Calendar</a>
             <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${principal.id}__/makeReservationWithClient'}">Make reservation with client</a>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li sec:authorize="hasRole('COTTAGE_OWNER')" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Reports
           </a>
@@ -58,6 +68,7 @@
 
           </div>
         </li>
+        </li>
         <li class="nav-item" sec:authorize="hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/cottages/allMyCottages/__${principal.id}__'}">My Cottages</a>
         </li>
@@ -66,6 +77,9 @@
         </li>
         <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
           <a class="nav-link" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
+        </li>
+        <li class="nav-item" sec:authorize="!hasRole('COTTAGE_OWNER')">
+          <a class="nav-link" th:href="${'/cottages/allCottages'}">All cottages</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="${'/auth/login'}">Log in</a>
@@ -179,27 +193,35 @@
               <div class="col-md-6">
                 <p th:text="${cottage.price}"></p>
               </div>
+            </div><!--
+            <div class="row">
+              <div class="col-md-6">
+                <label>Additional services</label>
+              </div>
+              <div class="col-md-6">
+                <p th:text="${cottage.additionalServices}"></p>
+              </div>
             </div>
-
+            -->
             <div class="row">
               <form th:object="${additionalService}" method="get">
-              <table>
-                <thead>
-                <tr>
-                  <th> Additional service </th>
-                  <th> Price </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${cottage.additionalServices.empty}">
-                  <td colspan="2"> No Additional services </td>
-                </tr>
-                <tr th:each="additionalService : ${cottage.additionalServices}">
-                  <td><span th:text="${additionalService.name}"> Additional service </span></td>
-                  <td><span th:text="${additionalService.price}"> Price </span></td>
-                </tr>
-                </tbody>
-              </table>
+                <table>
+                  <thead>
+                  <tr>
+                    <th> Additional service </th>
+                    <th> Price </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:if="${cottage.additionalServices.empty}">
+                    <td colspan="2"> No Additional services </td>
+                  </tr>
+                  <tr th:each="additionalService : ${cottage.additionalServices}">
+                    <td><span th:text="${additionalService.name}"> Additional service </span></td>
+                    <td><span th:text="${additionalService.price}"> Price </span></td>
+                  </tr>
+                  </tbody>
+                </table>
               </form>
             </div>
             <div class="row">
@@ -233,8 +255,12 @@
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/edit'}">Edit cottage</a>
             </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
+
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/subscriptions/cottage/new/__${cottage.id}__'}">Subscribe</a>
             </br></br>
-            <a th:href="@{'/cottageReservations/allDiscounts/__${cottage.id}__'}">View discounts</a>
+            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/allDiscounts/__${cottage.id}__'}">View discounts</a>
+            </br></br>
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/onDiscount/__${cottage.id}__'}">View special offers</a>
             </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define discount</a>
             </br></br>

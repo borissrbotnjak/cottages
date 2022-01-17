@@ -1,6 +1,5 @@
 package com.isa.cottages.Repository;
 
-
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Model.AdditionalService;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface AdditionalServiceRepository extends JpaRepository<AdditionalService, Long> {
-
 
     List<AdditionalService> findAllByAdventure(FishingInstructorAdventure fishingInstructorAdventure);
     @Query(value = "SELECT * FROM additional_service a WHERE a.cottage_id = ?1", nativeQuery = true)

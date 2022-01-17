@@ -6,9 +6,7 @@ import com.isa.cottages.Service.AdditionalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class AdditionalServiceServiceImpl implements AdditionalServiceService {
@@ -63,17 +61,25 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
     }
 
     @Override
-    public List<AdditionalService> findByBoat(Long id) throws Exception{
+    public List<AdditionalService> findByBoat(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         Boat boat = boatService.findById(id);
         List<AdditionalService> all = this.additionalServiceRepository.findByBoat(id);
         List<AdditionalService> myAdditionalServices = new ArrayList<AdditionalService>();
 
-        for (AdditionalService as:all) {
-            if(Objects.equals(as.getBoat().getId(), boat.getId())) {
+        for (AdditionalService as : all) {
+            if (Objects.equals(as.getBoat().getId(), boat.getId())) {
                 myAdditionalServices.add(as);
             }
         }
         return myAdditionalServices;
     }
+
+    @Override
+    public Set<Long> getIds(Set<AdditionalService> services) {
+        Set<Long> ids = new HashSet<>();
+        for (AdditionalService s : services) { ids.add(s.getId()); }
+        return ids;
+    }
+
 }

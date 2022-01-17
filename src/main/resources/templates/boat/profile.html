@@ -69,11 +69,11 @@
     </br>
     <div class="col-md-4">
         </br></br>
-        <a th:href="@{/boatOwner/profile/__${principal.id}__/editProfile}">Edit profile</a>
+        <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{/boatOwner/profile/__${principal.id}__/editProfile}">Edit profile</a>
         </br>
-        <a th:href="@{/auth/change-password}">Change password</a>
+        <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{/auth/change-password}">Change password</a>
         </br>
-        <a th:href="@{/auth/deleteAccount}">Delete account</a>
+        <a sec:authorize="hasRole('BOAT_OWNER')" th:href="@{/auth/deleteAccount}">Delete account</a>
     </div>
 </div>
 </div>

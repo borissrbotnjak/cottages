@@ -1,7 +1,11 @@
 package com.isa.cottages.Model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -54,6 +58,12 @@ public class FishingInstructorAdventure implements Serializable {
     @Column
     private Double averageRating = 0.0;
 
+    @Column
+    private Double price = 0.0;
+
+    @Column
+    private Integer numPersons;
+
     @ElementCollection
     private Set<Integer> ratings;
 
@@ -77,30 +87,36 @@ public class FishingInstructorAdventure implements Serializable {
     private String gearIncluded;
 
     @Column
-    @NonNull
-    private Double price;
-
-    @Column
     private Double cancellationFeePercent;
 
     @Column
     private String instructorInfo;
 
+    public FishingInstructorAdventure(String images) {
+        this.imageUrl = imageUrl;
+    }
+
     @ManyToOne(targetEntity = Instructor.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")
     private Instructor instructor;
 
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "adventure", targetEntity = AdventureReservation.class)
+        private Set<AdventureReservation> adventureReservations = new HashSet<>();
+
+    /*@ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
-    private Client subscriber;
-    @OneToMany(mappedBy = "adventure", targetEntity = AdventureReservation.class)
-    private Set<AdventureReservation> adventureReservations = new HashSet<>();
+    private Client subscriber;*/
 
-    @OneToMany(mappedBy = "adventure", targetEntity = AdditionalService.class)
-    @NonNull
+
+    @ManyToMany(mappedBy = "instructorSubscriptions")
+    private Set<Client> subscribers;
+
+    @OneToMany(targetEntity = AdditionalService.class, mappedBy = "adventure")
     private Set<AdditionalService> additionalServices = new HashSet<>();
+/*
+        @OneToMany(mappedBy = "adventure", targetEntity = AdditionalService.class)
+        @NonNull
+        private Set<AdditionalService> additionalServices = new HashSet<>();
+*/
 
-    public FishingInstructorAdventure(String images) {
-        this.imageUrl = imageUrl;
-    }
 }

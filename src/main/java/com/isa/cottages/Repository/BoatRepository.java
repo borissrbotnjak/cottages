@@ -14,7 +14,10 @@ public interface BoatRepository extends JpaRepository<Boat, Long> {
 
     @Query(value="SELECT c.* FROM Boat c JOIN USERS bo ON bo.id=c.boat_owner_id WHERE lower(c.boat_name) like lower(concat('%', ?1, '%'))"  +
             "or lower(bo.first_name) like lower(concat('%', ?1, '%'))" +
-            "or lower(bo.last_name) like lower(concat('%', ?1, '%'))"
+            "or lower(bo.last_name) like lower(concat('%', ?1, '%'))" +
+            "or lower(bo.residence) like lower(concat('%', ?1, '%'))"+
+            "or lower(bo.state) like lower(concat('%', ?1, '%'))"+
+            "or lower(bo.city) like lower(concat('%', ?1, '%'))"
             , nativeQuery = true)
     /*@Query(value="SELECT c.* FROM Boat c WHERE lower(c.boat_name) like lower(concat('%', ?1, '%')) "
             , nativeQuery = true)*/

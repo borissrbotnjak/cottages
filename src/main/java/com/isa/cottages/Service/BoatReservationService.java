@@ -20,6 +20,7 @@ public interface BoatReservationService {
     List<BoatReservation> getOwnersFreeReservations(Long id) throws Exception;
     List<BoatReservation> getPastReservations() throws Exception;
     List<BoatReservation> getUpcomingReservations() throws Exception;
+    List<BoatReservation> getAllUpcoming();
     List<BoatReservation> findAllByClient(Client client);
     List<BoatReservation> findClient(String keyword) throws Exception;
     Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
@@ -29,15 +30,29 @@ public interface BoatReservationService {
     BoatReservation saveReservation(BoatReservation boatReservation);
     List<BoatReservation> findDiscountsByBoat(Long id) throws Exception;
 
+    BoatReservation save(BoatReservation reservation);
+    BoatReservation makeReservation(BoatReservation reservation, Boat boat) throws Exception;
+    BoatReservation makeReservationOnDiscount(Long reservationId) throws Exception;
+
+    Boolean canCancel(Long id);
+
+    void cancel(Long id);
+    void deleteById(Long id);
+    void setDate(BoatReservation boatReservation);
+    void sendReservationMail(BoatReservation reservation);
+
     List<BoatReservation> findByOrderByStartTimeAsc() throws Exception;
     List<BoatReservation> findByOrderByStartTimeDesc() throws Exception;
     List<BoatReservation> findByOrderByDurationAsc() throws Exception;
     List<BoatReservation> findByOrderByDurationDesc() throws Exception;
     List<BoatReservation> findByOrderByPriceAsc() throws Exception;
     List<BoatReservation> findByOrderByPriceDesc() throws Exception;
+    List<BoatReservation> findAllAvailable(LocalDate startTime, LocalDate endTime);
 
-    void setDate(BoatReservation boatReservation);
-    BoatReservation save(BoatReservation reservation);
+    List<BoatReservation> getAllWithDiscount(Long boatId);
+
+    BoatReservation update(BoatReservation reservation);
+    BoatReservation getOne(Long id);
 
     BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;
 

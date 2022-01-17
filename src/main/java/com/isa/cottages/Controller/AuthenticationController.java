@@ -168,7 +168,6 @@ public class AuthenticationController {
         return userService.confirmToken(token);
     }
 
-    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER, INSTRUCTOR')")
     @GetMapping("/deleteAccount")
     public ModelAndView deleteAccount(Model model) throws Exception {
         User user = this.userService.getUserFromPrincipal();
@@ -180,7 +179,6 @@ public class AuthenticationController {
         return new ModelAndView("deleteAccount");
     }
 
-    @PreAuthorize("hasAnyRole('COTTAGE_OWNER', 'CLIENT', 'BOAT_OWNER, INSTRUCTOR')")
     @PostMapping("/deleteAccount/submit")
     public ModelAndView deleteAccountSubmit(Model model, @ModelAttribute Request request) throws Exception {
         User user = this.userService.getUserFromPrincipal();

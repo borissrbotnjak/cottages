@@ -1,6 +1,8 @@
 package com.isa.cottages.Repository;
 
+import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.CottageReservation;
+import com.isa.cottages.Model.InstructorReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,22 +34,19 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     List<CottageReservation> findAllByClient(@Param("client_id") Long clientId);
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
-            "and res.cottage_owner_id is not null", nativeQuery = true)
+            "and res.cottage_id is not null", nativeQuery = true)
     List<CottageReservation> getAllReserved();
 
     @Query(value = "SELECT * FROM reservation c WHERE c.cottage_id = ?1 and " +
-            "c.discount = true", nativeQuery = true)
+            "c.discount = true and c.deleted=false", nativeQuery = true)
     List<CottageReservation> findDiscountsByCottage(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%')) " +
             "and reservation_type like 'cottage_reservation' and res.reserved=true and res.deleted = false", nativeQuery = true)
     List<CottageReservation> findClient(@Param("keyword") String keyword);
 
-/*
-    List<CottageReservation> findByOrderByStartTimeAsc();
-    List<CottageReservation> findByOrderByStartTimeDesc();
-    List<CottageReservation> findByOrderByDurationAsc();
-    List<CottageReservation> findByOrderByDurationDesc();
-    List<CottageReservation> findByOrderByPriceAsc();
-    List<CottageReservation> findByOrderByPriceDesc();*/
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
+            "and res.cottage_id=?1 and res.discount = true", nativeQuery = true)
+    List<CottageReservation> findAllWithDiscount(Long cottageId);
+
 }

@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
--->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <link rel="stylesheet" href="../../static/css/profileCSS.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -30,12 +30,15 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/upcoming'}"> Upcoming boat reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/history'}">Boat reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/boatReservations/chooseTime'}">Make boat reservation</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/upcoming'}"> Upcoming instructor reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/history'}">Instructor reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/chooseTime'}">Make instructor reservation</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/upcoming'}"> Upcoming cottage reservations</a>
                         <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/history'}">Cottage reservation history</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/chooseTime'}">Make cottage reservation</a>
 
                         <!--for owners-->
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/upcomingOwnersReservations/__${owner.id}__'}> Upcoming reservations</a>
@@ -87,13 +90,13 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/cottages/allCottages'}">All cottages</a>
+                    <a class="nav-link" sec:authorize="!hasAnyRole('COTTAGE_OWNER','BOAT_OWNER')" th:href="${'/cottages/allCottages'}">All cottages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/boats/allBoats'}">All boats</a>
+                    <a class="nav-link" sec:authorize="!hasAnyRole('COTTAGE_OWNER','BOAT_OWNER')" th:href="${'/boats/allBoats'}">All boats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('CLIENT')" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
+                    <a class="nav-link" sec:authorize="!hasAnyRole('COTTAGE_OWNER','BOAT_OWNER')" th:href="${'/adventures/allAdventures'}">All fishing instructors</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('CLIENT')" href="#">Profile</a>
@@ -115,7 +118,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    <img src="https://kctherapy.com/wp-content/uploads/2019/09/default-user-avatar-300x293.png" alt=""/>
+                    <img src="https://cdn-icons-png.flaticon.com/128/1946/1946429.png" alt=""/>
                     <!--<div class="file btn btn-lg btn-primary">
                         Change Photo
                         <input type="file" name="file"/>
@@ -156,7 +159,7 @@
                             Subscriptions
                         </a>
                         <div sec:authorize="hasRole('CLIENT')" class="dropdown-menu" aria-labelledby="dropdown">
-                            <a th:href="@{/subscriptions/cottage}" >Cottage subscriptions</a><br/>
+                            <a th:href="@{'/subscriptions/cottage'}" >Cottage subscriptions</a><br/>
                             <a th:href="@{'/subscriptions/boat'}" >Boat subscriptions</a><br/>
                             <a th:href="@{'/subscriptions/instructor'}" >Instructors subscriptions</a><br/>
                         </div>
@@ -220,18 +223,10 @@
                     <div class="tab-pane fade" id="loyalty" role="tabpanel" aria-labelledby="loyalty-tab">
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Appointment points</label>
+                                <label>Reservation points</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${user.getLoyaltyProgram().getAppointmentPoints()}"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Consultation points</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p th:text="${user.getLoyaltyProgram().getConsultationPoints()}"></p>
+                                <p th:text="${user.getLoyaltyProgram().getReservationPoints()}"></p>
                             </div>
                         </div>
                         <div class="row">
@@ -282,17 +277,6 @@
                                 <p th:text="${user.getLoyaltyProgram().getDiscountGold()}"></p>
                             </div>
                         </div>
-                        </br>
-                        </br>
-                        <div class="row">
-                            <h4>
-                                Na osnovu
-                                kategorije, korisnik ostvaruje dodatni popust koji se primenjuje na svaku
-                                rezervaciju leka, kao i na svaki pregled i savetovanje.
-                            </h4>
-                        </div>
-                        </br>
-                        </br>
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Penalties</label>
@@ -301,6 +285,16 @@
                                 <p th:text="${user.getLoyaltyProgram().getPenalties()}"></p>
                             </div>
                         </div>
+                        </br>
+                        </br>
+                        <div class="row">
+                            <h4>
+                                Na osnovu
+                                kategorije, korisnik ostvaruje dodatni popust koji se primenjuje na svaku
+                                rezervaciju.
+                            </h4>
+                        </div>
+                        </br>
                     </div>
 
                 </div>
