@@ -82,16 +82,16 @@
                     <th>Client name</th>
                     <th>Reserved?</th>
                     <th>Discount?</th>
-                    <th></th>
                 </tr>
                 <tr th:each="boatReservation:${boatReservations}">
                     <td th:text="*{boatReservation.boat.getBoatName()}"></td>
                     <td th:text="*{boatReservation.startTime}"></td>
                     <td th:text="*{boatReservation.endTime}"></td>
-                    <td th:text="*{boatReservation.client.getFullName()}"></td>
+                    <td >
+                        <a th:href="@{/client/profile/__${boatReservation?.client?.getId()}__}"><p th:text="*{boatReservation?.client?.getFullName()}"></p></a>
+                    </td>
                     <td th:text="${boatReservation.reserved}"></td>
                     <td th:text="${boatReservation.discount}"></td>
-                    <td><a th:href="@{/client/profile/__${boatReservation.client.getId()}__}">View profile</a></td>
                 </tr>
             </table>
         </div>

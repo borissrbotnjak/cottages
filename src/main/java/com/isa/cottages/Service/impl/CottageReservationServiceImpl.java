@@ -43,6 +43,13 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public List<CottageReservation> findByCottage(Long id) throws Exception {
+        Cottage cottage = (Cottage) this.cottageService.findById(id);
+
+        return this.reservationRepository.findByCottage(id);
+    }
+
+    @Override
     public List<CottageReservation> getAllOwnersReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
@@ -134,16 +141,19 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
-    public List<CottageReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+    public List<CottageReservation> getAllOwnersNowAndUpcomingReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllOwnersReservations(id);
         List<CottageReservation> upcoming = new ArrayList<>();
 
-        for (CottageReservation res: all) {
-            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+        for (CottageReservation res : all) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+                    || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())) {
                 upcoming.add(res);
             }
         }
+
         return upcoming;
     }
 
@@ -153,6 +163,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
         cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
+        cr.setStartTime(cottageReservation.getStartTime());
+        cr.setEndTime(cottageReservation.getEndTime());
+        cr.setStartDate(cottageReservation.getStartTime().toLocalDate());
+        cr.setEndDate(cottageReservation.getEndTime().toLocalDate());
         cr.setNumPersons(cottageReservation.getNumPersons());
         cr.setDiscountPrice(cottageReservation.getDiscountPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());

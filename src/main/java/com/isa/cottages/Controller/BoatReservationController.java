@@ -146,6 +146,8 @@ public class BoatReservationController {
         BoatReservation boatReservation = new BoatReservation();
 
         model.addAttribute("boatReservation", boatReservation);
+        model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.boatService.findById(id).getAdditionalServices().size());
 
         Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(id);
         model.addAttribute("boatReservations", boatReservations);
@@ -163,6 +165,8 @@ public class BoatReservationController {
 //        }
         Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(id);
         model.addAttribute("boatReservations", boatReservations);
+        model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.boatService.findById(id).getAdditionalServices().size());
 
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
@@ -347,7 +351,7 @@ public class BoatReservationController {
         if (keyword != null) {
             model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("boatReservations", this.reservationService.getAllOwnersUpcomingReservations(id));
+            model.addAttribute("boatReservations", this.reservationService.getAllOwnersNowAndUpcomingReservations(id));
         }
         return new ModelAndView("boat/calendar");
     }
@@ -464,10 +468,7 @@ public class BoatReservationController {
         BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
 
-        LocalDateTime time = LocalDateTime.now();
-        model.addAttribute("time", time);
-
-        model.addAttribute("clients", this.clientService.findAllAvailable_Boat(time, oid));
+        model.addAttribute("clients", this.clientService.findAllAvailable_Boat(oid));
 
         return new ModelAndView("boat/makeReservation/showAvailableClients");
     }

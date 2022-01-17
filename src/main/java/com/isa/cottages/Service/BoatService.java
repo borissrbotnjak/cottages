@@ -20,7 +20,7 @@ public interface BoatService {
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
     Boat defineAvailability(Boat boat) throws Exception;
-    Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons);
+    Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons, Long id) throws Exception;
     Set<Boat> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
     List<Boat> findAllMyAvailableSorted(Long id, LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 

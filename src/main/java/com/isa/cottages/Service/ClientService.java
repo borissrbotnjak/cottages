@@ -13,6 +13,6 @@ public interface ClientService {
     Client updateProfile(Client client) throws Exception;
     Client updateBasicInfo(Client client, Client forUpdate);
 
-    Set<Client> findAllAvailable_Boat (LocalDateTime time, Long oid) throws Exception;
-    Set<Client> findAllAvailable_Cottage (LocalDateTime time, Long oid) throws Exception;
+    Set<Client> findAllAvailable_Boat (Long oid) throws Exception;
+    Set<Client> findAllAvailable_Cottage (Long oid) throws Exception;
 }

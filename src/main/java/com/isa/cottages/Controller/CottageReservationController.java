@@ -264,7 +264,7 @@ public class CottageReservationController {
         if (keyword != null) {
             model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
         } else {
-            model.addAttribute("cottageReservations", this.reservationService.getAllOwnersUpcomingReservations(id));
+            model.addAttribute("cottageReservations", this.reservationService.getAllOwnersNowAndUpcomingReservations(id));
         }
         return new ModelAndView("cottage/calendar");
     }
@@ -470,10 +470,8 @@ public class CottageReservationController {
     @GetMapping("/{oid}/makeReservationWithClient")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView showAvailableClients(Model model, @PathVariable Long oid) throws Exception {
-        LocalDateTime time = LocalDateTime.now();
-        model.addAttribute("time", time);
 
-        model.addAttribute("clients", this.clientService.findAllAvailable_Cottage(time, oid));
+        model.addAttribute("clients", this.clientService.findAllAvailable_Cottage(oid));
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         return new ModelAndView("cottage/makeReservation/showAvailableClients");

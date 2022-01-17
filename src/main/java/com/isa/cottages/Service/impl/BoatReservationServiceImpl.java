@@ -50,6 +50,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> findByBoat(Long id) throws Exception {
+        Boat boat = (Boat) this.boatService.findById(id);
+
+        return this.reservationRepository.findByBoat(id);
+    }
+
+    @Override
     public List<BoatReservation> getAllOwnersReservations(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
 
@@ -129,14 +136,15 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+    public List<BoatReservation> getAllOwnersNowAndUpcomingReservations(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         List<BoatReservation> all = this.reservationRepository.getAllOwnersReservations(id);
         List<BoatReservation> upcoming = new ArrayList<>();
 
         for (BoatReservation res : all) {
-            if ((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
-                    && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+            || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())){
                 upcoming.add(res);
             }
         }
@@ -203,6 +211,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
 
         br.setDiscountAvailableFrom(boatReservation.getDiscountAvailableFrom());
         br.setDiscountAvailableUntil(boatReservation.getDiscountAvailableUntil());
+        br.setStartTime(boatReservation.getStartTime());
+        br.setEndTime(boatReservation.getEndTime());
+        br.setStartDate(boatReservation.getStartTime().toLocalDate());
+        br.setEndDate(boatReservation.getEndTime().toLocalDate());
         br.setNumPersons(boatReservation.getNumPersons());
         br.setDiscountPrice(boatReservation.getDiscountPrice());
         br.setAdditionalServices(boatReservation.getAdditionalServices());
@@ -212,6 +224,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setDeleted(false);
         br.setReserved(false);
         br.setClient(boatReservation.getClient());
+        br.CalculatePrice();
         this.reservationRepository.save(br);
 
         return br;

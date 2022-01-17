@@ -85,16 +85,18 @@
                 <tr>
                     <th>Available from:</th>
                     <th>Available until:</th>
+                    <th>Start time:</th>
+                    <th>End time:</th>
                     <th>Max number of persons:</th>
                     <th>Price:</th>
-                    <th></th>
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="${cottageReservation.discountAvailableFrom}"></td>
                     <td th:text="${cottageReservation.discountAvailableUntil}"></td>
+                    <td th:text="${cottageReservation.startTime}"></td>
+                    <td th:text="${cottageReservation.endTime}"></td>
                     <td th:text="${cottageReservation.numPersons}"></td>
                     <td th:text="${cottageReservation.discountPrice}"></td>
-                    <td><a>Reserve</a></td>
                   </tr>
             </table>
         </div>

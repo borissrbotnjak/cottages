@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -80,14 +79,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Set<Client> findAllAvailable_Boat(LocalDateTime time, Long oid) throws Exception {
+    public Set<Client> findAllAvailable_Boat(Long oid) throws Exception {
         BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
         Set<Client> available = new HashSet<>();
-        List<BoatReservation> reservations = this.boatReservationService.getAllOwnersReservations(oid);
-
+        List<BoatReservation> reservations = this.boatReservationService.getAllOwnersReservedReservations(oid);
 
         for(BoatReservation res: reservations) {
-            if(res.getStartTime().isBefore(ChronoLocalDateTime.from(time)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(time))); {
+            if((res.getStartTime().isBefore(LocalDateTime.now()) || res.getStartTime().isEqual(LocalDateTime.now()))
+                    && res.getEndTime().isAfter(LocalDateTime.now())) {
                 available.add(res.getClient());
             }
         }
@@ -95,14 +94,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Set<Client> findAllAvailable_Cottage(LocalDateTime time, Long oid) throws Exception {
+    public Set<Client> findAllAvailable_Cottage(Long oid) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
         Set<Client> available = new HashSet<>();
-        List<CottageReservation> reservations = this.cottageReservationService.getAllOwnersReservations(oid);
-
+        List<CottageReservation> reservations = this.cottageReservationService.getAllOwnersReservedReservations(oid);
 
         for(CottageReservation res: reservations) {
-            if(res.getStartTime().isBefore(ChronoLocalDateTime.from(time)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(time))); {
+            if((res.getStartTime().isBefore(LocalDateTime.now()) || res.getStartTime().isEqual(LocalDateTime.now()))
+                    && res.getEndTime().isAfter(LocalDateTime.now())) {
                 available.add(res.getClient());
             }
         }
