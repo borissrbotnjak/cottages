@@ -24,17 +24,6 @@ public class CottageServiceImpl implements CottageService {
     @Autowired
     private CottageReservationServiceImpl reservationService;
 
-//    @Autowired
-//    public CottageServiceImpl(CottageRepository cottageRepository, UserServiceImpl userService,
-//                              CottageOwnerServiceImpl cottageOwnerService,
-//                              CottageReservationServiceImpl reservationService){
-//        this.cottageRepository = cottageRepository;
-//        this.userService = userService;
-//        this.cottageOwnerService = cottageOwnerService;
-//        this.reservationService = reservationService;
-//
-//    }
-
     @Override
     public Cottage findById(Long id) throws Exception {
         if(this.cottageRepository.findById(id).isEmpty()) {

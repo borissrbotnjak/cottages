@@ -26,17 +26,6 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     @Autowired
     private ClientServiceImpl clientService;
 
-//    @Autowired
-//    public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
-//                                         UserServiceImpl userService,
-//                                         CottageServiceImpl cottageService,
-//                                         ClientServiceImpl clientService) {
-//        this.reservationRepository = reservationRepository;
-//        this.userService = userService;
-//        this.cottageService = cottageService;
-//        this.clientService = clientService;
-//    }
-
     @Override
     public CottageReservation findOne(Long id) {
         return reservationRepository.getOne(id);
@@ -176,6 +165,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setDeleted(false);
         cr.setReserved(false);
         cr.setClient(cottageReservation.getClient());
+        cr.CalculatePrice();
         this.reservationRepository.save(cr);
 
         return cr;

@@ -1,6 +1,5 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Collection;
 
 @Controller
 @RequestMapping(value = "/boatOwner")

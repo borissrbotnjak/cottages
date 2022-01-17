@@ -2,7 +2,6 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.Client;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public interface ClientService {

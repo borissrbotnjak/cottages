@@ -24,17 +24,6 @@ public class BoatServiceImpl implements BoatService {
     @Autowired
     private BoatReservationServiceImpl reservationService;
 
-//    @Autowired
-//    public BoatServiceImpl(BoatRepository boatRepository,
-//                           UserServiceImpl userService,
-//                           BoatOwnerServiceImpl boatOwnerService,
-//                           BoatReservationServiceImpl reservationService){
-//        this.boatRepository = boatRepository;
-//        this.userService = userService;
-//        this.boatOwnerService = boatOwnerService;
-//        this.reservationService = reservationService;
-//    }
-
     @Override
     public Boat findById(Long id) throws Exception {
         if (this.boatRepository.findById(id).isEmpty()) {

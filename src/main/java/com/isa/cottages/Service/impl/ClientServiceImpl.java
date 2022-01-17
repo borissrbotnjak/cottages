@@ -26,16 +26,6 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private CottageReservationServiceImpl cottageReservationService;
 
-//    @Autowired
-//    public ClientServiceImpl(UserServiceImpl userService, ClientRepository clientRepository,
-//                             BoatReservationServiceImpl boatReservationService,
-//                             CottageReservationServiceImpl cottageReservationService) {
-//       this.userService = userService;
-//       this.clientRepository = clientRepository;
-//       this.boatReservationService = boatReservationService;
-//       this.cottageReservationService = cottageReservationService;
-//    }
-
     @Override
     public Client findById(Long id) throws Exception {
         if (this.clientRepository.findById(id).isEmpty()) {

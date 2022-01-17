@@ -1,6 +1,9 @@
 package com.isa.cottages.Controller;
 
+import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.Client;
+import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Model.User;
 import com.isa.cottages.Service.impl.ClientServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,8 @@ public class ClientController {
     public ModelAndView showProfile(Model model, @PathVariable("id") Long id) throws Exception {
         Client client = clientService.findById(id);
         model.addAttribute("user", client);
+        User user = userService.getUserFromPrincipal();
+        model.addAttribute("owner", user);
         return new ModelAndView("client/profile");
     }
 

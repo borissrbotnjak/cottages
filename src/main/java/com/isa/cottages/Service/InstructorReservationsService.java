@@ -1,6 +1,5 @@
 package com.isa.cottages.Service;
 
-import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.InstructorReservation;
 

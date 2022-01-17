@@ -30,17 +30,6 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Autowired
     private EmailService emailService;
 
-//    @Autowired
-//    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
-//                                      BoatReservationRepository boatReservationRepository,
-//                                      BoatServiceImpl boatService) {
-//        this.clientService = clientService;
-//        this.userService = userService;
-//        this.reservationRepository = boatReservationRepository;
-//        this.boatService = boatService;
-////        this.emailService = emailService;
-//    }
-
     @Override
     public BoatReservation findById(Long id) throws Exception{
         if (this.reservationRepository.findById(id).isEmpty()) {
