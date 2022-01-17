@@ -53,5 +53,9 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 
 
     void deleteById(Long id);
+
+    @Query(value = "SELECT * FROM reservation b WHERE b.deleted=false and " +
+            "b.reserved = true and b.num_persons >= ?1 and boat_id is not null", nativeQuery = true)
+    List<BoatReservation> findAllByCapacity(@Param("capacity") int numOfPersons);
 }
 

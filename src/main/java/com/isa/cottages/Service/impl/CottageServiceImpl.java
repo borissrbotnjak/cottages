@@ -213,6 +213,11 @@ public class CottageServiceImpl implements CottageService {
         return false;
     }
 
+    public Boolean reservationOverlaps(LocalDate reservationStart, LocalDate reservationEnd, LocalDate desiredStart, LocalDate desiredEnd) {
+        if ((reservationStart.isBefore(desiredStart) && reservationEnd.isBefore(desiredStart)) ||
+                (reservationStart.isAfter(desiredEnd) && reservationEnd.isAfter(desiredEnd))) { return false; }
+        return true;
+    }
 
     @Override
     public Set<Cottage> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
@@ -225,14 +230,16 @@ public class CottageServiceImpl implements CottageService {
         for (CottageReservation res : reservations) {
             withReservation.add(res.getCottage());
 
-            if (!available.contains(res.getCottage())) {
-                if (this.cottageAvailable(startDate, endDate, res.getCottage(), numOfPersons)) {
-                    if ((res.getStartTime().toLocalDate().isAfter(endDate) && res.getEndTime().toLocalDate().isAfter(endDate)) ||
-                            (res.getStartTime().toLocalDate().isBefore(startDate) && res.getEndTime().toLocalDate().isBefore(startDate))) {
-                        available.add(res.getCottage());
-                    }
-                } else { unAvailable.add(res.getCottage()); }
+            if (!unAvailable.contains(res.getCottage())) {
+                if (this.cottageAvailable(startDate, endDate, res.getCottage(), numOfPersons) && !reservationOverlaps(res.getStartTime().toLocalDate(),
+                        res.getEndTime().toLocalDate(), startDate, endDate)) {
+                    available.add(res.getCottage());
+                }
+                else {
+                    unAvailable.add(res.getCottage());
+                }
             }
+
         }
 
         List<Cottage> all = this.cottageRepository.findAll();
@@ -245,7 +252,6 @@ public class CottageServiceImpl implements CottageService {
         }
 
         available.removeIf(unAvailable::contains);
-
         return available;
     }
 

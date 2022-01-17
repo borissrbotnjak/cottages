@@ -54,4 +54,5 @@ public interface BoatReservationService {
 
     BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;
 
+    List<BoatReservation> findAllUpcomingByCapacity(int numOfPersons) throws Exception;
 }
