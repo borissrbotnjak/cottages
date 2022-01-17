@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*
+import java.util.*;
 
 @RestController
 @RequestMapping("/cottageReservations")
@@ -99,7 +99,7 @@ public class CottageReservationController {
 
         return new ModelAndView("cottage/defineDiscount");
     }
-
+/*
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/defineDiscount/submit")
     public ModelAndView defineDiscount(@PathVariable Long id, @ModelAttribute CottageReservation cottageReservation,
@@ -125,7 +125,7 @@ public class CottageReservationController {
         }
         return new ModelAndView("redirect:/cottageReservations/allDiscounts/{id}/");
     }
-
+*/
     public String email(String name, String text1, String cottageName, String text2) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
@@ -252,7 +252,7 @@ public class CottageReservationController {
         reportService.save(report);
         return new ModelAndView("redirect:/cottageReservations/pastOwnersReservations/{oid}");
     }
-
+/*
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @GetMapping("/writeReport/{id}")
     public ModelAndView reportForm(Model model, @PathVariable Long id) throws Exception {
@@ -270,6 +270,7 @@ public class CottageReservationController {
 
         return new ModelAndView("cottage/report");
     }
+*/
 
     @GetMapping("/chooseTime")
     @PreAuthorize("hasRole('CLIENT')")
@@ -892,7 +893,7 @@ public class CottageReservationController {
 
         return new ModelAndView("redirect:/cottageReservations/end");
     }
-
+/*
     @GetMapping("/end")
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ModelAndView reservationConfirmation(Model model) throws Exception {
@@ -900,7 +901,7 @@ public class CottageReservationController {
 
         return new ModelAndView("cottage/makeReservation/success");
     }
-
+*/
     public String emailSuccess(String name, String text1, String text2, String cottageName, String text3,
                                String cottageOwnerName,
                                String text4, LocalDate startDate, String text5, LocalDate endDate,

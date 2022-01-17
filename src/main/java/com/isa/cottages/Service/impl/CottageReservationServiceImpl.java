@@ -19,20 +19,16 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     private CottageReservationRepository reservationRepository;
     private CottageRepository cottageRepository;
     private UserServiceImpl userService;
-    // private CottageServiceImpl cottageService;
-    private ClientServiceImpl clientService;
     private EmailService emailService;
 
     @Autowired
     public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
                                          UserServiceImpl userService,
                                          CottageRepository cottageRepository,
-                                         ClientServiceImpl clientService,
                                          EmailService emailService) {
         this.reservationRepository = reservationRepository;
         this.userService = userService;
         this.cottageRepository = cottageRepository;
-        this.clientService = clientService;
         this.emailService = emailService;
     }
 
@@ -285,7 +281,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
         cr.setNumPersons(cottageReservation.getNumPersons());
         cr.setPrice(cottageReservation.getPrice());
-        cr.setDiscountPrice(cottageReservation.getDiscountPrice()
+        cr.setDiscountPrice(cottageReservation.getDiscountPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
         cr.setCottageOwner(cottageReservation.getCottageOwner());
         cr.setCottage(cottageReservation.getCottage());
@@ -314,7 +310,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
     @Override
     public List<CottageReservation> getUpcomingReservations() throws Exception {
-        Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+        Client cl = (Client) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllReserved();
         List<CottageReservation> upcoming = new ArrayList<>();
 
@@ -343,7 +339,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
     @Override
     public List<CottageReservation> getPastReservations() throws Exception {
-        Client cl = this.clientService.findByEmail(this.userService.getUserFromPrincipal().getEmail());
+        Client cl = (Client) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllReserved();
         List<CottageReservation> pastOnes = new ArrayList<>();
 
@@ -392,11 +388,6 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setEndDate(ed);
         reservation.setStartTime(sd.atStartOfDay());
         reservation.setEndTime(ed.atStartOfDay());
-    }
-
-    @Override
-    public CottageReservation save(CottageReservation reservation) {
-        return this.reservationRepository.save(reservation);
     }
 
     @Override

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -86,10 +87,6 @@ public class FishingInstructorAdventure implements Serializable {
     private String gearIncluded;
 
     @Column
-    @NonNull
-    private Double price;
-
-    @Column
     private Double cancellationFeePercent;
 
     @Column
@@ -97,6 +94,7 @@ public class FishingInstructorAdventure implements Serializable {
 
     public FishingInstructorAdventure(String images) {
         this.imageUrl = imageUrl;
+    }
 
     @ManyToOne(targetEntity = Instructor.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")

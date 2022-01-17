@@ -34,7 +34,7 @@ public class BoatReservationController {
     @Autowired
     public BoatReservationController(UserServiceImpl userService, BoatReservationServiceImpl reservationService,
                                      BoatServiceImpl boatService, ReportServiceImpl reportService,
-                                     EmailSender emailSender, ClientServiceImpl clientService
+                                     EmailSender emailSender, ClientServiceImpl clientService,
                                      AdditionalServiceServiceImpl serviceService) {
         this.userService = userService;
         this.reservationService = reservationService;
@@ -366,7 +366,7 @@ public class BoatReservationController {
 
         return new ModelAndView("boat/defineDiscount");
     }
-
+/*
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @PostMapping("/{id}/defineDiscount/submit")
     public ModelAndView defineDiscount(@PathVariable Long id,
@@ -394,7 +394,7 @@ public class BoatReservationController {
         }
         return new ModelAndView("redirect:/boatReservations/allDiscounts/{id}/");
     }
-
+*/
     public String email(String name, String text1, String boatName, String text2) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
@@ -895,7 +895,7 @@ public class BoatReservationController {
 
         return new ModelAndView("redirect:/boatReservations/end");
     }
-
+/*
     @GetMapping("/end")
     @PreAuthorize("hasRole('BOAT_OWNER')")
     public ModelAndView reservationConfirmation(Model model) throws Exception {
@@ -904,7 +904,7 @@ public class BoatReservationController {
 
         return new ModelAndView("boat/makeReservation/success");
     }
-
+*/
     public String emailSuccess(String name, String text1, String text2, String boatName, String text3, String boatOwnerName,
                                String text4, LocalDate startDate, String text5, LocalDate endDate,
                                String text6, Integer numPersons, String text7, Double price) {

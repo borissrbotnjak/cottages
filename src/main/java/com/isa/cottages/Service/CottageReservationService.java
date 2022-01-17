@@ -47,12 +47,10 @@ public interface CottageReservationService {
     List<CottageReservation> getAllWithDiscount(Long CottageId);
 
     CottageReservation update(CottageReservation reservation);
-
     CottageReservation makeReservationOnDiscount(Long reservationId) throws Exception;
-
     CottageReservation getOne(Long id);
 
-    CottageReservation save(CottageReservation reservation);
+    void setDate(CottageReservation reservation);
 
     CottageReservation makeReservationWithClient(CottageReservation reservation, Cottage cottage, Long clid) throws Exception;
 }

@@ -50,8 +50,6 @@ public interface BoatReservationService {
     List<BoatReservation> getAllWithDiscount(Long boatId);
 
     BoatReservation update(BoatReservation reservation);
-
-    BoatReservation save(BoatReservation reservation);
     BoatReservation getOne(Long id);
 
     BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;

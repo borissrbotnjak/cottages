@@ -15,15 +15,19 @@ import java.util.Set;
 @Service
 public class ClientServiceImpl implements ClientService {
 
+    @Autowired
     private UserServiceImpl userService;
+    @Autowired
     private ClientRepository clientRepository;
-    private UserServiceImpl userService;
+    @Autowired
     private LoyaltyProgramServiceImpl loyaltyService;
+    @Autowired
     private BoatReservationServiceImpl boatReservationService;
+    @Autowired
     private CottageReservationServiceImpl cottageReservationService;
 
 
-
+/*
     @Autowired
     public ClientServiceImpl(UserServiceImpl userService, ClientRepository clientRepository,
                              BoatReservationServiceImpl boatReservationService,
@@ -33,7 +37,7 @@ public class ClientServiceImpl implements ClientService {
        this.boatReservationService = boatReservationService;
        this.cottageReservationService = cottageReservationService;
     }
-
+*/
     @Override
     public Client getCurrentClient() throws Exception {
         return this.findByEmail(this.userService.getUserFromPrincipal().getEmail());

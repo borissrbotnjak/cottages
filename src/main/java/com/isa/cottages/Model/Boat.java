@@ -85,12 +85,6 @@ public class Boat implements Serializable {
     @Column
     private Boolean available = true;
 
-    @Column
-    private Double price = 0.0;
-
-    @Column
-    private Integer numPersons;
-
     @ManyToOne(targetEntity = BoatOwner.class)
     private BoatOwner boatOwner;
 
@@ -106,9 +100,6 @@ public class Boat implements Serializable {
  */
     @ManyToMany(mappedBy = "boatSubscriptions")
     private Set<Client> subscribers;
-
-    @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
-    private Set<AdditionalService> additionalServices = new HashSet<>();
 
     @OneToMany(mappedBy = "boat", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();

@@ -40,7 +40,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
     List<BoatReservation> findAllByClient(@Param("client_id") Long clientId);
 
     @Query(value = "SELECT * FROM reservation b WHERE b.boat_id = ?1 and " +
-            "b.discount = true", nativeQuery = true)
+            "b.discount = true and b.deleted=false", nativeQuery = true)
     List<BoatReservation> findDiscountsByBoat(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))" +

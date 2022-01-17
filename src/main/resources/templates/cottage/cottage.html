@@ -255,12 +255,11 @@
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottages/__${cottage.id}__/defineAvailability'}">Define availability</a>
 
             <a sec:authorize="hasRole('CLIENT')" th:href="@{'/subscriptions/cottage/new/__${cottage.id}__'}">Subscribe</a>
-            </br></br>
+            </br></br><!--
             <a th:href="@{'/cottageReservations/allDiscounts/__${cottage.id}__'}">View discounts</a>
-            <!--
-            </br></br>
-            <a th:href="@{'/cottageReservations/onDiscount/__${cottage.id}__'}">View special offers</a>
             -->
+            </br></br>
+            <a sec:authorize="hasRole('CLIENT')" th:href="@{'/cottageReservations/onDiscount/__${cottage.id}__'}">View special offers</a>
             </br></br>
             <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageReservations/__${cottage.id}__/defineDiscount'}">Define discount</a>
             </br></br>
