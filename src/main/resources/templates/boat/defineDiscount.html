@@ -46,6 +46,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate3'}> Attendance</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -74,8 +75,31 @@
             <br><label for="discountUntil">Discount available until:</label>
             <input id="discountUntil" type="datetime-local" th:field="*{discountAvailableUntil}"/>
 
+            <br><label for="startTime">Start time:</label>
+            <input id="startTime" type="datetime-local" th:field="*{startTime}"/>
+
+            <br><label for="endTime">End time:</label>
+            <input id="endTime" type="datetime-local" th:field="*{endTime}"/>
+
             <br><label for="numPersons">Max number of persons:</label>
             <input id="numPersons" type="number" th:field="*{numPersons}"/>
+
+            <div class="form-group">
+                <label for="services">Services</br></label>
+                <div class="input-group" id="services" data-target-input="nearest">
+                    <label for="services">
+                        <select class="form-control" multiple="multiple" name="additionalServices">
+                            <option th:each="service : ${services}"
+                                    th:value="${service.id}"
+                                    th:text="${service.name} + ' ' + ${service.price}">Additional services:
+                            </option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <input type="text" name="selectedServices" th:value="${services}" hidden/>
+            </br>
+            <p th:if="${sLength == 0}">There are no additional services</p>
 
             <br><label for="discountPrice">Price:</label>
             <input type="number" id="discountPrice" th:field="*{discountPrice}"/>

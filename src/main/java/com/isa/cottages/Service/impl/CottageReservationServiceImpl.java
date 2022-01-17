@@ -26,20 +26,16 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     @Autowired
     private ClientServiceImpl clientService;
 
-//    @Autowired
-//    public CottageReservationServiceImpl(CottageReservationRepository reservationRepository,
-//                                         UserServiceImpl userService,
-//                                         CottageServiceImpl cottageService,
-//                                         ClientServiceImpl clientService) {
-//        this.reservationRepository = reservationRepository;
-//        this.userService = userService;
-//        this.cottageService = cottageService;
-//        this.clientService = clientService;
-//    }
-
     @Override
     public CottageReservation findOne(Long id) {
         return reservationRepository.getOne(id);
+    }
+
+    @Override
+    public List<CottageReservation> findByCottage(Long id) throws Exception {
+        Cottage cottage = (Cottage) this.cottageService.findById(id);
+
+        return this.reservationRepository.findByCottage(id);
     }
 
     @Override
@@ -134,16 +130,19 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
-    public List<CottageReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+    public List<CottageReservation> getAllOwnersNowAndUpcomingReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<CottageReservation> all = this.reservationRepository.getAllOwnersReservations(id);
         List<CottageReservation> upcoming = new ArrayList<>();
 
-        for (CottageReservation res: all) {
-            if((res.getStartTime().isAfter(LocalDateTime.now())) && (Objects.equals(res.getCottageOwner().getId(), cottageOwner.getId()))) {
+        for (CottageReservation res : all) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+                    || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())) {
                 upcoming.add(res);
             }
         }
+
         return upcoming;
     }
 
@@ -153,6 +152,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
         cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
+        cr.setStartTime(cottageReservation.getStartTime());
+        cr.setEndTime(cottageReservation.getEndTime());
+        cr.setStartDate(cottageReservation.getStartTime().toLocalDate());
+        cr.setEndDate(cottageReservation.getEndTime().toLocalDate());
         cr.setNumPersons(cottageReservation.getNumPersons());
         cr.setDiscountPrice(cottageReservation.getDiscountPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
@@ -162,6 +165,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setDeleted(false);
         cr.setReserved(false);
         cr.setClient(cottageReservation.getClient());
+        cr.CalculatePrice();
         this.reservationRepository.save(cr);
 
         return cr;
@@ -237,6 +241,21 @@ public class CottageReservationServiceImpl implements CottageReservationService 
                 filtered.add(res);
             }
         }
+        return filtered;
+    }
+
+    @Override
+    public Set<CottageReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+        List<CottageReservation> reservations = this.getOwnersPastReservations(id);
+        Set<CottageReservation> filtered = new HashSet<>();
+        Double attendance = 0.0;
+
+        for(CottageReservation res: reservations){
+            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+                filtered.add(res);
+            }
+        }
+
         return filtered;
     }
 

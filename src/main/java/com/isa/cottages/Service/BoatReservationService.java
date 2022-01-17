@@ -11,10 +11,11 @@ import java.util.Set;
 public interface BoatReservationService {
 
     BoatReservation findById(Long id) throws Exception;
+    List<BoatReservation> findByBoat(Long id) throws Exception;
     List<BoatReservation> getAllOwnersReservations(Long id) throws Exception;
     List<BoatReservation> getAllOwnersReservedReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception;
-    List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception;
+    List<BoatReservation> getAllOwnersNowAndUpcomingReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersPastReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersFreeReservations(Long id) throws Exception;
     List<BoatReservation> getPastReservations() throws Exception;
@@ -22,6 +23,7 @@ public interface BoatReservationService {
     List<BoatReservation> findAllByClient(Client client);
     List<BoatReservation> findClient(String keyword) throws Exception;
     Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
+    Set<BoatReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 
     BoatReservation saveDiscount(BoatReservation boatReservation);
     BoatReservation saveReservation(BoatReservation boatReservation);

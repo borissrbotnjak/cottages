@@ -30,23 +30,19 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     @Autowired
     private EmailService emailService;
 
-//    @Autowired
-//    public BoatReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
-//                                      BoatReservationRepository boatReservationRepository,
-//                                      BoatServiceImpl boatService) {
-//        this.clientService = clientService;
-//        this.userService = userService;
-//        this.reservationRepository = boatReservationRepository;
-//        this.boatService = boatService;
-////        this.emailService = emailService;
-//    }
-
     @Override
     public BoatReservation findById(Long id) throws Exception{
         if (this.reservationRepository.findById(id).isEmpty()) {
             throw new Exception("No such value(BoatReservation service)");
         }
         return this.reservationRepository.findById(id).get();
+    }
+
+    @Override
+    public List<BoatReservation> findByBoat(Long id) throws Exception {
+        Boat boat = (Boat) this.boatService.findById(id);
+
+        return this.reservationRepository.findByBoat(id);
     }
 
     @Override
@@ -129,14 +125,15 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public List<BoatReservation> getAllOwnersUpcomingReservations(Long id) throws Exception {
+    public List<BoatReservation> getAllOwnersNowAndUpcomingReservations(Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         List<BoatReservation> all = this.reservationRepository.getAllOwnersReservations(id);
         List<BoatReservation> upcoming = new ArrayList<>();
 
         for (BoatReservation res : all) {
-            if ((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))
-                    && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+            || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())){
                 upcoming.add(res);
             }
         }
@@ -203,6 +200,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
 
         br.setDiscountAvailableFrom(boatReservation.getDiscountAvailableFrom());
         br.setDiscountAvailableUntil(boatReservation.getDiscountAvailableUntil());
+        br.setStartTime(boatReservation.getStartTime());
+        br.setEndTime(boatReservation.getEndTime());
+        br.setStartDate(boatReservation.getStartTime().toLocalDate());
+        br.setEndDate(boatReservation.getEndTime().toLocalDate());
         br.setNumPersons(boatReservation.getNumPersons());
         br.setDiscountPrice(boatReservation.getDiscountPrice());
         br.setAdditionalServices(boatReservation.getAdditionalServices());
@@ -212,6 +213,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setDeleted(false);
         br.setReserved(false);
         br.setClient(boatReservation.getClient());
+        br.CalculatePrice();
         this.reservationRepository.save(br);
 
         return br;
@@ -265,6 +267,21 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         for(BoatReservation res: reservations){
             if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
               filtered.add(res);
+            }
+        }
+
+        return filtered;
+    }
+
+    @Override
+    public Set<BoatReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
+        List<BoatReservation> reservations = this.getOwnersPastReservations(id);
+        Set<BoatReservation> filtered = new HashSet<>();
+        Double attendance = 0.0;
+
+        for(BoatReservation res: reservations){
+            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+                filtered.add(res);
             }
         }
 

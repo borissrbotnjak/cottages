@@ -22,13 +22,13 @@ public class BoatOwner extends User {
     @Column
     private UserRole userRole = UserRole.BOAT_OWNER;
 
-    @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime unavailableFrom;
-
-    @Column
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime unavailableUntil;
+//    @Column
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+//    private LocalDateTime unavailableFrom;
+//
+//    @Column
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+//    private LocalDateTime unavailableUntil;
 
     @Column
     private RegistrationType registrationType = RegistrationType.BOAT_ADVERTISER;

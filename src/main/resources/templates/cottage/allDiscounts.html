@@ -48,6 +48,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottages/__${principal.id}__/averageRating'}> Average rating</a>
                         <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate'}> Incomes</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('COTTAGE_OWNER')" th:href=@{'/cottageReservations/__${principal.id}__/chooseDate3'}> Attendance</a>
+
                     </div>
                 </li>
                 <li class="nav-item">
@@ -83,16 +85,18 @@
                 <tr>
                     <th>Available from:</th>
                     <th>Available until:</th>
+                    <th>Start time:</th>
+                    <th>End time:</th>
                     <th>Max number of persons:</th>
                     <th>Price:</th>
-                    <th></th>
                 </tr>
                 <tr th:each="cottageReservation:${cottageReservations}">
                     <td th:text="${cottageReservation.discountAvailableFrom}"></td>
                     <td th:text="${cottageReservation.discountAvailableUntil}"></td>
+                    <td th:text="${cottageReservation.startTime}"></td>
+                    <td th:text="${cottageReservation.endTime}"></td>
                     <td th:text="${cottageReservation.numPersons}"></td>
-                    <td th:text="${cottageReservation.discountPrice}"></td>
-                    <td><a>Reserve</a></td>
+                    <td th:text="${cottageReservation.price}"></td>
                   </tr>
             </table>
         </div>

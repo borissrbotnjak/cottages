@@ -45,7 +45,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boats/__${principal.id}__/averageRating'}> Average rating</a>
                         <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate'}> Incomes</a>
-                    </div>
+                    <a class="dropdown-item" sec:authorize="hasRole('BOAT_OWNER')" th:href=@{'/boatReservations/__${principal.id}__/chooseDate3'}> Attendance</a>
+</div>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('BOAT_OWNER')">
                     <a class="nav-link" th:href="${'/boats/allMyBoats/__${principal.id}__'}">My Boats</a>
@@ -61,93 +62,30 @@
     </nav>
 </div> </br></br>
 
+
 <div class="container">
-    <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link" id="week-tab-md" data-toggle="tab" href="#week-md" role="tab" aria-controls="week-md"
-               aria-selected="false">Per Week</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="month-tab-md" data-toggle="tab" href="#month-md" role="tab" aria-controls="month-md"
-               aria-selected="false">Per Month</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="year-tab-md" data-toggle="tab" href="#year-md" role="tab" aria-controls="year-md"
-               aria-selected="false">Per Year</a>
-        </li>
-    </ul>
-    <div class="tab-content card pt-5" id="myTabContentMD">
-        <div class="tab-pane fade" id="week-md" role="tabpanel" aria-labelledby="week-tab-md">
-
-            <div class="row">
-                </br>
-                <form th:action="@{'/boatReservations/__${principal.id}__/chooseDate2'}" method="post">
-                    <div class="form-group">
-                        <label for="date">Start date</br></label>
-                        <div class="input-group date" id="date1" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="startDate"
-                                   th:value="${startDate}" id="date" placeholder="format example: 01/01/2022"/>
-                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="date2">End date</br></label>
-                        <div class="input-group date" id="date2" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#date1" name="endDate"
-                                   th:value="${endDate}" id="date_2" placeholder="format example: 02/01/2022"/>
-                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <button type="submit" class="btn btn-dark mt-2">Submit</button>
-                    </br>
-                </form>
-            </div>
-
-
-        </div>
-        <div class="tab-pane fade" id="month-md" role="tabpanel" aria-labelledby="month-tab-md">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose month
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">January</a></li>
-                    <li><a href="#">February</a></li>
-                    <li><a href="#">March</a></li>
-                    <li><a href="#">April</a></li>
-                    <li><a href="#">May</a></li>
-                    <li><a href="#">Jun</a></li>
-                    <li><a href="#">July</a></li>
-                    <li><a href="#">August</a></li>
-                    <li><a href="#">September</a></li>
-                    <li><a href="#">October</a></li>
-                    <li><a href="#">November</a></li>
-                    <li><a href="#">December</a></li>
-                </ul>
-            </div>
+    <h2>Incomes</h2>
+    </br>
+    <div class="row">
+        <div class="table">
+            <table width="90%">
+                <tr>
+                    <th>Boat name</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                </tr>
+                <tr th:each="reservation:${reservations}">
+                    <td th:text="${reservation.boat.getBoatName()}"></td>
+                    <td th:text="${reservation.startDate}"></td>
+                    <td th:text="${reservation.endDate}"></td>
+                </tr>
+            </table>
             </br></br>
-        </div>
-        <div class="tab-pane fade" id="year-md" role="tabpanel" aria-labelledby="year-tab-md">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose year
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">2021</a></li>
-                    <li><a href="#">2022</a></li>
-                </ul>
-            </div>
-            </br></br>
+            <h3>Total number of reservations:</h3>
+            <td th:text="${attendance}"></td>
         </div>
     </div>
 </div>
-
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
