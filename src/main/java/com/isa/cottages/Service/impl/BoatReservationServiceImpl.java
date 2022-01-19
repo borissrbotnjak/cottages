@@ -475,6 +475,15 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         return reservation;
     }
 
+    @Override
+    public List<BoatReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd) {
+        return this.reservationRepository.findAllUnavailable(desiredStart, desiredEnd);
+    }
+
+    @Override
+    public List<BoatReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity) {
+        return this.reservationRepository.findAllAvailable(desiredStart, desiredEnd, capacity);
+    }
 }
 
 

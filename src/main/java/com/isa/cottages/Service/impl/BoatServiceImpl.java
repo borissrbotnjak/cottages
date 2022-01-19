@@ -204,39 +204,35 @@ public class BoatServiceImpl implements BoatService {
     public Set<Boat> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
 
         Set<Boat> available = new HashSet<>();
-        Set<Boat> unAvailable = new HashSet<>();
-        Set<Boat> withReservation = new HashSet<>();
-        List<BoatReservation> reservations = this.reservationService.findAllUpcomingByCapacity(numOfPersons);
+        Set<Boat> unavailable = new HashSet<>();
+        List<BoatReservation> reservations = this.reservationService.getAllAvailable(startDate, endDate, numOfPersons);
 
+        // TODO: ubai proveru dostunosti i kod rezervacija. availableUntil > preferredEnd
         for (BoatReservation res : reservations) {
-            withReservation.add(res.getBoat());
-
-            if (!unAvailable.contains(res.getBoat())) {
-                if (this.boatAvailable(startDate, endDate, res.getBoat()) && !reservationOverlaps(res.getStartTime().toLocalDate(),
-                                                                                                            res.getEndTime().toLocalDate(), startDate, endDate)) {
-                    available.add(res.getBoat());
-                }
-                else {
-                    unAvailable.add(res.getBoat());
-                }
-            }
-
+            available.add(res.getBoat());
         }
 
-        // ako ne postoji rezervacija i dobar je kapacitet, dodaj
+        List<BoatReservation> un = this.reservationService.getAllUnavailable(startDate, endDate);
+
+        for (BoatReservation r : un) {
+            Boat c = r.getBoat();
+            unavailable.add(r.getBoat());
+        }
+
         List<Boat> all = this.boatRepository.findAll();
         HashSet<Boat> allSet = new HashSet<>(all);
 
-        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(available); }};
 
         for (Boat b : woReservation) {
-            if (!unAvailable.contains(b) && this.boatAvailable(startDate, endDate, b) &&
-                    b.getNumPersons()>=numOfPersons) {
+            boolean u = unavailable.contains(b);
+            if (!unavailable.contains(b) && this.boatAvailable(startDate, endDate, b) && b.getNumPersons() >= numOfPersons) {
                 available.add(b);
             }
         }
 
-        available.removeIf(unAvailable::contains);
+        available.removeIf(unavailable::contains);
+
         return available;
     }
 

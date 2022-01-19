@@ -255,4 +255,14 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
 
     @Override
     public List<InstructorReservation> findAllByClient(Client client) { return this.reservationRepository.findAllByClient(client.getId()); }
+
+    @Override
+    public List<InstructorReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd) {
+        return this.reservationRepository.findAllUnavailable(desiredStart, desiredEnd);
+    }
+
+    @Override
+    public List<InstructorReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity) {
+        return this.reservationRepository.findAllAvailable(desiredStart, desiredEnd, capacity);
+    }
 }

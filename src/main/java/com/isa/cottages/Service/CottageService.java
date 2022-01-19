@@ -29,7 +29,7 @@ public interface CottageService {
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 
     Boolean canUpdateOrDelete(Long id) throws Exception;
-    Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons);
+    Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage);
 
     List<Cottage> orderByNameDesc();
     List<Cottage> orderByNameAsc();

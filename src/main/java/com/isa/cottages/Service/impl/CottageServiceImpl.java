@@ -190,13 +190,10 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
-    public Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons) {
-        if (cottage.getNumPersons() >= numPersons) {
-            if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
-                if (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
-            } else { return true; }
-        }
-
+    public Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage) {
+        if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
+            if (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
+        } else { return true; }
         return false;
     }
 
@@ -223,35 +220,35 @@ public class CottageServiceImpl implements CottageService {
     public Set<Cottage> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
 
         Set<Cottage> available = new HashSet<>();
-        Set<Cottage> unAvailable = new HashSet<>();
-        Set<Cottage> withReservation = new HashSet<>();
-        List<CottageReservation> reservations = this.reservationService.getAllUpcoming();
+        Set<Cottage> unavailable = new HashSet<>();
+        List<CottageReservation> reservations = this.reservationService.getAllAvailable(startDate, endDate, numOfPersons);
 
+        // TODO: ubai proveru dostunosti i kod rezervacija. availableUntil > preferredEnd
         for (CottageReservation res : reservations) {
-            withReservation.add(res.getCottage());
+            available.add(res.getCottage());
+        }
 
-            if (!unAvailable.contains(res.getCottage())) {
-                if (this.cottageAvailable(startDate, endDate, res.getCottage(), numOfPersons) && !reservationOverlaps(res.getStartTime().toLocalDate(),
-                        res.getEndTime().toLocalDate(), startDate, endDate)) {
-                    available.add(res.getCottage());
-                }
-                else {
-                    unAvailable.add(res.getCottage());
-                }
-            }
+        List<CottageReservation> un = this.reservationService.getAllUnavailable(startDate, endDate);
 
+        for (CottageReservation r : un) {
+            Cottage c = r.getCottage();
+            unavailable.add(r.getCottage());
         }
 
         List<Cottage> all = this.cottageRepository.findAll();
         HashSet<Cottage> allSet = new HashSet<>(all);
 
-        HashSet<Cottage> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+        HashSet<Cottage> woReservation = new HashSet<>(allSet) {{ removeAll(available); }};
 
         for (Cottage b : woReservation) {
-            if (!unAvailable.contains(b) && this.cottageAvailable(startDate, endDate, b, numOfPersons)) { available.add(b); }
+            // boolean u = unavailable.contains(b);
+            if (!unavailable.contains(b) && this.cottageAvailable(startDate, endDate, b) && b.getNumPersons() >= numOfPersons) {
+                available.add(b);
+            }
         }
 
-        available.removeIf(unAvailable::contains);
+        available.removeIf(unavailable::contains);
+
         return available;
     }
 

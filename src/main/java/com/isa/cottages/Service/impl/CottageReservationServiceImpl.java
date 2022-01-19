@@ -406,4 +406,15 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         return reservation;
     }
+
+    @Override
+    public List<CottageReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity) {
+        return this.reservationRepository.findAllAvailable(desiredStart, desiredEnd, capacity);
+    }
+
+    @Override
+    public List<CottageReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd) {
+        return this.reservationRepository.findAllUnavailable(desiredStart, desiredEnd);
+    }
+
 }
