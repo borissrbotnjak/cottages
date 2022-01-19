@@ -54,4 +54,7 @@ public interface CottageReservationService {
     void setDate(CottageReservation reservation);
 
     CottageReservation makeReservationWithClient(CottageReservation reservation, Cottage cottage, Long clid) throws Exception;
+
+    List<CottageReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity);
+    List<CottageReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd);
 }

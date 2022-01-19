@@ -1,15 +1,12 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.FishingInstructorAdventure;
-import com.isa.cottages.Model.InstructorReservation;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.AdditionalServiceRepository;
 import com.isa.cottages.Repository.FishingInstructorAdventureRepository;
 import com.isa.cottages.Service.FishingInstructorAdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.isa.cottages.Model.AdditionalService;
-import com.isa.cottages.Model.Instructor;
 // import com.isa.cottages.Repository.AdditionalServiceRepository;
 
 import java.time.LocalDate;
@@ -112,13 +109,10 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     }
 
     @Override
-    public Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor, int numPersons) {
-        if (instructor.getNumPersons() >= numPersons) {
-            if (instructor.getAvailableFrom() != null && instructor.getAvailableUntil() != null) {
-                if (instructor.getAvailableFrom().toLocalDate().isBefore(startDate) && instructor.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
-            } else { return true; }
-        }
-
+    public Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor) {
+        if (instructor.getAvailableFrom() != null && instructor.getAvailableUntil() != null) {
+            if (instructor.getAvailableFrom().toLocalDate().isBefore(startDate) && instructor.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
+        } else { return true; }
         return false;
     }
 
@@ -126,32 +120,34 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     public Set<FishingInstructorAdventure> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
 
         Set<FishingInstructorAdventure> available = new HashSet<>();
-        Set<FishingInstructorAdventure> unAvailable = new HashSet<>();
-        Set<FishingInstructorAdventure> withReservation = new HashSet<>();
-        List<InstructorReservation> reservations = this.reservationService.getAllUpcoming();
+        Set<FishingInstructorAdventure> unavailable = new HashSet<>();
+        List<InstructorReservation> reservations = this.reservationService.getAllAvailable(startDate, endDate, numOfPersons);
 
+        // TODO: ubai proveru dostunosti i kod rezervacija. availableUntil > preferredEnd
         for (InstructorReservation res : reservations) {
-            withReservation.add(res.getFishingInstructorAdventure());
-            if(!unAvailable.contains(res.getFishingInstructorAdventure())) {
-                if (this.InstructorAvailable(startDate, endDate, res.getFishingInstructorAdventure(), numOfPersons)) {
-                    if ((res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
-                            (res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
-                        available.add(res.getFishingInstructorAdventure());
-                    }
-                } else { unAvailable.add(res.getFishingInstructorAdventure()); }
-            }
+            available.add(res.getFishingInstructorAdventure());
+        }
+
+        List<InstructorReservation> un = this.reservationService.getAllUnavailable(startDate, endDate);
+
+        for (InstructorReservation r : un) {
+            FishingInstructorAdventure ir = r.getFishingInstructorAdventure();
+            unavailable.add(r.getFishingInstructorAdventure());
         }
 
         List<FishingInstructorAdventure> all = this.adventureRepository.findAll();
         HashSet<FishingInstructorAdventure> allSet = new HashSet<>(all);
 
-        HashSet<FishingInstructorAdventure> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+        HashSet<FishingInstructorAdventure> woReservation = new HashSet<>(allSet) {{ removeAll(available); }};
 
         for (FishingInstructorAdventure b : woReservation) {
-            if (!unAvailable.contains(b) && this.InstructorAvailable(startDate, endDate, b, numOfPersons)) {  available.add(b); }
+            boolean u = unavailable.contains(b);
+            if (!unavailable.contains(b) && this.InstructorAvailable(startDate, endDate, b) && b.getNumPersons() >= numOfPersons) {
+                available.add(b);
+            }
         }
 
-        available.removeIf(unAvailable::contains);
+        available.removeIf(unavailable::contains);
 
         return available;
     }

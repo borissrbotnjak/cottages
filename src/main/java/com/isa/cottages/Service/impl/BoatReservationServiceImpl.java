@@ -470,6 +470,20 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
+    public List<BoatReservation> findAllUpcomingByCapacity(int numOfPersons) throws Exception {
+        Client cl = (Client) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.findAllByCapacity(numOfPersons);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res : all) {
+            if ((res.getStartTime().isAfter(LocalDateTime.now())) && (res.getEndTime().isAfter(LocalDateTime.now()))) {
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
     public BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         Client client = (Client) userService.findById(clid);
@@ -486,6 +500,15 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         return reservation;
     }
 
+    @Override
+    public List<BoatReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd) {
+        return this.reservationRepository.findAllUnavailable(desiredStart, desiredEnd);
+    }
+
+    @Override
+    public List<BoatReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity) {
+        return this.reservationRepository.findAllAvailable(desiredStart, desiredEnd, capacity);
+    }
 }
 
 
