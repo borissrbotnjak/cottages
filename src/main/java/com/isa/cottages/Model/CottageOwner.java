@@ -22,13 +22,13 @@ public class CottageOwner extends User {
     @Column
     private UserRole userRole = UserRole.COTTAGE_OWNER;
 
-//    @Column
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-//    private LocalDateTime unavailableFrom;
-//
-//    @Column
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-//    private LocalDateTime unavailableUntil;
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime unavailableFrom;
+
+    @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime unavailableUntil;
 
     @Column
     private RegistrationType registrationType = RegistrationType.COTTAGE_ADVERTISER;

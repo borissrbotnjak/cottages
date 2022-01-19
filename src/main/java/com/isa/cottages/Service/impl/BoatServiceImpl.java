@@ -3,9 +3,6 @@ package com.isa.cottages.Service.impl;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Service.BoatService;
-import org.hibernate.Hibernate;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
@@ -40,6 +37,7 @@ public class BoatServiceImpl implements BoatService {
     @Override
     public Boat saveBoat(Boat boat) {
         Boat b = new Boat();
+
         b.setBoatName(boat.getBoatName());
         b.setEngineType(boat.getEngineType());
         b.setLength(boat.getLength());
@@ -56,6 +54,10 @@ public class BoatServiceImpl implements BoatService {
         b.setBoatOwner(boat.getBoatOwner());
         b.setAvailableFrom(boat.getAvailableFrom());
         b.setAvailableUntil(boat.getAvailableUntil());
+        b.setImageUrl(boat.getImageUrl());
+        b.setReserved(false);
+        b.setDeleted(false);
+        b.setImageUrl(boat.getImageUrl());
 
         this.boatRepository.save(b);
         return b;
@@ -82,6 +84,7 @@ public class BoatServiceImpl implements BoatService {
         forUpdate.setPrice(boat.getPrice());
         forUpdate.setBoatOwner(boat.getBoatOwner());
         forUpdate.setCancellationCondition(boat.getCancellationCondition());
+        forUpdate.setImageUrl(boat.getImageUrl());
 
         this.boatRepository.save(forUpdate);
         return forUpdate;
@@ -108,10 +111,12 @@ public class BoatServiceImpl implements BoatService {
     public Boolean canUpdateOrDelete(Long id) throws Exception {
         boolean updateOrDelete = true;
         Boat boat = findById(id);
-        List<BoatReservation> reservations = this.reservationService.findByBoat(id);
-        for(BoatReservation br:reservations) {
-            if (br.getReserved() == true || boat.getReserved() == true) {
-                updateOrDelete = false;
+        List<BoatReservation> reservations = this.reservationService.findNowAndUpcomingByBoat(id);
+        if (reservations != null) {
+            for (BoatReservation br : reservations) {
+                if (br.getReserved() == true || boat.getReserved() == true) {
+                    updateOrDelete = false;
+                }
             }
         }
         return updateOrDelete;

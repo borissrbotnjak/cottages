@@ -53,6 +53,7 @@ public class CottageServiceImpl implements CottageService {
         c.setReserved(false);
         c.setDeleted(false);
         c.setAdditionalServices(cottage.getAdditionalServices());
+
         this.cottageRepository.save(c);
 
         return c;
@@ -140,11 +141,13 @@ public class CottageServiceImpl implements CottageService {
     public Boolean canUpdateOrDelete(Long id) throws Exception {
         boolean updateOrDelete = true;
         Cottage cottage = findById(id);
-        List<CottageReservation> reservations = this.reservationService.findByCottage(id);
+        List<CottageReservation> reservations = this.reservationService.findNowAndUpcomingByCottage(id);
+        if (reservations != null) {
         for(CottageReservation cr:reservations) {
             if (cr.getReserved() == true || cottage.getReserved() == true) {
                 updateOrDelete = false;
             }
+        }
         }
             return updateOrDelete;
     }

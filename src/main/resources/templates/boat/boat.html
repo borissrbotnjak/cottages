@@ -111,18 +111,19 @@
 </div> </br></br>
 
 <div class="container emp-profile">
-  <!--<form method="post">-->
   <form th:object="${boat}" method="get">
     <div class="row">
       <div class="col-md-8">
         <div class="tab-content profile-tab" id="myTabContent">
           <div id="profile">
-            <p align="center">
-              <img alt="" th:src="@{'/getImage/'+${boat.imageUrl}+ '/' +${principal.id}}">
+
+            <p th:each="img:${boat.imageUrl}">
+              <img alt="" th:src="@{'/getImage/'+${img} + '/' + ${principal.id}}">
             </p>
-            <p>
-              <img alt="" th:src="${boat.imageUrl}">
-            </p>
+              <p th:each="i:${boat.imageUrl}">
+                  <img alt="" th:src="${i}">
+              </p>
+
             <div class="row">
               <div class="col-md-6">
                 <label>Boat name</label>

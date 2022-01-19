@@ -1,9 +1,6 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Model.AdditionalService;
-import com.isa.cottages.Model.Cottage;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Model.CottageReservation;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.AdditionalServiceServiceImpl;
 import com.isa.cottages.Service.impl.CottageReservationServiceImpl;
 import com.isa.cottages.Service.impl.CottageServiceImpl;
@@ -48,12 +45,6 @@ public class CottageController {
         Cottage cottage = new Cottage();
         model.addAttribute("cottage", cottage);
 
-//        List<AdditionalService> additionalService = new ArrayList<>();
-//        model.addAttribute("additionalService", additionalService);
-//        for(int i=1; i<=3; i++) {
-//            cottage.addAdditionalService(new AdditionalService());
-//        }
-
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
 
@@ -63,40 +54,31 @@ public class CottageController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/addCottage/{id}/submit")
     public ModelAndView addCottage(@PathVariable Long id, @ModelAttribute Cottage cottage,
-//                                   @ModelAttribute AdditionalService additionalService,
-                                   @RequestParam("image") MultipartFile image,
-                                   Model model) throws Exception {
-//        if (this.cottageService.findById(cottage.getId()) != null) {
-//            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
-//        }
-        Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
-        try {
-            InputStream inputStream = image.getInputStream();
-            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
-                    StandardCopyOption.REPLACE_EXISTING);
-            cottage.setImageUrl(image.getOriginalFilename().toLowerCase());
-            model.addAttribute("cottage", cottage);
-            model.addAttribute("imageUrl", cottage.getImageUrl());
+                                @RequestParam("image") MultipartFile[] image,
+                                Model model) throws Exception {
+        List<String> list = new ArrayList<>();
+        for (MultipartFile img:image) {
+            Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
+            try {
+                InputStream inputStream = img.getInputStream();
+                Files.copy(inputStream, path.resolve(img.getOriginalFilename()),
+                        StandardCopyOption.REPLACE_EXISTING);
+                String i = img.getOriginalFilename().toLowerCase();
+                list.add(i);
+                cottage.setImageUrl(list);
+                model.addAttribute("cottage", cottage);
+                model.addAttribute("imageUrl", cottage.getImageUrl());
+                model.addAttribute("list", list);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
-
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
-//        for(int i=1; i<=3; i++) {
-//            cottage.setAdditionalServices(cottage.getAdditionalServices());
-//            additionalService.setCottage(additionalService.getCottage());
-//            additionalService.setCottage(cottage);
-//            this.additionalServiceService.save(additionalService);
-//        }
-
-//        model.addAttribute("additionalService", additionalService);
-//        model.addAttribute("additionalServices", cottage.getAdditionalServices());
 
         this.cottageService.saveCottage(cottage);
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}/");
@@ -157,18 +139,6 @@ public class CottageController {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
         Cottage cottage = this.cottageService.findById(id);
         model.addAttribute("cottage", this.cottageService.findById(id));
-//        AdditionalService additionalService = additionalServiceService.findOne(aid);
-//        Collection<AdditionalService> additionalServices = additionalServiceService.findByCottage(id);
-//        model.addAttribute("additionalService", additionalService);
-//        model.addAttribute("additionalServices", additionalServices);
-//        model.addAttribute("aid", aid);
-//
-//        Double totalPrice = cottage.getTotalPrice();
-//        Double additionalServicePrice = 0.0;
-//        for(int i=0; i<3; i++) {
-//            additionalServicePrice += additionalService.getPrice();
-//        }
-//        totalPrice = cottage.getPrice() + additionalServicePrice;
 
         return new ModelAndView("cottage/cottage");
     }
@@ -206,27 +176,32 @@ public class CottageController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/edit/submit")
     public ModelAndView edit(@PathVariable Long id, Model model, Cottage cottage,
-                             @RequestParam("image") MultipartFile image) throws Exception {
-        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", cottageOwner);
+                             @RequestParam("image") MultipartFile[] image) throws Exception {
 
+        List<String> list = new ArrayList<>();
+        for (MultipartFile img:image) {
+            Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
+            try {
+                InputStream inputStream = img.getInputStream();
+                Files.copy(inputStream, path.resolve(img.getOriginalFilename()),
+                        StandardCopyOption.REPLACE_EXISTING);
+                String i = img.getOriginalFilename().toLowerCase();
+                list.add(i);
+                cottage.setImageUrl(list);
+                model.addAttribute("cottage", cottage);
+                model.addAttribute("imageUrl", cottage.getImageUrl());
+                model.addAttribute("list", list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Collection<Cottage> cottages = this.cottageService.findByCottageOwner(id);
         model.addAttribute("cottages", cottages);
-
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
         cottage.setCottageOwner((CottageOwner) this.userService.getUserFromPrincipal());
 
-        Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
-        try {
-            InputStream inputStream = image.getInputStream();
-            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
-                    StandardCopyOption.REPLACE_EXISTING);
-            cottage.setImageUrl(image.getOriginalFilename().toLowerCase());
-            model.addAttribute("cottage", cottage);
-            model.addAttribute("imageUrl", cottage.getImageUrl());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.cottageService.updateCottage(cottage);
 
         boolean update = this.cottageService.canUpdateOrDelete(id);
         if (!update) {

@@ -70,7 +70,7 @@
 
 
 <div class="container center-align lighten-5">
-    <h1>Add cottage</h1>
+    <h1>Add boat</h1>
     <form th:action="@{/boats/addBoat/__${principal.id}__/submit}" method="post" enctype="multipart/form-data">
 
         <br><label for="name">Name:</label>
@@ -137,7 +137,7 @@
 
         <div class="form-group">
             <label for="customFile">Image</label>
-            </br><input type="file" name="image" id="customFile"/>
+            </br><input type="file" multiple="multiple" name="image" id="customFile"/>
         </div>
 
         </br>

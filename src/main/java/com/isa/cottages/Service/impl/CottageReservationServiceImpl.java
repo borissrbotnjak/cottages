@@ -41,6 +41,24 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
+    public List<CottageReservation> findNowAndUpcomingByCottage(Long id) throws Exception {
+        Cottage cottage = cottageRepository.findById(id).get();
+
+        List<CottageReservation> all = this.reservationRepository.getAllReservedByCottage(id);
+        List<CottageReservation> upcoming = new ArrayList<>();
+
+        for (CottageReservation res : all) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+                    || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())){
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+
+    @Override
     public List<CottageReservation> getAllOwnersReservations(Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
@@ -285,10 +303,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
         cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
         cr.setDiscountAvailableUntil(cottageReservation.getDiscountAvailableUntil());
-        cr.setStartTime(cottageReservation.getStartTime());
-        cr.setEndTime(cottageReservation.getEndTime());
-        cr.setStartDate(cottageReservation.getStartTime().toLocalDate());
-        cr.setEndDate(cottageReservation.getEndTime().toLocalDate());
+        cr.setStartTime(cottageReservation.getDiscountAvailableFrom());
+        cr.setEndTime(cottageReservation.getDiscountAvailableUntil());
+        cr.setStartDate(cottageReservation.getDiscountAvailableFrom().toLocalDate());
+        cr.setEndDate(cottageReservation.getDiscountAvailableUntil().toLocalDate());
         cr.setNumPersons(cottageReservation.getNumPersons());
         cr.setPrice(cottageReservation.getPrice());
         cr.setDiscountPrice(cottageReservation.getDiscountPrice());

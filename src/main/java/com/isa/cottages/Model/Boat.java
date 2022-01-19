@@ -1,12 +1,16 @@
 package com.isa.cottages.Model;
 
+import groovyjarjarantlr4.v4.runtime.misc.Array2DHashSet;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -47,8 +51,8 @@ public class Boat implements Serializable {
     @Column
     private String state;
 
-    @Column
-    private String imageUrl;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> imageUrl;
 
     @Column
     private Long capacity;
@@ -93,11 +97,7 @@ public class Boat implements Serializable {
 
     @ElementCollection
     private Set<Integer> ratings;
-/*
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
-    private Client subscriber;
- */
+
     @ManyToMany(mappedBy = "boatSubscriptions")
     private Set<Client> subscribers;
 
@@ -109,4 +109,5 @@ public class Boat implements Serializable {
 
     @OneToMany(mappedBy = "boat", targetEntity = FishingEquipment.class)
     private Set<FishingEquipment> fishingEquipments = new HashSet<>();
+
 }

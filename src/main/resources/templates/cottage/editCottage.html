@@ -66,7 +66,6 @@
 
   <div class="container">
     <div class="center-align blue lighten-5">
-<!--      <form th:action="@{'/cottages/allMyCottages/__${principal.id}__/editCottage/__${cottage.id}__/submit'}" th:object="${cottage}" method="post">-->
         <form th:action="@{'/cottages/__${cottage.id}__/edit/submit'}" method="post" enctype="multipart/form-data">
             <br><label for="name">Name:</label>
             <input id="name" type="text" th:field="*{cottage.name}"/>
@@ -103,7 +102,7 @@
 
             <div class="form-group">
                 <label for="customFile">Image</label>
-                </br><input type="file" name="image" id="customFile"/>
+                </br><input type="file" name="image" multiple="multiple" id="customFile"/>
             </div>
 
             <div class="form-group">

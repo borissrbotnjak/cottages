@@ -17,6 +17,10 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
             "and res.cottage_id = ?1", nativeQuery = true)
     List<CottageReservation> findByCottage(@Param("id") Long id);
 
+    @Query(value = "SELECT * FROM reservation res WHERE res.reserved=true " +
+            "and res.cottage_id = ?1", nativeQuery = true)
+    List<CottageReservation> getAllReservedByCottage(@Param("id") Long id);
+
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.cottage_owner_id = ?1", nativeQuery = true)
     List<CottageReservation> getAllReservedByOwner(@Param("id") Long id);

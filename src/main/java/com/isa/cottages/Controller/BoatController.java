@@ -1,6 +1,5 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/boats")
@@ -33,7 +31,7 @@ public class BoatController {
     public BoatController(BoatServiceImpl boatService, UserServiceImpl userService,
                           AdditionalServiceServiceImpl additionalServiceService,
                           NavigationEquipmentServiceImpl navigationEquipmentService,
-                          FishingEquipmentServiceImpl fishingEquipmentService){
+                          FishingEquipmentServiceImpl fishingEquipmentService) {
         this.boatService = boatService;
         this.userService = userService;
         this.additionalServiceService = additionalServiceService;
@@ -61,10 +59,10 @@ public class BoatController {
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/allMyBoats/{id}")
-    public ModelAndView getAllMyBoats (@PathVariable Long id, Model model, String keyword) throws Exception{
+    public ModelAndView getAllMyBoats(@PathVariable Long id, Model model, String keyword) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
-        if(boatOwner == null) {
+        if (boatOwner == null) {
             throw new Exception("Boat owner does not exist.");
         }
         if (keyword != null) {
@@ -168,6 +166,12 @@ public class BoatController {
         Boat boat = new Boat();
         model.addAttribute("boat", boat);
 
+//        List<AdditionalService> additionalService = new ArrayList<>();
+//        model.addAttribute("additionalService", additionalService);
+//        for(int i=1; i<=3; i++) {
+//            boat.addAdditionalService(new AdditionalService());
+//        }
+
         Collection<Boat> boats = this.boatService.findByBoatOwner(id);
         model.addAttribute("boats", boats);
 
@@ -177,36 +181,44 @@ public class BoatController {
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @PostMapping("/addBoat/{id}/submit")
     public ModelAndView addBoat(@PathVariable Long id, @ModelAttribute Boat boat,
-                                   @RequestParam("image") MultipartFile image,
+                                   @RequestParam("image") MultipartFile[] image,
                                    Model model) throws Exception {
-//        if (this.boatService.findById(boat.getId()) != null) {
-//            throw new ResourceConflictException(boat.getId(), "Boat with this id already exist.");
-//        }
-        Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
-        try {
-            InputStream inputStream = image.getInputStream();
-            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
-                    StandardCopyOption.REPLACE_EXISTING);
-            boat.setImageUrl(image.getOriginalFilename().toLowerCase());
-            model.addAttribute("boat", boat);
-            model.addAttribute("imageUrl", boat.getImageUrl());
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<String> list = new ArrayList<>();
+        for (MultipartFile img:image) {
+            Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
+            try {
+                InputStream inputStream = img.getInputStream();
+                Files.copy(inputStream, path.resolve(img.getOriginalFilename()),
+                        StandardCopyOption.REPLACE_EXISTING);
+                String i = img.getOriginalFilename().toLowerCase();
+                list.add(i);
+                boat.setImageUrl(list);
+                model.addAttribute("boat", boat);
+                model.addAttribute("imageUrl", boat.getImageUrl());
+                model.addAttribute("list", list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
         Collection<Boat> boats = this.boatService.findByBoatOwner(id);
         model.addAttribute("boats", boats);
-
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
 
         boat.setBoatOwner((BoatOwner) this.userService.getUserFromPrincipal());
+//        for(int i=1; i<=3; i++) {
+//            cottage.setAdditionalServices(cottage.getAdditionalServices());
+//            additionalService.setCottage(additionalService.getCottage());
+//            additionalService.setCottage(cottage);
+//            this.additionalServiceService.save(additionalService);
+//        }
+
+//        model.addAttribute("additionalService", additionalService);
+//        model.addAttribute("additionalServices", cottage.getAdditionalServices());
 
         this.boatService.saveBoat(boat);
         return new ModelAndView("redirect:/boats/allMyBoats/{id}/");
     }
-
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/{id}/addAdditionalService")
@@ -340,27 +352,30 @@ public class BoatController {
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @PostMapping("/{id}/edit/submit")
     public ModelAndView edit(@PathVariable Long id, Model model, Boat boat,
-                             @RequestParam("image") MultipartFile image) throws Exception {
-        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
-        model.addAttribute("principal", boatOwner);
-
+                             @RequestParam("image") MultipartFile[] image) throws Exception {
+        List<String> list = new ArrayList<>();
+        for (MultipartFile img:image) {
+            Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
+            try {
+                InputStream inputStream = img.getInputStream();
+                Files.copy(inputStream, path.resolve(img.getOriginalFilename()),
+                        StandardCopyOption.REPLACE_EXISTING);
+                String i = img.getOriginalFilename().toLowerCase();
+                list.add(i);
+                boat.setImageUrl(list);
+                model.addAttribute("boat", boat);
+                model.addAttribute("imageUrl", boat.getImageUrl());
+                model.addAttribute("list", list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Collection<Boat> boats = this.boatService.findByBoatOwner(id);
         model.addAttribute("boats", boats);
-
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
         boat.setBoatOwner((BoatOwner) this.userService.getUserFromPrincipal());
-
-        Path path = Paths.get("C:\\Users\\Dijana\\Desktop\\Cottages\\cottages\\uploads");
-        try {
-            InputStream inputStream = image.getInputStream();
-            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
-                    StandardCopyOption.REPLACE_EXISTING);
-            boat.setImageUrl(image.getOriginalFilename().toLowerCase());
-            model.addAttribute("boat", boat);
-            model.addAttribute("imageUrl", boat.getImageUrl());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.boatService.updateBoat(boat);
 
         boolean update = this.boatService.canUpdateOrDelete(id);
         if (!update) {

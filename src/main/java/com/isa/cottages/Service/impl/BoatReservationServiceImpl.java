@@ -41,10 +41,20 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public List<BoatReservation> findByBoat(Long id) throws Exception {
+    public List<BoatReservation> findNowAndUpcomingByBoat(Long id) throws Exception {
         Boat boat = boatRepository.findById(id).get();
 
-        return this.reservationRepository.findByBoat(id);
+        List<BoatReservation> all = this.reservationRepository.getAllReservedByBoat(id);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res : all) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+                    || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())){
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
     }
 
     @Override
@@ -361,10 +371,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
 
         br.setDiscountAvailableFrom(boatReservation.getDiscountAvailableFrom());
         br.setDiscountAvailableUntil(boatReservation.getDiscountAvailableUntil());
-        br.setStartTime(boatReservation.getStartTime());
-        br.setEndTime(boatReservation.getEndTime());
-        br.setStartDate(boatReservation.getStartTime().toLocalDate());
-        br.setEndDate(boatReservation.getEndTime().toLocalDate());
+        br.setStartTime(boatReservation.getDiscountAvailableFrom());
+        br.setEndTime(boatReservation.getDiscountAvailableUntil());
+        br.setStartDate(boatReservation.getDiscountAvailableFrom().toLocalDate());
+        br.setEndDate(boatReservation.getDiscountAvailableUntil().toLocalDate());
         br.setNumPersons(boatReservation.getNumPersons());
         br.setDiscountPrice(boatReservation.getDiscountPrice());
         br.setAdditionalServices(boatReservation.getAdditionalServices());
