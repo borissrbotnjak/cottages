@@ -4,6 +4,7 @@ import com.isa.cottages.Model.*;
 import com.isa.cottages.Model.Client;
 import com.isa.cottages.Model.InstructorReservation;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface InstructorReservationsService {
@@ -40,4 +41,8 @@ public interface InstructorReservationsService {
     List<InstructorReservation> getAllWithDiscount(Long instructorId);
 
     InstructorReservation makeReservationOnDiscount(Long id) throws Exception;
+
+    List<InstructorReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd);
+
+    List<InstructorReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity);
 }

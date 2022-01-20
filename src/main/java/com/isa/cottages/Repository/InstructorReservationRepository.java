@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -28,12 +29,16 @@ public interface InstructorReservationRepository extends JpaRepository<Instructo
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
             "and res.instructor_id=?1 and res.discount = true", nativeQuery = true)
     List<InstructorReservation> findAllWithDiscount(Long instructorId);
-/*
-    List<InstructorReservation> findByOrderByStartTimeAsc();
-    List<InstructorReservation> findByOrderByStartTimeDesc();
-    List<InstructorReservation> findByOrderByDurationAsc();
-    List<InstructorReservation> findByOrderByDurationDesc();
-    List<InstructorReservation> findByOrderByPriceAsc();
-    List<InstructorReservation> findByOrderByPriceDesc();*/
 
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
+            "and res.instructor_id is not null " +
+            "and not (res.start_date < ?2 and res.end_date > ?1 )" +
+            "and res.num_persons >= ?3 ", nativeQuery = true)
+    List<InstructorReservation> findAllAvailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
+                                           @Param("capacity") int capacity);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
+            "and res.instructor_id is not null " +
+            "and res.start_date < ?2 and res.end_date > ?1 ", nativeQuery = true)
+    List<InstructorReservation> findAllUnavailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

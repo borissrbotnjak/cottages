@@ -15,7 +15,7 @@ public interface FishingInstructorAdventureService {
     Set<FishingInstructorAdventure> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
     List<FishingInstructorAdventure> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
-    Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor, int numPersons);
+    Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor);
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
     List<AdditionalService> findServicesByAdventure(FishingInstructorAdventure adventure);

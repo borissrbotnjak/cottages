@@ -31,7 +31,9 @@ public interface BoatService {
     List<Boat> orderByAddressDesc();
     List<Boat> orderByAddressAsc();
 
-    Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons);
+    Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat);
+
+    Boolean reservationOverlaps(LocalDate reservationStart, LocalDate reservationEnd, LocalDate desiredStart, LocalDate desiredEnd);
 
     Set<Boat> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
     List<Boat> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
