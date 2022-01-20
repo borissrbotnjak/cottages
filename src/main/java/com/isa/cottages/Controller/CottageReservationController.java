@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -93,6 +92,8 @@ public class CottageReservationController {
         CottageReservation cottageReservation = new CottageReservation();
 
         model.addAttribute("cottageReservation", cottageReservation);
+        model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
 
         Collection<CottageReservation> cottageReservations = this.reservationService.findDiscountsByCottage(id);
         model.addAttribute("cottageReservations", cottageReservations);
@@ -103,12 +104,12 @@ public class CottageReservationController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     @PostMapping("/{id}/defineDiscount/submit")
     public ModelAndView defineDiscount(@PathVariable Long id, @ModelAttribute CottageReservation cottageReservation,
-                                       Model model, String email) throws Exception {
-//        if (this.cottageService.findById(cottage.getId()) != null) {
-//            throw new ResourceConflictException(cottage.getId(), "Cottage with this id already exist.");
-//        }
+                                       Model model) throws Exception {
         Collection<CottageReservation> cottageReservations = this.reservationService.findDiscountsByCottage(id);
         model.addAttribute("cottageReservations", cottageReservations);
+
+        model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
 
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);

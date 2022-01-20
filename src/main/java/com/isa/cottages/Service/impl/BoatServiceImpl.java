@@ -37,6 +37,7 @@ public class BoatServiceImpl implements BoatService {
     @Override
     public Boat saveBoat(Boat boat) {
         Boat b = new Boat();
+
         b.setBoatName(boat.getBoatName());
         b.setEngineType(boat.getEngineType());
         b.setLength(boat.getLength());
@@ -53,6 +54,10 @@ public class BoatServiceImpl implements BoatService {
         b.setBoatOwner(boat.getBoatOwner());
         b.setAvailableFrom(boat.getAvailableFrom());
         b.setAvailableUntil(boat.getAvailableUntil());
+        b.setImageUrl(boat.getImageUrl());
+        b.setReserved(false);
+        b.setDeleted(false);
+        b.setImageUrl(boat.getImageUrl());
 
         this.boatRepository.save(b);
         return b;
@@ -79,6 +84,7 @@ public class BoatServiceImpl implements BoatService {
         forUpdate.setPrice(boat.getPrice());
         forUpdate.setBoatOwner(boat.getBoatOwner());
         forUpdate.setCancellationCondition(boat.getCancellationCondition());
+        forUpdate.setImageUrl(boat.getImageUrl());
 
         this.boatRepository.save(forUpdate);
         return forUpdate;
@@ -105,10 +111,12 @@ public class BoatServiceImpl implements BoatService {
     public Boolean canUpdateOrDelete(Long id) throws Exception {
         boolean updateOrDelete = true;
         Boat boat = findById(id);
-        List<BoatReservation> reservations = this.reservationService.findByBoat(id);
-        for(BoatReservation br:reservations) {
-            if (br.getReserved() == true || boat.getReserved() == true) {
-                updateOrDelete = false;
+        List<BoatReservation> reservations = this.reservationService.findNowAndUpcomingByBoat(id);
+        if (reservations != null) {
+            for (BoatReservation br : reservations) {
+                if (br.getReserved() == true || boat.getReserved() == true) {
+                    updateOrDelete = false;
+                }
             }
         }
         return updateOrDelete;
@@ -136,6 +144,16 @@ public class BoatServiceImpl implements BoatService {
             }
         }
         return myBoats;
+    }
+
+    @Override
+    public Boolean isByBoatOwner(Long id, Boat boat) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+
+        if(Objects.equals(boat.getBoatOwner().getId(), boatOwner.getId())) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -176,18 +194,15 @@ public class BoatServiceImpl implements BoatService {
         return false;
     }
 
-    public Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons, Long id) throws Exception {
+    public Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
-        if (boat.getNumPersons() >= numPersons && boat.getDeleted() == false) {
-            if (boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) {
-                if ((boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate))
-                        && Objects.equals(boat.getBoatOwner().getId(), boatOwner.getId()) && boat.getDeleted()==false) {
-                    return true;
-                }
-            } else {
-                return true;
-            }
-        }
+          if (boat.getDeleted() == false) {
+              if ((boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) ||
+                      boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate)
+                              && Objects.equals(boat.getBoatOwner().getId(), boatOwner.getId())) {
+                  return true;
+              }
+          }
         return false;
     }
 
@@ -257,33 +272,44 @@ public class BoatServiceImpl implements BoatService {
 
     @Override
     public Set<Boat> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception {
+            Set<Boat> available = new HashSet<>();
+            Set<Boat> unavailable = new HashSet<>();
 
-        Set<Boat> available = new HashSet<>();
-        Set<Boat> withReservation = new HashSet<>();
-        List<BoatReservation> reservations = this.reservationService.getOwnersUpcomingReservations(id);
 
-        //Pronadji slobodan termin
-        for (BoatReservation res : reservations) {
-            withReservation.add(res.getBoat());
-            if (this.myBoatAvailable(startDate, endDate, res.getBoat(), numOfPersons, id) == true) {
-                if ((res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
-                        (res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
-                        (res.getBoat().getNumPersons() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
-                    available.add(res.getBoat());
+                List<BoatReservation> reservations = this.reservationService.getAllMyAvailable(startDate, endDate, numOfPersons, id);
+                for (BoatReservation res : reservations) {
+                    if(isByBoatOwner(id, res.getBoat()) && !startDate.isBefore(LocalDate.now())
+                            && !endDate.isBefore(startDate)) {
+                        available.add(res.getBoat());
+                    }
+
+                List<BoatReservation> un = this.reservationService.getAllMyUnavailable(startDate, endDate, id);
+                for (BoatReservation r : un) {
+                    if (isByBoatOwner(id, r.getBoat()) && !startDate.isBefore(LocalDate.now())
+                            && !endDate.isBefore(startDate)) {
+                        unavailable.add(r.getBoat());
+                    }
                 }
             }
-        }
 
-        // ako ne postoji rezervacija i dobar je kapacitet, dodaj
-        List<Boat> all = this.boatRepository.findAll();
+            // ako ne postoji rezervacija i dobar je kapacitet, dodaj
+            List<Boat> all = this.boatRepository.findByBoatOwner(id);
+            HashSet<Boat> allSet = new HashSet<>(all);
 
-        HashSet<Boat> allSet = new HashSet<>(all);
+            HashSet<Boat> woReservation = new HashSet<>(allSet) {{
+                removeAll(available);
+            }};
 
-        HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+            for (Boat b : woReservation) {
+//                boolean u = unavailable.contains(b);
+                if (b.getNumPersons() >= numOfPersons && !unavailable.contains(b)
+                        && this.myBoatAvailable(startDate, endDate, b, id) && !startDate.isBefore(LocalDate.now())
+                        && !endDate.isBefore(startDate)){
+                    available.add(b);
+                }
+            }
+            available.removeIf(unavailable::contains);
 
-        for (Boat b : woReservation) {
-            if (b.getNumPersons() >= numOfPersons && this.myBoatAvailable(startDate, endDate, b, numOfPersons, id)) { available.add(b); }
-        }
         return available;
     }
 

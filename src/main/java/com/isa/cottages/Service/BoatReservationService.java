@@ -11,7 +11,7 @@ import java.util.Set;
 public interface BoatReservationService {
 
     BoatReservation findById(Long id) throws Exception;
-    List<BoatReservation> findByBoat(Long id) throws Exception;
+    List<BoatReservation> findNowAndUpcomingByBoat(Long id) throws Exception;
     List<BoatReservation> getAllOwnersReservations(Long id) throws Exception;
     List<BoatReservation> getAllOwnersReservedReservations(Long id) throws Exception;
     List<BoatReservation> getOwnersUpcomingReservations(Long id) throws Exception;
@@ -38,6 +38,9 @@ public interface BoatReservationService {
 
     void cancel(Long id);
     void deleteById(Long id);
+    List<BoatReservation> getAllMyUnavailable(LocalDate desiredStart, LocalDate desiredEnd, Long id) throws Exception;
+    List<BoatReservation> getAllMyAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity, Long id) throws Exception;
+
     void setDate(BoatReservation boatReservation);
     void sendReservationMail(BoatReservation reservation);
 

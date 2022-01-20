@@ -69,7 +69,7 @@
 
 <div class="container">
     </br>
-    <h3>Boat discounts</h3>
+    <h3>Boat reservations on discounts</h3>
     <br>
     <div class="row">
         <button type="button" class="btn mt-2">
@@ -83,18 +83,14 @@
         </br>
         <table width="90%">
             <tr>
-                <th>Available from:</th>
-                <th>Available until:</th>
-                <th>Start time:</th>
-                <th>End time:</th>
+                <th>Available from (start time):</th>
+                <th>Available until (end time):</th>
                 <th>Max number of people:</th>
                 <th>Price:</th>
             </tr>
             <tr th:each="boatReservation:${boatReservations}">
                 <td th:text="${boatReservation.discountAvailableFrom}"></td>
                 <td th:text="${boatReservation.discountAvailableUntil}"></td>
-                <td th:text="${boatReservation.startTime}"></td>
-                <td th:text="${boatReservation.endTime}"></td>
                 <td th:text="${boatReservation.numPersons}"></td>
                 <td th:text="${boatReservation.price}"></td>
             </tr>

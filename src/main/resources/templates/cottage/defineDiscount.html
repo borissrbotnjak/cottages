@@ -70,17 +70,11 @@
         <h1>Define discount</h1>
         <form th:action="@{'/cottageReservations/__${cottage.id}__/defineDiscount/submit'}" th:object="${cottageReservation}" method="post">
 
-            <br><label for="discountFrom">Discount available from:</label>
+            <br><label for="discountFrom">Discount available from (start time):</label>
             <input id="discountFrom" type="datetime-local" th:field="*{discountAvailableFrom}"/>
 
-            <br><label for="discountUntil">Discount available until:</label>
+            <br><label for="discountUntil">Discount available until (end time):</label>
             <input id="discountUntil" type="datetime-local" th:field="*{discountAvailableUntil}"/>
-
-            <br><label for="startTime">Start time:</label>
-            <input id="startTime" type="datetime-local" th:field="*{startTime}"/>
-
-            <br><label for="endTime">End time:</label>
-            <input id="endTime" type="datetime-local" th:field="*{endTime}"/>
 
             <br><label for="numPersons">Max number of people:</label>
             <input id="numPersons" type="number" th:field="*{numPersons}"/>

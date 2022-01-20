@@ -35,8 +35,8 @@ public class Cottage implements Serializable {
     @Column
     private String promotionalDescription;
 
-    @Column
-    private String imageUrl;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> imageUrl;
 
     @Column
     private Integer numPersons;
@@ -49,10 +49,7 @@ public class Cottage implements Serializable {
 
     @Column
     private String rules;
-/*
-    @Column
-    private String additionalServices;
-*/
+
     @Column
     private Boolean reserved;
 
@@ -82,20 +79,12 @@ public class Cottage implements Serializable {
 
     @OneToMany(mappedBy = "cottage", targetEntity = CottageReservation.class)
     private Set<CottageReservation> cottageReservations = new HashSet<>();
-/*
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
-    private Client subscriber;
- */
+
     @ManyToMany(mappedBy = "cottageSubscriptions")
     private Set<Client> subscribers;
 
     @OneToMany(mappedBy = "cottage", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();
-
-    public Cottage(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public void addAdditionalService(AdditionalService additionalService) {
         this.additionalServices.add(additionalService);

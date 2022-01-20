@@ -12,6 +12,8 @@ public interface CottageReservationService {
     List<CottageReservation> findByCottage(Long id) throws Exception;
     List<CottageReservation> getAllOwnersReservations(Long id) throws Exception;
 
+    List<CottageReservation> findNowAndUpcomingByCottage(Long id) throws Exception;
+
     Boolean canCancel(Long id);
 
     void cancel(Long id);
@@ -42,6 +44,8 @@ public interface CottageReservationService {
     List<CottageReservation> findByOrderByPriceAsc() throws Exception;
     List<CottageReservation> findByOrderByPriceDesc() throws Exception;
 
+    List<CottageReservation> getAllMyUnavailable(LocalDate desiredStart, LocalDate desiredEnd, Long id) throws Exception;
+    List<CottageReservation> getAllMyAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity, Long id) throws Exception;
     void setDate(Reservation reservation);
     void sendReservationMail(CottageReservation reservation);
 

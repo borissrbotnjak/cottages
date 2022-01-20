@@ -8,10 +8,6 @@ VALUES(2,0,0,0,1,5,3,0);
 INSERT INTO loyalty_program(reservation_points, discount_gold, discount_regular, discount_silver, gold_points, regular_points,
                             silver_points, penalties)
 VALUES(2,0,0,0,1,5,3,0);
-/*
-INSERT INTO USERS_LOYALTY_PROGRAM(SYSTEM_ADMINISTRATOR_ID, LOYALTY_PROGRAMS_ID)
-VALUES(1,1);
-*/
 
 /* USERS */
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
@@ -40,28 +36,28 @@ VALUES ('Instruktor', 'Simovic', 'instruktor4@gmail.com', 'in', 'Trstenik', 'Trs
 
 
 /* BOATS */
-INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, image_url, price, num_persons)
-VALUES('Dalila', 0, 5, 2, 250, 35, 8, '', '', 4, 4.7, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 0, 'https://i.pinimg.com/564x/c7/95/9f/c7959f829431e3616dcfa2ec9c48e110.jpg', 2000, 4);
-INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, image_url, price, num_persons)
-VALUES('Zaklina', 0, 7, 2, 200, 40, 8, '', '', 4, 4.1, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 0, 'http://inverlochmarine.com.au/sites/default/files/styles/large/public/2_5.jpg?itok=Zo3bRpNi', 1000, 5);
-INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, image_url, price, num_persons)
-VALUES('Bojana', 1, 7, 2, 300, 40, 8, '', '', 4, 4.1, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg', 1000, 4);
-INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, image_url, price, num_persons)
-VALUES('Kristina', 3, 7, 2, 200, 40, 8, '', '', 6, 4.6, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 'https://i.pinimg.com/564x/e1/5b/4a/e15b4ad8938cf85f98b45e0b83dd701b.jpg', 1000, 2);
-INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, image_url, price, num_persons)
-VALUES('Brod5', 1, 7, 2, 300, 40, 8, '', '', 4, 4.1, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg', 1000, 4);
+INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, price, num_persons)
+VALUES('Dalila', 0, 5, 2, 250, 35, 8, '', '', 4, 4.7, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 0, 2000, 4);
+INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, price, num_persons)
+VALUES('Zaklina', 0, 7, 2, 200, 40, 8, '', '', 4, 4.1, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 0, 1000, 5);
+INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, price, num_persons)
+VALUES('Bojana', 1, 7, 2, 300, 40, 8, '', '', 4, 4.1, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 1000, 4);
+INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, price, num_persons)
+VALUES('Kristina', 3, 7, 2, 200, 40, 8, '', '', 6, 4.6, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 1000, 2);
+INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, price, num_persons)
+VALUES('Brod5', 1, 7, 2, 300, 40, 8, '', '', 4, 4.1, false, false, '01/01/2021 12:00', '12/12/2022 12:00', 1, 1000, 4);
 
 /* COTTAGES */
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
-VALUES('Vikendica 1', 'Srbija', 'Novi Sad', 'Ledinci', 3, 5, 4.1, '', 2, TRUE, FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 'https://i.pinimg.com/564x/0e/08/ab/0e08ab8052d8176950710801b798cce1.jpg', 2000, 6);
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
-VALUES('Vikendica 2', 'Srbija', 'Novi Sad', 'Veternik', 1, 3, 3.4, '', 2, FALSE, FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 'https://tinyhousetalk.com/wp-content/uploads/Pendleton-Cottage-001.jpg', 2000, 6);
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
-VALUES('Vikendica 3', 'Srbija', 'Palic', 'Palic', 3, 2, 4.0, '', 3, TRUE, FALSE, '01/01/2021 12:00', '12/12/2022 12:00', '', 2000, 6);
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
-VALUES('Vikendica 4', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE,  FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg', 2000, 5);
-INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, IMAGE_URL, PRICE, NUM_PERSONS)
-VALUES('Vikendica 5', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE,  FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg', 2000, 5);
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, PRICE, NUM_PERSONS)
+VALUES('Vikendica 1', 'Srbija', 'Novi Sad', 'Ledinci', 3, 5, 4.1, '', 2, TRUE, FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 2000, 6);
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, PRICE, NUM_PERSONS)
+VALUES('Vikendica 2', 'Srbija', 'Novi Sad', 'Veternik', 1, 3, 3.4, '', 2, FALSE, FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 2000, 6);
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, PRICE, NUM_PERSONS)
+VALUES('Vikendica 3', 'Srbija', 'Palic', 'Palic', 3, 2, 4.0, '', 3, TRUE, FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 2000, 6);
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, PRICE, NUM_PERSONS)
+VALUES('Vikendica 4', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE,  FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 2000, 5);
+INSERT INTO COTTAGE(NAME, STATE, CITY, RESIDENCE, NUMBER_OF_ROOMS, NUMBER_OF_BEDS, AVERAGE_RATING, RULES, COTTAGE_OWNER_ID, RESERVED, DELETED, AVAILABLE_FROM, AVAILABLE_UNTIL, PRICE, NUM_PERSONS)
+VALUES('Vikendica 5', 'Srbija', 'Novi Sad', 'Vrdnik', 4, 2, 4.5, '', 2, FALSE,  FALSE, '01/01/2021 12:00', '12/12/2022 12:00', 2000, 5);
 
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
@@ -241,12 +237,14 @@ VALUES (1, 1, 5, 4, FALSE, TRUE, '10/01/2022 12:00', '30/01/2022 12:00', '10/01/
 
 /* BOAT_RESERVATIONS-FREE */
 
-INSERT INTO reservation(ADMIN_ID, BOAT_ID, CLIENT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL, DISCOUNT_PRICE, NUM_PERSONS)
-VALUES (1, 1, 5, 4, FALSE, FALSE, '01/05/2022 12:00', '08/05/2022 12:00', '01/05/2022', '08/05/2022', TRUE, 'boat_reservation', '01/01/2022', '02/12/2022', 2000, 2);
-INSERT INTO reservation(ADMIN_ID, BOAT_ID, CLIENT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
-VALUES (1, 2, 5, 4, FALSE, FALSE, '04/03/2022 12:00', '08/03/2022 12:00', '04/03/2022', '08/03/2022', FALSE, 'boat_reservation');
-INSERT INTO reservation(ADMIN_ID, BOAT_ID, CLIENT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
-VALUES (1, 3, 7, 4, FALSE, FALSE, '03/03/2022 12:00', '12/03/2022 12:00', '03/03/2022', '12/03/2022', FALSE, 'boat_reservation');
+INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL, DISCOUNT_PRICE, NUM_PERSONS)
+VALUES (1, 1, 4, FALSE, FALSE, '01/05/2022 12:00', '08/05/2022 12:00', '01/05/2022', '08/05/2022', TRUE, 'boat_reservation', '01/01/2022', '02/12/2022', 2000, 2);
+INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
+VALUES (1, 2, 4, FALSE, FALSE, '04/03/2022 12:00', '08/03/2022 12:00', '04/03/2022', '08/03/2022', FALSE, 'boat_reservation');
+INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
+VALUES (1, 3, 4, FALSE, FALSE, '03/03/2022 12:00', '12/03/2022 12:00', '03/03/2022', '12/03/2022', FALSE, 'boat_reservation');
+INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
+VALUES (1, 5, 4, FALSE, FALSE, '03/03/2022 12:00', '12/03/2022 12:00', '03/03/2022', '12/03/2022', FALSE, 'boat_reservation');
 
 --DIJANA
 /* BOAT_RESERVATIONS-UPCOMING */
@@ -319,9 +317,9 @@ INSERT INTO RESERVATION(BOAT_ID, DELETED, RESERVED, START_TIME, END_TIME, DISCOU
 VALUES (4, FALSE, FALSE, '13/07/2022 12:00', '13/07/2022 20:00', TRUE, 'boat_reservation', 1, 4500, 5, '13/07/2022', '13/07/2022', 3200,
         '04/09/2022 12:00', '04/10/2022 12:00', 6);
 
-INSERT INTO RESERVATION(COTTAGE_ID, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE, DURATION, PRICE, NUM_PERSONS, START_DATE,
+INSERT INTO RESERVATION(COTTAGE_ID, COTTAGE_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE, DURATION, PRICE, NUM_PERSONS, START_DATE,
                         END_DATE, DISCOUNT_PRICE, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL)
-VALUES (1, FALSE, FALSE, '04/11/2022 12:00', '04/11/2022 20:00', TRUE, 'cottage_reservation', 1, 10000, 5, '04/11/2022', '04/11/2022', 7000,
+VALUES (1, 2, FALSE, FALSE, '04/11/2022 12:00', '04/11/2022 20:00', TRUE, 'cottage_reservation', 1, 10000, 5, '04/11/2022', '04/11/2022', 7000,
         '04/09/2022 12:00', '04/10/2022 12:00');
 
 INSERT INTO RESERVATION(INSTRUCTOR_ID, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE, DURATION, PRICE, NUM_PERSONS, START_DATE,
@@ -339,3 +337,14 @@ INSERT INTO COTTAGE_SUBSCRIBERS(client_id, cottage_id) VALUES(5, 2);
 
 INSERT INTO INSTRUCTOR_SUBSCRIBERS(client_id, instructor_id) VALUES(5, 1);
 INSERT INTO INSTRUCTOR_SUBSCRIBERS(client_id, instructor_id) VALUES(5, 3);
+
+/* IMAGES */
+INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(1, 'https://i.pinimg.com/564x/c7/95/9f/c7959f829431e3616dcfa2ec9c48e110.jpg');
+INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(2, 'http://inverlochmarine.com.au/sites/default/files/styles/large/public/2_5.jpg?itok=Zo3bRpNi');
+INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(3, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg');
+INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(4, 'https://i.pinimg.com/564x/e1/5b/4a/e15b4ad8938cf85f98b45e0b83dd701b.jpg');
+INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(5, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg');
+INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(1, 'https://i.pinimg.com/564x/0e/08/ab/0e08ab8052d8176950710801b798cce1.jpg');
+INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(2, 'https://tinyhousetalk.com/wp-content/uploads/Pendleton-Cottage-001.jpg');
+INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(4, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg');
+INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(5, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg');
