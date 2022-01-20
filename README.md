@@ -10,6 +10,7 @@ Tim: 108, stari studenti, Informacioni inženjering
 Korišćene tehnologije: Spring Boot, PostgreSQL, HTML, Thymeleaf
 
 Uputsvto za pokretanje:
+link: http://localhost:8081/auth/home
 
 Testni podaci:
 USERS:
@@ -25,8 +26,8 @@ Klijent:           email:    borissrbotnjak@gmail.com
 Administrator:     email:    
                    password: 
                    
-Instruktor:        email:    
-                   password:
+Instruktor:        email:    instruktor@gmail.com   
+                   password: in
                    
                   
 
