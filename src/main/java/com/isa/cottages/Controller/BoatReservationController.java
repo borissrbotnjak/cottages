@@ -534,8 +534,8 @@ public class BoatReservationController {
         report.setBoatOwner(boatOwner);
         report.setClient((Client) this.userService.findById(id));
         report.setAdmin(admin);
-        int penalties = 0;
-        report.getClient().setPenalties(penalties);
+        client.setPenalties(report.getClient().getPenalties());
+        int penalties = client.getPenalties();
 
         if(report.getPenal() == report.getPenal().TRUE) {
             admin.getReports().add(report);
@@ -547,8 +547,10 @@ public class BoatReservationController {
             client.getPenalties();
             penalties += 1;
             report.getClient().setPenalties(penalties);
+            client.setPenalties(report.getClient().getPenalties());
         }
 
+        client.setPenalties(report.getClient().getPenalties());
         reportService.save(report);
         return new ModelAndView("redirect:/boatReservations/pastOwnersReservations/{oid}");
     }
