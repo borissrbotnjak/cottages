@@ -383,7 +383,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setDiscount(true);
         br.setDeleted(false);
         br.setReserved(false);
-        br.setClient(boatReservation.getClient());
+//        br.setClient(boatReservation.getClient());
         br.CalculatePrice();
         this.reservationRepository.save(br);
 
@@ -407,22 +407,6 @@ public class BoatReservationServiceImpl implements BoatReservationService {
 
         return br;
     }
-/*
-    @Override
-    public List<BoatReservation> findDiscountsByBoat(Long id) throws Exception{
-        Boat boat = boatService.findById(id);
-        List<BoatReservation> all = this.reservationRepository.findDiscountsByBoat(id);
-        List<BoatReservation> br = new ArrayList<>();
-        // TODO: zar nije all i br isto ??? vec si filtrirala po id u repository
-        // nisi stavila deleted = false u repo
-        for (BoatReservation b:all) {
-            if(Objects.equals(b.getBoat().getId(), boat.getId())) {
-                br.add(b);
-            }
-        }
-        return br;
-    }
-*/
 
     @Override
     public List<BoatReservation> findDiscountsByBoat(Long id) throws Exception{
@@ -466,6 +450,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         return filtered;
     }
 
+
     @Override
     public void setDate(BoatReservation reservation) {
 
@@ -477,6 +462,34 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setEndDate(ed);
         reservation.setStartTime(sd.atStartOfDay());
         reservation.setEndTime(ed.atStartOfDay());
+    }
+    
+    @Override
+    public List<BoatReservation> getAllMyAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity, Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.findAllMyAvailable(desiredStart, desiredEnd, capacity, id);
+        List<BoatReservation> filtered = new ArrayList<>();
+
+        for (BoatReservation res:all) {
+            if(Objects.equals(res.getBoatOwner().getId(), boatOwner.getId())) {
+                filtered.add(res);
+            }
+        }
+        return filtered;
+    }
+
+    @Override
+    public List<BoatReservation> getAllMyUnavailable(LocalDate desiredStart, LocalDate desiredEnd, Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        List<BoatReservation> all = this.reservationRepository.findAllMyUnavailable(desiredStart, desiredEnd, id);
+        List<BoatReservation> filtered = new ArrayList<>();
+
+        for (BoatReservation res:all) {
+            if(Objects.equals(res.getBoatOwner().getId(), boatOwner.getId())) {
+                filtered.add(res);
+            }
+        }
+        return filtered;
     }
 
     @Override

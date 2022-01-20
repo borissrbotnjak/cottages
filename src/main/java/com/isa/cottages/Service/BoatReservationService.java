@@ -38,6 +38,9 @@ public interface BoatReservationService {
 
     void cancel(Long id);
     void deleteById(Long id);
+    List<BoatReservation> getAllMyUnavailable(LocalDate desiredStart, LocalDate desiredEnd, Long id) throws Exception;
+    List<BoatReservation> getAllMyAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity, Long id) throws Exception;
+
     void setDate(BoatReservation boatReservation);
     void sendReservationMail(BoatReservation reservation);
 

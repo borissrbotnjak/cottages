@@ -1,13 +1,12 @@
 package com.isa.cottages.Repository;
 
-import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.CottageReservation;
-import com.isa.cottages.Model.InstructorReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -52,5 +51,18 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
             "and res.cottage_id=?1 and res.discount = true", nativeQuery = true)
     List<CottageReservation> findAllWithDiscount(Long cottageId);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
+            "and res.cottage_id is not null " +
+            "and not (res.start_date < ?2 and res.end_date > ?1 )" +
+            "and res.num_persons >= ?3 and res.cottage_owner_id=?4", nativeQuery = true)
+    List<CottageReservation> findAllMyAvailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
+                                             @Param("capacity") int capacity, @Param("id") Long id);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
+            "and res.cottage_id is not null " +
+            "and res.start_date < ?2 and res.end_date > ?1 and res.cottage_owner_id=?3", nativeQuery = true)
+    List<CottageReservation> findAllMyUnavailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
+                                               @Param("id") Long id);
 
 }

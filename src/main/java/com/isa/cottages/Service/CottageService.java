@@ -20,7 +20,7 @@ public interface CottageService {
     List<Cottage> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
     Cottage defineAvailability(Cottage cottage) throws Exception;
-    Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons, Long id) throws Exception;
+    Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, Long id) throws Exception;
     Set<Cottage> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
     List<Cottage> findAllMyAvailableSorted(Long id, LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
@@ -28,6 +28,7 @@ public interface CottageService {
     Cottage updateCottage(Cottage cottage) throws Exception;
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 
+    Boolean isByCottageOwner(Long id, Cottage cottage) throws Exception;
     Boolean canUpdateOrDelete(Long id) throws Exception;
     Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, int numPersons);
 

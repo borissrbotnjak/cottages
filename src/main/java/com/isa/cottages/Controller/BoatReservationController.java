@@ -371,11 +371,9 @@ public class BoatReservationController {
     public ModelAndView defineDiscount(@PathVariable Long id,
                                        @ModelAttribute BoatReservation boatReservation,
                                        Model model) throws Exception {
-//        if (this.boatService.findById(boat.getId()) != null) {
-//            throw new ResourceConflictException(boat.getId(), "Boat with this id already exist.");
-//        }
         Collection<BoatReservation> boatReservations = this.reservationService.findDiscountsByBoat(id);
         model.addAttribute("boatReservations", boatReservations);
+
         model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
         model.addAttribute("sLength", this.boatService.findById(id).getAdditionalServices().size());
 

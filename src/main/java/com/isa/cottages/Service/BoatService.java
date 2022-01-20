@@ -12,6 +12,7 @@ public interface BoatService {
     Collection<Boat> getAll();
     Boat findById(Long id) throws Exception;
     List<Boat> findByBoatOwner(Long id) throws Exception;
+    Boolean isByBoatOwner(Long id, Boat boat) throws Exception;
     List<Boat> findByKeyword(String keyword);
 
     Boat saveBoat(Boat boat);
@@ -20,7 +21,7 @@ public interface BoatService {
     Boolean canUpdateOrDelete(Long id) throws Exception;
 
     Boat defineAvailability(Boat boat) throws Exception;
-    Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, int numPersons, Long id) throws Exception;
+    Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, Long id) throws Exception;
     Set<Boat> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
     List<Boat> findAllMyAvailableSorted(Long id, LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
