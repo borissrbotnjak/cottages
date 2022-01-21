@@ -1,5 +1,6 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.NavigationEquipment;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class NavigationEquipmentServiceImpl implements NavigationEquipmentService {
@@ -25,6 +27,14 @@ public class NavigationEquipmentServiceImpl implements NavigationEquipmentServic
         this.navigationEquipmentRepository = navigationEquipmentRepository;
         this.boatService = boatService;
         this.userService = userService;
+    }
+
+    @Override
+    public NavigationEquipment findById(Long id) throws Exception {
+        if (this.navigationEquipmentRepository.findById(id).isEmpty()) {
+            throw new Exception("No such value(navigationEquipment service)");
+        }
+        return this.navigationEquipmentRepository.findById(id).get();
     }
 
 
@@ -55,5 +65,18 @@ public class NavigationEquipmentServiceImpl implements NavigationEquipmentServic
         return n;
     }
 
+    @Override
+    public void removeNavigationEquipment(NavigationEquipment navigationEquipment, Long id) throws Exception {
+        Boat boat = boatService.findById(id);
 
+        NavigationEquipment ne = findById(navigationEquipment.getId());
+
+        Set<NavigationEquipment> navigationEquipments = boat.getNavigationEquipments();
+        navigationEquipments.remove(ne);
+        boat.setNavigationEquipments(navigationEquipments);
+        navigationEquipment.setDeleted(true);
+
+        ne.setBoat(null);
+        this.boatService.updateNavigationEquipments(boat);
+    }
 }

@@ -26,6 +26,13 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         this.boatService = boatService;
     }
 
+    @Override
+    public AdditionalService findById(Long id) throws Exception {
+        if (this.additionalServiceRepository.findById(id).isEmpty()) {
+            throw new Exception("No such value(additionalService service)");
+        }
+        return this.additionalServiceRepository.findById(id).get();
+    }
 
     @Override
     public AdditionalService findOne(Long id) {
@@ -43,6 +50,36 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         this.additionalServiceRepository.save(as);
 
         return as;
+    }
+
+    @Override
+    public void removeAdditionalServiceFromBoat(AdditionalService additionalService, Long id) throws Exception {
+        Boat boat = boatService.findById(id);
+
+        AdditionalService as = findById(additionalService.getId());
+
+        Set<AdditionalService> additionalServices = boat.getAdditionalServices();
+        additionalServices.remove(as);
+        boat.setAdditionalServices(additionalServices);
+        additionalService.setDeleted(true);
+
+        as.setBoat(null);
+        this.boatService.updateAdditionalServices(boat);
+    }
+
+    @Override
+    public void removeAdditionalServiceFromCottage(AdditionalService additionalService, Long id) throws Exception {
+        Cottage cottage = cottageService.findById(id);
+
+        AdditionalService as = findById(additionalService.getId());
+
+        Set<AdditionalService> additionalServices = cottage.getAdditionalServices();
+        additionalServices.remove(as);
+        cottage.setAdditionalServices(additionalServices);
+        additionalService.setDeleted(true);
+
+        as.setCottage(null);
+        this.cottageService.updateAdditionalServices(cottage);
     }
 
     @Override

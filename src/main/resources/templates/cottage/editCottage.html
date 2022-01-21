@@ -83,10 +83,13 @@
             <input id="promotionalDescription" type="text" th:field="*{cottage.promotionalDescription}"/>
 
             <br><label for="numberOfRooms">Number of rooms:</label>
-            <input id="numberOfRooms" type="text" th:field="*{cottage.numberOfRooms}"/>
+            <input id="numberOfRooms" type="number" th:field="*{cottage.numberOfRooms}"/>
 
             <br><label for="numberOfBeds">Number of beds:</label>
-            <input id="numberOfBeds" type="text" th:field="*{cottage.numberOfBeds}"/>
+            <input id="numberOfBeds" type="number" th:field="*{cottage.numberOfBeds}"/>
+
+            <br><label for="numPersons">Number of people:</label>
+            <input id="numPersons" type="number" th:field="*{cottage.numPersons}"/>
 
             <br><label for="rules">Rules:</label>
             <input id="rules" type="text" th:field="*{cottage.rules}"/>

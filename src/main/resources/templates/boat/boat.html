@@ -269,6 +269,7 @@
                   <tr>
                     <th> Additional service </th>
                     <th> Price </th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -278,6 +279,7 @@
                   <tr th:each="additionalService : ${boat.additionalServices}">
                     <td><span th:text="${additionalService.name}"> Additional service </span></td>
                     <td><span th:text="${additionalService.price}"> Price </span></td>
+                    <td><a th:href="@{'/boats/__${boat.id}__/removeAdditionalService/__${additionalService.id}__'}">Remove</a></td>
                   </tr>
                   </tbody>
                 </table>
@@ -290,6 +292,7 @@
                   <thead>
                   <tr>
                     <th> Navigation Equipment </th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -298,6 +301,7 @@
                   </tr>
                   <tr th:each="navigationEquipment : ${boat.navigationEquipments}">
                     <td><span th:text="${navigationEquipment.name}"> Navigation equipment </span></td>
+                    <td><a th:href="@{'/boats/__${boat.id}__/removeNavigationEquipment/__${navigationEquipment.id}__'}">Remove</a></td>
                   </tr>
                   </tbody>
                 </table>
@@ -311,6 +315,7 @@
                   <thead>
                   <tr>
                     <th> Fishing Equipment </th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -319,6 +324,7 @@
                   </tr>
                   <tr th:each="fishingEquipment : ${boat.fishingEquipments}">
                     <td><span th:text="${fishingEquipment.name}"> Fishing equipment </span></td>
+                    <td><a th:href="@{'/boats/__${boat.id}__/removeFishingEquipment/__${fishingEquipment.id}__'}">Remove</a></td>
                   </tr>
                   </tbody>
                 </table>

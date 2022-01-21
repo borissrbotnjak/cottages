@@ -84,7 +84,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
             "and res.start_date < ?2 and res.end_date > ?1 ", nativeQuery = true)
     List<BoatReservation> findAllUnavailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.boat_id is not null " +
             "and not (res.start_date < ?2 and res.end_date > ?1 )" +
             "and res.num_persons >= ?3 and res.boat_owner_id=?4", nativeQuery = true)

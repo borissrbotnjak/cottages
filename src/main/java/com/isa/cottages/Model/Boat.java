@@ -55,7 +55,7 @@ public class Boat implements Serializable {
     private List<String> imageUrl;
 
     @Column
-    private Long capacity;
+    private Integer capacity;
 
     @Column
     private String rules;

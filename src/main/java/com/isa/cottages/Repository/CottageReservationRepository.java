@@ -62,7 +62,7 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
             "and res.cottage_id=?1 and res.discount = true", nativeQuery = true)
     List<CottageReservation> findAllWithDiscount(Long cottageId);
 
-    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.cottage_id is not null " +
             "and not (res.start_date < ?2 and res.end_date > ?1 )" +
             "and res.num_persons >= ?3 and res.cottage_owner_id=?4", nativeQuery = true)

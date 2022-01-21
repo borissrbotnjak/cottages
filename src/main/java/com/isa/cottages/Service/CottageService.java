@@ -1,5 +1,6 @@
 package com.isa.cottages.Service;
 
+import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.Cottage;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public interface CottageService {
     List<Cottage> findAllMyAvailableSorted(Long id, LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;
 
     Cottage saveCottage(Cottage cottage) throws Exception;
+    Cottage updateAdditionalServices(Cottage cottage) throws Exception;
     Cottage updateCottage(Cottage cottage) throws Exception;
     void removeCottage(Cottage cottage, Long oid) throws Exception;
 

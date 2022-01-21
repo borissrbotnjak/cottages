@@ -237,6 +237,34 @@ public class CottageController {
         return new ModelAndView("redirect:/cottages/allMyCottages/{id}" );
     }
 
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    @GetMapping(value = "/{cid}/removeAdditionalService/{asid}")
+    public ModelAndView removeAdditionalService(@PathVariable Long asid,
+                                                @PathVariable Long cid,
+                                                Model model) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", cottageOwner);
+
+        Cottage cottage = cottageService.findById(cid);
+        model.addAttribute("cottage", cottage);
+
+        AdditionalService additionalService = this.additionalServiceService.findById(asid);
+        model.addAttribute("asid", asid);
+
+        boolean update = this.cottageService.canUpdateOrDelete(cid);
+        if (!update) {
+            return new ModelAndView("cottage/errors/errorUpdateCottage");
+        } else {
+            this.additionalServiceService.removeAdditionalServiceFromCottage(additionalService, cid);
+            additionalService.setDeleted(true);
+            this.cottageService.updateAdditionalServices(cottage);
+            this.cottageService.updateCottage(cottage);
+        }
+
+        return new ModelAndView("redirect:/cottages/{cid}" );
+    }
+
+
     @GetMapping("/allCottages")
     public ModelAndView getAllCottages(Model model, String keyword) throws Exception {
         if (keyword != null) {

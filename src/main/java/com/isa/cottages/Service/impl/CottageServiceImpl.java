@@ -144,6 +144,16 @@ public class CottageServiceImpl implements CottageService {
     }
 
     @Override
+    public Cottage updateAdditionalServices(Cottage cottage) throws Exception {
+        Cottage forUpdate = this.findById(cottage.getId());
+        if(forUpdate == null) { throw new Exception("Cottage does not exist."); }
+
+        forUpdate.setAdditionalServices(cottage.getAdditionalServices());
+        this.cottageRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
     public Boolean canUpdateOrDelete(Long id) throws Exception {
         boolean updateOrDelete = true;
         Cottage cottage = findById(id);

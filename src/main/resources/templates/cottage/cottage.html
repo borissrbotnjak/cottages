@@ -211,6 +211,7 @@
                   <tr>
                     <th> Additional service </th>
                     <th> Price </th>
+                    <th>Remove</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -220,6 +221,7 @@
                   <tr th:each="additionalService : ${cottage.additionalServices}">
                     <td><span th:text="${additionalService.name}"> Additional service </span></td>
                     <td><span th:text="${additionalService.price}"> Price </span></td>
+                    <td><a th:href="@{'/cottages/__${cottage.id}__/removeAdditionalService/__${additionalService.id}__'}">Remove</a></td>
                   </tr>
                   </tbody>
                 </table>

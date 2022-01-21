@@ -412,6 +412,91 @@ public class BoatController {
     }
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping(value = "/{bid}/removeAdditionalService/{asid}")
+    public ModelAndView removeAdditionalService(@PathVariable Long asid,
+                                   @PathVariable Long bid,
+                                   Model model) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        Boat boat = boatService.findById(bid);
+        model.addAttribute("boat", boat);
+
+        AdditionalService additionalService = this.additionalServiceService.findById(asid);
+        model.addAttribute("asid", asid);
+
+        boolean update = this.boatService.canUpdateOrDelete(bid);
+        if (!update) {
+            return new ModelAndView("boat/errors/errorUpdateBoat");
+        } else {
+            this.additionalServiceService.removeAdditionalServiceFromBoat(additionalService, bid);
+            additionalService.setDeleted(true);
+            this.boatService.updateAdditionalServices(boat);
+            this.boatService.updateBoat(boat);
+        }
+
+        return new ModelAndView("redirect:/boats/{bid}" );
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping(value = "/{bid}/removeFishingEquipment/{feid}")
+    public ModelAndView removeFishingEquipment(@PathVariable Long feid,
+                                                @PathVariable Long bid,
+                                                Model model) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        Boat boat = boatService.findById(bid);
+        model.addAttribute("boat", boat);
+
+        FishingEquipment fishingEquipment = this.fishingEquipmentService.findById(feid);
+        model.addAttribute("feid", feid);
+
+        boolean update = this.boatService.canUpdateOrDelete(bid);
+        if (!update) {
+            return new ModelAndView("boat/errors/errorUpdateBoat");
+        } else {
+            this.fishingEquipmentService.removeFishingEquipment(fishingEquipment, bid);
+            fishingEquipment.setDeleted(true);
+            this.boatService.updateBoat(boat);
+        }
+
+        Collection<Boat> boats = this.boatService.findByBoatOwner(bid);
+        model.addAttribute("boats", boats);
+
+        return new ModelAndView("redirect:/boats/{bid}" );
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
+    @GetMapping(value = "/{bid}/removeNavigationEquipment/{neid}")
+    public ModelAndView removeNavigationEquipment(@PathVariable Long neid,
+                                               @PathVariable Long bid,
+                                               Model model) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", boatOwner);
+
+        Boat boat = boatService.findById(bid);
+        model.addAttribute("boat", boat);
+
+        NavigationEquipment navigationEquipment = this.navigationEquipmentService.findById(neid);
+        model.addAttribute("neid", neid);
+
+        boolean update = this.boatService.canUpdateOrDelete(bid);
+        if (!update) {
+            return new ModelAndView("boat/errors/errorUpdateBoat");
+        } else {
+            this.navigationEquipmentService.removeNavigationEquipment(navigationEquipment, bid);
+            navigationEquipment.setDeleted(true);
+            this.boatService.updateBoat(boat);
+        }
+
+        Collection<Boat> boats = this.boatService.findByBoatOwner(bid);
+        model.addAttribute("boats", boats);
+
+        return new ModelAndView("redirect:/boats/{bid}" );
+    }
+
+    @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/{id}/defineAvailability")
     public ModelAndView defineAvailability(Model model, @PathVariable Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();

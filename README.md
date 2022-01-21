@@ -12,7 +12,7 @@ Korišćene tehnologije: Spring Boot, PostgreSQL, HTML, Thymeleaf
 Uputsvto za pokretanje:
 link: http://localhost:8081/auth/home
 
-Testni podaci:
+Testni podaci: nalaze se u data-postgres.sql fajlu
 USERS:
 Vlasnik vikendice: email:    v@gmail.com
                    password: v

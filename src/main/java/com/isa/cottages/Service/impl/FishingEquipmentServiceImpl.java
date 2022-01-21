@@ -1,5 +1,6 @@
 package com.isa.cottages.Service.impl;
 
+import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.FishingEquipment;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class FishingEquipmentServiceImpl implements FishingEquipmentService {
@@ -26,6 +28,14 @@ public class FishingEquipmentServiceImpl implements FishingEquipmentService {
         this.fishingEquipmentRepository = fishingEquipmentRepository;
         this.userService = userService;
         this.boatService = boatService;
+    }
+
+    @Override
+    public FishingEquipment findById(Long id) throws Exception {
+        if (this.fishingEquipmentRepository.findById(id).isEmpty()) {
+            throw new Exception("No such value(fishing equipmnet service)");
+        }
+        return this.fishingEquipmentRepository.findById(id).get();
     }
 
     @Override
@@ -53,5 +63,20 @@ public class FishingEquipmentServiceImpl implements FishingEquipmentService {
         this.fishingEquipmentRepository.save(fe);
 
         return fe;
+    }
+
+    @Override
+    public void removeFishingEquipment(FishingEquipment fishingEquipment, Long id) throws Exception {
+        Boat boat = boatService.findById(id);
+
+        FishingEquipment fe = findById(fishingEquipment.getId());
+
+        Set<FishingEquipment> fishingEquipments = boat.getFishingEquipments();
+        fishingEquipments.remove(fe);
+        boat.setFishingEquipments(fishingEquipments);
+        fishingEquipment.setDeleted(true);
+
+        fe.setBoat(null);
+        this.boatService.updateFishingEquipments(boat);
     }
 }

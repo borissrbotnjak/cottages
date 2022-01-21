@@ -17,6 +17,9 @@ public interface BoatService {
     List<Boat> findMyByKeyword(String keyword, Long id) throws Exception;
 
     Boat saveBoat(Boat boat);
+    Boat updateAdditionalServices(Boat boat) throws Exception;
+    Boat updateFishingEquipments(Boat boat) throws Exception;
+    Boat updateNavigationEquipments(Boat boat) throws Exception;
     Boat updateBoat(Boat boat) throws Exception;
     void removeBoat(Boat boat, Long id) throws Exception;
     Boolean canUpdateOrDelete(Long id) throws Exception;

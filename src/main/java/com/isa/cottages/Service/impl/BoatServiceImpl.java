@@ -48,6 +48,7 @@ public class BoatServiceImpl implements BoatService {
         b.setCity(boat.getCity());
         b.setResidence(boat.getResidence());
         b.setCapacity(boat.getCapacity());
+        b.setNumPersons(boat.getCapacity());
         b.setRules(boat.getRules());
         b.setDescription(boat.getDescription());
         b.setPrice(boat.getPrice());
@@ -64,6 +65,36 @@ public class BoatServiceImpl implements BoatService {
     }
 
     @Override
+    public Boat updateAdditionalServices(Boat boat) throws Exception {
+        Boat forUpdate = this.findById(boat.getId());
+        if(forUpdate == null) { throw new Exception("Boat does not exist."); }
+
+        forUpdate.setAdditionalServices(boat.getAdditionalServices());
+        this.boatRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public Boat updateFishingEquipments(Boat boat) throws Exception {
+        Boat forUpdate = this.findById(boat.getId());
+        if(forUpdate == null) { throw new Exception("Boat does not exist."); }
+
+        forUpdate.setFishingEquipments(boat.getFishingEquipments());
+        this.boatRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
+    public Boat updateNavigationEquipments(Boat boat) throws Exception {
+        Boat forUpdate = this.findById(boat.getId());
+        if(forUpdate == null) { throw new Exception("Boat does not exist."); }
+
+        forUpdate.setNavigationEquipments(boat.getNavigationEquipments());
+        this.boatRepository.save(forUpdate);
+        return forUpdate;
+    }
+
+    @Override
     public Boat updateBoat(Boat boat) throws Exception {
         Boat forUpdate = findById(boat.getId());
 
@@ -77,6 +108,7 @@ public class BoatServiceImpl implements BoatService {
         forUpdate.setCity(boat.getCity());
         forUpdate.setResidence(boat.getResidence());
         forUpdate.setCapacity(boat.getCapacity());
+        forUpdate.setNumPersons(boat.getCapacity());
         forUpdate.setRules(boat.getRules());
         forUpdate.setDescription(boat.getDescription());
         forUpdate.setAvailableFrom(boat.getAvailableFrom());

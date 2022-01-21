@@ -29,6 +29,9 @@ public class AdditionalService implements Serializable {
     @Column
     private Double price = 0.0;
 
+    @Column
+    private Boolean deleted = false;
+
     @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "boat_id", nullable = true, referencedColumnName = "id")
     private Boat boat;
