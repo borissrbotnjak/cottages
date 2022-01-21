@@ -33,7 +33,8 @@ public interface CottageReservationService {
     List<CottageReservation> findDiscountsByCottage(Long id) throws Exception;
 
     List<CottageReservation> findAllByClient(Client client);
-    List<CottageReservation> findClient(String keyword) throws Exception;
+    List<CottageReservation> findClientForHistory(String keyword, Long id) throws Exception;
+    List<CottageReservation> findClientForCalendar(String keyword, Long id) throws Exception;
     Set<CottageReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
     Set<CottageReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 

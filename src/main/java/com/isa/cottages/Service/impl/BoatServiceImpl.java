@@ -133,6 +133,12 @@ public class BoatServiceImpl implements BoatService {
     }
 
     @Override
+    public List<Boat> findMyByKeyword(String keyword, Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) userService.getUserFromPrincipal();
+        return this.boatRepository.findMyByKeyword(keyword, id);
+    }
+
+    @Override
     public List<Boat> findByBoatOwner(Long id) throws Exception{
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         List<Boat> all = this.boatRepository.findByBoatOwner(id);
@@ -199,7 +205,7 @@ public class BoatServiceImpl implements BoatService {
     public Boolean myBoatAvailable(LocalDate startDate, LocalDate endDate, Boat boat, Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
           if (boat.getDeleted() == false) {
-              if ((boat.getAvailableFrom() != null && boat.getAvailableUntil() != null) ||
+              if ((boat.getAvailableFrom() == null && boat.getAvailableUntil() == null) ||
                       boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate)
                               && Objects.equals(boat.getBoatOwner().getId(), boatOwner.getId())) {
                   return true;

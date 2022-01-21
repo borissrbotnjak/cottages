@@ -83,6 +83,12 @@ public class CottageServiceImpl implements CottageService {
         return this.cottageRepository.findByKeyword(keyword);
     }
 
+    @Override
+    public List<Cottage> findMyByKeyword(String keyword, Long id) throws Exception {
+        CottageOwner cottageOwner = (CottageOwner) userService.getUserFromPrincipal();
+        return this.cottageRepository.findMyByKeyword(keyword, id);
+    }
+
     public List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         List<Cottage> all = this.cottageRepository.findByKeywordAndCottageOwner(keyword, id);
@@ -216,7 +222,7 @@ public class CottageServiceImpl implements CottageService {
     public Boolean myCottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage, Long id) throws Exception {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         if (cottage.getDeleted() == false) {
-            if ((cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) ||
+            if ((cottage.getAvailableFrom() == null && cottage.getAvailableUntil() == null) ||
                     cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate)
                             && Objects.equals(cottage.getCottageOwner().getId(), cottageOwner.getId())) {
                 return true;

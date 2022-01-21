@@ -127,7 +127,7 @@ public class CottageController {
             throw new Exception("Cottage owner does not exist.");
         }
         if (keyword != null) {
-            model.addAttribute("cottages", this.cottageService.findByKeyword(keyword));
+            model.addAttribute("cottages", this.cottageService.findMyByKeyword(keyword, id));
         } else {
             model.addAttribute("cottages", cottageService.findByCottageOwner(id));
         }

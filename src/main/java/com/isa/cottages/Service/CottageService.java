@@ -15,6 +15,7 @@ public interface CottageService {
     List<Cottage> findByCottageOwner(Long id) throws Exception;
 
     List<Cottage> findByKeyword(String keyword);
+    List<Cottage> findMyByKeyword(String keyword, Long id) throws Exception;
     List<Cottage> findByKeywordAndCottageOwner(String keyword, Long id) throws Exception;
     Set<Cottage> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
     List<Cottage> findAllAvailableSorted(LocalDate startDate, LocalDate endDate, int numOfPersons, Boolean asc, Boolean price, Boolean rating) throws Exception;

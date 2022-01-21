@@ -14,6 +14,7 @@ public interface BoatService {
     List<Boat> findByBoatOwner(Long id) throws Exception;
     Boolean isByBoatOwner(Long id, Boat boat) throws Exception;
     List<Boat> findByKeyword(String keyword);
+    List<Boat> findMyByKeyword(String keyword, Long id) throws Exception;
 
     Boat saveBoat(Boat boat);
     Boat updateBoat(Boat boat) throws Exception;

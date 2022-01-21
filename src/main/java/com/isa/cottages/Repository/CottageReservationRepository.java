@@ -44,9 +44,19 @@ public interface CottageReservationRepository extends JpaRepository<CottageReser
             "c.discount = true and c.deleted=false", nativeQuery = true)
     List<CottageReservation> findDiscountsByCottage(@Param("id") Long id);
 
-    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%')) " +
-            "and reservation_type like 'cottage_reservation' and res.reserved=true and res.deleted = false", nativeQuery = true)
-    List<CottageReservation> findClient(@Param("keyword") String keyword);
+    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE " +
+            "(lower(u.first_name) like lower(concat('%', ?1, '%'))" +
+            "or lower(u.last_name) like lower(concat('%', ?1, '%'))) " +
+            "and reservation_type like 'cottage_reservation' and res.reserved=true " +
+            "and res.deleted = false", nativeQuery = true)
+    List<CottageReservation> findClientForHistory(@Param("keyword") String keyword);
+
+    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE " +
+            "(lower(u.first_name) like lower(concat('%', ?1, '%'))" +
+            "or lower(u.last_name) like lower(concat('%', ?1, '%'))) " +
+            "and reservation_type like 'cottage_reservation' " +
+            "and res.deleted = false", nativeQuery = true)
+    List<CottageReservation> findClientForCalendar(@Param("keyword") String keyword);
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
             "and res.cottage_id=?1 and res.discount = true", nativeQuery = true)

@@ -66,7 +66,7 @@ public class BoatController {
             throw new Exception("Boat owner does not exist.");
         }
         if (keyword != null) {
-            model.addAttribute("boats", this.boatService.findByKeyword(keyword));
+            model.addAttribute("boats", this.boatService.findMyByKeyword(keyword, id));
         } else {
             model.addAttribute("boats", boatService.findByBoatOwner(id));
         }

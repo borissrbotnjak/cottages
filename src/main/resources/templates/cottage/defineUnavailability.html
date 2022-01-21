@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -17,9 +17,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Calendar</title>
+    <title>Define unavailability</title>
 </head>
 <body>
+
 
 
 <div class="container-fluid bg-light">
@@ -65,41 +66,23 @@
     </nav>
 </div>
 
-    <div class="container">
-        </br>
-        <h2>My occupancy calendar</h2>
-        <div class="table">
-            </br>
-            <form th:action="@{'/cottageReservations/viewCalendar/__${principal.id}__'}" method="get">
-                <input type="text" placeholder="Search client..." name="keyword"/>
-                <button type="submit" class="btn btn-dark mt-2">Search</button>
-                </br>
-            </form>
-            </br></br>
-            <a sec:authorize="hasRole('COTTAGE_OWNER')" th:href="@{'/cottageOwner/__${principal.id}__/defineUnavailability'}">Define Unavailability</a>
-            </br></br>
-            <table width="90%">
-                <tr>
-                    <th>Cottage</th>
-                    <th>Reservation start</th>
-                    <th>Reservation end</th>
-                    <th>Client name</th>
-                    <th>Reserved?</th>
-                    <th>Discount?</th>
-                </tr>
-                <tr th:each="cottageReservation:${cottageReservations}">
-                    <td th:text="*{cottageReservation.cottage.getName()}"></td>
-                    <td th:text="*{cottageReservation.startTime}"></td>
-                    <td th:text="*{cottageReservation.endTime}"></td>
-                    <td >
-                    <a th:href="@{/client/profile/__${cottageReservation?.client?.getId()}__}"><p th:text="*{cottageReservation?.client?.getFullName()}"></p></a>
-                    </td>
-                    <td th:text="${cottageReservation.reserved}"></td>
-                    <td th:text="${cottageReservation.discount}"></td>
-                </tr>
-            </table>
-        </div>
+<div class="container">
+    </br>
+    <div class="center-align lighten-5">
+        <form th:action="@{'/cottageOwner/__${principal.id}__/defineUnavailability/submit'}" th:object="${principal}" method="post">
+            <br><label for="unavailableFrom">Unavailable From:</label>
+            <input id="unavailableFrom" type="datetime-local" th:field="*{unavailableFrom}"/>
+
+            <br><label for="unavailableUntil">Unavailable Until:</label>
+            <input id="unavailableUntil" type="datetime-local" th:field="*{unavailableUntil}"/>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success bg-dark">Submit</button>
+            </div>
+        </form>
     </div>
+</div>
+
 
 
 <!-- Optional JavaScript -->
