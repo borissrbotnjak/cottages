@@ -2,6 +2,7 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.*;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,6 +18,10 @@ public interface InstructorReservationsService {
     List<InstructorReservation> findByOrderByDurationAsc() throws Exception;
     List<InstructorReservation> findByOrderByDurationDesc() throws Exception;
     List<InstructorReservation> findByOrderByPriceAsc() throws Exception;
+
+    Double CalculatePrice(InstructorReservation reservation) throws ParseException;
+
+    // Integer getDuration(InstructorReservation reservation) throws ParseException;
 
     Boolean canCancel(Long id);
 

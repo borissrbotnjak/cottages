@@ -174,7 +174,7 @@ public class BoatServiceImpl implements BoatService {
 
     @Override
     public Boolean boatAvailable(LocalDate startDate, LocalDate endDate, Boat boat) {
-        if ((boat.getAvailableFrom() != null && boat.getAvailableUntil() != null)
+        if ((boat.getAvailableFrom() == null && boat.getAvailableUntil() == null)
                 || boat.getAvailableFrom().toLocalDate().isBefore(startDate) && boat.getAvailableUntil().toLocalDate().isAfter(endDate)) {
             return true;
         }
@@ -207,15 +207,17 @@ public class BoatServiceImpl implements BoatService {
         Set<Boat> unavailable = new HashSet<>();
         List<BoatReservation> reservations = this.reservationService.getAllAvailable(startDate, endDate, numOfPersons);
 
-        // TODO: ubai proveru dostunosti i kod rezervacija. availableUntil > preferredEnd
+        // TODO: ubaci lp i penalties
         for (BoatReservation res : reservations) {
-            available.add(res.getBoat());
+            if (boatAvailable(startDate, endDate, res.getBoat())) {
+                available.add(res.getBoat());
+            }
         }
 
         List<BoatReservation> un = this.reservationService.getAllUnavailable(startDate, endDate);
 
         for (BoatReservation r : un) {
-            Boat c = r.getBoat();
+            // Boat c = r.getBoat();
             unavailable.add(r.getBoat());
         }
 
@@ -225,7 +227,7 @@ public class BoatServiceImpl implements BoatService {
         HashSet<Boat> woReservation = new HashSet<>(allSet) {{ removeAll(available); }};
 
         for (Boat b : woReservation) {
-            boolean u = unavailable.contains(b);
+            //boolean u = unavailable.contains(b);
             if (!unavailable.contains(b) && this.boatAvailable(startDate, endDate, b) && b.getNumPersons() >= numOfPersons) {
                 available.add(b);
             }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -25,8 +26,8 @@ public class BoatReservation extends Reservation{
     @ManyToOne(targetEntity = Boat.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "boat_id", nullable = true, referencedColumnName = "id")
     private Boat boat;
-
-    public BoatReservation(LocalDate startDate, LocalDate endDate, Integer numPersons, Boolean reserved, Boat boat, Client client) {
+/*
+    public BoatReservation(LocalDate startDate, LocalDate endDate, Integer numPersons, Boolean reserved, Boat boat, Client client) throws ParseException {
         this.setNumPersons(numPersons);
         // this.setStartTime(LocalDateTime.from(startDate));
         // this.setEndTime(LocalDateTime.from(endDate));
@@ -37,7 +38,7 @@ public class BoatReservation extends Reservation{
         this.setClient(client);
 
         this.setPrice(boat.getPrice());
-        this.CalculatePrice();
+        //this.CalculatePrice();
     }
 
     public  BoatReservation(String startDate, String endDate, int numPersons, Boat boat, Client client) {
@@ -48,4 +49,5 @@ public class BoatReservation extends Reservation{
         this.setBoatOwner(boat.getBoatOwner());
         this.setClient(client);
     }
+ */
 }
