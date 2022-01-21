@@ -481,13 +481,11 @@ public class BoatReservationController {
                                                @PathVariable("id") Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
-//        Client client = this.clientService.findByEmail(email);
-//        model.addAttribute("client", client);
 
         model.addAttribute("id", id);
 
         if (keyword != null) {
-            model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
+            model.addAttribute("boatReservations", this.reservationService.findClientForHistory(keyword, id));
         } else {
             model.addAttribute("boatReservations", this.reservationService.getOwnersPastReservations(id));
         }
@@ -542,6 +540,7 @@ public class BoatReservationController {
             report.setApproved(true);
             penalties += 1;
             report.getClient().setPenalties(penalties);
+            client.setPenalties(report.getClient().getPenalties());
         }
         if (report.getDidAppear() == report.getDidAppear().FALSE) {
             client.getPenalties();
@@ -561,7 +560,7 @@ public class BoatReservationController {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
         if (keyword != null) {
-            model.addAttribute("boatReservations", this.reservationService.findClient(keyword));
+            model.addAttribute("boatReservations", this.reservationService.findClientForCalendar(keyword, id));
         } else {
             model.addAttribute("boatReservations", this.reservationService.getAllOwnersNowAndUpcomingReservations(id));
         }
@@ -916,8 +915,9 @@ public class BoatReservationController {
         model.addAttribute("principal", boatOwner);
 
         Boat boat = this.boatService.findById(boatId);
-        BoatReservation res = this.reservationService.makeReservationWithClient(reservation, boat, clid);
 
+        reservation.CalculatePrice();
+        BoatReservation res = this.reservationService.makeReservationWithClient(reservation, boat, clid);
         Client client = (Client) userService.findById(clid);
         model.addAttribute("client", client);
 

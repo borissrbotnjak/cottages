@@ -18,6 +18,17 @@ public interface CottageRepository extends JpaRepository<Cottage, Long> {
            , nativeQuery = true)
     List<Cottage> findByKeyword(@Param("keyword") String keyword);
 
+    @Query(value="SELECT c.* FROM Cottage c JOIN USERS co ON co.id=c.cottage_owner_id WHERE " +
+            "(lower(c.name) like lower(concat('%', ?1, '%'))"  +
+            "or lower(co.first_name) like lower(concat('%', ?1, '%'))" +
+            "or lower(co.last_name) like lower(concat('%', ?1, '%'))" +
+            "or lower(c.residence) like lower(concat('%', ?1, '%'))"+
+            "or lower(c.state) like lower(concat('%', ?1, '%'))"+
+            "or lower(c.city) like lower(concat('%', ?1, '%')))" +
+            "and c.cottage_owner_id=?2"
+            , nativeQuery = true)
+    List<Cottage> findMyByKeyword(@Param("keyword") String keyword, @Param("id") Long id);
+
     @Query(value="SELECT * FROM Cottage co WHERE lower(co.name) like lower(concat('%', ?1, '%')) " +
             "or lower(co.residence) like lower(concat('%', ?1, '%')) " +
             "and co.cottage_owner_id = ?1",

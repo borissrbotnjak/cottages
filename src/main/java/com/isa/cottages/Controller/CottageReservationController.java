@@ -58,7 +58,7 @@ public class CottageReservationController {
 //        model.addAttribute("client", client);
 
         if (keyword != null) {
-            model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
+            model.addAttribute("cottageReservations", this.reservationService.findClientForHistory(keyword, id));
         } else {
             model.addAttribute("cottageReservations", this.reservationService.getOwnersPastReservations(id));
         }
@@ -465,7 +465,7 @@ public class CottageReservationController {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", cottageOwner);
         if (keyword != null) {
-            model.addAttribute("cottageReservations", this.reservationService.findClient(keyword));
+            model.addAttribute("cottageReservations", this.reservationService.findClientForCalendar(keyword, id));
         } else {
             model.addAttribute("cottageReservations", this.reservationService.getAllOwnersNowAndUpcomingReservations(id));
         }

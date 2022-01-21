@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -312,15 +313,48 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public List<BoatReservation> getOwnersPastReservations(Long id) throws Exception {
+    public List<BoatReservation> findClientForCalendar(String keyword, Long id) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
-//        List<Boat> boat = this.boatService.findByCottageOwner(id);
+        List<BoatReservation> all = this.reservationRepository.findClientForCalendar(keyword);
+        List<BoatReservation> upcoming = new ArrayList<>();
+
+        for (BoatReservation res : all) {
+            if( (res.getStartTime().isAfter(LocalDateTime.now()) || res.getStartTime().isBefore(LocalDateTime.now())
+                    || res.getStartTime().isEqual(LocalDateTime.now()))
+                    &&  res.getEndTime().isAfter(LocalDateTime.now())
+                    && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))){
+                upcoming.add(res);
+            }
+        }
+        return upcoming;
+    }
+
+    @Override
+    public List<BoatReservation> getOwnersPastReservations(Long id) throws Exception {
+
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         List<BoatReservation> all = this.reservationRepository.getAllReservedByOwner(id);
         List<BoatReservation> pastOnes = new ArrayList<>();
 
         for (BoatReservation res:all) {
             if((res.getStartTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now()))
             && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
+                pastOnes.add(res);
+            }
+        }
+        return pastOnes;
+    }
+
+    @Override
+    public List<BoatReservation> findClientForHistory(String keyword, Long id) throws Exception {
+        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
+
+        List<BoatReservation> all = this.reservationRepository.findClientForHistory(keyword);
+        List<BoatReservation> pastOnes = new ArrayList<>();
+
+        for (BoatReservation res:all) {
+            if((res.getStartTime().isBefore(LocalDateTime.now())) && (res.getEndTime().isBefore(LocalDateTime.now()))
+                    && (Objects.equals(res.getBoatOwner().getId(), boatOwner.getId()))) {
                 pastOnes.add(res);
             }
         }
@@ -414,24 +448,16 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public List<BoatReservation> findClient(String keyword) throws Exception {
-        BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
-
-        return this.reservationRepository.findClient(keyword);
-    }
-
-    @Override
     public Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception{
         List<BoatReservation> reservations = this.getOwnersPastReservations(id);
         Set<BoatReservation> filtered = new HashSet<>();
         Double income = 0.0;
 
-        for(BoatReservation res: reservations){
-            if(res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
-              filtered.add(res);
+        for (BoatReservation res : reservations) {
+            if (res.getStartDate().isAfter(startDate) && res.getEndDate().isBefore(endDate)) {
+                filtered.add(res);
             }
         }
-
         return filtered;
     }
 

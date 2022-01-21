@@ -22,7 +22,8 @@ public interface BoatReservationService {
     List<BoatReservation> getUpcomingReservations() throws Exception;
     List<BoatReservation> getAllUpcoming();
     List<BoatReservation> findAllByClient(Client client);
-    List<BoatReservation> findClient(String keyword) throws Exception;
+    List<BoatReservation> findClientForHistory(String keyword, Long id) throws Exception;
+    List<BoatReservation> findClientForCalendar(String keyword, Long id) throws Exception;
     Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
     Set<BoatReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 

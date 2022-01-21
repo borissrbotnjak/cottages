@@ -26,7 +26,11 @@ Klijent:           email:    borissrbotnjak@gmail.com
 Administrator:     email:    
                    password: 
                    
+<<<<<<< HEAD
 Instruktor:        email:    instruktor@gmail.com
+=======
+Instruktor:        email:    instruktor@gmail.com   
+>>>>>>> owner
                    password: in
                    
                   
