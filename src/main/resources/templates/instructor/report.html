@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <!--Import Google Icon Font-->
+    <!-- Required meta tags -->
+    <meta charset="utf-8"><!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
-    <link href="css/materialize.min.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
     <!--Let browser know website is optimized for mobile-->
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Compiled and minified CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Update profile</title>
+    <title>Report</title>
 </head>
 <body>
 <div class="container-fluid bg-light">
@@ -63,25 +62,29 @@
         </div>
     </nav>
 </div>
+
 <div class="container">
-    <div class="center-align blue lighten-5">
-        <h1>Edit profile</h1>
-        <form method="post" th:action="@{'/instructor/profile/__${principal.id}__/editProfile/submit'}"
-              th:object="${principal}">
-            <br><label for="firstName">FirstName:</label>
-            <input id="firstName" th:field="*{firstName}" type="text"/>
-            <br><label for="lastName">LastName:</label>
-            <input id="lastName" th:field="*{lastName}" type="text"/>
-            <br><label for="residence">Residence:</label>
-            <input id="residence" th:field="*{residence}" type="text"/>
-            <br><label for="city">City:</label>
-            <input id="city" th:field="*{city}" type="text"/>
-            <br><label for="state">State:</label>
-            <input id="state" th:field="*{state}" type="text"/>
-            <br><label for="phoneNumber">Phone Number:</label>
-            <input id="phoneNumber" th:field="*{phoneNumber}" type="text"/>
-            <div class="form-group">
-                <button class="btn btn-block btn-success bg-dark" type="submit">Submit</button>
+    <div class="center-align">
+        <h1>Write report</h1>
+        <form th:action="@{/adventutreReservations/writeReport/__${iid}__/__${id}__/__${aid}__/submit}" th:object="${report}" method="post">
+            <br><label for="text">Comment</label>
+            <input id="text" type="text" th:field="*{text}"/>
+
+            <div class="for-group">
+                <br><label>Give sanction (penal)?</label>
+                </br><input type="radio" value="1" name="penal" th:field="*{penal}"/>Yes
+                </br><input type="radio" value="0" name="penal" th:field="*{penal}" checked/>No
+            </div>
+
+            <div class="for-group">
+                <br><label>Did appear?</label>
+                </br><input type="radio" value="1" name="didAppear" th:field="*{didAppear}"/> Yes
+                </br><input type="radio" value="0" name="didAppear" th:field="*{didAppear}"/> No
+            </div>
+
+            </br></br>
+            <div>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </form>
     </div>
@@ -92,6 +95,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 
 </body>
 </html>

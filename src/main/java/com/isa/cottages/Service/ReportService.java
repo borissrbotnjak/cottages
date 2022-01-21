@@ -10,5 +10,7 @@ public interface ReportService {
     List<Report> findBoatOwnersReports(Long id) throws Exception;
     List<Report> findCottageOwnersReports(Long id) throws Exception;
 
+    List<Report> findInstructorsReports(Long id) throws Exception;
+
     Report save(Report report) throws Exception;
 }

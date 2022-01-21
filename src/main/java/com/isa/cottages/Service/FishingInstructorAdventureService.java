@@ -3,7 +3,9 @@ package com.isa.cottages.Service;
 import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public interface FishingInstructorAdventureService {
     FishingInstructorAdventure findById(Long id) throws Exception;
@@ -20,7 +22,18 @@ public interface FishingInstructorAdventureService {
 
     AdditionalService saveService(AdditionalService additionalService);
 
+    Set<FishingInstructorAdventure> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception;
+
     void updateAdventure(FishingInstructorAdventure adventure) throws Exception;
+
+    Boolean adventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, int numPersons);
+
+    Boolean myAdventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, int numPersons, Long id) throws Exception;
+
+    Set<FishingInstructorAdventure> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
+
+    List<FishingInstructorAdventure> findAllMyAvailableSorted(Long oid, LocalDate startDate, LocalDate endDate, int numOfPersons,
+                                                              Boolean asc, Boolean price, Boolean rating) throws Exception;
 
     void removeAdventure(FishingInstructorAdventure adventure)throws Exception;
 

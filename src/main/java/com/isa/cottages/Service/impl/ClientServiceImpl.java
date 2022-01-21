@@ -27,6 +27,9 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private CottageReservationServiceImpl cottageReservationService;
 
+    @Autowired
+    private AdventureReservationServiceImpl adventureReservationService;
+
 //    @Autowired
 //    public ClientServiceImpl(UserServiceImpl userService, ClientRepository clientRepository,
 //                             BoatReservationServiceImpl boatReservationService,
@@ -103,6 +106,21 @@ public class ClientServiceImpl implements ClientService {
 
         for(CottageReservation res: reservations) {
             if(res.getStartTime().isBefore(ChronoLocalDateTime.from(time)) && res.getEndTime().isAfter(ChronoLocalDateTime.from(time))); {
+                available.add(res.getClient());
+            }
+        }
+        return available;
+    }
+
+    @Override
+    public Set<Client> findAllAvailable_Adventure(Long iid) throws Exception {
+        Instructor instructor = (Instructor) userService.getUserFromPrincipal();
+        Set<Client> available = new HashSet<>();
+        List<AdventureReservation> reservations = this.adventureReservationService.getAllInstructorsReservations(iid);
+
+        for(AdventureReservation res: reservations) {
+            if((res.getStartTime().isBefore(LocalDateTime.now()) || res.getStartTime().isEqual(LocalDateTime.now()))
+                    && res.getEndTime().isAfter(LocalDateTime.now())) {
                 available.add(res.getClient());
             }
         }

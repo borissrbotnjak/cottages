@@ -3,6 +3,8 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
+import com.isa.cottages.Service.impl.FishingInstructorAdventureServiceImpl;
+import com.isa.cottages.Service.impl.InstructorServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,11 +20,14 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final BoatOwnerServiceImpl boatOwnerService;
+    private InstructorServiceImpl instructorService;
 
     @Autowired
-    public UserController(UserServiceImpl userService, BoatOwnerServiceImpl boatOwnerService) {
+    public UserController(UserServiceImpl userService, BoatOwnerServiceImpl boatOwnerService,
+                          InstructorServiceImpl instructorService) {
         this.userService = userService;
         this.boatOwnerService = boatOwnerService;
+        this.instructorService =instructorService;
     }
 
     @GetMapping("/index")
@@ -77,10 +82,9 @@ public class UserController {
 
     @GetMapping("/instructor/home")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ModelAndView instructorHome(Model model, Authentication auth) {
-        Instructor instructor = (Instructor) userService.findByEmail(auth.getName());
-        model.addAttribute("user", instructor);
-        return new ModelAndView("instructor/instructorHome");//todo napravi ovu stranicu
+    public ModelAndView instructorHome(Model model, Authentication auth) throws Exception {
+        model.addAttribute("principal", this.instructorService.getInstructorFromPrincipal());
+        return new ModelAndView("instructor/instructorHome");
     }
 
     @GetMapping("/registerSystemAdmin")

@@ -1,6 +1,7 @@
 package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.AdditionalService;
+import com.isa.cottages.Model.AdventureReservation;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Model.Instructor;
 import com.isa.cottages.Repository.AdditionalServiceRepository;
@@ -9,10 +10,8 @@ import com.isa.cottages.Service.FishingInstructorAdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class FishingInstructorAdventureServiceImpl implements FishingInstructorAdventureService {
@@ -21,13 +20,15 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
     private final AdditionalServiceRepository serviceRepository;
     private final InstructorServiceImpl instructorService;
     private final UserServiceImpl userService;
+    private final FishingInstructorAdventureReservationServiceImpl reservationService;
 
     @Autowired
-    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, AdditionalServiceRepository serviceRepository, InstructorServiceImpl instructorService, UserServiceImpl userService) {
+    public FishingInstructorAdventureServiceImpl(FishingInstructorAdventureRepository adventureRepository, AdditionalServiceRepository serviceRepository, InstructorServiceImpl instructorService, UserServiceImpl userService, FishingInstructorAdventureReservationServiceImpl reservationService) {
         this.adventureRepository = adventureRepository;
         this.userService = userService;
         this.instructorService=instructorService;
         this.serviceRepository = serviceRepository;
+        this.reservationService = reservationService;
     }
 
     @Override
@@ -77,6 +78,41 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         return this.serviceRepository.save(additionalService);
     }
 
+
+    @Override
+    public Set<FishingInstructorAdventure> findAllAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons) throws Exception {
+
+        Set<FishingInstructorAdventure> available = new HashSet<>();
+        Set<FishingInstructorAdventure> unAvailable = new HashSet<>();
+        Set<FishingInstructorAdventure> withReservation = new HashSet<>();
+        List<AdventureReservation> reservations = this.reservationService.getAllUpcoming();
+
+        for (AdventureReservation res : reservations) {
+            withReservation.add(res.getAdventure());
+
+            if (!available.contains(res.getAdventure())) {
+                if (this.adventureAvailable(startDate, endDate, res.getAdventure(), numOfPersons)) {
+                    if ((res.getStartTime().toLocalDate().isAfter(endDate) && res.getEndTime().toLocalDate().isAfter(endDate)) ||
+                            (res.getStartTime().toLocalDate().isBefore(startDate) && res.getEndTime().toLocalDate().isBefore(startDate))) {
+                        available.add(res.getAdventure());
+                    }
+                } else { unAvailable.add(res.getAdventure()); }
+            }
+        }
+
+        List<FishingInstructorAdventure> all = this.adventureRepository.findAll();
+        HashSet<FishingInstructorAdventure> allSet = new HashSet<>(all);
+
+        HashSet<FishingInstructorAdventure> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+
+        for (FishingInstructorAdventure b : woReservation) {
+            if (!unAvailable.contains(b) && this.adventureAvailable(startDate, endDate, b, numOfPersons)) { available.add(b); }
+        }
+
+        available.removeIf(unAvailable::contains);
+
+        return available;
+    }
     @Override
     public void updateAdventure(FishingInstructorAdventure adventure) throws Exception {
         FishingInstructorAdventure forUpdate = findById(adventure.getId());
@@ -87,7 +123,6 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
         forUpdate.setAdventureState(adventure.getAdventureState());
         forUpdate.setAdventureDescription(adventure.getAdventureDescription());
         forUpdate.setMaxClients(adventure.getMaxClients());
-        forUpdate.setQuickReservation(adventure.getQuickReservation());
         forUpdate.setImageUrl(adventure.getImageUrl());
         forUpdate.setAdditionalServices(adventure.getAdditionalServices());
         forUpdate.setConductRules(adventure.getConductRules());
@@ -103,6 +138,82 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
 
         this.adventureRepository.save(forUpdate);
     }
+
+    @Override
+    public Boolean adventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, int numPersons) {
+        if (adventure.getMaxClients() >= numPersons) {
+            if (adventure.getAvailableFrom() != null && adventure.getAvailableUntil() != null) {
+                return adventure.getAvailableFrom().toLocalDate().isBefore(startDate) && adventure.getAvailableUntil().toLocalDate().isAfter(endDate);
+            } else { return true; }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean myAdventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, int numPersons, Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        if (adventure.getMaxClients() >= numPersons && !adventure.getDeleted()) {
+            if (adventure.getAvailableFrom() != null && adventure.getAvailableUntil() != null) {
+                return (adventure.getAvailableFrom().toLocalDate().isBefore(startDate) && adventure.getAvailableUntil().toLocalDate().isAfter(endDate))
+                        && Objects.equals(adventure.getInstructor().getId(), instructor.getId());
+            } else { return true; }
+        }
+        return false;
+    }
+    @Override
+    public Set<FishingInstructorAdventure> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception {
+
+        Set<FishingInstructorAdventure> available = new HashSet<>();
+        Set<FishingInstructorAdventure> withReservation = new HashSet<>();
+        List<AdventureReservation> reservations = this.reservationService.getInstructorsUpcomingReservations(id);
+
+        for (AdventureReservation res : reservations) {
+            withReservation.add(res.getAdventure());
+            if (this.myAdventureAvailable(startDate, endDate, res.getAdventure(), numOfPersons, id)) {
+                if ((res.getAdventure().getMaxClients() >= numOfPersons && res.getStartDate().isAfter(endDate) && res.getEndDate().isAfter(endDate)) ||
+                        (res.getAdventure().getMaxClients() >= numOfPersons && res.getStartDate() == null && res.getEndDate() == null) ||
+                        (res.getAdventure().getMaxClients() >= numOfPersons && res.getStartDate().isBefore(startDate) && res.getEndDate().isBefore(startDate))) {
+                    available.add(res.getAdventure());
+                }
+            }
+        }
+
+        // ako ne postoji rezervacija i dobar je kapacitet, dodaj
+        List<FishingInstructorAdventure> all = this.adventureRepository.findAll();
+
+        HashSet<FishingInstructorAdventure> allSet = new HashSet<>(all);
+
+        HashSet<FishingInstructorAdventure> woReservation = new HashSet<>(allSet) {{ removeAll(withReservation); }};
+
+        for (FishingInstructorAdventure c : woReservation) {
+            if (c.getMaxClients() >= numOfPersons && this.myAdventureAvailable(startDate, endDate, c, numOfPersons, id)) { available.add(c); }
+        }
+        return available;
+    }
+    @Override
+    public List<FishingInstructorAdventure> findAllMyAvailableSorted(Long oid, LocalDate startDate, LocalDate endDate, int numOfPersons,
+                                                  Boolean asc, Boolean price, Boolean rating) throws Exception {
+        Instructor instructor = (Instructor) userService.getUserFromPrincipal();
+        Set<FishingInstructorAdventure> set = this.findAllMyAvailable(startDate, endDate, numOfPersons, oid);
+        List<FishingInstructorAdventure> available = new ArrayList<>(set);
+
+        if (asc && price && !rating) {
+            available.sort(Comparator.comparing(FishingInstructorAdventure::getPrice));
+        }
+        else if (asc && !price && rating) {
+            available.sort(Comparator.comparing(FishingInstructorAdventure::getAverageRating));
+        }
+        else if (!asc && price && !rating) {
+            available.sort(Comparator.comparing(FishingInstructorAdventure::getPrice).reversed());
+        }
+        else if (!asc && !price && rating) {
+            available.sort(Comparator.comparing(FishingInstructorAdventure::getAverageRating).reversed());
+        }
+
+        return available;
+    }
+
 
     @Override
     public void removeAdventure(FishingInstructorAdventure adventure)throws Exception{

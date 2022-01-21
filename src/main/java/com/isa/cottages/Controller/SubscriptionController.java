@@ -35,7 +35,7 @@ public class SubscriptionController {
     @GetMapping("/instructor")
     private ModelAndView getAllInstructor(Model model) throws Exception {
         Client client = (Client) this.userService.getUserFromPrincipal();
-        model.addAttribute("subscriptions", client.getInstructorSubscriptions());
+        model.addAttribute("subscriptions", client.getAdventureSubscriptions());
         model.addAttribute("principal", client);
         return new ModelAndView("subscription/instructor");
     }

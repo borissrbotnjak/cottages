@@ -11,6 +11,8 @@ public interface AdventureReservationsService {
     List<AdventureReservation> getUpcomingReservations() throws Exception;
     List<AdventureReservation> findAllByClient(Client client);
 
+    List<AdventureReservation> getAllInstructorsReservations(Long id) throws Exception;
+
     List<AdventureReservation> findByOrderByStartTimeAsc() throws Exception;
     List<AdventureReservation> findByOrderByStartTimeDesc() throws Exception;
     List<AdventureReservation> findByOrderByDurationAsc() throws Exception;

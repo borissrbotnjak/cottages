@@ -2,6 +2,7 @@ package com.isa.cottages.Service.impl;
 
 import com.isa.cottages.Model.BoatOwner;
 import com.isa.cottages.Model.CottageOwner;
+import com.isa.cottages.Model.Instructor;
 import com.isa.cottages.Model.Report;
 import com.isa.cottages.Repository.ReportRepository;
 import com.isa.cottages.Service.ReportService;
@@ -25,9 +26,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Report findById(Long id) throws Exception {
 
-        if(this.reportRepository.getById(id) == null) {
-            throw new Exception("Report with this id does not exist");
-        }
+        this.reportRepository.getById(id);
         return this.reportRepository.getById(id);
     }
 
@@ -43,6 +42,13 @@ public class ReportServiceImpl implements ReportService {
         CottageOwner cottageOwner = (CottageOwner) this.userService.getUserFromPrincipal();
 
         return this.reportRepository.findCottageOwnersReports(id);
+    }
+
+    @Override
+    public List<Report> findInstructorsReports(Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+
+        return this.reportRepository.finndInstructorsReports(id);
     }
 
     @Override

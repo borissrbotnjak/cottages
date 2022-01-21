@@ -17,15 +17,17 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
     private CottageServiceImpl cottageService;
     private UserServiceImpl userService;
     private BoatServiceImpl boatService;
+    private FishingInstructorAdventureServiceImpl adventureService;
 
     @Autowired
     public AdditionalServiceServiceImpl (AdditionalServiceRepository additionalServiceRepository,
                                          CottageServiceImpl cottageService, UserServiceImpl userService,
-                                         BoatServiceImpl boatService) {
+                                         BoatServiceImpl boatService, FishingInstructorAdventureServiceImpl adventureService) {
         this.additionalServiceRepository = additionalServiceRepository;
         this.cottageService = cottageService;
         this.userService = userService;
         this.boatService = boatService;
+        this.adventureService = adventureService;
     }
 
 
@@ -45,6 +47,21 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         this.additionalServiceRepository.save(as);
 
         return as;
+    }
+
+    @Override
+    public List<AdditionalService> findByAdventure(Long id) throws Exception{
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        FishingInstructorAdventure adventure = adventureService.findById(id);
+        List<AdditionalService> all = this.additionalServiceRepository.findByAdventure(id);
+        List<AdditionalService> myAdditionalServices = new ArrayList<AdditionalService>();
+
+        for (AdditionalService as:all) {
+            if(Objects.equals(as.getCottage().getId(), adventure.getId())) {
+                myAdditionalServices.add(as);
+            }
+        }
+        return myAdditionalServices;
     }
 
     @Override

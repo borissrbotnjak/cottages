@@ -1,6 +1,7 @@
 package com.isa.cottages.Repository;
 
 import com.isa.cottages.Model.AdventureReservation;
+import com.isa.cottages.Model.CottageReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,10 @@ public interface AdventureReservationRepository extends JpaRepository<AdventureR
     @Query(value = "SELECT * FROM RESERVATION RES WHERE RES.DELETED=FALSE AND RES.RESERVED=TRUE" +
             "AND RES.INSTRUCTOR_ID IS NOT NULL AND RES.CLIENT_ID=?1", nativeQuery = true)
     List<AdventureReservation> findAllByClient(@Param("client_id") Long clientId);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false " +
+            "and res.instructor_id = ?1", nativeQuery = true)
+    List<AdventureReservation> getAllInstructorsReservations(@Param("id") Long id);
 /*
     List<AdventureReservation> findByOrderByStartTimeAsc();
     List<AdventureReservation> findByOrderByStartTimeDesc();

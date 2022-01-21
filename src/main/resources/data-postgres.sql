@@ -89,27 +89,27 @@ VALUES('fishing rods', 2);
 
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
-                                         instructor_info, average_rating, subscriber_id)
-VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2, 5);
+                                         instructor_info, average_rating)
+VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state,
-                                         adventure_description, instructor_info, average_rating, subscriber_id)
-VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9, 5);
+                                         adventure_description, instructor_info, average_rating)
+VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved, IMAGE_URL)
-VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 7, false,
+VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 8, false,
         'https://www.slo-fishing.si/images/Fishing-for-beginners/River-fishing-best-world-locations.jpg');
-
+INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING)
 VALUES ('Predrag Maric', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL)
-VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 7, false,
+VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 8, false,
         'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
-
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL)
-VALUES ('debil', 'Pecanje na Juznoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.5, 7, true,
+VALUES ('debil', 'Pecanje na Juznoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.5, 8, true,
         'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
+INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
                                          ADVENTURE_STATE, AVERAGE_RATING)
 VALUES ('Maja Simovic', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4);
 
@@ -226,8 +226,8 @@ INSERT INTO reservation(INSTRUCTOR_ID, CLIENT_ID, DELETED, RESERVED, START_TIME,
 VALUES (3, 5, FALSE, TRUE, '4/03/2022 12:00', '8/03/2022 12:00', FALSE, 'instructor_reservation');
 /* ADVENTURE_RESERVATIONS-UPCOMING*/
 INSERT INTO reservation(INSTRUCTOR_ID, adventure_id, CLIENT_ID, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE)
-VALUES (7, 3, 5, FALSE, TRUE , '4/03/2022 12:00', '8/03/2022 12:00', FALSE, 'instructor_reservation');
+VALUES (8, 3, 5, FALSE, TRUE , '4/03/2022 12:00', '8/03/2022 12:00', FALSE, 'instructor_reservation');
 
 /* ADVENTURE_RESERVATIONS-PAST*/
 INSERT INTO reservation(INSTRUCTOR_ID, adventure_id, CLIENT_ID, admin_id, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE)
-VALUES (7, 3, 5,1, FALSE, TRUE , '4/03/2021 12:00', '8/03/2021 12:00', FALSE, 'instructor_reservation');
+VALUES (8, 3, 5,1, FALSE, TRUE , '4/03/2021 12:00', '8/03/2021 12:00', FALSE, 'instructor_reservation');

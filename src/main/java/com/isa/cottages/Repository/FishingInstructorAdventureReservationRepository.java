@@ -29,4 +29,12 @@ public interface FishingInstructorAdventureReservationRepository extends JpaRepo
     @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%')) " +
             "and reservation_type like 'adventure_reservation' and res.reserved=true and res.deleted = false", nativeQuery = true)
     List<AdventureReservation> findClient(@Param("keyword") String keyword);
+
+    @Query(value = "SELECT * FROM reservation c WHERE c.adventure_id = ?1 and " +
+            "c.discount = true and c.deleted=false", nativeQuery = true)
+    List<AdventureReservation> findDiscountsByAdventure(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
+            "and res.adventure_id=?1 and res.discount = true", nativeQuery = true)
+    List<AdventureReservation> findAllWithDiscount(Long adventureId);
 }

@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class AdventureReservationsServiceImpl implements AdventureReservationsService {
+public class AdventureReservationServiceImpl implements AdventureReservationsService {
 
     private ClientServiceImpl clientService;
     private UserServiceImpl userService;
     private AdventureReservationRepository reservationRepository;
 
     @Autowired
-    public AdventureReservationsServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService, AdventureReservationRepository adventureReservationRepository) {
+    public AdventureReservationServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService, AdventureReservationRepository adventureReservationRepository) {
         this.clientService = clientService;
         this.userService = userService;
         this.reservationRepository = adventureReservationRepository;
@@ -55,6 +55,14 @@ public class AdventureReservationsServiceImpl implements AdventureReservationsSe
             }
         }
         return upcoming;
+    }
+
+
+    @Override
+    public List<AdventureReservation> getAllInstructorsReservations(Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+
+        return this.reservationRepository.getAllInstructorsReservations(id);
     }
 
     @Override

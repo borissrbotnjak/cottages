@@ -17,7 +17,7 @@ public class ComplaintController {
     private ComplaintServiceImpl complaintService;
     private UserServiceImpl userService;
     private CottageReservationServiceImpl cottageReservationService;
-    private AdventureReservationsServiceImpl instructorReservationService;
+    private AdventureReservationServiceImpl instructorReservationService;
     private BoatReservationServiceImpl boatReservationService;
     private BoatServiceImpl boatService;
     private CottageServiceImpl cottageService;

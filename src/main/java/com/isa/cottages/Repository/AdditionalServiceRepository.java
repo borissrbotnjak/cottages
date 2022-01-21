@@ -20,4 +20,7 @@ public interface AdditionalServiceRepository extends JpaRepository<AdditionalSer
 
     @Query(value = "SELECT * FROM additional_service a WHERE a.boat_id = ?1", nativeQuery = true)
     List<AdditionalService> findByBoat(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM additional_service a WHERE a.adventure_id = ?1", nativeQuery = true)
+    List<AdditionalService> findByAdventure(@Param("id") Long id);
 }

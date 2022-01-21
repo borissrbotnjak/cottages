@@ -3,6 +3,8 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Model.AdditionalService;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 import com.isa.cottages.Model.Instructor;
+import com.isa.cottages.Service.AdditionalServiceService;
+import com.isa.cottages.Service.impl.AdditionalServiceServiceImpl;
 import com.isa.cottages.Service.impl.FishingInstructorAdventureServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
@@ -29,13 +31,14 @@ public class FishingInstructorAdventureController {
 
     private FishingInstructorAdventureServiceImpl adventureService;
     private UserServiceImpl userService;
+    private AdditionalServiceServiceImpl additionalServiceService;
 
     @GetMapping("/allAdventures")
     public ModelAndView getAllAdventures(Model model, String keyword) {
         if (keyword != null) {
-            model.addAttribute("instructors", this.adventureService.findByKeyword(keyword));
+            model.addAttribute("adventures", this.adventureService.findByKeyword(keyword));
         } else {
-            model.addAttribute("instructors", this.adventureService.findAll());
+            model.addAttribute("adventures", this.adventureService.findAll());
         }
 
         try {
@@ -51,7 +54,9 @@ public class FishingInstructorAdventureController {
     public ModelAndView showAdventure(@PathVariable("id") Long id, Model model) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
         model.addAttribute("adventure", this.adventureService.findById(id));
-        return new ModelAndView("instructor/instructor");
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByAdventure(id);
+        model.addAttribute("additionalServices", additionalServices);
+        return new ModelAndView("instructor/adventure");
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
@@ -160,7 +165,7 @@ public class FishingInstructorAdventureController {
         Path path = Paths.get("C:\\Users\\User\\IdeaProjects\\cottages\\uploads");
         try {
             InputStream inputStream = image.getInputStream();
-            Files.copy(inputStream, path.resolve(image.getOriginalFilename()),
+            Files.copy(inputStream, path.resolve(Objects.requireNonNull(image.getOriginalFilename())),
                     StandardCopyOption.REPLACE_EXISTING);
             adventure.setImageUrl(image.getOriginalFilename().toLowerCase());
             model.addAttribute("adventure", adventure);
@@ -178,16 +183,16 @@ public class FishingInstructorAdventureController {
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @GetMapping("/allMyAdventures/{id}/editAdventure/{aid}")
-    public ModelAndView updateAdventure(Model model, @PathVariable("id") Long id,
-                                        @PathVariable("aid") Long aid) throws Exception {
+    @GetMapping("/allMyAdventures/{id}/editAdventure/")
+    public ModelAndView updateAdventure(Model model, @PathVariable("id") Long id
+                                       ) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
 
-        FishingInstructorAdventure adventure = this.adventureService.findById(aid);
+        FishingInstructorAdventure adventure = this.adventureService.findById(id);
         model.addAttribute("adventure", adventure);
 
-        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
+        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(adventure.getInstructor().getId());
         model.addAttribute("adventures", adventures);
         return new ModelAndView("instructor/editAdventure");
     }
@@ -224,43 +229,39 @@ public class FishingInstructorAdventureController {
     }
     //</editor-fold>
 
-
-
+    //<editor-fold desc="Get-post additional services">
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @GetMapping("/allMyAdventures/{id}/additionalServices/{aid}")
-    public ModelAndView additionalServices(Model model, @PathVariable("id") Long id,
-                                           @PathVariable("aid") Long aid) throws Exception {
+    @GetMapping("/{id}/addAdditionalService")
+    public ModelAndView addAdditionalService(Model model, @PathVariable Long id) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
-
-        FishingInstructorAdventure adventure = this.adventureService.findById(aid);
+        AdditionalService additionalService = new AdditionalService();
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByAdventure(id);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        FishingInstructorAdventure adventure = adventureService.findById(id);
         model.addAttribute("adventure", adventure);
 
-        Collection<AdditionalService> services = this.adventureService.findServicesByAdventure(adventure);
-        model.addAttribute("services", services);
+        return new ModelAndView("instructor/addAdditionalService");
 
-        AdditionalService newService = new AdditionalService();
-        model.addAttribute("newService", newService);
-
-        return new ModelAndView("instructor/additionalServices");
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @PostMapping("/addAdventure/{id}/submit/{adventureId}")
-    public ModelAndView addService(@PathVariable Long id, @PathVariable Long adventureId, @ModelAttribute AdditionalService service,
-                                   Model model) throws Exception {
-
-        service.setAdventure(this.adventureService.findById(adventureId));
-        this.adventureService.saveService(service);
-
-
-        Collection<FishingInstructorAdventure> adventures = this.adventureService.findByInstructor(id);
-        model.addAttribute("adventures", adventures);
-
+    @PostMapping("/{id}/addAdditionalService/submit")
+    public ModelAndView addAdditionalServiceSubmit(Model model, @PathVariable Long id,
+                                                   @ModelAttribute AdditionalService additionalService) throws Exception {
+        FishingInstructorAdventure adventure = adventureService.findById(id);
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        Collection<AdditionalService> additionalServices = additionalServiceService.findByAdventure(id);
+        additionalService.setAdventure(adventure);
+        additionalServiceService.save(additionalService);
         model.addAttribute("principal", instructor);
-        return new ModelAndView("redirect:/adventures/allMyAdventures/{id}/");
+        model.addAttribute("adventure", adventure);
+        model.addAttribute("additionalServices", additionalServices);
+        model.addAttribute("additionalService", additionalService);
+        return new ModelAndView("redirect:/adventures/{id}/");
     }
+    //</editor-fold>
 
     @GetMapping("/allAdventures/sortByInstructorNameDesc")
     public ModelAndView sortByInstructorNameDesc(Model model) {

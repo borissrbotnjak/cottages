@@ -1,6 +1,6 @@
 package com.isa.cottages.Controller;
 
-import com.isa.cottages.Service.impl.AdventureReservationsServiceImpl;
+import com.isa.cottages.Service.impl.AdventureReservationServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,10 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class InstructorReservationController {
 
     private UserServiceImpl userService;
-    private AdventureReservationsServiceImpl reservationService;
+    private AdventureReservationServiceImpl reservationService;
 
     @Autowired
-    public InstructorReservationController(UserServiceImpl userService, AdventureReservationsServiceImpl reservationService) {
+    public InstructorReservationController(UserServiceImpl userService, AdventureReservationServiceImpl reservationService) {
         this.userService = userService;
         this.reservationService = reservationService;
     }

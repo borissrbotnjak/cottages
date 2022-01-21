@@ -36,10 +36,7 @@ public class FishingInstructorAdventure implements Serializable {
     private String adventureDescription;
 
     @Column
-    private String maxClients;
-
-    @Column
-    private String quickReservation = "No";
+    private Integer maxClients;
 
     @Column
     private String imageUrl;
@@ -83,9 +80,8 @@ public class FishingInstructorAdventure implements Serializable {
     @JoinColumn(name = "instructor_id", nullable = true, referencedColumnName = "id")
     private Instructor instructor;
 
-    @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subscriber_id", nullable = true, referencedColumnName = "id")
-    private Client subscriber;
+    @ManyToMany(mappedBy = "adventureSubscriptions")
+    private Set<Client> subscribers;
 
     @OneToMany(mappedBy = "adventure", targetEntity = AdventureReservation.class)
     private Set<AdventureReservation> adventureReservations = new HashSet<>();

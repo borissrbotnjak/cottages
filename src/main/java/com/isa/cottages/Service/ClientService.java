@@ -15,4 +15,7 @@ public interface ClientService {
 
     Set<Client> findAllAvailable_Boat (LocalDateTime time, Long oid) throws Exception;
     Set<Client> findAllAvailable_Cottage (LocalDateTime time, Long oid) throws Exception;
+
+
+    Set<Client> findAllAvailable_Adventure(Long iid) throws Exception;
 }
