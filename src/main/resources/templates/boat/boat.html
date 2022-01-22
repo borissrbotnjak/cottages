@@ -115,7 +115,7 @@
       <div class="col-md-8">
         <div class="tab-content profile-tab" id="myTabContent">
           <div id="profile">
-            <p align="center">
+            <p align="center" sec:authorize="isAuthenticated()">
               <img alt="" th:src="@{'/getImage/'+${boat.imageUrl}+ '/' +${principal.id}}">
             </p>
             <p>

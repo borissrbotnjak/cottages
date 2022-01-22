@@ -289,19 +289,31 @@ public class CottageReservationController {
     @PreAuthorize("hasRole('CLIENT')")
     public ModelAndView chooseTime(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
                                    @RequestParam("numPersons") Integer numPersons) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", client);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        LocalDate sd = LocalDate.parse(startDate, formatter);
-        LocalDate ed = LocalDate.parse(endDate, formatter);
+        try {
+            LocalDate sd = LocalDate.parse(startDate, formatter);
+            LocalDate ed = LocalDate.parse(endDate, formatter);
 
-        model.addAttribute("startDate", sd);
-        model.addAttribute("endDate", ed);
-        model.addAttribute("numPersons", numPersons);
+            if (ed.isBefore(sd) || sd.isBefore(LocalDate.now()) || ed.isBefore(LocalDate.now())) {
+                return new ModelAndView("reservation/dateError");
+            }
 
-        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+            if (client.getLoyaltyProgram().getPenalties() > 2) {
+                return new ModelAndView("reservation/penaltiesError");
+            }
 
-        return new ModelAndView("redirect:/cottageReservations/available");
+            model.addAttribute("startDate", sd);
+            model.addAttribute("endDate", ed);
+            model.addAttribute("numPersons", numPersons);
+
+            return new ModelAndView("redirect:/cottageReservations/available");
+        } catch (Exception e) {
+            return new ModelAndView("reservation/dateError");
+        }
     }
 
     @GetMapping("/available")
