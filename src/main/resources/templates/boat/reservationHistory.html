@@ -132,6 +132,7 @@
                     <a th:href="${'/boatReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
                 </th>
                 <th></th>
+                <th></th>
             </tr>
             <tr th:each="reservation:${reservations}">
                 <td th:text="${reservation.boat.boatName}"></td>
@@ -140,6 +141,7 @@
                 <td th:text="${reservation.duration}"></td>
                 <td th:text="${reservation.price}"></td>
                 <td><a th:href="${'/complaints/boat/new/' + reservation.getBoat().getId() }">Make Complaint</a></td>
+                <td><a th:href="${'/reviews/boat/new/' + reservation.getBoat().getId() }">Leave review</a></td>
             </tr>
         </table>
         </table>

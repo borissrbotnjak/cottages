@@ -90,4 +90,16 @@ public class Cottage implements Serializable {
         this.additionalServices.add(additionalService);
     }
 
+    @OneToMany(targetEntity = Complaint.class, mappedBy = "cottage")
+    private Set<Complaint> complaints = new HashSet<>();
+
+    @OneToMany(targetEntity = Review.class, mappedBy = "cottage")
+    private Set<Review> reviews = new HashSet<>();
+
+/*
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "review_id", referencedColumnName = "id")
+    private Review review;
+
+ */
 }

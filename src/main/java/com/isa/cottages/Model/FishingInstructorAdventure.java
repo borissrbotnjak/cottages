@@ -108,4 +108,16 @@ public class FishingInstructorAdventure implements Serializable {
 
     @OneToMany(targetEntity = AdditionalService.class, mappedBy = "adventure")
     private Set<AdditionalService> additionalServices = new HashSet<>();
+
+    @OneToMany(targetEntity = Complaint.class, mappedBy = "instructor")
+    private Set<Complaint> complaints = new HashSet<>();
+
+    @OneToMany(targetEntity = Review.class, mappedBy = "instructor")
+    private Set<Review> reviews = new HashSet<>();
+/*
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "review_id", referencedColumnName = "id")
+    private Review review;
+
+ */
 }

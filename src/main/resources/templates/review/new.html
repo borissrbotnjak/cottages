@@ -19,7 +19,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <title>Instructor reservation history</title>
+  <title>Boat reservation History</title>
 </head>
 <body>
 
@@ -62,10 +62,7 @@
         <li class="nav-item">
           <a class="nav-link" th:href="${'/client/profile/__${principal.id}__'}">Profile</a>
         </li>
-        <li class="nav-item" sec:authorize="isAnonymous()">
-          <a class="nav-link" th:href="${'/auth/home'}">Home</a>
-        </li>
-        <li class="nav-item" sec:authorize="hasRole('CLIENT')">
+        <li class="nav-item" >
           <a class="nav-link" th:href="${'/client/home'}">Home</a>
         </li>
         <li class="nav-item">
@@ -77,53 +74,41 @@
   </nav>
 </div>
 
-<div class="container">
-  <div id="cottages" class="table">
-    </br>
-    <h3>Instructor reservation history</h3>
-    </br>
-    <form th:action="@{'/instructorReservations/History'}" method="get">
-      <input type="text" placeholder="Search..." name="keyword"/>
-      <button type="submit" class="btn btn-dark mt-2">Search</button>
-      </br>
-    </form>
-    </br></br></br>
-    <table width="90%">
-      <tr>
-        <th>Instructor name</th>
-        <th>Adventure name</th>
-        <th>
-          Reservation start
-          <a th:href="${'/instructorReservations/history/sortByDateDesc'}"><font color="black">▼</font></a>
-          <a th:href="${'/instructorReservations/history/sortByDateAsc'}"><font color="black">▲</font></a>
-        </th>
-        <th>
-          Duration
-          <a th:href="${'/instructorReservations/history/sortByDurationDesc'}"><font color="black">▼</font></a>
-          <a th:href="${'/instructorReservations/history/sortByDurationAsc'}"><font color="black">▲</font></a>
-        </th>
-        <th>
-          Price
-          <a th:href="${'/instructorReservations/history/sortByPriceDesc'}"><font color="black">▼</font></a>
-          <a th:href="${'/instructorReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
-        </th>
-        <th sec:authorize="hasRole('CLIENT')"></th>
-        <th sec:authorize="hasRole('CLIENT')"></th>
-      </tr>
-      <tr th:each="reservation:${reservations}">
-        <td th:text="${reservation.fishingInstructorAdventure.instructorInfo}"></td>
-        <td th:text="${reservation.fishingInstructorAdventure.adventureName}"></td>
-        <td th:text="${reservation.startTime}"></td>
-        <td th:text="${reservation.duration}"></td>
-        <td th:text="${reservation.price}"></td>
-        <td><a sec:authorize="hasRole('CLIENT')"
-               th:href="${'/complaints/instructor/new/' + reservation.getFishingInstructorAdventure().getId() }">Make Complaint</a></td>
-        <td><a sec:authorize="hasRole('CLIENT')"
-               th:href="${'/reviews/instructor/new/' + reservation.getFishingInstructorAdventure().getId() }">Leave review</a></td>
-      </tr>
-    </table>
+<form th:if="${review.getBoat() != null}" th:action="@{'/reviews/boat/new/' + __${entity_id}__}" th:object="${review}" method="post">
+  <br><label for="boatReviewText">Review:</label>
+  <input id="boatReviewText" type="text" th:field="*{reviewText}"/>
+  <br>
+  <label>Rating:</label>
+  <label for="rating">Rate (between 1 and 5):</label>
+  <input th:field="*{rating}" type="number" id="rating" name="rating" min="1" max="5">
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark mt-2">Submit</button>
   </div>
-</div>
+</form>
+
+<form th:if="${review.getCottage() != null}" th:action="@{'/reviews/cottage/new/' + __${entity_id}__}" th:object="${review}" method="post">
+  <br><label for="cottageReviewText">Review:</label>
+  <input id="cottageReviewText" type="text" th:field="*{reviewText}"/>
+  <br>
+  <label>Rating:</label>
+  <label for="rating_2">Rate (between 1 and 5):</label>
+  <input th:field="*{rating}" type="number" id="rating_2" name="rating" min="1" max="5">
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark mt-2">Submit</button>
+  </div>
+</form>
+
+<form th:if="${review.getInstructor() != null}" th:action="@{'/reviews/instructor/new/' + __${entity_id}__}" th:object="${review}" method="post">
+  <br><label for="adventureReviewText">Review:</label>
+  <input id="adventureReviewText" type="text" th:field="*{reviewText}"/>
+  <br>
+  <label>Rating:</label>
+  <label for="rating_3">Rate (between 1 and 5):</label>
+  <input th:field="*{rating}" type="number" id="rating_3" name="rating" min="1" max="5">
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark mt-2">Submit</button>
+  </div>
+</form>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

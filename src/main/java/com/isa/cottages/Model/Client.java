@@ -27,6 +27,13 @@ public class Client extends User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "loyalty_program_id", referencedColumnName = "id")
     private LoyaltyProgram  loyaltyProgram;
+/*
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "review_id", referencedColumnName = "id")
+    private Review review;
+*/
+    @OneToMany(mappedBy = "client", targetEntity = Reservation.class)
+    private Set<Review> review = new HashSet<>();
 
     @OneToMany(mappedBy = "client", targetEntity = Reservation.class)
     private Set<Reservation> Reservations = new HashSet<>();
@@ -45,4 +52,7 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "client", targetEntity = Report.class)
     private Set<Report> reports = new HashSet<>();
+
+    @OneToMany(mappedBy = "client", targetEntity = Complaint.class)
+    private Set<Complaint> complaints = new HashSet<>();
 }

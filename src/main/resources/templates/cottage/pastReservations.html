@@ -149,6 +149,7 @@
                 <a th:href="${'/cottageReservations/history/sortByPriceAsc'}"><font color="black">▲</font></a>
             </th>
             <th></th>
+            <th></th>
         </tr>
         <tr th:each="cottageReservation:${cottageReservations}">
             <td th:text="${cottageReservation.cottage.getName()}"></td>
@@ -156,6 +157,7 @@
             <td th:text="${cottageReservation.duration}"></td>
             <td th:text="${cottageReservation.price}"></td>
             <td><a th:href="${'/complaints/cottage/new/' + cottageReservation.getCottage().getId() }">Make Complaint</a></td>
+            <td><a th:href="${'/review/cottage/new/' + cottageReservation.getCottage().getId() }">Leave review</a></td>
         </tr>
     </table>
 </div>
