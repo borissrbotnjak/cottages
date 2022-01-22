@@ -422,8 +422,6 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setAdditionalServices(boatReservation.getAdditionalServices());
         br.setBoatOwner(boatReservation.getBoatOwner());
         br.setBoat(boatReservation.getBoat());
-//        Double price = this.CalculateDiscountPrice(br);
-//        br.setPrice(price);
         br.setDiscount(true);
         br.setDeleted(false);
         br.setReserved(false);
@@ -559,16 +557,6 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         }
         return sum * reservation.getDuration();
     }
-
-//    @Override
-//    public Double CalculateDiscountPrice(BoatReservation reservation) {
-//        Double sum = reservation.getDiscountPrice();
-//
-//        for (AdditionalService s : reservation.getAdditionalServices()) {
-//            sum += s.getPrice();
-//        }
-//        return sum;
-//    }
 }
 
 

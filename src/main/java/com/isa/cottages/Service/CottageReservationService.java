@@ -62,5 +62,4 @@ public interface CottageReservationService {
     CottageReservation makeReservationWithClient(CottageReservation reservation, Cottage cottage, Long clid) throws Exception;
 
     Double CalculatePrice(CottageReservation reservation) throws ParseException;
-    Double CalculateDiscountPrice(CottageReservation reservation);
 }

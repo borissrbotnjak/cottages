@@ -19,11 +19,11 @@ VALUES ('Vikendica2', 'Petrusic2', 'v2@gmail.com', 'v2', 'Novi Sad', 'Novi Sad',
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod', 'Petrusic', 'b@gmail.com', 'b', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id, penalties)
-VALUES ('Klijent', 'Petrusic', 'klijent@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1, 0);
+VALUES ('Klijent', 'Petrusic', 'dijanadika99@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1, 0);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id, penalties)
-VALUES ('Klijent', 'Klijent', 'borissrbotnjak@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 2, 0);
+VALUES ('Klijent', 'Klijent', 'dijanadika99@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 2, 0);
 
 INSERT INTO USERS(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Instruktor', 'Otasevic', 'instruktor@gmail.com', 'in', 'Nova Varos', 'Nova Varos', 'Srbija', '0641234567', 'Instructor', TRUE, 4);
@@ -234,8 +234,8 @@ VALUES (1, 1, 5, 4, FALSE, TRUE, '10/01/2022 12:00', '30/01/2022 12:00', '10/01/
 
 /* BOAT_RESERVATIONS-FREE */
 
-INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL, DISCOUNT_PRICE, NUM_PERSONS)
-VALUES (1, 1, 4, FALSE, FALSE, '01/05/2022 12:00', '08/05/2022 12:00', '01/05/2022', '08/05/2022', TRUE, 'boat_reservation', '01/05/2022', '08/05/2022', 2000, 2);
+INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL, DISCOUNT_PRICE, NUM_PERSONS, PRICE)
+VALUES (1, 1, 4, FALSE, FALSE, '01/05/2022 12:00', '08/05/2022 12:00', '01/05/2022', '08/05/2022', TRUE, 'boat_reservation', '01/05/2022', '08/05/2022', 2000, 2, 1000);
 INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
 VALUES (1, 2, 4, FALSE, FALSE, '04/03/2022 12:00', '08/03/2022 12:00', '04/03/2022', '08/03/2022', FALSE, 'boat_reservation');
 INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE)
@@ -340,8 +340,6 @@ INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(1, 'https://i.pinimg.com/5
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(2, 'http://inverlochmarine.com.au/sites/default/files/styles/large/public/2_5.jpg?itok=Zo3bRpNi');
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(3, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg');
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(4, 'https://i.pinimg.com/564x/e1/5b/4a/e15b4ad8938cf85f98b45e0b83dd701b.jpg');
-INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(5, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg');
 INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(1, 'https://i.pinimg.com/564x/0e/08/ab/0e08ab8052d8176950710801b798cce1.jpg');
 INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(2, 'https://tinyhousetalk.com/wp-content/uploads/Pendleton-Cottage-001.jpg');
 INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(4, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg');
-INSERT INTO COTTAGE_IMAGE_URL(cottage_id, image_url) VALUES(5, 'https://i.pinimg.com/564x/83/97/8c/83978c07ed7eeabc18013e853c618493.jpg');

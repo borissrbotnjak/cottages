@@ -78,8 +78,6 @@ public class CottageReservationController {
         }
         model.addAttribute("cottageReservations", reservationService.findDiscountsByCottage(id));
         model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
-
-        model.addAttribute("service", reservationService.findDiscountsByCottage(id));
         model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
 
         return new ModelAndView("cottage/allDiscounts");
@@ -113,8 +111,6 @@ public class CottageReservationController {
 
         model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
         model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
-
-        model.addAttribute("selectedServices", cottageReservation.getAdditionalServices());
 
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
@@ -590,13 +586,21 @@ public class CottageReservationController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        LocalDate ld1 = LocalDate.parse(startDate, formatter);
-        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        try {
+            LocalDate ld1 = LocalDate.parse(startDate, formatter);
+            LocalDate ld2 = LocalDate.parse(endDate, formatter);
 
-        model.addAttribute("startDate", ld1);
-        model.addAttribute("endDate", ld2);
+            if (ld2.isBefore(ld1)) {
+                return new ModelAndView("reservation/dateError");
+            }
 
-        return new ModelAndView("redirect:/cottageReservations/{id}/incomes");
+            model.addAttribute("startDate", ld1);
+            model.addAttribute("endDate", ld2);
+
+            return new ModelAndView("redirect:/cottageReservations/{id}/incomes");
+        } catch (Exception e) {
+            return new ModelAndView("reservation/dateError");
+        }
     }
 
     @GetMapping("/{id}/incomes")
@@ -643,13 +647,21 @@ public class CottageReservationController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        LocalDate ld1 = LocalDate.parse(startDate, formatter);
-        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+        try {
+            LocalDate ld1 = LocalDate.parse(startDate, formatter);
+            LocalDate ld2 = LocalDate.parse(endDate, formatter);
 
-        model.addAttribute("startDate", ld1);
-        model.addAttribute("endDate", ld2);
+            if (ld2.isBefore(ld1)) {
+                return new ModelAndView("reservation/dateError");
+            }
 
-        return new ModelAndView("redirect:/cottageReservations/{id}/attendance");
+            model.addAttribute("startDate", ld1);
+            model.addAttribute("endDate", ld2);
+
+            return new ModelAndView("redirect:/cottageReservations/{id}/attendance");
+        } catch (Exception e) {
+            return new ModelAndView("reservation/dateError");
+        }
     }
 
     @PreAuthorize("hasRole('COTTAGE_OWNER')")

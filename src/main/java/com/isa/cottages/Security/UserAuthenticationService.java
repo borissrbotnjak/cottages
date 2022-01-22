@@ -35,7 +35,7 @@ public class UserAuthenticationService implements AuthenticationProvider {
         Authentication retVal = null;
         List<GrantedAuthority> grantedAuths = new ArrayList<>();
         User user = this.userService.findByEmailAndPassword(auth.getName(),auth.getCredentials().toString());
-
+        
         if (auth != null && user != null) {
             String email = auth.getName();
             String password = auth.getCredentials().toString();

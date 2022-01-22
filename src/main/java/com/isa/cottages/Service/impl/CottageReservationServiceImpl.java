@@ -331,16 +331,8 @@ public class CottageReservationServiceImpl implements CottageReservationService 
 
     @Override
     public List<CottageReservation> findDiscountsByCottage(Long id) {
-        Cottage cottage = cottageRepository.findById(id).get();
-        List<CottageReservation> all = this.reservationRepository.findDiscountsByCottage(id);
-        List<CottageReservation> cr = new ArrayList<>();
+        return this.reservationRepository.findDiscountsByCottage(id);
 
-        for (CottageReservation c:all) {
-            if(Objects.equals(c.getCottage().getId(), cottage.getId())) {
-                cr.add(c);
-            }
-        }
-        return cr;
     }
 
     @Override
@@ -529,15 +521,4 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         }
         return sum * reservation.getDuration();
     }
-
-    @Override
-    public Double CalculateDiscountPrice(CottageReservation reservation) {
-        Double sum = reservation.getDiscountPrice();
-
-        for (AdditionalService s : reservation.getAdditionalServices()) {
-            sum += s.getPrice();
-        }
-        return sum * reservation.getDuration();
-    }
-
 }

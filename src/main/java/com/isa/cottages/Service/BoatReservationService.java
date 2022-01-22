@@ -62,6 +62,5 @@ public interface BoatReservationService {
     BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;
 
     Double CalculatePrice(BoatReservation reservation) throws ParseException;
-//    Double CalculateDiscountPrice(BoatReservation reservation);
 
 }
