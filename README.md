@@ -23,8 +23,8 @@ Vlasnik broda:     email:    b@gmail.com
 Klijent:           email:    borissrbotnjak@gmail.com
                    password: kl
                    
-Administrator:     email:    
-                   password: 
+Administrator:     email:    goca@gmail.com
+                   password: goca
                    
 Instruktor:        email:    instruktor@gmail.com   
                    password: in

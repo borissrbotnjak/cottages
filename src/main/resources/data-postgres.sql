@@ -19,11 +19,11 @@ VALUES ('Vikendica2', 'Petrusic2', 'v2@gmail.com', 'v2', 'Novi Sad', 'Novi Sad',
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod', 'Petrusic', 'b@gmail.com', 'b', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id, penalties)
-VALUES ('Klijent', 'Petrusic', 'dijanadika99@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1, 0);
+VALUES ('Klijent', 'Petrusic', 'klijent99@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 1, 0);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role, loyalty_program_id, penalties)
-VALUES ('Klijent', 'Klijent', 'dijanadika99@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 2, 0);
+VALUES ('Klijent', 'Klijent', 'borissrbotnjak@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3, 2, 0);
 
 INSERT INTO USERS(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Instruktor', 'Otasevic', 'instruktor@gmail.com', 'in', 'Nova Varos', 'Nova Varos', 'Srbija', '0641234567', 'Instructor', TRUE, 4);
@@ -251,14 +251,9 @@ INSERT INTO reservation(ADMIN_ID, BOAT_ID, CLIENT_ID, BOAT_OWNER_ID, DELETED, RE
 VALUES (1, 2, 5, 4, FALSE, TRUE, '06/12/2022 12:00', '09/12/2022 12:00', '06/12/2022', '09/12/2022', FALSE, 'boat_reservation', 1000);
 INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE, PRICE)
 VALUES (1, 2, 4, FALSE, FALSE, '01/12/2022 12:00', '03/12/2022 12:00', '01/12/2022', '03/12/2022', FALSE, 'boat_reservation', 1000);
-INSERT INTO reservation(ADMIN_ID, BOAT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE, PRICE)
-VALUES (1, 3, 4, FALSE, FALSE, '01/12/2022 12:00', '03/12/2022 12:00', '01/12/2022', '03/12/2022', FALSE, 'boat_reservation', 1000);
 
 --BORIS
 /* BOAT_RESERVATIONS-UPCOMING */
-INSERT INTO reservation(ADMIN_ID, BOAT_ID, CLIENT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE,
-                        NUM_PERSONS, PRICE)
-VALUES (1, 2, 5, 4, FALSE, TRUE, '01/12/2022 12:00', '03/12/2022 12:00', '01/12/2022', '03/12/2022', FALSE, 'boat_reservation', 4, 1000);
 INSERT INTO reservation(ADMIN_ID, BOAT_ID, CLIENT_ID, BOAT_OWNER_ID, DELETED, RESERVED, START_TIME, END_TIME, START_DATE, END_DATE, DISCOUNT, RESERVATION_TYPE,
                         NUM_PERSONS, PRICE)
 VALUES (1, 3, 7, 4, FALSE, TRUE, '01/12/2022 12:00', '03/12/2022 12:00', '01/12/2022', '03/12/2022', FALSE, 'boat_reservation', 4, 1000);

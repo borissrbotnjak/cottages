@@ -93,7 +93,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.boat_id is not null " +
-            "and res.start_date < ?2 and res.end_date > ?1 and res.boat_owner_id=?3", nativeQuery = true)
+            "and res.start_date <= ?2 and res.end_date > ?1 and res.boat_owner_id=?3", nativeQuery = true)
     List<BoatReservation> findAllMyUnavailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
                                                @Param("id") Long id);
 
