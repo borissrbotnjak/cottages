@@ -114,7 +114,7 @@
         <div class="tab-content profile-tab" id="myTabContent">
           <div id="profile">
 
-            <p th:each="img:${cottage.imageUrl}">
+            <p th:each="img:${cottage.imageUrl}" sec:authorize="isAuthenticated()">
               <img alt="" th:src="@{'/getImage/'+${img} + '/' + ${principal.id}}">
             </p>
               <p th:each="i:${cottage.imageUrl}">

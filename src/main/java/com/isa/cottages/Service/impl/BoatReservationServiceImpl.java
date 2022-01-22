@@ -8,6 +8,8 @@ import com.isa.cottages.Service.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
@@ -212,9 +214,14 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setBoatOwner(boat.getBoatOwner());
         reservation.setClient(client);
         reservation.setPrice(boat.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
+
         this.save(reservation);
 
         this.sendReservationMail(reservation);
@@ -230,7 +237,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setBoatOwner(reservation.getBoatOwner());
-        reservation.CalculatePrice();
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+        // Double price = this.CalculatePrice(reservation);
+        // reservation.setPrice(price);
         this.update(reservation);
 
         this.sendReservationMail(reservation);
@@ -541,15 +551,44 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setBoatOwner(boat.getBoatOwner());
         reservation.setClient(client);
         reservation.setPrice(boat.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
+
         this.save(reservation);
 
         return reservation;
     }
 
     @Override
+    public Double CalculatePrice(BoatReservation reservation) throws ParseException {
+        Double sum = reservation.getPrice();
+        if (reservation.getDiscount() && reservation.getDiscountPrice() != 0.0) {
+            sum = reservation.getDiscountPrice();
+        }
+
+        for (AdditionalService s : reservation.getAdditionalServices()) {
+            sum += s.getPrice();
+        }
+        return sum * reservation.getDuration();
+    }
+/*
+    @Override
+    public Integer getDuration(BoatReservation reservation) throws ParseException {
+        SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy");
+        Date sd = sdf.parse(String.valueOf(reservation.getStartDate()));
+        Date ed = sdf.parse(String.valueOf(reservation.getEndDate()));
+
+        long difference_In_Time = ed.getTime() - sd.getTime();
+        long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24))  % 365;
+        return Math.toIntExact(difference_In_Days);
+    }
+*/
+@Override
     public List<BoatReservation> getAllUnavailable(LocalDate desiredStart, LocalDate desiredEnd) {
         return this.reservationRepository.findAllUnavailable(desiredStart, desiredEnd);
     }

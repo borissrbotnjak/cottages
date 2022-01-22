@@ -39,6 +39,6 @@ public interface InstructorReservationRepository extends JpaRepository<Instructo
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.instructor_id is not null " +
-            "and res.start_date < ?2 and res.end_date > ?1 ", nativeQuery = true)
+            "and res.start_date <= ?2 and res.end_date >= ?1 ", nativeQuery = true)
     List<InstructorReservation> findAllUnavailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

@@ -210,9 +210,10 @@ public class CottageServiceImpl implements CottageService {
 
     @Override
     public Boolean cottageAvailable(LocalDate startDate, LocalDate endDate, Cottage cottage) {
-        if (cottage.getAvailableFrom() != null && cottage.getAvailableUntil() != null) {
-            if (cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
-        } else { return true; }
+        if ((cottage.getAvailableFrom() == null && cottage.getAvailableUntil() == null)
+                || cottage.getAvailableFrom().toLocalDate().isBefore(startDate) && cottage.getAvailableUntil().toLocalDate().isAfter(endDate)) {
+            return true;
+        }
         return false;
     }
 
@@ -243,13 +244,15 @@ public class CottageServiceImpl implements CottageService {
 
         // TODO: ubai proveru dostunosti i kod rezervacija. availableUntil > preferredEnd
         for (CottageReservation res : reservations) {
-            available.add(res.getCottage());
+            if (cottageAvailable(startDate, endDate, res.getCottage())) {
+                available.add(res.getCottage());
+            }
         }
 
         List<CottageReservation> un = this.reservationService.getAllUnavailable(startDate, endDate);
 
         for (CottageReservation r : un) {
-            Cottage c = r.getCottage();
+            // Cottage c = r.getCottage();
             unavailable.add(r.getCottage());
         }
 

@@ -4,6 +4,7 @@ import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -61,6 +62,10 @@ public interface BoatReservationService {
     BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;
 
     List<BoatReservation> findAllUpcomingByCapacity(int numOfPersons) throws Exception;
+
+    Double CalculatePrice(BoatReservation reservation) throws ParseException;
+
+    // Integer getDuration(BoatReservation reservation) throws ParseException;
 
     List<BoatReservation> getAllUnavailable(LocalDate startDate, LocalDate endDate);
 

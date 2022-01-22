@@ -110,9 +110,10 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
 
     @Override
     public Boolean InstructorAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure instructor) {
-        if (instructor.getAvailableFrom() != null && instructor.getAvailableUntil() != null) {
-            if (instructor.getAvailableFrom().toLocalDate().isBefore(startDate) && instructor.getAvailableUntil().toLocalDate().isAfter(endDate)) { return true; }
-        } else { return true; }
+        if ((instructor.getAvailableFrom() == null && instructor.getAvailableUntil() == null)
+                || (instructor.getAvailableFrom().toLocalDate().isBefore(startDate) && instructor.getAvailableUntil().toLocalDate().isAfter(endDate))) {
+            return true;
+        }
         return false;
     }
 
@@ -125,7 +126,9 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
 
         // TODO: ubai proveru dostunosti i kod rezervacija. availableUntil > preferredEnd
         for (InstructorReservation res : reservations) {
-            available.add(res.getFishingInstructorAdventure());
+            if (InstructorAvailable(startDate, endDate, res.getFishingInstructorAdventure())) {
+                available.add(res.getFishingInstructorAdventure());
+            }
         }
 
         List<InstructorReservation> un = this.reservationService.getAllUnavailable(startDate, endDate);

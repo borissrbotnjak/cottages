@@ -48,6 +48,10 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
             "b.discount = true and b.deleted=false", nativeQuery = true)
     List<BoatReservation> findDiscountsByBoat(@Param("id") Long id);
 
+    @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE lower(u.first_name) like lower(concat('%', ?1, '%'))" +
+            "and reservation_type like 'boat_reservation' and res.reserved=true and res.deleted = false", nativeQuery = true)
+    List<BoatReservation> findClient(@Param("keyword") String keyword);
+
     @Query(value = "SELECT * FROM reservation res JOIN Users u ON res.client_id=u.id WHERE" +
             "(lower(u.first_name) like lower(concat('%', ?1, '%'))" +
             "or lower(u.last_name) like lower(concat('%', ?1, '%')))" +
@@ -61,6 +65,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
             "and reservation_type like 'boat_reservation' " +
             "and res.deleted = false", nativeQuery = true)
     List<BoatReservation> findClientForCalendar(@Param("keyword") String keyword);
+
 
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=false " +
             "and res.boat_id=?1 and res.discount = true", nativeQuery = true)
@@ -78,6 +83,7 @@ public interface BoatReservationRepository extends JpaRepository<BoatReservation
             "and res.num_persons >= ?3 ", nativeQuery = true)
     List<BoatReservation> findAllAvailable(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
                                               @Param("capacity") int capacity);
+
     @Query(value = "SELECT * FROM reservation res WHERE res.deleted=false and res.reserved=true " +
             "and res.boat_id is not null " +
             "and res.start_date < ?2 and res.end_date > ?1 ", nativeQuery = true)

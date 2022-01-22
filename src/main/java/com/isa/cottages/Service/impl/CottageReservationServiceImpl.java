@@ -8,6 +8,7 @@ import com.isa.cottages.Service.CottageReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -141,9 +142,14 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setCottageOwner(cottage.getCottageOwner());
         reservation.setClient(client);
         reservation.setPrice(cottage.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
+
         this.save(reservation);
 
         this.sendReservationMail(reservation);
@@ -220,7 +226,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setCottageOwner(reservation.getCottage().getCottageOwner());
-        reservation.CalculatePrice();
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+        // Double price = this.CalculatePrice(reservation);
+        // reservation.setPrice(price);
         this.update(reservation);
 
         this.sendReservationMail(reservation);
@@ -500,14 +509,42 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setCottageOwner(cottage.getCottageOwner());
         reservation.setClient(client);
         reservation.setPrice(cottage.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
         this.setDate(reservation);
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
+
         this.save(reservation);
 
         return reservation;
     }
 
+    @Override
+    public Double CalculatePrice(CottageReservation reservation) throws ParseException {
+        Double sum = reservation.getPrice();
+        if (reservation.getDiscount() && reservation.getDiscountPrice() != 0.0) {
+            sum = reservation.getDiscountPrice();
+        }
+
+        for (AdditionalService s : reservation.getAdditionalServices()) {
+            sum += s.getPrice();
+        }
+        return sum * reservation.getDuration();
+    }
+/*
+    public Integer getDuration(CottageReservation reservation) throws ParseException {
+        SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy");
+        Date sd = sdf.parse(String.valueOf(reservation.getStartDate()));
+        Date ed = sdf.parse(String.valueOf(reservation.getEndDate()));
+
+        long difference_In_Time = ed.getTime() - sd.getTime();
+        long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24))  % 365;
+        return Math.toIntExact(difference_In_Days);
+    }
+*/
     @Override
     public List<CottageReservation> getAllAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity) {
         return this.reservationRepository.findAllAvailable(desiredStart, desiredEnd, capacity);
