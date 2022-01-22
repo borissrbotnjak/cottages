@@ -8,6 +8,7 @@ import com.isa.cottages.Service.CottageReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -141,9 +142,13 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setCottageOwner(cottage.getCottageOwner());
         reservation.setClient(client);
         reservation.setPrice(cottage.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.save(reservation);
 
         this.sendReservationMail(reservation);
@@ -220,7 +225,10 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setCottageOwner(reservation.getCottage().getCottageOwner());
-        reservation.CalculatePrice();
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+        // Double price = this.CalculatePrice(reservation);
+        // reservation.setPrice(price);
         this.update(reservation);
 
         this.sendReservationMail(reservation);
@@ -299,7 +307,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     }
 
     @Override
-    public CottageReservation saveDiscount(CottageReservation cottageReservation) {
+    public CottageReservation saveDiscount(CottageReservation cottageReservation) throws Exception {
         CottageReservation cr = new CottageReservation();
 
         cr.setDiscountAvailableFrom(cottageReservation.getDiscountAvailableFrom());
@@ -309,7 +317,6 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setStartDate(cottageReservation.getDiscountAvailableFrom().toLocalDate());
         cr.setEndDate(cottageReservation.getDiscountAvailableUntil().toLocalDate());
         cr.setNumPersons(cottageReservation.getNumPersons());
-        cr.setPrice(cottageReservation.getPrice());
         cr.setDiscountPrice(cottageReservation.getDiscountPrice());
         cr.setAdditionalServices(cottageReservation.getAdditionalServices());
         cr.setCottageOwner(cottageReservation.getCottageOwner());
@@ -317,8 +324,6 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setDiscount(true);
         cr.setDeleted(false);
         cr.setReserved(false);
-//        cr.setClient(cottageReservation.getClient());
-        cr.CalculatePrice();
         this.reservationRepository.save(cr);
 
         return cr;
@@ -500,11 +505,39 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setCottageOwner(cottage.getCottageOwner());
         reservation.setClient(client);
         reservation.setPrice(cottage.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.save(reservation);
 
         return reservation;
     }
+
+    @Override
+    public Double CalculatePrice(CottageReservation reservation) throws ParseException {
+        Double sum = reservation.getPrice();
+        if (reservation.getDiscount() && reservation.getDiscountPrice() != 0.0) {
+            sum = reservation.getDiscountPrice();
+        }
+
+        for (AdditionalService s : reservation.getAdditionalServices()) {
+            sum += s.getPrice();
+        }
+        return sum * reservation.getDuration();
+    }
+
+    @Override
+    public Double CalculateDiscountPrice(CottageReservation reservation) {
+        Double sum = reservation.getDiscountPrice();
+
+        for (AdditionalService s : reservation.getAdditionalServices()) {
+            sum += s.getPrice();
+        }
+        return sum * reservation.getDuration();
+    }
+
 }

@@ -339,10 +339,11 @@ public class BoatReservationController {
         Boat boat = this.boatService.findById(id);
         model.addAttribute("boat", boat);
 
-        if(boat == null) {
+        if (boat == null) {
             throw new Exception("Boat with this id does not exist.");
         }
         model.addAttribute("boatReservations", reservationService.findDiscountsByBoat(id));
+        model.addAttribute("services", this.boatService.findById(id).getAdditionalServices());
 
         return new ModelAndView("boat/allDiscounts");
     }
@@ -387,7 +388,7 @@ public class BoatReservationController {
 
         Boat boat = boatService.findById(id);
         Set<Client> clients = boat.getSubscribers();
-        for (Client c:clients) {
+        for (Client c : clients) {
             if (boat.getSubscribers() != null && c.getBoatSubscriptions() != null) {
                 emailSender.send(c.getEmail(), email(c.getFirstName(), "New discount for cottage ", boat.getBoatName(), " published."));
             }
@@ -451,7 +452,7 @@ public class BoatReservationController {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:10px;line-height:25px;color:#0b0c0c\"> <p>" + text1 + boatName + text2 +"</p> </p></blockquote>\n" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:10px;line-height:25px;color:#0b0c0c\"> <p>" + text1 + boatName + text2 + "</p> </p></blockquote>\n" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
@@ -535,7 +536,7 @@ public class BoatReservationController {
         client.setPenalties(report.getClient().getPenalties());
         int penalties = client.getPenalties();
 
-        if(report.getPenal() == report.getPenal().TRUE) {
+        if (report.getPenal() == report.getPenal().TRUE) {
             admin.getReports().add(report);
             report.setApproved(true);
             penalties += 1;
@@ -556,7 +557,7 @@ public class BoatReservationController {
 
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @GetMapping("/viewCalendar/{id}")
-    public ModelAndView viewCalendar (Model model, @PathVariable Long id, String keyword) throws Exception {
+    public ModelAndView viewCalendar(Model model, @PathVariable Long id, String keyword) throws Exception {
         BoatOwner boatOwner = (BoatOwner) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", boatOwner);
         if (keyword != null) {
@@ -598,8 +599,8 @@ public class BoatReservationController {
 
     @GetMapping("/{id}/incomes")
     @PreAuthorize("hasRole('BOAT_OWNER')")
-    public ModelAndView incomes (Model model, @RequestParam("startDate") String startDate,
-                                 @RequestParam("endDate") String endDate, @PathVariable Long id) throws Exception{
+    public ModelAndView incomes(Model model, @RequestParam("startDate") String startDate,
+                                @RequestParam("endDate") String endDate, @PathVariable Long id) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -612,7 +613,7 @@ public class BoatReservationController {
         model.addAttribute("reservations", reservations);
 
         Double income = 0.0;
-        for(BoatReservation br: reservations) {
+        for (BoatReservation br : reservations) {
             income += br.getPrice();
         }
         model.addAttribute("income", income);
@@ -635,8 +636,8 @@ public class BoatReservationController {
     @PreAuthorize("hasRole('BOAT_OWNER')")
     @PostMapping("/{id}/chooseDate4")
     public ModelAndView chooseDate4(Model model, @PathVariable Long id,
-                                            @RequestParam("startDate") String startDate,
-                                            @RequestParam("endDate") String endDate) throws Exception {
+                                    @RequestParam("startDate") String startDate,
+                                    @RequestParam("endDate") String endDate) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -695,7 +696,7 @@ public class BoatReservationController {
 
         Client client = (Client) userService.findById(clid);
         model.addAttribute("clid", clid);
-        model.addAttribute("client",client);
+        model.addAttribute("client", client);
 
         return new ModelAndView("redirect:/boatReservations/{oid}/{clid}/next");
     }
@@ -709,7 +710,7 @@ public class BoatReservationController {
 
         Client client = (Client) userService.findById(clid);
         model.addAttribute("clid", clid);
-        model.addAttribute("client",client);
+        model.addAttribute("client", client);
 
         model.addAttribute("startDate", LocalDate.now());
         model.addAttribute("endDate", LocalDate.now());
@@ -730,17 +731,29 @@ public class BoatReservationController {
 
         Client client = (Client) userService.findById(clid);
         model.addAttribute("clid", clid);
-        model.addAttribute("client",client);
+        model.addAttribute("client", client);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate sd = LocalDate.parse(startDate, formatter);
-        LocalDate ed = LocalDate.parse(endDate, formatter);
-        model.addAttribute("startDate", sd);
-        model.addAttribute("endDate", ed);
-        model.addAttribute("numPersons", numPersons);
 
-        return new ModelAndView("redirect:/boatReservations/{oid}/{clid}/showAvailableBoats");
+        try {
+            LocalDate sd = LocalDate.parse(startDate, formatter);
+            LocalDate ed = LocalDate.parse(endDate, formatter);
+
+            if (ed.isBefore(sd) || sd.isBefore(LocalDate.now()) || ed.isBefore(LocalDate.now())) {
+                return new ModelAndView("reservation/dateError");
+            }
+
+            model.addAttribute("startDate", sd);
+            model.addAttribute("endDate", ed);
+            model.addAttribute("numPersons", numPersons);
+
+            return new ModelAndView("redirect:/boatReservations/{oid}/{clid}/showAvailableBoats");
+
+        } catch (Exception e) {
+            return new ModelAndView("reservation/dateError");
+        }
     }
+
 
     @GetMapping("/{oid}/{clid}/showAvailableBoats")
     @PreAuthorize("hasRole('BOAT_OWNER')")
@@ -915,9 +928,8 @@ public class BoatReservationController {
         model.addAttribute("principal", boatOwner);
 
         Boat boat = this.boatService.findById(boatId);
-
-        reservation.CalculatePrice();
         BoatReservation res = this.reservationService.makeReservationWithClient(reservation, boat, clid);
+
         Client client = (Client) userService.findById(clid);
         model.addAttribute("client", client);
 

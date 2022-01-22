@@ -39,13 +39,13 @@ public class Cottage implements Serializable {
     private List<String> imageUrl;
 
     @Column
-    private Integer numPersons;
+    private Integer numberOfRooms = 0;
 
     @Column
-    private Long numberOfRooms;
+    private Integer numberOfBeds = 0;
 
     @Column
-    private Long numberOfBeds;
+    private Integer numPersons = numberOfBeds * numberOfRooms;
 
     @Column
     private String rules;

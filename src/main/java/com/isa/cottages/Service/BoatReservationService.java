@@ -4,6 +4,7 @@ import com.isa.cottages.Model.Boat;
 import com.isa.cottages.Model.BoatReservation;
 import com.isa.cottages.Model.Client;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public interface BoatReservationService {
     Set<BoatReservation> findByInterval(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
     Set<BoatReservation> findByInterval2(LocalDate startDate, LocalDate endDate, Long id) throws Exception;
 
-    BoatReservation saveDiscount(BoatReservation boatReservation);
+    BoatReservation saveDiscount(BoatReservation boatReservation) throws Exception;
     BoatReservation saveReservation(BoatReservation boatReservation);
     List<BoatReservation> findDiscountsByBoat(Long id) throws Exception;
 
@@ -59,5 +60,8 @@ public interface BoatReservationService {
     BoatReservation getOne(Long id);
 
     BoatReservation makeReservationWithClient(BoatReservation reservation, Boat boat, Long clid) throws Exception;
+
+    Double CalculatePrice(BoatReservation reservation) throws ParseException;
+//    Double CalculateDiscountPrice(BoatReservation reservation);
 
 }

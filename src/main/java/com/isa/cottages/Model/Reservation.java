@@ -8,8 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
@@ -110,23 +112,21 @@ public class Reservation implements Serializable {
     private Set<AdditionalService> additionalServices = new HashSet<>();
 
 
-    public void CalculatePrice() {
-        Double sum = price;
-        if (this.discount && this.discountPrice != 0.0) {
-            sum = discountPrice;
-        }
+//    public void CalculatePrice() {
+//        Double sum = price;
+//        if (this.discount && this.discountPrice != 0.0) {
+//            sum = discountPrice;
+//        }
+//
+//        for (AdditionalService s : this.additionalServices) {
+//            sum += s.getPrice();
+//        }
+//        // this.calculateDuration();
+//        this.price = sum;
+//    }
 
-        for (AdditionalService s : this.additionalServices) {
-            sum += s.getPrice();
-        }
-        // this.calculateDuration();
-        this.price = sum;
+    public void calculateDuration(LocalDate startDate, LocalDate endDate) throws ParseException {
+        Period difference = Period.between(startDate, endDate);
+        this.duration = difference.getDays() + 1;
     }
-
-    // TODO:
-/*
-    public void calculateDuration() {
-        this.duration = ChronoUnit.DAYS.between( this.startDate , this.endDate ).intValue();
-    }
-*/
 }

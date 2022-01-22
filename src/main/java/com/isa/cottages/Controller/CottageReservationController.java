@@ -67,8 +67,7 @@ public class CottageReservationController {
 
     @GetMapping("/allDiscounts/{id}")
     public ModelAndView getDiscountsByCottage(@PathVariable Long id, Model model) throws Exception {
-        User user =
-                this.userService.getUserFromPrincipal();
+        User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
 
         Cottage cottage = this.cottageService.findById(id);
@@ -78,6 +77,10 @@ public class CottageReservationController {
             throw new Exception("Cottage with this id does not exist.");
         }
         model.addAttribute("cottageReservations", reservationService.findDiscountsByCottage(id));
+        model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
+
+        model.addAttribute("service", reservationService.findDiscountsByCottage(id));
+        model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
 
         return new ModelAndView("cottage/allDiscounts");
     }
@@ -110,6 +113,8 @@ public class CottageReservationController {
 
         model.addAttribute("services", this.cottageService.findById(id).getAdditionalServices());
         model.addAttribute("sLength", this.cottageService.findById(id).getAdditionalServices().size());
+
+        model.addAttribute("selectedServices", cottageReservation.getAdditionalServices());
 
         User user = this.userService.getUserFromPrincipal();
         model.addAttribute("principal", user);
@@ -726,13 +731,23 @@ public class CottageReservationController {
         model.addAttribute("client",client);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        try {
         LocalDate sd = LocalDate.parse(startDate, formatter);
         LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        if (ed.isBefore(sd) || sd.isBefore(LocalDate.now()) || ed.isBefore(LocalDate.now())) {
+            return new ModelAndView("reservation/dateError");
+        }
+
         model.addAttribute("startDate", sd);
         model.addAttribute("endDate", ed);
         model.addAttribute("numPersons", numPersons);
 
         return new ModelAndView("redirect:/cottageReservations/{oid}/{clid}/showAvailableCottages");
+    } catch (Exception e) {
+        return new ModelAndView("reservation/dateError");
+        }
     }
 
     @GetMapping("/{oid}/{clid}/showAvailableCottages")

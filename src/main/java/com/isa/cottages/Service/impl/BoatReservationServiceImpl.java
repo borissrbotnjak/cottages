@@ -8,6 +8,7 @@ import com.isa.cottages.Service.BoatReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
@@ -212,9 +213,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setBoatOwner(boat.getBoatOwner());
         reservation.setClient(client);
         reservation.setPrice(boat.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.save(reservation);
 
         this.sendReservationMail(reservation);
@@ -230,7 +235,10 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setBoatOwner(reservation.getBoatOwner());
-        reservation.CalculatePrice();
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+        // Double price = this.CalculatePrice(reservation);
+        // reservation.setPrice(price);
         this.update(reservation);
 
         this.sendReservationMail(reservation);
@@ -400,7 +408,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     }
 
     @Override
-    public BoatReservation saveDiscount(BoatReservation boatReservation) {
+    public BoatReservation saveDiscount(BoatReservation boatReservation) throws Exception{
         BoatReservation br = new BoatReservation();
 
         br.setDiscountAvailableFrom(boatReservation.getDiscountAvailableFrom());
@@ -414,11 +422,11 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setAdditionalServices(boatReservation.getAdditionalServices());
         br.setBoatOwner(boatReservation.getBoatOwner());
         br.setBoat(boatReservation.getBoat());
+//        Double price = this.CalculateDiscountPrice(br);
+//        br.setPrice(price);
         br.setDiscount(true);
         br.setDeleted(false);
         br.setReserved(false);
-//        br.setClient(boatReservation.getClient());
-        br.CalculatePrice();
         this.reservationRepository.save(br);
 
         return br;
@@ -527,14 +535,40 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setBoatOwner(boat.getBoatOwner());
         reservation.setClient(client);
         reservation.setPrice(boat.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.save(reservation);
 
         return reservation;
     }
 
+    @Override
+    public Double CalculatePrice(BoatReservation reservation) throws ParseException {
+        Double sum = reservation.getPrice();
+        if (reservation.getDiscount() && reservation.getDiscountPrice() != 0.0) {
+            sum = reservation.getDiscountPrice();
+        }
+
+        for (AdditionalService s : reservation.getAdditionalServices()) {
+            sum += s.getPrice();
+        }
+        return sum * reservation.getDuration();
+    }
+
+//    @Override
+//    public Double CalculateDiscountPrice(BoatReservation reservation) {
+//        Double sum = reservation.getDiscountPrice();
+//
+//        for (AdditionalService s : reservation.getAdditionalServices()) {
+//            sum += s.getPrice();
+//        }
+//        return sum;
+//    }
 }
 
 

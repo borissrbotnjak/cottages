@@ -39,9 +39,9 @@ public class CottageServiceImpl implements CottageService {
         c.setResidence(cottage.getResidence());
         c.setCity(cottage.getCity());
         c.setState(cottage.getState());
-        c.setNumPersons(cottage.getNumPersons());
         c.setNumberOfRooms(cottage.getNumberOfRooms());
         c.setNumberOfBeds(cottage.getNumberOfBeds());
+        c.setNumPersons(cottage.getNumberOfRooms()*cottage.getNumberOfBeds());
         c.setRules(cottage.getRules());
         c.setPromotionalDescription(cottage.getPromotionalDescription());
         c.setPrice(cottage.getPrice());
@@ -110,9 +110,9 @@ public class CottageServiceImpl implements CottageService {
         forUpdate.setResidence(cottage.getResidence());
         forUpdate.setCity(cottage.getCity());
         forUpdate.setState(cottage.getState());
-        forUpdate.setNumPersons(cottage.getNumPersons());
         forUpdate.setNumberOfRooms(cottage.getNumberOfRooms());
         forUpdate.setNumberOfBeds(cottage.getNumberOfBeds());
+        forUpdate.setNumPersons(cottage.getNumberOfRooms()*cottage.getNumberOfBeds());
         forUpdate.setRules(cottage.getRules());
         forUpdate.setPromotionalDescription(cottage.getPromotionalDescription());
         forUpdate.setPrice(cottage.getPrice());
@@ -302,23 +302,20 @@ public class CottageServiceImpl implements CottageService {
         Set<Cottage> available = new HashSet<>();
         Set<Cottage> unavailable = new HashSet<>();
 
-
         List<CottageReservation> reservations = this.reservationService.getAllMyAvailable(startDate, endDate, numOfPersons, id);
         for (CottageReservation res : reservations) {
-            if(isByCottageOwner(id, res.getCottage()) && !startDate.isBefore(LocalDate.now())
-                    && !endDate.isBefore(startDate)) {
+            if (isByCottageOwner(id, res.getCottage()) && myCottageAvailable(startDate, endDate, res.getCottage(), id)) {
                 available.add(res.getCottage());
             }
+        }
 
-            List<CottageReservation> un = this.reservationService.getAllMyUnavailable(startDate, endDate, id);
-            for (CottageReservation r : un) {
-                if (isByCottageOwner(id, r.getCottage()) && !startDate.isBefore(LocalDate.now())
-                && !endDate.isBefore(startDate)) {
-//                    Cottage c = r.getCottage();
-                    unavailable.add(r.getCottage());
+        List<CottageReservation> un = this.reservationService.getAllMyUnavailable(startDate, endDate, id);
+        for (CottageReservation r : un) {
+            if (isByCottageOwner(id, r.getCottage())) {
+//              Cottage c = r.getCottage();
+                unavailable.add(r.getCottage());
                 }
             }
-        }
 
         // ako ne postoji rezervacija i dobar je kapacitet, dodaj
         List<Cottage> all = this.cottageRepository.findByCottageOwner(id);
@@ -331,8 +328,7 @@ public class CottageServiceImpl implements CottageService {
         for (Cottage c : woReservation) {
 //            boolean u = unavailable.contains(c);
             if (c.getNumPersons() >= numOfPersons && !unavailable.contains(c)
-                    && this.myCottageAvailable(startDate, endDate, c, id) && !startDate.isBefore(LocalDate.now())
-                    && !endDate.isBefore(startDate)) {
+                    && this.myCottageAvailable(startDate, endDate, c, id)) {
                 available.add(c);
             }
         }

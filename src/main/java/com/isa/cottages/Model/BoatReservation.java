@@ -37,7 +37,7 @@ public class BoatReservation extends Reservation{
         this.setClient(client);
 
         this.setPrice(boat.getPrice());
-        this.CalculatePrice();
+//        this.CalculatePrice();
     }
 
     public  BoatReservation(String startDate, String endDate, int numPersons, Boat boat, Client client) {

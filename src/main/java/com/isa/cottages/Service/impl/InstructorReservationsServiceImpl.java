@@ -136,7 +136,7 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
         reservation.setFishingInstructorAdventure(instructor);
         reservation.setClient(client);
         reservation.setPrice(instructor.getPrice());
-        reservation.CalculatePrice();
+//        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
         this.save(reservation);
@@ -167,7 +167,7 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setFishingInstructorAdventure(reservation.getFishingInstructorAdventure());
-        reservation.CalculatePrice();
+//        reservation.CalculatePrice();
         this.update(reservation);
 
         this.sendReservationMail(reservation);

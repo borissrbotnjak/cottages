@@ -2,6 +2,7 @@ package com.isa.cottages.Service;
 
 import com.isa.cottages.Model.*;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,7 @@ public interface CottageReservationService {
     List<CottageReservation> getPastReservations() throws Exception;
     List<CottageReservation> getAllUpcoming();
 
-    CottageReservation saveDiscount(CottageReservation cottageReservation);
+    CottageReservation saveDiscount(CottageReservation cottageReservation) throws Exception;
     CottageReservation save(CottageReservation cottageReservation);
     CottageReservation makeReservation(CottageReservation reservation, Cottage cottage) throws Exception;
 
@@ -59,4 +60,7 @@ public interface CottageReservationService {
     void setDate(CottageReservation reservation);
 
     CottageReservation makeReservationWithClient(CottageReservation reservation, Cottage cottage, Long clid) throws Exception;
+
+    Double CalculatePrice(CottageReservation reservation) throws ParseException;
+    Double CalculateDiscountPrice(CottageReservation reservation);
 }
