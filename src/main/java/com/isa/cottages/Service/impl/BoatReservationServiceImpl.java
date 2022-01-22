@@ -238,7 +238,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         return reservation;
     }
 
-    @Override
+/*    @Override
     public BoatReservation makeReservationOnDiscount(Long reservationId) throws Exception {
         Client client = (Client) this.userService.getUserFromPrincipal();
         BoatReservation reservation = this.getOne(reservationId);
@@ -246,11 +246,27 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setBoatOwner(reservation.getBoatOwner());
-        reservation.calculateDuration(reservation.getStartDate(),
-                reservation.getEndDate());
-        // Double price = this.CalculatePrice(reservation);
-        // reservation.setPrice(price);
+        reservation.calculateDuration(reservation.getStartDate(), reservation.getEndDate());
+        //Double price = this.CalculatePrice(reservation);
+        reservation.setPrice();
         // TODO: add updateDiscount method instead
+        this.update(reservation);
+
+        this.sendReservationMail(reservation);
+
+        return reservation;
+    }*/
+
+    @Override
+    public BoatReservation makeReservationOnDiscount(Long reservationId) throws Exception {
+        Client client = (Client) this.userService.getUserFromPrincipal();
+        BoatReservation reservation = this.getOne(reservationId);
+
+        reservation.setClient(client);
+        reservation.setReserved(true);
+        reservation.setBoatOwner(reservation.getBoat().getBoatOwner());
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.update(reservation);
 
         this.sendReservationMail(reservation);

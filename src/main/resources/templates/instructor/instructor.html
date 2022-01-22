@@ -131,8 +131,9 @@
                 <p th:text="${instructor.averageRating}"></p>
               </div>
             </div>
-            </br></br></br>
+            </br></br></br><!--
             <a th:href="@{'/adventures/__${instructor.id}__/timeSlots'}">Reservation time slots</a>
+            -->
             </br></br>
             <a sec:authorize="hasRole('CLIENT')" th:href="@{'/instructorReservations/onDiscount/__${instructor.id}__'}">View special offers</a>
             </br></br>
