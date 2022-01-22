@@ -239,10 +239,9 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setClient(client);
         reservation.setReserved(true);
         reservation.setCottageOwner(reservation.getCottage().getCottageOwner());
-        reservation.calculateDuration(reservation.getStartDate(),
-                reservation.getEndDate());
-        // Double price = this.CalculatePrice(reservation);
-        // reservation.setPrice(price);
+        //reservation.calculateDuration(reservation.getStartDate(), reservation.getEndDate());
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.update(reservation);
 
         this.sendReservationMail(reservation);
@@ -548,6 +547,7 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         }
         return sum * reservation.getDuration();
     }
+
 /*
     public Integer getDuration(CottageReservation reservation) throws ParseException {
         SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy");
