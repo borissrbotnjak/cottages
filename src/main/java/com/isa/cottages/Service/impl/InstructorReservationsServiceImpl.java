@@ -21,15 +21,17 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
     private UserServiceImpl userService;
     private InstructorReservationRepository reservationRepository;
     private EmailService emailService;
+    private LoyaltyProgramServiceImpl loyaltyService;
 
     @Autowired
     public InstructorReservationsServiceImpl(ClientServiceImpl clientService, UserServiceImpl userService,
                                              InstructorReservationRepository instructorReservationRepository,
-                                             EmailService emailService) {
+                                             EmailService emailService, LoyaltyProgramServiceImpl loyaltyService) {
         this.clientService = clientService;
         this.userService = userService;
         this.reservationRepository = instructorReservationRepository;
         this.emailService = emailService;
+        this.loyaltyService = loyaltyService;
     }
 
     @Override
@@ -134,7 +136,13 @@ public class InstructorReservationsServiceImpl implements InstructorReservations
 
         reservation.setFishingInstructorAdventure(instructor);
         reservation.setClient(client);
-        reservation.setPrice(instructor.getPrice());
+
+        double discount = this.loyaltyService.calculateClientDiscount(client);
+        if (discount > 0) { reservation.setPrice(instructor.getPrice() * (1.0-discount)); }
+        else { reservation.setPrice(instructor.getPrice()); }
+
+        this.loyaltyService.updateAfterReservation(client.getLoyaltyProgram());
+
         reservation.setReserved(true);
         this.setDate(reservation);
         reservation.calculateDuration(reservation.getStartDate(),

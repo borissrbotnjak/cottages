@@ -4,7 +4,7 @@ INSERT INTO loyalty_program(reservation_points, discount_gold, discount_regular,
 VALUES(0,0,0,0,1,5,3,1);
 INSERT INTO loyalty_program(reservation_points, discount_gold, discount_regular, discount_silver, gold_points, regular_points,
                             silver_points, penalties)
-VALUES(2,0,0,0,1,5,3,0);
+VALUES(2,0,0,0,1,6,3,0);
 INSERT INTO loyalty_program(reservation_points, discount_gold, discount_regular, discount_silver, gold_points, regular_points,
                             silver_points, penalties)
 VALUES(2,0,0,0,1,5,3,0);
@@ -340,7 +340,7 @@ INSERT INTO INSTRUCTOR_SUBSCRIBERS(client_id, instructor_id) VALUES(5, 3);
 
 /* IMAGES */
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(1, 'https://i.pinimg.com/564x/c7/95/9f/c7959f829431e3616dcfa2ec9c48e110.jpg');
-INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(2, 'http://inverlochmarine.com.au/sites/default/files/styles/large/public/2_5.jpg?itok=Zo3bRpNi');
+INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(2, 'https://inverlochmarine.com.au/sites/default/files/styles/large/public/2_5.jpg?itok=Zo3bRpNi');
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(3, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg');
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(4, 'https://i.pinimg.com/564x/e1/5b/4a/e15b4ad8938cf85f98b45e0b83dd701b.jpg');
 INSERT INTO BOAT_IMAGE_URL(boat_id, image_url) VALUES(5, 'https://i.pinimg.com/564x/b4/27/94/b42794f63240d0f7aa3454ef85eb168c.jpg');

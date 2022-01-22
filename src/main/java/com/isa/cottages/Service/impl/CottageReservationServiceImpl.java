@@ -27,7 +27,13 @@ public class CottageReservationServiceImpl implements CottageReservationService 
     private UserServiceImpl userService;
 
     @Autowired
+    private ClientServiceImpl clientService;
+
+    @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private LoyaltyProgramServiceImpl loyaltyService;
 
     @Override
     public CottageReservation findOne(Long id) {
@@ -141,7 +147,14 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         reservation.setCottage(cottage);
         reservation.setCottageOwner(cottage.getCottageOwner());
         reservation.setClient(client);
-        reservation.setPrice(cottage.getPrice());
+
+        double discount = this.loyaltyService.calculateClientDiscount(client);
+        if (discount > 0) { reservation.setPrice(cottage.getPrice() * (1.0-discount)); }
+        else { reservation.setPrice(cottage.getPrice()); }
+
+        this.loyaltyService.updateAfterReservation(client.getLoyaltyProgram());
+
+
         reservation.setReserved(true);
         this.setDate(reservation);
         reservation.calculateDuration(reservation.getStartDate(),
@@ -327,7 +340,8 @@ public class CottageReservationServiceImpl implements CottageReservationService 
         cr.setDeleted(false);
         cr.setReserved(false);
 //        cr.setClient(cottageReservation.getClient());
-        cr.CalculatePrice();
+//        cr.CalculatePrice();
+        cr.setPrice(cottageReservation.getCottage().getPrice());
         this.reservationRepository.save(cr);
 
         return cr;

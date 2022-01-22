@@ -5,6 +5,7 @@ import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.BoatRepository;
 import com.isa.cottages.Repository.BoatReservationRepository;
 import com.isa.cottages.Service.BoatReservationService;
+import com.isa.cottages.Service.LoyaltyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +25,17 @@ public class BoatReservationServiceImpl implements BoatReservationService {
     private BoatReservationRepository reservationRepository;
     private BoatRepository boatRepository;
     private EmailService emailService;
+    private LoyaltyProgramServiceImpl loyaltyService;
 
     @Autowired
     public BoatReservationServiceImpl(UserServiceImpl userService,
                                       BoatReservationRepository reservationRepository, BoatRepository boatRepository,
-                                      EmailService emailService) {
+                                      EmailService emailService, LoyaltyProgramServiceImpl loyaltyService) {
         this.userService = userService;
         this.reservationRepository = reservationRepository;
         this.boatRepository = boatRepository;
         this.emailService = emailService;
+        this.loyaltyService = loyaltyService;
     }
 
     @Override
@@ -213,7 +216,13 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         reservation.setBoat(boat);
         reservation.setBoatOwner(boat.getBoatOwner());
         reservation.setClient(client);
-        reservation.setPrice(boat.getPrice());
+
+        double discount = this.loyaltyService.calculateClientDiscount(client);
+        if (discount > 0) { reservation.setPrice(boat.getPrice() * (1.0-discount)); }
+        else { reservation.setPrice(boat.getPrice()); }
+
+        this.loyaltyService.updateAfterReservation(client.getLoyaltyProgram());
+
         reservation.setReserved(true);
         this.setDate(reservation);
         reservation.calculateDuration(reservation.getStartDate(),
@@ -241,6 +250,7 @@ public class BoatReservationServiceImpl implements BoatReservationService {
                 reservation.getEndDate());
         // Double price = this.CalculatePrice(reservation);
         // reservation.setPrice(price);
+        // TODO: add updateDiscount method instead
         this.update(reservation);
 
         this.sendReservationMail(reservation);
@@ -428,7 +438,8 @@ public class BoatReservationServiceImpl implements BoatReservationService {
         br.setDeleted(false);
         br.setReserved(false);
 //        br.setClient(boatReservation.getClient());
-        br.CalculatePrice();
+        // br.CalculatePrice();
+        br.setPrice(boatReservation.getBoat().getPrice());
         this.reservationRepository.save(br);
 
         return br;

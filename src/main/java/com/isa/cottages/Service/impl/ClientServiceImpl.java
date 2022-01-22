@@ -98,6 +98,7 @@ public class ClientServiceImpl implements ClientService {
         forUpdate.setEnabled(client.getEnabled());
 
         this.clientRepository.save(forUpdate);
+        this.loyaltyService.update(forUpdate.getLoyaltyProgram());
         return forUpdate;
     }
 

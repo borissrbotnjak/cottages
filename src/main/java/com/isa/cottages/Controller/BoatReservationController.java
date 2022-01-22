@@ -928,7 +928,7 @@ public class BoatReservationController {
 
         Boat boat = this.boatService.findById(boatId);
 
-        reservation.CalculatePrice();
+        // reservation.CalculatePrice();
         BoatReservation res = this.reservationService.makeReservationWithClient(reservation, boat, clid);
         Client client = (Client) userService.findById(clid);
         model.addAttribute("client", client);
