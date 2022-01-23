@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  -->
+    <link rel="stylesheet" href="../../static/css/profileCSS.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
 
     <title>Make reservation with client</title>
 </head>
 <body>
+
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Pecanje Ivanovic</a>
@@ -63,28 +62,44 @@
         </div>
     </nav>
 </div>
-<div class="container">
-    <h3>Available clients:</h3>
-    </br>
-    </br></br></br>
-    <table width="90%">
-        <tr>
-            <th>Client name:</th>
-            <th>Client id:</th>
-            <th>Client email:</th>
-        </tr>
-        <tr th:each="client:${clients}">
-            <td th:text="${client?.getFullName()}"></td>
-            <td th:text="${client?.id}"></td>
-            <td th:text="${client?.email}"></td>
-            <td>
-                <form th:action="@{'/adventureReservations/__${principal.id}__/__${client?.id}__/selectClient'}">
-                    <button type="submit" class="btn btn">Select</button>
-                </form>
-            </td>
-        </tr>
-    </table>
 
+<div class="container mySpace">
+    <div class="center-align blue lighten-5">
+        <h1>Choose reservation parameters</h1> </br></br>
+        <form th:action="@{'/adventureReservations/__${principal.id}__/reserve/__${adventure_id}__/__${client.id}__'}" method="post" th:object="${reservation}">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div>
+                            <div>
+                                <input type="text" name="endDateString" th:value="${endDateString}" hidden/>
+                                <input type="text" name="startDateString" th:value="${startDateString}" hidden/>
+                                <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                                <input type="text" name="services" th:value="${services}" hidden/>
+                                <div class="form-group">
+                                    <label for="services">Services</br></label>
+                                    <div class="input-group" id="services" data-target-input="nearest">
+                                        <label for="services">
+                                            <select class="form-control" multiple="multiple" name="additionalServices">
+                                                <option th:each="service : ${services}"
+                                                        th:value="${service.id}"
+                                                        th:text="${service.name} + ' ' + ${service.price}">Additional services:
+                                                </option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                <input type="text" name="selectedServices" th:value="${services}" hidden/>
+                                </br>
+                                <p th:if="${sLength == 0}">There are no additional services</p>
+                                </br></br>
+                                <input class="btn grey lighten-4 black-text" type="submit" value="Proceed">
+                            </div>
+                        </div>
+                    </div>
+                </div></div>
+        </form>
+    </div>
 </div>
 
 <!-- Optional JavaScript -->

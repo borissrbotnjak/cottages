@@ -1,9 +1,6 @@
 package com.isa.cottages.Service.impl;
 
-import com.isa.cottages.Model.BoatOwner;
-import com.isa.cottages.Model.CottageOwner;
-import com.isa.cottages.Model.Instructor;
-import com.isa.cottages.Model.Report;
+import com.isa.cottages.Model.*;
 import com.isa.cottages.Repository.ReportRepository;
 import com.isa.cottages.Service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +13,39 @@ public class ReportServiceImpl implements ReportService {
 
     private ReportRepository reportRepository;
     private UserServiceImpl userService;
+    private ClientServiceImpl clientService;
 
     @Autowired
-    public ReportServiceImpl(ReportRepository reportRepository, UserServiceImpl userService) {
+    public ReportServiceImpl(ReportRepository reportRepository, UserServiceImpl userService, ClientServiceImpl clientService) {
         this.reportRepository = reportRepository;
         this.userService = userService;
+        this.clientService = clientService;
     }
 
     @Override
     public Report findById(Long id) throws Exception {
 
-        this.reportRepository.getById(id);
-        return this.reportRepository.getById(id);
+        return this.reportRepository.findById(id).get();
+    }
+
+    @Override
+    public Report givePenalty(Long rid)  throws Exception
+    {
+        Report report = this.findById(rid);
+        Client client = (Client) this.userService.findById(report.getClient().getId());
+        if (client.getPenalties() == null)
+            client.setPenalties(0);
+        client.setPenalties(report.getClient().getPenalties() + 1);
+        report.setApproved(Boolean.TRUE);
+        report= this.update(report);
+        this.clientService.updateProfile(client);
+
+        return report;
+    }
+
+    public List<Report> findNotApprovedReports()throws Exception
+    {
+        return this.reportRepository.findReportByApprovedIsFalse();
     }
 
     @Override
@@ -48,7 +66,21 @@ public class ReportServiceImpl implements ReportService {
     public List<Report> findInstructorsReports(Long id) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
 
-        return this.reportRepository.finndInstructorsReports(id);
+        return this.reportRepository.findInstructorsReports(id);
+    }
+    @Override
+    public Report update(Report report) throws Exception {
+        Report r = findById(report.getId());
+        r.setText(report.getText());
+        r.setPenal(report.getPenal());
+        r.setDidAppear(report.getDidAppear());
+        r.setBoatOwner(report.getBoatOwner());
+        r.setAdmin(report.getAdmin());
+        r.setClient(report.getClient());
+        r.getClient().setPenalties(report.getClient().getPenalties());
+        r.setApproved(report.getApproved());
+        this.reportRepository.save(r);
+        return r;
     }
 
     @Override
@@ -60,7 +92,10 @@ public class ReportServiceImpl implements ReportService {
         r.setBoatOwner(report.getBoatOwner());
         r.setAdmin(report.getAdmin());
         r.setClient(report.getClient());
-        r.getClient().setPenalties(report.getClient().getPenalties());
+        if(report.getClient().getPenalties()==null)
+            r.getClient().setPenalties(0);
+        else
+            r.getClient().setPenalties(report.getClient().getPenalties());
         r.setApproved(report.getApproved());
 
         return this.reportRepository.save(r);

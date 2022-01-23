@@ -22,7 +22,11 @@ public interface UserService {
 
     User saveBoatOwner(UserRequest userRequest);
 
+    void deleteByEmail(String email);
+
     User saveClient(UserRequest userRequest);
+
+    User setEnabled(String mail);
 
     User saveSystemAdmin(SystemAdministrator systemAdministrator);
 
@@ -31,6 +35,8 @@ public interface UserService {
     String confirmToken(String token);
 
     User getUserFromPrincipal() throws Exception;
+
+    User findByEmailAndPassword(String email, String password);
 }
 
 

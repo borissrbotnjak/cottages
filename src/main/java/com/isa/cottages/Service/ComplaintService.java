@@ -10,4 +10,6 @@ public interface ComplaintService {
 
     Complaint save(Complaint complaint);
     Complaint update(Complaint complaint);
+
+    List<Complaint> findNotAnswered() throws Exception;
 }

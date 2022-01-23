@@ -6,10 +6,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@DiscriminatorValue("report")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Report implements Serializable {
 
     @Id

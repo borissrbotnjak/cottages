@@ -17,12 +17,15 @@ public class SystemAdministrator extends User{
     private Set<LoyaltyProgram> loyaltyPrograms = new HashSet<>();
 
     @Column
-    private Boolean isFirstLogin = false;
+    private Boolean isFirstLogin;
 
     @OneToMany(mappedBy = "admin", targetEntity = Report.class)
     private Set<Report> reports = new HashSet<>();
 
     @OneToMany(mappedBy = "admin", targetEntity = Reservation.class)
     private Set<Reservation> Reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "admin", targetEntity = Reservation.class)
+    private Set<Complaint> complaints = new HashSet<>();
 
 }

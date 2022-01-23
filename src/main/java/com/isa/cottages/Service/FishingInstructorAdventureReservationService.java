@@ -12,6 +12,10 @@ public interface FishingInstructorAdventureReservationService {
 
     List<AdventureReservation> getInstructorsUpcomingReservations(Long id) throws Exception;
 
+    List<AdventureReservation> getAllMyAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity, Long id) throws Exception;
+
+    List<AdventureReservation> getAllMyUnavailable(LocalDate desiredStart, LocalDate desiredEnd, Long id) throws Exception;
+
     void sendReservationMail(AdventureReservation reservation);
 
     List<AdventureReservation> findByOrderByStartTimeAsc() throws Exception;

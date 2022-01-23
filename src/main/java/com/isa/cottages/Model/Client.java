@@ -44,4 +44,7 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "client", targetEntity = Report.class)
     private Set<Report> reports = new HashSet<>();
+
+    @OneToMany(mappedBy = "client", targetEntity = Report.class)
+    private Set<Complaint> complaint = new HashSet<>();
 }

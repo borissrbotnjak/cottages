@@ -18,5 +18,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findCottageOwnersReports(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM report r WHERE r.instructor_id = ?1", nativeQuery = true)
-    List<Report> finndInstructorsReports(@Param("id") Long id);
+    List<Report> findInstructorsReports(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM report r WHERE r.approved = FALSE", nativeQuery = true)
+    List<Report> findReportByApprovedIsFalse();
 }

@@ -41,7 +41,32 @@ public class FishingInstructorAdventureReservationServiceImpl implements Fishing
                 upcoming.add(res);
         return upcoming;
     }
+    @Override
+    public List<AdventureReservation> getAllMyAvailable(LocalDate desiredStart, LocalDate desiredEnd, int capacity, Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        List<AdventureReservation> all = this.reservationRepository.findAllMyAvailable(desiredStart, desiredEnd, capacity, id);
+        List<AdventureReservation> filtered = new ArrayList<>();
 
+        for (AdventureReservation res : all) {
+            if (Objects.equals(res.getInstructor().getId(), instructor.getId())) {
+                filtered.add(res);
+            }
+        }
+        return filtered;
+    }
+    @Override
+    public List<AdventureReservation> getAllMyUnavailable(LocalDate desiredStart, LocalDate desiredEnd, Long id) throws Exception {
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        List<AdventureReservation> all = this.reservationRepository.findAllMyUnavailable(desiredStart, desiredEnd, id);
+        List<AdventureReservation> filtered = new ArrayList<>();
+
+        for (AdventureReservation res:all) {
+            if(Objects.equals(res.getInstructor().getId(), instructor.getId())) {
+                filtered.add(res);
+            }
+        }
+        return filtered;
+    }
     @Override
     public void sendReservationMail(AdventureReservation reservation) {
         String to = reservation.getClient().getEmail();

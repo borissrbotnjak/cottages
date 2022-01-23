@@ -66,20 +66,20 @@
 <div class="container">
     <div class="center-align">
         <h1>Write report</h1>
-        <form th:action="@{/adventutreReservations/writeReport/__${iid}__/__${id}__/__${aid}__/submit}" th:object="${report}" method="post">
+        <form th:action="@{/adventureReservations/writeReport/__${iid}__/__${clid}__/__${aid}__/submit}"  method="post">
             <br><label for="text">Comment</label>
-            <input id="text" type="text" th:field="*{text}"/>
+            <input id="text" type="text" th:field="*{report.text}"/>
 
             <div class="for-group">
                 <br><label>Give sanction (penal)?</label>
-                </br><input type="radio" value="1" name="penal" th:field="*{penal}"/>Yes
-                </br><input type="radio" value="0" name="penal" th:field="*{penal}" checked/>No
+                </br><input type="radio" value="1" name="penal" th:field="*{report.penal}"/>Yes
+                </br><input type="radio" value="0" name="penal" th:field="*{report.penal}" checked/>No
             </div>
 
             <div class="for-group">
                 <br><label>Did appear?</label>
-                </br><input type="radio" value="1" name="didAppear" th:field="*{didAppear}"/> Yes
-                </br><input type="radio" value="0" name="didAppear" th:field="*{didAppear}"/> No
+                </br><input type="radio" value="1" name="didAppear" th:field="*{report.didAppear}"/> Yes
+                </br><input type="radio" value="0" name="didAppear" th:field="*{report.didAppear}"/> No
             </div>
 
             </br></br>

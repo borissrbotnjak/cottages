@@ -28,9 +28,11 @@ public interface FishingInstructorAdventureService {
 
     Boolean adventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, int numPersons);
 
-    Boolean myAdventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, int numPersons, Long id) throws Exception;
+    Boolean myAdventureAvailable(LocalDate startDate, LocalDate endDate, FishingInstructorAdventure adventure, Long id) throws Exception;
 
     Set<FishingInstructorAdventure> findAllMyAvailable(LocalDate startDate, LocalDate endDate, int numOfPersons, Long id) throws Exception;
+
+    Boolean isByInstructor(Long id, FishingInstructorAdventure adventure) throws Exception;
 
     List<FishingInstructorAdventure> findAllMyAvailableSorted(Long oid, LocalDate startDate, LocalDate endDate, int numOfPersons,
                                                               Boolean asc, Boolean price, Boolean rating) throws Exception;

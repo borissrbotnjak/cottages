@@ -3,7 +3,6 @@ package com.isa.cottages.Controller;
 import com.isa.cottages.Exception.ResourceConflictException;
 import com.isa.cottages.Model.*;
 import com.isa.cottages.Service.impl.BoatOwnerServiceImpl;
-import com.isa.cottages.Service.impl.FishingInstructorAdventureServiceImpl;
 import com.isa.cottages.Service.impl.InstructorServiceImpl;
 import com.isa.cottages.Service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('SYS_ADMIN', 'COTTAGE_OWNER', 'BOAT_OWNER', 'CLIENT', 'INSTRUCTOR')")
     public ModelAndView indexPage(Authentication auth) throws Exception {
         User u = this.userService.findByEmail(auth.getName());
-        if (u.getEnabled() == false) {
+        if (!u.getEnabled()) {
             throw new Exception("Your account is not activated, please check your email.");
         }
         // TODO: add separate page redirection for each user role
@@ -60,8 +59,10 @@ public class UserController {
 
     @GetMapping("sys-admin/home")
     @PreAuthorize("hasRole('SYS_ADMIN')")
-    public ModelAndView sysAdminHome(Model model) {
-        return new ModelAndView("sys-admin-home");
+    public ModelAndView sysAdminHome(Model model, Authentication auth) {
+        SystemAdministrator systemAdministrator = (SystemAdministrator) this.userService.findByEmail(auth.getName());
+        model.addAttribute("principal", systemAdministrator);
+        return new ModelAndView("sysadmin/home");
     }
 
     @GetMapping("/boat-owner/home")

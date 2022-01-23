@@ -2,6 +2,7 @@ package com.isa.cottages.Controller;
 
 import com.isa.cottages.Model.Instructor;
 import com.isa.cottages.Service.impl.InstructorServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class InstructorController {
 
     private InstructorServiceImpl instructorService;
+
+    @Autowired
+    public InstructorController(InstructorServiceImpl instructorService)
+
+    {
+        this.instructorService=instructorService;
+    }
 
 
     @PreAuthorize("hasRole('INSTRUCTOR')")

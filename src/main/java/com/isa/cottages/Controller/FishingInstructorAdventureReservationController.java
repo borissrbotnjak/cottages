@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -50,7 +49,6 @@ public class FishingInstructorAdventureReservationController {
     }
     //</editor-fold>
 
-
     //<editor-fold desc="Get reservation history">
     @GetMapping("/pastInstructorsReservations/{id}")
     @PreAuthorize("hasRole('INSTRUCTOR')")
@@ -65,7 +63,6 @@ public class FishingInstructorAdventureReservationController {
         return new ModelAndView("instructor/pastReservations");
     }
     //</editor-fold>
-
 
     //<editor-fold desc="Get all discounts and get/post define discount">
     @GetMapping("/allDiscounts/{id}")
@@ -201,17 +198,16 @@ public class FishingInstructorAdventureReservationController {
 
     //<editor-fold desc="Get/post write report">
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @GetMapping("/writeReport/{iid}/{id}/{aid}")
-    public ModelAndView reportForm(Model model, @PathVariable Long id,
-                                   @PathVariable Long aid, @PathVariable Long iid) throws Exception {
+    @GetMapping("/writeReport/{iid}/{clid}/{aid}")
+    public ModelAndView reportForm(Model model, @PathVariable Long iid,
+                                   @PathVariable Long clid, @PathVariable Long aid) throws Exception {
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         model.addAttribute("principal", instructor);
         model.addAttribute("advetntureReservations", this.reservationService.getInstructorsPastReservations(iid));
         Report report = new Report();
+
         model.addAttribute("report", report);
-        report.setClient((Client) this.userService.findById(id));
-        report.setAdmin((SystemAdministrator) this.userService.findById(aid));
-        model.addAttribute("id", id);
+        model.addAttribute("clid", clid);
         model.addAttribute("aid", aid);
         model.addAttribute("iid", iid);
 
@@ -219,42 +215,33 @@ public class FishingInstructorAdventureReservationController {
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @PostMapping("/writeReport/{iid}/{id}/{aid}/submit")
-    public ModelAndView reportFormSubmit(Model model, @ModelAttribute Report report,
-                                         @PathVariable Long id, @PathVariable Long aid,
-                                         @PathVariable Long iid,
-                                         Client client) throws Exception {
+    @PostMapping("/writeReport/{iid}/{clid}/{aid}/submit")
+    public ModelAndView reportFormSubmit(Model model,
+                                         @PathVariable Long iid, @PathVariable Long clid,
+                                         @PathVariable Long aid, @ModelAttribute Report report) throws Exception {
+
         Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
+        report.setClient((Client) this.userService.findById(clid));
+        report.setAdmin((SystemAdministrator) this.userService.findById(aid));
+        report.setInstructor(instructor);
+        report= this.reportService.save(report);
         model.addAttribute("principal", instructor);
         model.addAttribute("adventureReservations", this.reservationService.getInstructorsPastReservations(iid));
-
-        model.addAttribute("report", report);
-        List<Report> reports = reportService.findInstructorsReports(instructor.getId());
-        model.addAttribute("reports", reports);
-        SystemAdministrator admin = (SystemAdministrator) this.userService.findById(aid);
-        model.addAttribute("id", id);
+        model.addAttribute("clid", clid);
         model.addAttribute("aid", aid);
         model.addAttribute("iid", iid);
-
-        report.setInstructor(instructor);
-        report.setClient((Client) this.userService.findById(id));
-        report.setAdmin(admin);
-        int penalties = 0;
-        report.getClient().setPenalties(penalties);
+        model.addAttribute("report", report);
 
         if(report.getPenal() == Boolean.TRUE) {
-            admin.getReports().add(report);
-            report.setApproved(true);
-            penalties += 1;
-            report.getClient().setPenalties(penalties);
+            report.setApproved(Boolean.FALSE);
+            this.reportService.update(report);
         }
         if (report.getDidAppear() == Boolean.FALSE) {
-            client.getPenalties(); //?????
-            penalties += 1;
-            report.getClient().setPenalties(penalties);
+            report.getClient().setPenalties(report.getClient().getPenalties() + 1);
+            this.reportService.update(report);
         }
 
-        reportService.save(report);
+        reportService.update(report);
         return new ModelAndView("redirect:/adventureReservations/pastInstructorsReservations/{iid}");
     }
     //</editor-fold>
@@ -292,6 +279,7 @@ public class FishingInstructorAdventureReservationController {
         model.addAttribute("startDate", sd);
         model.addAttribute("endDate", ed);
         model.addAttribute("numPersons", numPersons);
+        model.addAttribute("instructor", this.userService.findById(iid));
 
         model.addAttribute("adventures", this.adventureService.findAllMyAvailable(sd, ed, numPersons, iid));
 
@@ -307,6 +295,9 @@ public class FishingInstructorAdventureReservationController {
         model.addAttribute("principal", userService.getUserFromPrincipal());
         Client client = (Client) userService.findById(clid);
         model.addAttribute("clid", clid);
+        model.addAttribute("iid", iid);
+        model.addAttribute("client", userService.findById(clid));
+        model.addAttribute("instructor", userService.findById(iid));
         model.addAttribute("client",client);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -322,61 +313,66 @@ public class FishingInstructorAdventureReservationController {
         return new ModelAndView("instructor/makeReservation/showAvailableAdventures");
     }
 
-    @GetMapping("/{oid}/{clid}/showAvailableAdventures/byPriceDesc")
-    @PreAuthorize("hasRole('CLIENT')")
-    public ModelAndView showAvailableSortedByPriceDesc(Model model, @PathVariable Long oid,
-                                                       @PathVariable Long clid,
-                                                       @RequestParam("startDate") String startDate,
-                                                       @RequestParam("endDate") String endDate,
-                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
-        model.addAttribute("principal", userService.getUserFromPrincipal());
-        Client client = (Client) userService.findById(clid);
-        model.addAttribute("clid", clid);
-        model.addAttribute("client",client);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate sd = LocalDate.parse(startDate, formatter);
-        LocalDate ed = LocalDate.parse(endDate, formatter);
-
-        model.addAttribute("startDate", sd);
-        model.addAttribute("endDate", ed);
-        model.addAttribute("numPersons", numPersons);
-
-        model.addAttribute("adventures", this.adventureService.findAllMyAvailableSorted(oid, sd, ed, numPersons, false, true, false));
-        model.addAttribute("principal", this.userService.getUserFromPrincipal());
-
-        return new ModelAndView("instructor/makeReservation/showAvailableAdventures");
-    }
-
-    @GetMapping("/{oid}/{clid}/showAvailableAdventures/byRatingAsc")
-    @PreAuthorize("hasRole('CLIENT')")
-    public ModelAndView showAvailableSortedByRatingAsc(Model model, @PathVariable long oid,
-                                                       @PathVariable Long clid,
-                                                       @RequestParam("startDate") String startDate,
-                                                       @RequestParam("endDate") String endDate,
-                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
-        model.addAttribute("principal", userService.getUserFromPrincipal());
-        Client client = (Client) userService.findById(clid);
-        model.addAttribute("clid", clid);
-        model.addAttribute("client",client);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate sd = LocalDate.parse(startDate, formatter);
-        LocalDate ed = LocalDate.parse(endDate, formatter);
-
-        model.addAttribute("startDate", sd);
-        model.addAttribute("endDate", ed);
-        model.addAttribute("numPersons", numPersons);
-
-        model.addAttribute("adventures", this.adventureService.findAllMyAvailableSorted(oid, sd, ed, numPersons, true, false, true));
-        model.addAttribute("principal", this.userService.getUserFromPrincipal());
-
-        return new ModelAndView("instructor/makeReservation/showAvailableAdventures");
-    }
-
-    @GetMapping("/{oid}/{clid}/showAvailableAdventures/byRatingDesc")
+    @GetMapping("/{iid}/{clid}/showAvailableAdventures/byPriceDesc")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ModelAndView showAvailableSortedByRatingDesc(Model model, @PathVariable Long oid,
+    public ModelAndView showAvailableSortedByPriceDesc(Model model, @PathVariable Long iid,
+                                                       @PathVariable Long clid,
+                                                       @RequestParam("startDate") String startDate,
+                                                       @RequestParam("endDate") String endDate,
+                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
+        model.addAttribute("principal", userService.getUserFromPrincipal());
+        Client client = (Client) userService.findById(clid);
+        model.addAttribute("clid", clid);
+        model.addAttribute("client",client);
+        model.addAttribute("iid", iid);
+        model.addAttribute("client", userService.findById(clid));
+        model.addAttribute("instructor", userService.findById(iid));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("adventures", this.adventureService.findAllMyAvailableSorted(iid, sd, ed, numPersons, false, true, false));
+        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+
+        return new ModelAndView("instructor/makeReservation/showAvailableAdventures");
+    }
+
+    @GetMapping("/{iid}/{clid}/showAvailableAdventures/byRatingAsc")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ModelAndView showAvailableSortedByRatingAsc(Model model, @PathVariable long iid,
+                                                       @PathVariable Long clid,
+                                                       @RequestParam("startDate") String startDate,
+                                                       @RequestParam("endDate") String endDate,
+                                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
+        model.addAttribute("principal", userService.getUserFromPrincipal());
+        Client client = (Client) userService.findById(clid);
+        model.addAttribute("clid", clid);
+        model.addAttribute("client",client);
+        model.addAttribute("iid", iid);
+        model.addAttribute("client", userService.findById(clid));
+        model.addAttribute("instructor", userService.findById(iid));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate sd = LocalDate.parse(startDate, formatter);
+        LocalDate ed = LocalDate.parse(endDate, formatter);
+
+        model.addAttribute("startDate", sd);
+        model.addAttribute("endDate", ed);
+        model.addAttribute("numPersons", numPersons);
+
+        model.addAttribute("adventures", this.adventureService.findAllMyAvailableSorted(iid, sd, ed, numPersons, true, false, true));
+
+        return new ModelAndView("instructor/makeReservation/showAvailableAdventures");
+    }
+
+    @GetMapping("/{iid}/{clid}/showAvailableAdventures/byRatingDesc")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public ModelAndView showAvailableSortedByRatingDesc(Model model, @PathVariable Long iid,
                                                         @PathVariable Long clid,
                                                         @RequestParam("startDate") String startDate,
                                                         @RequestParam("endDate") String endDate,
@@ -385,6 +381,9 @@ public class FishingInstructorAdventureReservationController {
         Client client = (Client) userService.findById(clid);
         model.addAttribute("clid", clid);
         model.addAttribute("client",client);
+        model.addAttribute("iid", iid);
+        model.addAttribute("client", userService.findById(clid));
+        model.addAttribute("instructor", userService.findById(iid));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate sd = LocalDate.parse(startDate, formatter);
@@ -394,7 +393,7 @@ public class FishingInstructorAdventureReservationController {
         model.addAttribute("endDate", ed);
         model.addAttribute("numPersons", numPersons);
 
-        model.addAttribute("adventure", this.adventureService.findAllMyAvailableSorted(oid, sd, ed, numPersons, false, false, true));
+        model.addAttribute("adventures", this.adventureService.findAllMyAvailableSorted(iid, sd, ed, numPersons, false, false, true));
 
         return new ModelAndView("instructor/makeReservation/showAvailableAdventures");
     }

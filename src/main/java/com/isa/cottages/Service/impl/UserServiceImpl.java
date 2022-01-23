@@ -55,6 +55,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteByEmail(String email) {
+         userRepository.delete(this.findByEmail(email));
+    }
+
+
+    @Override
     public Client saveClient(UserRequest userRequest) {
         // TODO: test loyalty program
         LoyaltyProgram loyaltyProgram = new LoyaltyProgram();
@@ -151,6 +157,15 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.save(bo);
         return bo;
+    }
+
+    @Override
+    public User setEnabled(String mail) {
+
+        User u = this.userRepository.findByEmail(mail);
+        u.setEnabled(true);
+        this.userRepository.save(u);
+        return u;
     }
 
     @Override
@@ -257,5 +272,10 @@ public class UserServiceImpl implements UserService {
     public User getUserFromPrincipal() throws Exception {
         String principal = this.facade.getPrincipalEmail();
         return this.findByEmail(principal);
+    }
+    @Override
+    public User findByEmailAndPassword(String email, String password){
+
+        return this.userRepository.findByEmailAndPassword(email,password);
     }
 }

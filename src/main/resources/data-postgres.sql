@@ -24,8 +24,11 @@ INSERT INTO users(first_name, last_name, email, password, residence, city, state
 VALUES ('Brod2', 'Brodic', 'b2@gmail.com', 'brod', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Boat_owner', TRUE, 2);
 INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
 VALUES ('Instruktor', 'Instruktorovic', 'instruktor@gmail.com', 'in', 'Beograd', 'Beograd', 'Srbija', '0641234567', 'Instructor', TRUE, 4);
-INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role)
-VALUES ('Klijent', 'Klijent', 'borissrbotnjak@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role) VALUES ('Klijent', 'Klijent', 'borissrbotnjak@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', TRUE, 3);
+
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role) VALUES ('Ivan', 'Mitrovic', 'random1@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', FALSE , 3);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role) VALUES ('Ivan', 'Mitrovic', 'random2@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', FALSE, 3);
+INSERT INTO users(first_name, last_name, email, password, residence, city, state, phone_number, user_type, enabled, user_role) VALUES ('Ivan', 'Mitrovic', 'random3@gmail.com', 'kl', 'Novi Sad', 'Novi Sad', 'Srbija', '0641234567', 'Client', FALSE, 3);
 
 /* BOATS */
 INSERT INTO BOAT(boat_name, engine_type, length, engine_number, engine_power, max_speed, capacity, rules, description, boat_owner_id, average_rating, deleted, reserved, available_from, available_until, cancellation_condition, image_url, SUBSCRIBER_ID, price, num_persons)
@@ -89,29 +92,29 @@ VALUES('fishing rods', 2);
 
 /* ADVENTURES */
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state, adventure_description,
-                                         instructor_info, average_rating)
-VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2);
+                                         instructor_info, average_rating, max_clients, deleted, price)
+VALUES ('Avantura 1', 'Zlatar', 'Nova Varos', 'Srbija', 'Opis avanture 1', 'Milorad Otasevic', 4.2,9,false, 215);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(adventure_name, adventure_residence, adventure_city, adventure_state,
-                                         adventure_description, instructor_info, average_rating)
-VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9);
+                                         adventure_description, instructor_info, average_rating, max_clients, deleted, price)
+VALUES ('Avantura 2', 'Palic', 'Palic', 'Srbija', 'Opis', 'Istvan Tamas', 3.9,9,false, 374);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved, IMAGE_URL)
+                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved, IMAGE_URL, max_clients, deleted, price)
 VALUES ('ozbiljan predavac', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2, 8, false,
-        'https://www.slo-fishing.si/images/Fishing-for-beginners/River-fishing-best-world-locations.jpg');
+        'https://www.slo-fishing.si/images/Fishing-for-beginners/River-fishing-best-world-locations.jpg',9,false, 323);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING)
-VALUES ('Predrag Maric', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2);
+                                         ADVENTURE_STATE, AVERAGE_RATING, max_clients, deleted, price)
+VALUES ('Predrag Maric', 'Pecanje na Dunavu', 'Smederevo', 'Smederevo', 'Srbija', 4.2,9,false, 333);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL)
+                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL, max_clients, deleted, price)
 VALUES ('sjajna instruktorka', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 8, false,
-        'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
+        'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg', 9,false,111);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL)
+                                         ADVENTURE_STATE, AVERAGE_RATING, instructor_id, reserved,  IMAGE_URL, max_clients, deleted, price)
 VALUES ('debil', 'Pecanje na Juznoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.5, 8, true,
-        'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg');
+        'https://blog.blains.com/blog/wp-content/uploads/2016/08/Tips-for-Lake-vs-River-Fishing.jpg', 9,false,34214);
 INSERT INTO FISHING_INSTRUCTOR_ADVENTURE(INSTRUCTOR_INFO, ADVENTURE_NAME, ADVENTURE_RESIDENCE, ADVENTURE_CITY,
-                                         ADVENTURE_STATE, AVERAGE_RATING)
-VALUES ('Maja Simovic', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4);
+                                         ADVENTURE_STATE, AVERAGE_RATING, max_clients, deleted, price)
+VALUES ('Maja Simovic', 'Pecanje na Zapadnoj Moravi', 'Trstenik', 'Trstenik', 'Srbija', 4.4, 9, FALSE,412);
 
 /* COTTAGE_RESERVATIONS-DISCOUNTS */
 INSERT INTO reservation(ADMIN_ID, COTTAGE_ID, CLIENT_ID, COTTAGE_OWNER_ID, DISCOUNT_AVAILABLE_FROM, DISCOUNT_AVAILABLE_UNTIL,
@@ -231,3 +234,20 @@ VALUES (8, 3, 5, FALSE, TRUE , '4/03/2022 12:00', '8/03/2022 12:00', FALSE, 'ins
 /* ADVENTURE_RESERVATIONS-PAST*/
 INSERT INTO reservation(INSTRUCTOR_ID, adventure_id, CLIENT_ID, admin_id, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE)
 VALUES (8, 3, 5,1, FALSE, TRUE , '4/03/2021 12:00', '8/03/2021 12:00', FALSE, 'instructor_reservation');
+
+/* ADVENTURE_RESERVATIONS-ONGOING*/
+INSERT INTO reservation(INSTRUCTOR_ID, adventure_id, CLIENT_ID, admin_id, DELETED, RESERVED, START_TIME, END_TIME, DISCOUNT, RESERVATION_TYPE)
+VALUES (8, 3, 5,1, FALSE, TRUE , '4/03/2021 12:00', '8/03/2022 12:00', FALSE, 'instructor_reservation');
+
+/* COMPLAINT*/
+INSERT INTO complaint(text, complaint_type, is_answered, boat_id, client_id)
+VALUES ('noge sam polomio',0, FALSE, 1 , 5);
+INSERT INTO complaint(text,complaint_type, is_answered, cottage_id, client_id)
+VALUES ('ruke sam polomio',1, FALSE , 2 , 6);
+INSERT INTO complaint(text,complaint_type, is_answered, instructor_id, client_id)
+VALUES ('nos sam polomio',2, FALSE , 1 , 5);
+
+/*USER-request*/
+INSERT INTO user_request(explanation_of_registration,email, enabled, user_role,registration_type,  first_name, last_name) VALUES ('da vidim sta ima','random1@gmail.com', FALSE , 3,1, 'Ivan' , 'Mitrovic');
+INSERT INTO user_request(explanation_of_registration,email, enabled, user_role,registration_type, first_name, last_name) VALUES ('da vidim sta ima','random2@gmail.com',FALSE , 3,2, 'Ivan' , 'Mitrovic');
+INSERT INTO user_request(explanation_of_registration,email, enabled, user_role,registration_type, first_name, last_name) VALUES ('da vidim sta ima','random3@gmail.com', FALSE , 3,0, 'Ivan' , 'Mitrovic');

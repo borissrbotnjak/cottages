@@ -22,6 +22,7 @@
     <title>Make reservation with client</title>
 </head>
 <body>
+
 <div class="container-fluid bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Pecanje Ivanovic</a>
@@ -63,22 +64,59 @@
         </div>
     </nav>
 </div>
+
 <div class="container">
-    <h3>Available clients:</h3>
+    <h3>Available adventures</h3>
     </br>
     </br></br></br>
     <table width="90%">
         <tr>
-            <th>Client name:</th>
-            <th>Client id:</th>
-            <th>Client email:</th>
+            <th>Adventure name:</th>
+            <th>Rating:</th>
+            <th>Price:</th>
+            <th>Address:</th>
+            <th></th>
+            <th></th>
+            <th>
+                <form th:action="${'/adventureReservations/__${principal.id}__/__${client.id}__/showAvailableAdventures/byPriceAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Ascending</button>
+                </form>
+                <form th:action="${'/adventureReservations/__${principal.id}__/__${client.id}__/showAvailableAdventures/byPriceDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Price Descending</button>
+                </form>
+            </th>
+            <th>
+                <form th:action="${'/adventureReservations/__${principal.id}__/__${client.id}__/showAvailableAdventures/byRatingAsc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Ascending</button>
+                </form>
+                <form th:action="${'/adventureReservations/__${principal.id}__/__${client.id}__/showAvailableAdventures/byRatingDesc'}" method="get">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
+                    <button type="submit" class="btn btn">Sort by Rating Descending</button>
+                </form>
+            </th>
         </tr>
-        <tr th:each="client:${clients}">
-            <td th:text="${client?.getFullName()}"></td>
-            <td th:text="${client?.id}"></td>
-            <td th:text="${client?.email}"></td>
+        <tr th:each="adventure:${adventures}">
+            <td th:text="${adventure.getAdventureName()}"></td>
+            <td th:text="${adventure.getAverageRating}"></td>
+            <td th:text="${adventure.getPrice()}"></td>
+            <td th:text="${adventure.getInstructor().getCity()}"></td>
+            <td th:text="${adventure.getInstructor().getState()}"></td>
             <td>
-                <form th:action="@{'/adventureReservations/__${principal.id}__/__${client?.id}__/selectClient'}">
+                <form th:action="@{'/adventureReservations/__${principal.id}__/selectAdventure/__${client.id}__/__${instructor.id}__'}">
+                    <input type="text" name="endDate" th:value="${endDate}" hidden/>
+                    <input type="text" name="startDate" th:value="${startDate}" hidden/>
+                    <input type="text" name="numPersons" th:value="${numPersons}" hidden/>
                     <button type="submit" class="btn btn">Select</button>
                 </form>
             </td>
