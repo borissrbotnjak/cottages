@@ -191,14 +191,14 @@
                             <form th:object="${additionalServices}" method="get">
                                 <table>
                                     <thead>
-                                    <tr th:if="${additionalServices.isEmpty()}">
+                                    <tr>
                                         <th> Additional service </th>
                                         <th> Price </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="${!additionalServices.isEmpty()}">
-                                        <td colspan="2"> No Additional services </td>
+                                    <tr th:if="${adventure.additionalServices.isEmpty()}">
+                                        <td  colspan="2"> No Additional services </td>
                                     </tr>
                                     <tr th:each="additionalService : ${adventure.additionalServices}">
                                         <td><span th:text="${additionalService.name}"> Additional service </span></td>

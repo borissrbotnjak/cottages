@@ -8,6 +8,7 @@ import com.isa.cottages.Service.FishingInstructorAdventureReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -377,18 +378,33 @@ public class FishingInstructorAdventureReservationServiceImpl implements Fishing
 
     @Override
     public AdventureReservation makeReservationWithClient(AdventureReservation reservation, FishingInstructorAdventure adventure, Long clid) throws Exception {
-
+        Instructor instructor = (Instructor) this.userService.getUserFromPrincipal();
         Client client = (Client) userService.findById(clid);
 
         reservation.setAdventure(adventure);
         reservation.setInstructor(adventure.getInstructor());
         reservation.setClient(client);
         reservation.setPrice(adventure.getPrice());
-        reservation.CalculatePrice();
         reservation.setReserved(true);
         this.setDate(reservation);
+        reservation.calculateDuration(reservation.getStartDate(),
+                reservation.getEndDate());
+
+        Double price = this.CalculatePrice(reservation);
+        reservation.setPrice(price);
         this.save(reservation);
 
         return reservation;
+    }
+    @Override
+    public Double CalculatePrice(AdventureReservation reservation) throws ParseException {
+        Double sum = reservation.getPrice();
+        if (reservation.getDiscount() && reservation.getDiscountPrice() != 0.0) {
+            sum = reservation.getDiscountPrice();
+        }
+        for (AdditionalService s : reservation.getAdditionalServices()) {
+            sum += s.getPrice();
+        }
+        return sum * reservation.getDuration();
     }
 }

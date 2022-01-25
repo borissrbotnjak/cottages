@@ -63,10 +63,11 @@
     </nav>
 </div>
 
+
 <div class="container mySpace">
     <div class="center-align blue lighten-5">
         <h1>Choose reservation parameters</h1> </br></br>
-        <form th:action="@{'/adventureReservations/__${principal.id}__/reserve/__${adventure_id}__/__${client.id}__'}" method="post" th:object="${reservation}">
+        <form th:action="@{'/adventureReservations/__${principal.id}__/reserve/__${adventure.id}__/__${client.id}__'}" method="post" th:object="${reservation}">
             <div class="row">
                 <div class="col-md-8">
                     <div class="tab-content profile-tab" id="myTabContent">
@@ -101,7 +102,6 @@
         </form>
     </div>
 </div>
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

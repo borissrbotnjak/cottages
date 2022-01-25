@@ -72,6 +72,8 @@ VALUES('wifi', 500, 2);
 INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, BOAT_ID)
 VALUES('usluga2', 300, 2);
 
+
+
 /* NAVIGATION EQUIPMENTS */
 INSERT INTO NAVIGATION_EQUIPMENT(NAME, BOAT_ID)
 VALUES('GPS', 1);
@@ -251,3 +253,25 @@ VALUES ('nos sam polomio',2, FALSE , 1 , 5);
 INSERT INTO user_request(explanation_of_registration,email, enabled, user_role,registration_type,  first_name, last_name) VALUES ('da vidim sta ima','random1@gmail.com', FALSE , 3,1, 'Ivan' , 'Mitrovic');
 INSERT INTO user_request(explanation_of_registration,email, enabled, user_role,registration_type, first_name, last_name) VALUES ('da vidim sta ima','random2@gmail.com',FALSE , 3,2, 'Ivan' , 'Mitrovic');
 INSERT INTO user_request(explanation_of_registration,email, enabled, user_role,registration_type, first_name, last_name) VALUES ('da vidim sta ima','random3@gmail.com', FALSE , 3,0, 'Ivan' , 'Mitrovic');
+
+/*ADDITIONAL SERVICE ADVENTURE*/
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje nogu', 500, 3);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje ruku', 200, 3);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje nosa', 300, 4);
+
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje nogu', 500, 4);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje ruku', 200, 5);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje nosa', 300, 5);
+
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje nogu', 500, 6);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje ruku', 200, 6);
+INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
+VALUES('lomljenje nosa', 300, 7);

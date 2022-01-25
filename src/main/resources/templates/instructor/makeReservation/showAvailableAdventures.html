@@ -113,7 +113,7 @@
             <td th:text="${adventure.getInstructor().getCity()}"></td>
             <td th:text="${adventure.getInstructor().getState()}"></td>
             <td>
-                <form th:action="@{'/adventureReservations/__${principal.id}__/selectAdventure/__${client.id}__/__${instructor.id}__'}">
+                <form th:action="@{'/adventureReservations/__${principal.id}__/selectAdventure/__${client.id}__/__${adventure.id}__'}">
                     <input type="text" name="endDate" th:value="${endDate}" hidden/>
                     <input type="text" name="startDate" th:value="${startDate}" hidden/>
                     <input type="text" name="numPersons" th:value="${numPersons}" hidden/>

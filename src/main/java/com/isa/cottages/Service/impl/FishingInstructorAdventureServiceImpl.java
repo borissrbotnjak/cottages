@@ -33,7 +33,8 @@ public class FishingInstructorAdventureServiceImpl implements FishingInstructorA
 
     @Override
     public FishingInstructorAdventure findById(Long id) throws Exception {
-        if (this.adventureRepository.findById(id).isEmpty()) {
+        Optional<FishingInstructorAdventure> adventure = this.adventureRepository.findById(id);
+        if (adventure.isEmpty()) {
             throw new Exception("No such value(adventure)");
         }
         return this.adventureRepository.findById(id).get();

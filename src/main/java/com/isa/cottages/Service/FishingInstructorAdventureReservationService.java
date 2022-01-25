@@ -3,6 +3,7 @@ package com.isa.cottages.Service;
 import com.isa.cottages.Model.AdventureReservation;
 import com.isa.cottages.Model.FishingInstructorAdventure;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -67,4 +68,6 @@ public interface FishingInstructorAdventureReservationService {
     List<AdventureReservation> getAllWithDiscount(Long AdventureId);
 
     AdventureReservation makeReservationWithClient(AdventureReservation reservation, FishingInstructorAdventure adventure, Long clid) throws Exception;
+
+    Double CalculatePrice(AdventureReservation reservation) throws ParseException;
 }

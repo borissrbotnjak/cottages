@@ -463,16 +463,24 @@ public class FishingInstructorAdventureReservationController {
                                     @RequestParam("startDate") String startDate,
                                     @RequestParam("endDate") String endDate) throws Exception {
         model.addAttribute("principal", this.userService.getUserFromPrincipal());
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
 
-        LocalDate ld1 = LocalDate.parse(startDate, formatter);
-        LocalDate ld2 = LocalDate.parse(endDate, formatter);
+            LocalDate ld1 = LocalDate.parse(startDate, formatter);
+            LocalDate ld2 = LocalDate.parse(endDate, formatter);
 
-        model.addAttribute("startDate", ld1);
-        model.addAttribute("endDate", ld2);
+            if (ld2.isBefore(ld1)) {
+                return new ModelAndView("reservation/dateError");
+            }
 
-        return new ModelAndView("redirect:/adventureReservations/{id}/incomes");
+            model.addAttribute("startDate", ld1);
+            model.addAttribute("endDate", ld2);
+
+            return new ModelAndView("redirect:/adventureReservations/{id}/incomes");
+        } catch (Exception e) {
+            return new ModelAndView("reservation/dateError");
+        }
+
     }
 
     @GetMapping("/{id}/incomes")
@@ -597,13 +605,24 @@ public class FishingInstructorAdventureReservationController {
         model.addAttribute("client",client);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate sd = LocalDate.parse(startDate, formatter);
-        LocalDate ed = LocalDate.parse(endDate, formatter);
-        model.addAttribute("startDate", sd);
-        model.addAttribute("endDate", ed);
-        model.addAttribute("numPersons", numPersons);
+        try {
+            LocalDate sd = LocalDate.parse(startDate, formatter);
+            LocalDate ed = LocalDate.parse(endDate, formatter);
 
-        return new ModelAndView("redirect:/adventureReservations/{iid}/{clid}/showAvailableAdventures");
+            if (ed.isBefore(sd) || sd.isBefore(LocalDate.now()) || ed.isBefore(LocalDate.now())) {
+                return new ModelAndView("reservation/dateError");
+            }
+
+            model.addAttribute("startDate", sd);
+            model.addAttribute("endDate", ed);
+            model.addAttribute("numPersons", numPersons);
+
+            return new ModelAndView("redirect:/adventureReservations/{iid}/{clid}/showAvailableAdventures");
+
+        } catch (Exception e) {
+            return new ModelAndView("reservation/dateError");
+        }
+
     }
     //</editor-fold>
 
@@ -771,8 +790,8 @@ public class FishingInstructorAdventureReservationController {
     //<editor-fold desc="Make reservation">
     @GetMapping("/{iid}/selectAdventure/{clid}/{id}")
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    public ModelAndView selectAdventure(@PathVariable Long id, @PathVariable Long clid,
-                                      @PathVariable Long iid,
+    public ModelAndView selectAdventure(@PathVariable Long iid, @PathVariable Long clid,
+                                      @PathVariable Long id,
                                       Model model, @RequestParam("startDate") String startDate,
                                       @RequestParam("endDate") String endDate,
                                       @RequestParam("numPersons") Integer numPersons) throws Exception {
@@ -783,7 +802,7 @@ public class FishingInstructorAdventureReservationController {
         model.addAttribute("clid", clid);
 
         model.addAttribute("services", this.adventureService.findById(id).getAdditionalServices());
-        model.addAttribute("adventure_id", id);
+        model.addAttribute("adventure", this.adventureService.findById(id));
         model.addAttribute("startDateString", startDate);
         model.addAttribute("endDateString", endDate);
         model.addAttribute("numPersons", numPersons);
@@ -802,7 +821,8 @@ public class FishingInstructorAdventureReservationController {
                                         @PathVariable Long iid,
                                         Model model,
                                         @ModelAttribute("reservation") AdventureReservation reservation) throws Exception {
-        model.addAttribute("principal", this.userService.getUserFromPrincipal());
+        Instructor instructor = (Instructor) userService.getUserFromPrincipal();
+        model.addAttribute("principal", instructor);
 
         FishingInstructorAdventure adventure = this.adventureService.findById(adventureId);
         AdventureReservation res = this.reservationService.makeReservationWithClient(reservation, adventure, clid);

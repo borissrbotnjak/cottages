@@ -43,6 +43,7 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         as.setPrice(additionalService.getPrice());
         as.setCottage(additionalService.getCottage());
         as.setBoat(additionalService.getBoat());
+        as.setAdventure(additionalService.getAdventure());
 
         this.additionalServiceRepository.save(as);
 
@@ -57,7 +58,7 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         List<AdditionalService> myAdditionalServices = new ArrayList<AdditionalService>();
 
         for (AdditionalService as:all) {
-            if(Objects.equals(as.getCottage().getId(), adventure.getId())) {
+            if(Objects.equals(as.getAdventure().getId(), adventure.getId())) {
                 myAdditionalServices.add(as);
             }
         }
@@ -93,4 +94,5 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         }
         return myAdditionalServices;
     }
+
 }
