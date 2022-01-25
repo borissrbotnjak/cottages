@@ -87,6 +87,9 @@ public class Cottage implements Serializable {
     @OneToMany(mappedBy = "cottage", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();
 
+    @OneToMany(mappedBy = "cottage", targetEntity = Review.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
+
     public Cottage(String imageUrl) {
         this.imageUrl = imageUrl;
     }

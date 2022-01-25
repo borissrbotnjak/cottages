@@ -23,16 +23,18 @@ public class SystemAdministratorController {
     private final SystemAdministratorServiceImpl administratorService;
     private final ComplaintServiceImpl complaintService;
     private final ReportServiceImpl reportService;
+    private final ReviewServiceImpl reviewService;
     private final UserRequestServiceImpl requestService;
     private final UserServiceImpl userService;
     private final ClientServiceImpl clientService;
     private final EmailSender emailSender;
 
     @Autowired
-    public SystemAdministratorController(SystemAdministratorServiceImpl administratorService, ComplaintServiceImpl complaintService, ReportServiceImpl reportService, UserRequestServiceImpl requestService, UserServiceImpl userService, ClientServiceImpl clientService, EmailSender emailSender) {
+    public SystemAdministratorController(SystemAdministratorServiceImpl administratorService, ComplaintServiceImpl complaintService, ReportServiceImpl reportService, ReviewServiceImpl reviewService, UserRequestServiceImpl requestService, UserServiceImpl userService, ClientServiceImpl clientService, EmailSender emailSender) {
         this.administratorService = administratorService;
         this.complaintService = complaintService;
         this.reportService = reportService;
+        this.reviewService = reviewService;
         this.requestService = requestService;
         this.userService = userService;
         this.clientService = clientService;
@@ -401,5 +403,49 @@ public class SystemAdministratorController {
         return new ModelAndView("redirect:/sysadmin/reports/");
     }
 
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    @GetMapping("/reviews")
+    public ModelAndView seeReviews(Model model) throws Exception {
+        SystemAdministrator systemAdministrator = (SystemAdministrator) this.userService.getUserFromPrincipal();
+        List<Review> notApproved = this.reviewService.findNotApprovedReviews();
+        model.addAttribute("principal", systemAdministrator);
+        model.addAttribute("reviews", notApproved);
+        return new ModelAndView("sysadmin/reviews");
+    }
 
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    @GetMapping("/{id}/acceptReview/{rid}")
+    public ModelAndView acceptReview(@PathVariable Long id, @PathVariable Long rid,
+                                 Model model) throws Exception {
+        SystemAdministrator systemAdministrator = (SystemAdministrator) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", systemAdministrator);
+        Review review= this.reviewService.postReview(rid);
+        Client client = this.reviewService.findById(rid).getClient();
+
+        Collection<Review> reviews = this.reviewService.findNotApprovedReviews();
+        model.addAttribute("reviews", reviews);
+        if (review.getAdventure() != null)
+            emailSender.send(review.getAdventure().getInstructor().getEmail(), email("Client " + review.getClient().getFullName() + " has been reviewed your adventure " + review.getAdventure().getAdventureName()));
+        else if (review.getBoat() != null)
+            emailSender.send(review.getBoat().getBoatOwner().getEmail(), email(" Client " + review.getClient().getFullName() + " has been reviewed your boat "  + review.getBoat().getBoatName()));
+        else if (review.getCottage() != null)
+            emailSender.send(review.getCottage().getCottageOwner().getEmail(), email(" Client " + review.getClient().getFullName() + " has been reviewed your cottage "  + review.getCottage().getName()));
+        return new ModelAndView("redirect:/sysadmin/reviews/");
+    }
+
+    @PreAuthorize("hasRole('SYS_ADMIN')")
+    @GetMapping("/{id}/declineReview/{rid}")
+    public ModelAndView declineReview(@PathVariable Long id, @PathVariable Long rid,
+                                     Model model) throws Exception {
+        SystemAdministrator systemAdministrator = (SystemAdministrator) this.userService.getUserFromPrincipal();
+        model.addAttribute("principal", systemAdministrator);
+        Review review= this.reviewService.findById(rid);
+        review.setApproved(Boolean.TRUE);
+        this.reviewService.update(review);
+        Client client = this.reviewService.findById(rid).getClient();
+
+        Collection<Review> reviews = this.reviewService.findNotApprovedReviews();//approved se odnosi da li ju je admin pogledao ili ne
+        model.addAttribute("reviews", reviews);
+        return new ModelAndView("redirect:/sysadmin/reviews/");
+    }
 }

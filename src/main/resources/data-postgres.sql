@@ -275,3 +275,15 @@ INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
 VALUES('lomljenje ruku', 200, 6);
 INSERT INTO ADDITIONAL_SERVICE(NAME, PRICE, ADVENTURE_ID)
 VALUES('lomljenje nosa', 300, 7);
+
+/*Reviews*/
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 3, 'smor',  5,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 4, 'dobro',  5,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 5, 'topina',  5,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 3, 'smor',  6,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 3, 'topina',  6,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 2, 'dobro',  6,5);
+
+INSERT INTO REVIEW(APPROVED, rating, review_text,boat_id, client_id) VALUES(FALSE, 2, 'dobro',  1,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,cottage_id, client_id) VALUES(FALSE, 2, 'dobro',  2,5);
+INSERT INTO REVIEW(APPROVED, rating, review_text,adventure_id, client_id) VALUES(FALSE, 2, 'dobro',  4,5);

@@ -86,6 +86,9 @@ public class FishingInstructorAdventure implements Serializable {
     @OneToMany(mappedBy = "adventure", targetEntity = AdventureReservation.class)
     private Set<AdventureReservation> adventureReservations = new HashSet<>();
 
+    @OneToMany(mappedBy = "adventure", targetEntity = Review.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
+
     @OneToMany(mappedBy = "adventure", targetEntity = AdditionalService.class)
     private Set<AdditionalService> additionalServices = new HashSet<>();
 

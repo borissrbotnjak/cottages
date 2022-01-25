@@ -19,7 +19,7 @@
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 
-    <title>Requests</title>
+    <title>Reviews</title>
 </head>
 <body>
 <div class="container-fluid bg-light">
@@ -49,31 +49,25 @@
 </div>
 <div class="container">
     </br>
-    <h3>Requests</h3>
+    <h3>Reviews</h3>
     <br>
     <div class="row">
         <div class="table">
             </br>
             <table id="requests" width="90%">
                 <tr>
-                    <th>Name:</th>
-                    <th>Last Name:</th>
-                    <th>Mail:</th>
-                    <th>Explanation:</th>
-                    <th>Role:</th>
-                    <th>Type:</th>
+                    <th>Client Name:</th>
+                    <th>Review:</th>
+                    <th>Rating:</th>
                     <th></th>
                     <th></th>
                 </tr>
-                <tr th:each="request:${requests}">
-                    <td th:text="${request.getFirstName()}"></td>
-                    <td th:text="${request.getLastName()}"></td>
-                    <td th:text="${request.getEmail()}"></td>
-                    <td th:text="${request.getExplanationOfRegistration()}"></td>
-                    <td th:text="${request.getUserRole()}"></td>
-                    <td th:text="${request.getRegistrationType()}"></td>
-                    <td><a th:href="@{'/sysadmin/__${principal.id}__/acceptRequest/__${request.id}__'}" th:object="${request}">Accept</a></td>
-                    <td><a th:href="@{'/sysadmin/__${principal.id}__/declineRequest/__${request.id}__'}" >Decline</a></td>
+                <tr th:each="review:${reviews}">
+                    <td th:text="${review.client.getFullName()}"></td>
+                    <td th:text="${review.getReviewText()}"></td>
+                    <td th:text="${review.getRating()}"></td>
+                    <td><a th:href="@{'/sysadmin/__${principal.id}__/acceptReview/__${review.id}__'}">Accept</a></td>
+                    <td><a th:href="@{'/sysadmin/__${principal.id}__/declineReview/__${review.id}__'}" >Decline</a></td>
                 </tr>
             </table>
         </div>
