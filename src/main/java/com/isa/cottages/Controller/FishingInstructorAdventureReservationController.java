@@ -91,6 +91,8 @@ public class FishingInstructorAdventureReservationController {
         AdventureReservation adventureReservation = new AdventureReservation();
 
         model.addAttribute("adventureReservation", adventureReservation);
+        model.addAttribute("services", this.adventureService.findById(id).getAdditionalServices());
+        model.addAttribute("sLength", this.adventureService.findById(id).getAdditionalServices().size());
 
         Collection<AdventureReservation> adventureReservations = this.reservationService.findDiscountsByAdventure(id);
         model.addAttribute("adventureReservations", adventureReservations);

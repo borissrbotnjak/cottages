@@ -34,11 +34,11 @@ public class Reservation implements Serializable {
     private LocalDateTime time = LocalDateTime.now();
 
     @Column
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startTime;
 
     @Column
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endTime;
 
     @Column
